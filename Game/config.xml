@@ -2,12 +2,12 @@
 
 <config>
   <app>
-    <title>Game Development Testbed</title>
+    <title>Bouncy Slime</title>
     <organization>UPC</organization>
   </app>
 	
   <renderer>
-    <vsync value="false"/>
+    <vsync value="true"/>
   </renderer>
 
   <window>
@@ -25,5 +25,12 @@
   <map>
     <folder>maps/</folder>
   </map>
+
+  <player>
+
+    <path>"textures/test.png"</path>
+    <idle x ="0" y ="0" w ="16" h="28"/>
+    
+  </player>
 
 </config>

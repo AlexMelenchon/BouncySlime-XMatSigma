@@ -11,6 +11,9 @@
 
 class j1App;
 
+struct SDL_Texture; // Struct for texture, to be able to call it from any module
+struct SDL_Rect; // Struct for rect, to be able to call it from any module
+
 class j1Module
 {
 public:
