@@ -369,5 +369,5 @@ bool j1App::SavegameNow() const
 
 float j1App::GetDeltaTime() const
 {
-	return (1.0f / 60.0f);
+	return 1.0f / 60.0f;
 }

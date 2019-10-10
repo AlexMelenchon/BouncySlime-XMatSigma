@@ -42,46 +42,37 @@ bool j1Player::Start()
 
 bool j1Player::PreUpdate()
 {
-
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
 	{
-		fpPlayerAccel.x += fpForce.x;
+		fpPlayerSpeed.x += fpForce.x;
+		deAccel(SLOW_NEGATIVE_X);
 
 		playerFlip = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) 
 	{
-		fpPlayerAccel.x -= fpForce.x;
+		fpPlayerSpeed.x -= fpForce.x;
+		deAccel(SLOW_POSITIVE_X);
 
 		playerFlip = SDL_RendererFlip::SDL_FLIP_NONE;
 	}
 	else
 	{
-		if (fpPlayerSpeed.x > 50) 
-		{
-			fpPlayerAccel.x = 0;
-			fpPlayerSpeed.x += fpForce.y;
-		}
-		else if (fpPlayerSpeed.x < -50)
-		{
-			fpPlayerAccel.x = 0;
-			fpPlayerSpeed.x -= fpForce.y;
-		}
-		else {
-			fpPlayerSpeed.x = 0.0f;
-		}
+		deAccel(SLOW_GENERAL);
 	}
+
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && current_state != ST_AIR)
 	{
-		fpPlayerAccel.y = -fpForce.y;
+		fpPlayerSpeed.y = fpForce.y;
 
 		inputs.add(IN_JUMP);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		fpPlayerAccel.y -= fpForce.y;
+		fpPlayerAccel.y -= -fpForce.y;
 	}
+
 
 	//Get the time elapsed since the last frame
 	flPreviousTime = flCurrentTime;
@@ -92,39 +83,26 @@ bool j1Player::PreUpdate()
 	UpdatePos(flCurrentTime);
 
 	//Check the player state and upload the new one
-	player_states current_state = process_fsm(inputs);
+	player_states state = process_fsm(inputs);
+	current_state = state;
 
-
+	if (fpPlayerPos.y > 200) inputs.add(IN_JUMP_FINISH);
 
 	return true;
 }
 
 void j1Player::UpdatePos(float dt)
 {
-	if (ST_AIR) 
-	{
-		fpPlayerAccel.y += fGravity;
-	}
-	else if (ST_GROUND)
-	{
-		fpPlayerAccel.y = 0;
-	}
-
-
-
 	fpPlayerPos.x += fpPlayerSpeed.x * dt;
-	fpPlayerSpeed.x += fpPlayerAccel.x * dt;
-
 
 	fpPlayerPos.y += fpPlayerSpeed.y * dt;
 	fpPlayerSpeed.y += fpPlayerAccel.y * dt;
 
-
 	//TODO: UPDATE AND CHECK COLLISION, IF FALSE, WE CONSIDER THE PLAYER IS FALLING
-	//	inputs.add(IN_JUMP);
+	//	inputs.add(IN_JUMP_FINISH);
 }
 
-void j1Player::LimitPlayerSpeed()
+void j1Player::LimitPlayerSpeed() 
 {
 	if (fpPlayerSpeed.x > fpPlayerMaxSpeed.x)
 	{
@@ -158,11 +136,14 @@ bool j1Player::Update(float dt)
 	{
 	case ST_GROUND:
 		LOG("IDLE\n");
+		fpPlayerAccel.y = 0;
+		fpPlayerSpeed.y = 0;
 		//current_animation = &idle;
 		break;
 		break;
 	case ST_AIR:
-		LOG("JUMPING NEUTRAL ^^^^\n");
+		LOG("IN THE AIR ^^^^\n");
+		fpPlayerAccel.y += -fGravity;
 		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
 		break;
 
@@ -172,7 +153,7 @@ bool j1Player::Update(float dt)
 
 bool j1Player::PostUpdate()
 {
-	App->render->Blit(playerTex, (int)fpPlayerPos.x, (int)fpPlayerPos.y, idleRect);
+	App->render->Blit(playerTex, (int)fpPlayerPos.x, (int)fpPlayerPos.y, idleRect, 1.0f, playerFlip);
 	return true;
 }
 
@@ -192,6 +173,27 @@ bool j1Player::Save(pugi::xml_node&) const
 	return true;
 }
 
+void j1Player::deAccel(slow_direction slow)
+{
+	switch (slow) {
+
+	case SLOW_GENERAL:
+		fpPlayerSpeed.x /= slowGrade;
+		break;
+
+	case SLOW_POSITIVE_X:
+		if(fpPlayerSpeed.x > slowLimit)
+		fpPlayerSpeed.x /= slowGrade;
+		break;
+
+	case SLOW_NEGATIVE_X:
+		if(fpPlayerSpeed.x < -slowLimit)
+		fpPlayerSpeed.x /= slowGrade;
+		break;
+	}
+
+}
+
 
 player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 {
@@ -206,7 +208,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 		{
 			switch (last_input)
 			{
-			case IN_JUMP: state = ST_AIR;  break;
+		case IN_JUMP: state = ST_AIR;  break;
 
 			}
 		}
