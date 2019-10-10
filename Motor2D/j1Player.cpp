@@ -45,25 +45,30 @@ bool j1Player::PreUpdate()
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
 	{
-		fpPlayerSpeed.x += fpForce.x;
+		fpPlayerAccel.x += fpForce.x;
 
 		playerFlip = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) 
 	{
-		fpPlayerSpeed.x -= fpForce.x;
+		fpPlayerAccel.x -= fpForce.x;
 
 		playerFlip = SDL_RendererFlip::SDL_FLIP_NONE;
 	}
 	else
 	{
-		if (fpPlayerSpeed.x > 5.2)
-			fpPlayerSpeed.x += fpPlayerAccel.x * 4;
-		else if (fpPlayerSpeed.x < 5.2)
-			fpPlayerSpeed.x -= fpPlayerAccel.x * 4;
+		if (fpPlayerSpeed.x > 10) 
+		{
+			fpPlayerAccel.x = 0;
+			fpPlayerSpeed.x += fpForce.x;
+		}
+		else if (fpPlayerSpeed.x < -10)
+		{
+			fpPlayerAccel.x = 0;
+			fpPlayerSpeed.x -= fpForce.x;
+		}
 		else {
 			fpPlayerSpeed.x = 0.0f;
-
 		}
 	}
 
@@ -80,10 +85,13 @@ bool j1Player::PreUpdate()
 	flCurrentTime = App->GetDeltaTime();
 
 	//Update position
+	LimitPlayerSpeed();
 	UpdatePos(flCurrentTime);
 
 	//Check the player state and upload the new one
 	player_states current_state = process_fsm(inputs);
+
+
 
 	return true;
 }
@@ -91,17 +99,17 @@ bool j1Player::PreUpdate()
 void j1Player::UpdatePos(float dt)
 {
 	fpPlayerPos.x += fpPlayerSpeed.x * dt;
-	fpPlayerSpeed.x += fpForce.x * dt;
+	fpPlayerSpeed.x += fpPlayerAccel.x * dt;
 
-	//LimitPlayerSpeed();
 }
 
-void j1Player::LimitPlayerSpeed() 
+void j1Player::LimitPlayerSpeed()
 {
-	if (fpPlayerSpeed.x > fpPlayerMaxSpeed.x) 
+	if (fpPlayerSpeed.x > fpPlayerMaxSpeed.x)
+	{
 		fpPlayerSpeed.x = fpPlayerMaxSpeed.x;
-
-
+		fpPlayerAccel.x = 0;
+	}
 
 }
 
@@ -142,7 +150,7 @@ bool j1Player::Update(float dt)
 
 bool j1Player::PostUpdate()
 {
-	App->render->Blit(playerTex, (uint)fpPlayerPos.x, (uint)fpPlayerPos.y, idleRect);
+	App->render->Blit(playerTex, (int)fpPlayerPos.x, (int)fpPlayerPos.y, idleRect);
 	return true;
 }
 

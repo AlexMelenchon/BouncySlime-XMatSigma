@@ -70,7 +70,7 @@ private:
 	//Position variables
 	fPoint fpPlayerPos = { 0.0f,0.0f }; //Determines player position on the map
 	fPoint fpPlayerSpeed = { 0.0f,0.0f }; // Determines player speed in the x and y axis
-	fPoint fpPlayerAccel = { -15.0f,-10.0f }; // Determines player acceleration in the x and y axis
+	fPoint fpPlayerAccel = { 0.0f,0.0f }; // Determines player acceleration in the x and y axis
 	fPoint fpForce = { -15,-10.f };
 
 
