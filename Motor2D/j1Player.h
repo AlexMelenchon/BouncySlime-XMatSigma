@@ -17,20 +17,13 @@ enum player_states
 {
 	ST_UNKNOWN,
 
-	ST_IDLE,
-	ST_WALK_FORWARD,
-	ST_WALK_BACKWARD,
-	ST_JUMP,
-	ST_JUMP_FORWARD,
-	ST_JUMP_BACKWARD
+	ST_GROUND,
+	ST_AIR
 };
 
 enum player_inputs
 {
 	IN_UNKNOWN,
-	IN_LEFT,
-	IN_RIGHT,
-	IN_LEFT_AND_RIGHT,
 	IN_JUMP,
 	IN_JUMP_FINISH
 };
@@ -71,10 +64,10 @@ private:
 	fPoint fpPlayerPos = { 0.0f,0.0f }; //Determines player position on the map
 	fPoint fpPlayerSpeed = { 0.0f,0.0f }; // Determines player speed in the x and y axis
 	fPoint fpPlayerAccel = { 0.0f,0.0f }; // Determines player acceleration in the x and y axis
-	fPoint fpForce = { -15,-10.f };
+	fPoint fpForce = { -90.0,-90.0f };
 
 
-	fPoint fpPlayerMaxSpeed = { 50.0f, 50.0f }; // Determines player maximum speed
+	fPoint fpPlayerMaxSpeed = { 650.0f, 650.0f }; // Determines player maximum speed
 
 
 	SDL_RendererFlip playerFlip = SDL_RendererFlip::SDL_FLIP_NONE; //Var that controls if the player is flipped or not
@@ -87,6 +80,7 @@ private:
 	bool onPlatform = false;
 	float flPreviousTime = 0;
 	float flCurrentTime = 0;
+	float fGravity = -10.0f;
 
 };
 

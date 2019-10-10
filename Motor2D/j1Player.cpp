@@ -57,28 +57,30 @@ bool j1Player::PreUpdate()
 	}
 	else
 	{
-
-		if (fpPlayerSpeed.x > 10) 
+		if (fpPlayerSpeed.x > 50) 
 		{
 			fpPlayerAccel.x = 0;
-			fpPlayerSpeed.x += fpForce.x;
+			fpPlayerSpeed.x += fpForce.y;
 		}
-		else if (fpPlayerSpeed.x < -10)
+		else if (fpPlayerSpeed.x < -50)
 		{
 			fpPlayerAccel.x = 0;
-			fpPlayerSpeed.x -= fpForce.x;
+			fpPlayerSpeed.x -= fpForce.y;
 		}
 		else {
 			fpPlayerSpeed.x = 0.0f;
 		}
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-		fpPlayerPos.y += fpPlayerSpeed.x;
-	}
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && current_state != ST_AIR)
+	{
+		fpPlayerAccel.y = -fpForce.y;
 
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
 		inputs.add(IN_JUMP);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	{
+		fpPlayerAccel.y -= fpForce.y;
 	}
 
 	//Get the time elapsed since the last frame
@@ -99,9 +101,27 @@ bool j1Player::PreUpdate()
 
 void j1Player::UpdatePos(float dt)
 {
+	if (ST_AIR) 
+	{
+		fpPlayerAccel.y += fGravity;
+	}
+	else if (ST_GROUND)
+	{
+		fpPlayerAccel.y = 0;
+	}
+
+
+
 	fpPlayerPos.x += fpPlayerSpeed.x * dt;
 	fpPlayerSpeed.x += fpPlayerAccel.x * dt;
 
+
+	fpPlayerPos.y += fpPlayerSpeed.y * dt;
+	fpPlayerSpeed.y += fpPlayerAccel.y * dt;
+
+
+	//TODO: UPDATE AND CHECK COLLISION, IF FALSE, WE CONSIDER THE PLAYER IS FALLING
+	//	inputs.add(IN_JUMP);
 }
 
 void j1Player::LimitPlayerSpeed()
@@ -109,7 +129,25 @@ void j1Player::LimitPlayerSpeed()
 	if (fpPlayerSpeed.x > fpPlayerMaxSpeed.x)
 	{
 		fpPlayerSpeed.x = fpPlayerMaxSpeed.x;
-		fpPlayerAccel.x = 0;
+		fpPlayerAccel.x = fpPlayerAccel.x;
+	}
+
+	if (fpPlayerSpeed.x < -fpPlayerMaxSpeed.x)
+	{
+		fpPlayerSpeed.x = -fpPlayerMaxSpeed.x;
+		fpPlayerAccel.x = fpPlayerAccel.x;
+	}
+
+	if (fpPlayerSpeed.y > fpPlayerMaxSpeed.y)
+	{
+		fpPlayerSpeed.y = fpPlayerMaxSpeed.y;
+		fpPlayerAccel.y = fpPlayerAccel.y;
+	}
+
+	if (fpPlayerSpeed.y < -fpPlayerMaxSpeed.y)
+	{
+		fpPlayerSpeed.y = -fpPlayerMaxSpeed.y;
+		fpPlayerAccel.y = fpPlayerAccel.y;
 	}
 
 }
@@ -118,33 +156,16 @@ bool j1Player::Update(float dt)
 {
 	switch (current_state)
 	{
-	case ST_IDLE:
+	case ST_GROUND:
 		LOG("IDLE\n");
 		//current_animation = &idle;
 		break;
-	case ST_WALK_FORWARD:
-		LOG("FORWARD >>>\n");
-		//iplayerPos.x += iplayerSpeed.x;
-
 		break;
-	case ST_WALK_BACKWARD:
-		LOG("BACKWARD <<<\n");
-		//iplayerPos.y -= iplayerSpeed.x;
-
-		break;
-	case ST_JUMP:
+	case ST_AIR:
 		LOG("JUMPING NEUTRAL ^^^^\n");
 		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
 		break;
-	case ST_JUMP_FORWARD:
-		LOG("JUMPING FORWARD ^^>>\n");
-		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
-		break;
-	case ST_JUMP_BACKWARD:
-		LOG("JUMPING BACKWARD ^^<<\n");
 
-		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
-		break;
 	}
 	return true;
 }
@@ -174,30 +195,28 @@ bool j1Player::Save(pugi::xml_node&) const
 
 player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 {
-	static player_states state = ST_IDLE;
+	static player_states state = ST_GROUND;
 	 player_inputs  last_input;
 
 	while (inputs.Pop(last_input))
 	{
 		switch (state)
 		{
-		case ST_IDLE:
+		case ST_GROUND:
 		{
 			switch (last_input)
 			{
-			case IN_RIGHT: state = ST_WALK_FORWARD; break;
-			case IN_LEFT: state = ST_WALK_BACKWARD; break;
-			case IN_JUMP: state = ST_JUMP;  break;
+			case IN_JUMP: state = ST_AIR;  break;
 
 			}
 		}
 		break;
 
-		case ST_JUMP:
+		case ST_AIR:
 		{
 			switch (last_input)
 			{
-			case IN_JUMP_FINISH: state = ST_IDLE; break;
+			case IN_JUMP_FINISH: state = ST_GROUND; break;
 
 			}
 		}
