@@ -10,8 +10,8 @@ template<class tdata>
 struct p2List_item
 {
 	tdata                 data;
-	p2List_item<tdata>*   next;
-	p2List_item<tdata>*   prev;
+	p2List_item<tdata>* next;
+	p2List_item<tdata>* prev;
 
 	inline p2List_item(const tdata& _data)
 	{
@@ -32,8 +32,8 @@ class p2List
 
 public:
 
-	p2List_item<tdata>*   start;
-	p2List_item<tdata>*   end;
+	p2List_item<tdata>* start;
+	p2List_item<tdata>* end;
 
 private:
 
@@ -71,10 +71,10 @@ public:
 	*/
 	p2List_item<tdata>* add(const tdata& item)
 	{
-		p2List_item<tdata>*   p_data_item;
+		p2List_item<tdata>* p_data_item;
 		p_data_item = new p2List_item < tdata >(item);
 
-		if(start == NULL)
+		if (start == NULL)
 		{
 			start = end = p_data_item;
 		}
@@ -94,17 +94,17 @@ public:
 	*/
 	bool del(p2List_item<tdata>* item)
 	{
-		if(item == NULL)
+		if (item == NULL)
 		{
 			return (false);
 		}
 
 		// Now reconstruct the list
-		if(item->prev != NULL)
+		if (item->prev != NULL)
 		{
 			item->prev->next = item->next;
 
-			if(item->next != NULL)
+			if (item->next != NULL)
 			{
 				item->next->prev = item->prev;
 			}
@@ -115,7 +115,7 @@ public:
 		}
 		else
 		{
-			if(item->next)
+			if (item->next)
 			{
 				item->next->prev = NULL;
 				start = item->next;
@@ -132,15 +132,50 @@ public:
 	}
 
 	/**
+* Deletes last item from the list
+*/
+	bool Pop(tdata& item)
+	{
+		bool result = false;
+
+		p2List_item<tdata>* last = GetLast();
+
+		if (last != NULL)
+		{
+			p2List_item<tdata>* tmp = start;
+
+			if (tmp == last)
+			{
+				// Only one item left in the qeue
+				item = start->data;
+				delete start;
+				start = NULL;
+			}
+			else
+			{
+				while (tmp->next != last)
+					tmp = tmp->next;
+
+				item = tmp->next->data;
+				delete tmp->next;
+				tmp->next = NULL;
+			}
+
+			result = true;
+		}
+
+		return result;
+	}
+	/**
 	* Destroy and free all mem
 	*/
 	void clear()
 	{
-		p2List_item<tdata>*   p_data;
-		p2List_item<tdata>*   p_next;
+		p2List_item<tdata>* p_data;
+		p2List_item<tdata>* p_next;
 		p_data = start;
 
-		while(p_data != NULL)
+		while (p_data != NULL)
 		{
 			p_next = p_data->next;
 			RELEASE(p_data);
@@ -157,13 +192,13 @@ public:
 	tdata& operator  [](const unsigned int index)
 	{
 		long                  pos;
-		p2List_item<tdata>*   p_item;
+		p2List_item<tdata>* p_item;
 		pos = 0;
 		p_item = start;
 
-		while(p_item != NULL)
+		while (p_item != NULL)
 		{
-			if(pos == index)
+			if (pos == index)
 			{
 				break;
 			}
@@ -181,13 +216,13 @@ public:
 	const tdata& operator  [](const unsigned int index) const
 	{
 		long                  pos;
-		p2List_item<tdata>*   p_item;
+		p2List_item<tdata>* p_item;
 		pos = 0;
 		p_item = start;
 
-		while(p_item != NULL)
+		while (p_item != NULL)
 		{
-			if(pos == index)
+			if (pos == index)
 			{
 				break;
 			}
@@ -206,9 +241,9 @@ public:
 	*/
 	const p2List<tdata>& operator +=(const p2List<tdata>& other_list)
 	{
-		p2List_item<tdata>*   p_item = other_list.start;
+		p2List_item<tdata>* p_item = other_list.start;
 
-		while(p_item != NULL)
+		while (p_item != NULL)
 		{
 			add(p_item->data);
 			p_item = p_item->next;
@@ -223,11 +258,11 @@ public:
 	const p2List_item<tdata>* At(unsigned int index) const
 	{
 		long                  pos = 0;
-		p2List_item<tdata>*   p_item = start;
+		p2List_item<tdata>* p_item = start;
 
-		while(p_item != NULL)
+		while (p_item != NULL)
 		{
-			if(pos++ == index)
+			if (pos++ == index)
 				break;
 
 			p_item = p_item->next;
@@ -242,11 +277,11 @@ public:
 	p2List_item<tdata>* At(unsigned int index)
 	{
 		long                  pos = 0;
-		p2List_item<tdata>*   p_item = start;
+		p2List_item<tdata>* p_item = start;
 
-		while(p_item != NULL)
+		while (p_item != NULL)
 		{
-			if(pos++ == index)
+			if (pos++ == index)
 				break;
 
 			p_item = p_item->next;
@@ -261,15 +296,15 @@ public:
 		int ret = 0;
 		bool swapped = true;
 
-		while(swapped)
+		while (swapped)
 		{
 			swapped = false;
 			p2List_item<tdata>* tmp = start;
 
-			while(tmp != NULL && tmp->next != NULL)
+			while (tmp != NULL && tmp->next != NULL)
 			{
 				++ret;
-				if(tmp->data > tmp->next->data)
+				if (tmp->data > tmp->next->data)
 				{
 					SWAP(tmp->data, tmp->next->data);
 					swapped = true;
@@ -290,9 +325,9 @@ public:
 		p2List_item<tdata>* tmp = start;
 		int index = 0;
 
-		while(tmp != NULL)
+		while (tmp != NULL)
 		{
-			if(tmp->data == data)
+			if (tmp->data == data)
 				return(index);
 
 			++index;
@@ -301,25 +336,38 @@ public:
 		return (-1);
 	}
 
+	/**
+* Get last item
+*/
+	p2List_item<tdata>* GetLast()
+	{
+		p2List_item<tdata>* tmp = start;
+
+		while (tmp != NULL && tmp->next != NULL)
+			tmp = tmp->next;
+
+		return tmp;
+	}
+
 	void InsertAfter(uint position, const p2List<tdata>& list)
 	{
 		p2List_item<tdata>* p_my_list = At(position);
 		p2List_item<tdata>* p_other_list = list.start;
 
-		while(p_other_list != NULL)
+		while (p_other_list != NULL)
 		{
 			p2List_item<tdata>* p_new_item = new p2List_item<tdata>(p_other_list->data);
 
 			p_new_item->next = (p_my_list) ? p_my_list->next : NULL;
 
-			if(p_new_item->next != NULL)
+			if (p_new_item->next != NULL)
 				p_new_item->next->prev = p_new_item;
 			else
 				end = p_new_item;
 
 			p_new_item->prev = p_my_list;
-				
-			if(p_new_item->prev != NULL)
+
+			if (p_new_item->prev != NULL)
 				p_new_item->prev->next = p_new_item;
 			else
 				start = p_new_item;

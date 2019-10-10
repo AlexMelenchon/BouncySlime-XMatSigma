@@ -50,6 +50,10 @@ public:
 	void SaveGame() const;
 	void GetSaveGames(p2List<p2SString>& list_to_fill) const;
 
+	//Gets the difference between the last update (frames)
+	//Used in the physics calculations of the game
+	float GetDeltaTime() const;
+
 private:
 
 	// Load config file

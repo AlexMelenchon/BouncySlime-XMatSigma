@@ -1,36 +1,1 @@
-<!-- Config file for the game -->
-
-<config>
-  <app>
-    <title>Bouncy Slime</title>
-    <organization>UPC</organization>
-  </app>
-	
-  <renderer>
-    <vsync value="true"/>
-  </renderer>
-
-  <window>
-    <resolution width="1024" height="768" scale="1"/>
-    <fullscreen value="false"/>
-    <borderless value="false"/>
-    <resizable value="false"/>
-    <fullscreen_window value="false"/>
-  </window>
-
-  <file_system>
-    <path>data.zip</path>
-  </file_system>
-
-  <map>
-    <folder>maps/</folder>
-  </map>
-
-  <player>
-
-    <path>"textures/test.png"</path>
-    <idle x ="0" y ="0" w ="16" h="28"/>
-    
-  </player>
-
-</config>
+<!-- Config file for the game --><config>  <app>    <title>Bouncy Slime</title>    <organization>UPC</organization>  </app>	  <renderer>    <vsync value="true"/>  </renderer>  <window>    <resolution width="1024" height="768" scale="1"/>    <fullscreen value="false"/>    <borderless value="false"/>    <resizable value="false"/>    <fullscreen_window value="false"/>  </window>  <file_system>    <path>data.zip</path>  </file_system>  <map>    <folder>maps/</folder>  </map>  <player>    <path>"textures/test.png"</path>    <idle x ="0" y ="0" w ="16" h="28"/>      </player></config>
