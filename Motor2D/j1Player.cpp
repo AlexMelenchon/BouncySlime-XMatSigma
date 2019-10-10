@@ -45,22 +45,22 @@ bool j1Player::PreUpdate()
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
 	{
-		fpPlayerSpeed.x += fpForce.x;
+		fpPlayerAccel.x += fpForce.x;
 
 		playerFlip = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) 
 	{
-		fpPlayerSpeed.x -= fpForce.x;
+		fpPlayerAccel.x -= fpForce.x;
 
 		playerFlip = SDL_RendererFlip::SDL_FLIP_NONE;
 	}
 	else
 	{
 		if (fpPlayerSpeed.x > 5.2)
-			fpPlayerSpeed.x += fpPlayerAccel.x * 4;
+			fpPlayerAccel.x += fpForce.x;
 		else if (fpPlayerSpeed.x < 5.2)
-			fpPlayerSpeed.x -= fpPlayerAccel.x * 4;
+			fpPlayerAccel.x -= fpForce.x ;
 		else {
 			fpPlayerSpeed.x = 0.0f;
 
@@ -91,9 +91,9 @@ bool j1Player::PreUpdate()
 void j1Player::UpdatePos(float dt)
 {
 	fpPlayerPos.x += fpPlayerSpeed.x * dt;
-	fpPlayerSpeed.x += fpForce.x * dt;
+	fpPlayerSpeed.x += fpPlayerAccel.x * dt;
 
-	//LimitPlayerSpeed();
+	LimitPlayerSpeed();
 }
 
 void j1Player::LimitPlayerSpeed() 
