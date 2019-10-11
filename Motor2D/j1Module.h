@@ -6,13 +6,21 @@
 #ifndef __j1MODULE_H__
 #define __j1MODULE_H__
 
+//General includes that we will use all across the modules
 #include "p2SString.h"
 #include "PugiXml\src\pugixml.hpp"
+#include "p2Point.h"
+#include "SDL/include/SDL_render.h"
+#include "p2List.h"
+#include "p2Log.h"
+#include"animation.h"
+
 
 class j1App;
 
 struct SDL_Texture; // Struct for texture, to be able to call it from any module
 struct SDL_Rect; // Struct for rect, to be able to call it from any module
+class Animation; //Class for animations
 
 class j1Module
 {

@@ -2,16 +2,8 @@
 #define __j1PLAYER_H__
 
 #include "j1Module.h"
-#include "p2Point.h"
-#include "SDL/include/SDL_render.h"
-#include "p2List.h"
-#include "p2Log.h"
 
 
-
-#define JUMPINGFRAMES 60
-#define JUMP_INIT_VY 10 //initial velocity on the Y coord. //16.2
-#define JUMP_INIT_AY 0.5 //initial acceleration on the Y coord. //0.867
 
 enum player_states
 {
@@ -72,11 +64,14 @@ private:
 	//Position variables
 	fPoint fpPlayerPos = { 0.0f,0.0f }; //Determines player position on the map
 	fPoint fpPlayerSpeed = { 0.0f,0.0f }; // Determines player speed in the x and y axis
-	fPoint fpPlayerAccel = { 0.0f,0.0f }; // Determines player acceleration in the x and y axis
-	fPoint fpForce = { -180.0,-500.0f };
+	float fPlayerAccel = 0.0f; // Determines player acceleration in the x and y axis
+	fPoint fpForce = { -180.0,-500.0f }; //Force applied to the player's movement in both axis
 
+	//Position Limits
+	float slowGrade = 1.25f;
+	int slowLimit = 200;
 
-	fPoint fpPlayerMaxSpeed = { 650.0f, 650.0f }; // Determines player maximum speed
+	fPoint fpPlayerMaxSpeed = { 650.0f, 750.0f }; // Determines player maximum speed
 
 
 	SDL_RendererFlip playerFlip = SDL_RendererFlip::SDL_FLIP_NONE; //Var that controls if the player is flipped or not
@@ -89,11 +84,14 @@ private:
 	bool onPlatform = false;
 	float flPreviousTime = 0;
 	float flCurrentTime = 0;
-	float fGravity = -40.0f;
-	float fGravityAugmented = fGravity * 2;
-	float slowGrade = 1.25f;
-	int slowLimit = 200;
+	float fGravity = 50.0f;
 
+
+
+
+
+	//Animations
+	Animation* animPlayerIdle = nullptr;
 };
 
 #endif 

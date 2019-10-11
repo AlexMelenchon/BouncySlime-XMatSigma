@@ -28,6 +28,18 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 
 	inputs.start = 0;
 
+	animPlayerIdle = new Animation();
+	for (pugi::xml_node iterator = player_node.child("sprite"); iterator; iterator = iterator.next_sibling("sprite"))
+	{
+		SDL_Rect frame;
+		frame.x = iterator.attribute("x").as_int();
+		frame.y = iterator.attribute("y").as_int();
+		frame.w = iterator.attribute("w").as_int();
+		frame.h = iterator.attribute("h").as_int();
+		animPlayerIdle->PushBack(frame, iterator.attribute("frames").as_int());
+	}
+
+
 
 	flCurrentTime = App->GetDeltaTime();
 
@@ -36,7 +48,7 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 
 bool j1Player::Start()
 {
-	playerTex = App->tex->Load("textures/test.png");
+	playerTex = App->tex->Load("textures/player/idle.png");
 	return true;
 }
 
@@ -62,7 +74,7 @@ bool j1Player::PreUpdate()
 	}
 
 
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && current_state != ST_AIR)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && current_state != ST_AIR)
 	{
 		fpPlayerSpeed.y = fpForce.y;
 
@@ -70,13 +82,17 @@ bool j1Player::PreUpdate()
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		fpPlayerAccel.y -= -fpForce.y;
+		fPlayerAccel -= -fpForce.y;
 	}
 
 
 	//Get the time elapsed since the last frame
 	flPreviousTime = flCurrentTime;
 	flCurrentTime = App->GetDeltaTime();
+
+	//The time gets corrected if it's too high
+	if (flCurrentTime > 0.15)
+		flCurrentTime = 0.15f;
 
 	//Update position
 	LimitPlayerSpeed();
@@ -86,7 +102,11 @@ bool j1Player::PreUpdate()
 	player_states state = process_fsm(inputs);
 	current_state = state;
 
-	if (fpPlayerPos.y > 200) inputs.add(IN_JUMP_FINISH);
+	//TO DELETE
+	if (fpPlayerPos.y > 200) {
+		inputs.add(IN_JUMP_FINISH);
+		fpPlayerPos.y = 200;
+	}
 
 	return true;
 }
@@ -96,7 +116,7 @@ void j1Player::UpdatePos(float dt)
 	fpPlayerPos.x += fpPlayerSpeed.x * dt;
 
 	fpPlayerPos.y += fpPlayerSpeed.y * dt;
-	fpPlayerSpeed.y += fpPlayerAccel.y * dt;
+	fpPlayerSpeed.y += fPlayerAccel * dt;
 
 	//TODO: UPDATE AND CHECK COLLISION, IF FALSE, WE CONSIDER THE PLAYER IS FALLING
 	//	inputs.add(IN_JUMP_FINISH);
@@ -107,25 +127,23 @@ void j1Player::LimitPlayerSpeed()
 	if (fpPlayerSpeed.x > fpPlayerMaxSpeed.x)
 	{
 		fpPlayerSpeed.x = fpPlayerMaxSpeed.x;
-		fpPlayerAccel.x = fpPlayerAccel.x;
 	}
 
 	if (fpPlayerSpeed.x < -fpPlayerMaxSpeed.x)
 	{
 		fpPlayerSpeed.x = -fpPlayerMaxSpeed.x;
-		fpPlayerAccel.x = fpPlayerAccel.x;
 	}
 
 	if (fpPlayerSpeed.y > fpPlayerMaxSpeed.y)
 	{
 		fpPlayerSpeed.y = fpPlayerMaxSpeed.y;
-		fpPlayerAccel.y = fpPlayerAccel.y;
+		fPlayerAccel = fPlayerAccel;
 	}
 
 	if (fpPlayerSpeed.y < -fpPlayerMaxSpeed.y)
 	{
 		fpPlayerSpeed.y = -fpPlayerMaxSpeed.y;
-		fpPlayerAccel.y = fpPlayerAccel.y;
+		fPlayerAccel = fPlayerAccel;
 	}
 
 }
@@ -136,24 +154,22 @@ bool j1Player::Update(float dt)
 	{
 	case ST_GROUND:
 		LOG("IDLE\n");
-		fpPlayerAccel.y = 0;
+		fPlayerAccel = 0;
 		fpPlayerSpeed.y = 0;
 		//current_animation = &idle;
 		break;
-		break;
 	case ST_AIR:
 		LOG("IN THE AIR ^^^^\n");
-		fpPlayerAccel.y += -fGravity;
+		fPlayerAccel += fGravity;
 		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
 		break;
-
 	}
 	return true;
 }
 
 bool j1Player::PostUpdate()
 {
-	App->render->Blit(playerTex, (int)fpPlayerPos.x, (int)fpPlayerPos.y, idleRect, 1.0f, playerFlip);
+	App->render->Blit(playerTex, (int)fpPlayerPos.x, (int)fpPlayerPos.y, &animPlayerIdle->GetCurrentFrame(), 1.0f, playerFlip);
 	return true;
 }
 
