@@ -15,7 +15,7 @@
 #include "p2Log.h"
 #include"animation.h"
 
-
+struct Collider;
 class j1App;
 
 struct SDL_Texture; // Struct for texture, to be able to call it from any module
@@ -79,6 +79,9 @@ public:
 	{
 		return true;
 	}
+
+	virtual void OnCollision(Collider*, Collider*) {}
+
 
 public:
 
