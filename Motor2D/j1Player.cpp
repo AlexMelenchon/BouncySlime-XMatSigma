@@ -57,20 +57,20 @@ bool j1Player::PreUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
 	{
 		fpPlayerSpeed.x += fpForce.x;
-		deAccel(SLOW_NEGATIVE_X);
+		deAccel();
 
 		playerFlip = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) 
 	{
 		fpPlayerSpeed.x -= fpForce.x;
-		deAccel(SLOW_POSITIVE_X);
+		deAccel();
 
 		playerFlip = SDL_RendererFlip::SDL_FLIP_NONE;
 	}
 	else
 	{
-		deAccel(SLOW_GENERAL);
+		deAccel();
 	}
 
 
@@ -189,25 +189,9 @@ bool j1Player::Save(pugi::xml_node&) const
 	return true;
 }
 
-void j1Player::deAccel(slow_direction slow)
+void j1Player::deAccel()
 {
-	switch (slow) {
-
-	case SLOW_GENERAL:
 		fpPlayerSpeed.x /= slowGrade;
-		break;
-
-	case SLOW_POSITIVE_X:
-		if(fpPlayerSpeed.x > slowLimit)
-		fpPlayerSpeed.x /= slowGrade;
-		break;
-
-	case SLOW_NEGATIVE_X:
-		if(fpPlayerSpeed.x < -slowLimit)
-		fpPlayerSpeed.x /= slowGrade;
-		break;
-	}
-
 }
 
 

@@ -19,15 +19,6 @@ enum player_inputs
 	IN_JUMP,
 	IN_JUMP_FINISH
 };
-
-enum slow_direction
-{
-	SLOW_UNKNOWN,
-	SLOW_GENERAL,
-	SLOW_POSITIVE_X,
-	SLOW_NEGATIVE_X
-};
-
 class j1Player : public j1Module
 {
 public:
@@ -52,7 +43,7 @@ public:
 
 	void UpdatePos(float dt); //Update player's position
 	void LimitPlayerSpeed();  // To limit the player speed in both axis
-	void deAccel(slow_direction slow);  //To slow smoothly the player in the x axis: 0.Slow current speed 1. slow the x+, 2. slow the x-
+	void deAccel();  //To slow smoothly the player in the x axis: 0.Slow current speed 1. slow the x+, 2. slow the x-
 
 	player_states process_fsm(p2List<player_inputs>& inputs);
 
