@@ -3,7 +3,7 @@
 
 #include "j1Module.h"
 
-
+#define MAX_COLLIDERS 6
 
 enum player_states
 {
@@ -19,6 +19,15 @@ enum player_inputs
 	IN_JUMP,
 	IN_JUMP_FINISH
 };
+
+enum slow_direction
+{
+	SLOW_UNKNOWN,
+	SLOW_GENERAL,
+	SLOW_POSITIVE_X,
+	SLOW_NEGATIVE_X
+};
+
 class j1Player : public j1Module
 {
 public:
@@ -41,9 +50,15 @@ public:
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 
+
+	void checkCollision(float x, float y);
+
 	void UpdatePos(float dt); //Update player's position
 	void LimitPlayerSpeed();  // To limit the player speed in both axis
-	void deAccel();  //To slow smoothly the player in the x axis: 0.Slow current speed 1. slow the x+, 2. slow the x-
+	void deAccel(slow_direction slow);  //To slow smoothly the player in the x axis: 0.Slow current speed 1. slow the x+, 2. slow the x-
+
+	virtual void OnCollision(Collider*, Collider*) {} //To work on collisions
+
 
 	player_states process_fsm(p2List<player_inputs>& inputs);
 
@@ -78,7 +93,8 @@ private:
 	float fGravity = 50.0f;
 
 
-
+	// Colliders
+	Collider* colliders[MAX_COLLIDERS];
 
 
 	//Animations

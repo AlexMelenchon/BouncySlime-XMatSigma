@@ -3,6 +3,7 @@
 #include "j1App.h"
 #include "j1Render.h"
 #include "j1Textures.h"
+#include "j1Collision.h"
 
 
 //Constructor
@@ -49,28 +50,40 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 bool j1Player::Start()
 {
 	playerTex = App->tex->Load("textures/player/idle.png");
+
+
+
 	return true;
 }
 
 bool j1Player::PreUpdate()
 {
+	for (int i = 0; i < MAX_COLLIDERS; i++)//deletes all the hitboxes at the start of the frame
+	{
+		if (colliders[i] != nullptr) {
+			colliders[i]->to_delete = true;
+			colliders[i] = nullptr;
+		}
+	}
+
+
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
 	{
 		fpPlayerSpeed.x += fpForce.x;
-		deAccel();
+		deAccel(SLOW_NEGATIVE_X);
 
 		playerFlip = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) 
 	{
 		fpPlayerSpeed.x -= fpForce.x;
-		deAccel();
+		deAccel(SLOW_POSITIVE_X);
 
 		playerFlip = SDL_RendererFlip::SDL_FLIP_NONE;
 	}
 	else
 	{
-		deAccel();
+		deAccel(SLOW_GENERAL);
 	}
 
 
@@ -113,13 +126,20 @@ bool j1Player::PreUpdate()
 
 void j1Player::UpdatePos(float dt)
 {
-	fpPlayerPos.x += fpPlayerSpeed.x * dt;
-
-	fpPlayerPos.y += fpPlayerSpeed.y * dt;
 	fpPlayerSpeed.y += fPlayerAccel * dt;
+
+	checkCollision(fpPlayerSpeed.x * dt, fpPlayerSpeed.y *dt);
+
+	fpPlayerPos.x += fpPlayerSpeed.x * dt;
+	fpPlayerPos.y += fpPlayerSpeed.y * dt;
 
 	//TODO: UPDATE AND CHECK COLLISION, IF FALSE, WE CONSIDER THE PLAYER IS FALLING
 	//	inputs.add(IN_JUMP_FINISH);
+}
+
+void j1Player::checkCollision(float x, float y) 
+{
+	//Check in all directions + (pos+vel); if a collider wall exists in that pos (with a for in j1Collision ?) make the player not go into there.
 }
 
 void j1Player::LimitPlayerSpeed() 
@@ -164,7 +184,15 @@ bool j1Player::Update(float dt)
 		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
 		break;
 	}
-	return true;
+	//Test Rect
+	for (uint i = 0; i < MAX_COLLIDERS; i++)
+	{
+		colliders[i++] = App->collision->AddCollider({ (int)fpPlayerPos.x, (int)fpPlayerPos.y, animPlayerIdle->frames->w, animPlayerIdle->frames->h }, COLLIDER_PLAYER, this);
+		colliders[i++] = App->collision->AddCollider({ (int)500, (int)100, 100, 500 }, COLLIDER_WALL, this);
+
+	}
+	
+		return true;
 }
 
 bool j1Player::PostUpdate()
@@ -189,9 +217,25 @@ bool j1Player::Save(pugi::xml_node&) const
 	return true;
 }
 
-void j1Player::deAccel()
+void j1Player::deAccel(slow_direction slow)
 {
+	switch (slow) {
+
+	case SLOW_GENERAL:
 		fpPlayerSpeed.x /= slowGrade;
+		break;
+
+	case SLOW_POSITIVE_X:
+		if(fpPlayerSpeed.x > slowLimit)
+		fpPlayerSpeed.x /= slowGrade;
+		break;
+
+	case SLOW_NEGATIVE_X:
+		if(fpPlayerSpeed.x < -slowLimit)
+		fpPlayerSpeed.x /= slowGrade;
+		break;
+	}
+
 }
 
 

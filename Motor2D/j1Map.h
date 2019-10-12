@@ -15,20 +15,20 @@ struct LayerInfo {
 	uint height = 0u;
 	uint* tileArray = nullptr;
 	~LayerInfo() {};
+
+
+	uint size = 0;
+	float parallaxSpeed;
+
+
+	inline uint Get(uint x, uint y) const
+	{
+		return x + y * width;
+	}
 };
-// ----------------------------------------------------
 
-	// TODO 6: Short function to get the value of x,y
-const inline uint Get(int x, int y, int tile_w) {
-	
-	return (x + y* tile_w);
-
-};
-
-// ----------------------------------------------------
 struct TileSet
 {
-	// TODO 7: Create a method that receives a tile id and returns it's Rect
 
 	p2SString			name;
 	int					firstgid;
@@ -44,7 +44,7 @@ struct TileSet
 	int					offset_x;
 	int					offset_y;
 
-	SDL_Rect getRect(uint tileId);
+	SDL_Rect GetTileRect(uint tileId);
 };
 
 enum MapTypes
@@ -91,16 +91,19 @@ public:
 	// Load new map
 	bool Load(const char* path);
 
-	// TODO 8: Create a method that translates x,y coordinates from map positions to world positions
+	//Returns x,y coordinates in the world
+	iPoint MapToWorld(int x, int y) const;
+
 
 private:
 
 	bool LoadMap();
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
-	// TODO 3: Create a method that loads a single laye
-	// bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool load_Layer(pugi::xml_node& node, LayerInfo* layer);
+
+	TileSet* GetTilesetFromTileId(int id) const;
+
 
 
 public:

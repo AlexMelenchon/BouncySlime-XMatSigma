@@ -5,6 +5,8 @@
 
 j1Collision::j1Collision()
 {
+	name.create("collision");
+
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 		colliders[i] = nullptr;
 
@@ -42,7 +44,7 @@ bool j1Collision::PreUpdate()
 }
 
 // Called before render is available
-bool j1Collision::Update()
+bool j1Collision::Update(float dt)
 {
 
 	DebugDraw();
@@ -89,8 +91,10 @@ bool j1Collision::PostUpdate()
 
 void j1Collision::DebugDraw()
 {
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_REPEAT)
-		debug = !debug;
+	//if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+		//debug = !debug;
+
+	debug = true;
 
 	if (debug == false)
 		return;
@@ -131,7 +135,7 @@ bool j1Collision::CleanUp()
 	return true;
 }
 
-Collider* j1Collision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, int damage, int delayPlayer, int delayEnemy, int attackType, j1Module* callback)
+Collider* j1Collision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback)
 {
 	Collider* ret = nullptr;
 
@@ -139,7 +143,7 @@ Collider* j1Collision::AddCollider(SDL_Rect rect, COLLIDER_TYPE type, int damage
 	{
 		if (colliders[i] == nullptr)
 		{
-			ret = colliders[i] = new Collider(rect, type, damage, delayPlayer, delayEnemy, attackType, callback);
+			ret = colliders[i] = new Collider(rect, type, callback);
 			break;
 		}
 	}
