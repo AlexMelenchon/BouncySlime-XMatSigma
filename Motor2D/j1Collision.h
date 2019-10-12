@@ -1,18 +1,11 @@
 #ifndef __ModuleCollision_H__
 #define __ModuleCollision_H__
 
-#define MAX_COLLIDERS 2
+#define MAX_COLLIDERS 20
 
 #include "j1Module.h"
 
-enum COLLIDER_TYPE
-{
-	COLLIDER_NONE = -1,
-	COLLIDER_WALL,
-	COLLIDER_PLAYER,
 
-	COLLIDER_MAX
-};
 
 struct Collider
 {
@@ -25,11 +18,28 @@ struct Collider
 		rect(rectangle),
 		type(type),
 		callback(callback)
-	{}
+	{};
+
+	Collider() :
+		rect({ 0, 0, 0, 0 }),
+		type(COLLIDER_NONE),
+		callback(nullptr)
+	{};
+
+
+
 	void SetPos(int x, int y)
 	{
 		rect.x = x;
 		rect.y = y;
+	}
+
+	void ReSet(int x, int y, int w, int h)
+	{
+		rect.x = x;
+		rect.y = y;
+		rect.w = w;
+		rect.h = h;
 	}
 
 	void setType(COLLIDER_TYPE type1)
@@ -52,12 +62,12 @@ public:
 	bool PostUpdate() ;
 	bool CleanUp() ;
 
-	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module * callback = nullptr);
+	void AddControlCollider(Collider*);
 	void DebugDraw();
 
 private:
 
-	Collider* colliders[MAX_COLLIDERS];
+	Collider* collidersDebug[MAX_COLLIDERS];
 	bool matrix[COLLIDER_MAX][COLLIDER_MAX];
 	bool debug = false;
 };

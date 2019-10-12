@@ -4,6 +4,8 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Map.h"
+#include "j1Collision.h"
+#include "j1Player.h"
 #include <math.h>
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
@@ -31,8 +33,6 @@ void j1Map::Draw()
 	if(map_loaded == false)
 		return;
 
-	// TODO 5: Prepare the loop to iterate all the tiles in a layer
-
 	for (p2List_item<LayerInfo*>* layer = data.layerList.start; layer != NULL; layer = layer->next)
 	{
 		for (int y = 0; y < data.height; ++y)
@@ -41,6 +41,7 @@ void j1Map::Draw()
 			{
 				uint tile_id = layer->data->tileArray[layer->data->Get(x, y)];
 				float parallaxSpeed = layer->data->parallaxSpeed;
+
 				if (tile_id > 0)
 				{
 					TileSet* tileset = GetTilesetFromTileId(tile_id);
@@ -48,8 +49,8 @@ void j1Map::Draw()
 					{
 						SDL_Rect r = tileset->GetTileRect(tile_id);
 						iPoint pos = MapToWorld(x, y);
-
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r,-parallaxSpeed);
+	
+						App->render->Blit(tileset->texture, pos.x, pos.y, &r,parallaxSpeed);
 					}
 				}
 			}
@@ -161,10 +162,20 @@ bool j1Map::Load(const char* file_name)
 	}
 
 	// Load layer info ----------------------------------------------
-	for (pugi::xml_node nodeLayer = map_file.child("map").child("layer"); nodeLayer; nodeLayer = nodeLayer.next_sibling("layer")) {
+	for (pugi::xml_node nodeLayer = map_file.child("map").child("layer"); nodeLayer; nodeLayer = nodeLayer.next_sibling("layer")) 
+	{
 		LayerInfo* layerInfo = new LayerInfo();
 
 		load_Layer(nodeLayer,layerInfo);
+
+	}
+	// Load colliders info ----------------------------------------------
+	for (pugi::xml_node nodeColliderGroup = map_file.child("map").child("objectgroup"); nodeColliderGroup; nodeColliderGroup = nodeColliderGroup.next_sibling("objectgroup"))
+	{
+		for (pugi::xml_node nodeCollider = nodeColliderGroup.child("object"); nodeCollider; nodeCollider = nodeCollider.next_sibling("object"))
+		{
+			load_collider(nodeCollider);
+		}
 
 	}
 
@@ -362,6 +373,45 @@ bool j1Map::load_Layer(pugi::xml_node& node, LayerInfo* layerInfo)
 
 		data.layerList.add(layerInfo);
 
+	}
+
+	return ret;
+}
+
+bool j1Map::load_collider(pugi::xml_node& node)
+{
+	bool ret = true;
+
+	SDL_Rect colliderRect;
+
+	colliderRect.x = node.attribute("x").as_int();
+	colliderRect.y = node.attribute("y").as_int();
+	colliderRect.w = node.attribute("width").as_int();
+	colliderRect.h = node.attribute("height").as_int();
+
+	COLLIDER_TYPE type;
+	p2SString name = node.attribute("name").as_string();
+
+	if (name == "Floor")
+		type = COLLIDER_WALL;
+	else if (name == "Start") 
+	{
+		type = COLLIDER_START;
+		App->player->setInitialPos(colliderRect.x, colliderRect.y);
+	}
+	else
+		type = COLLIDER_NONE;
+		
+	if (type == COLLIDER_NONE)
+	{
+		LOG("Error loading collider. Type not especified");
+		ret = false;
+	}
+	else if (type != COLLIDER_START)
+	{
+		Collider* collision  = new Collider(colliderRect, type, this);
+		App->collision->AddControlCollider(collision);
+		data.colliderList.add(collision);
 	}
 
 	return ret;

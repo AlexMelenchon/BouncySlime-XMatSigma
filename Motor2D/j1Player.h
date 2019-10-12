@@ -50,8 +50,11 @@ public:
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 
+	void CalculateCollider(fPoint);
 
-	void checkCollision(float x, float y);
+	void checkCollision(Collider*);
+
+	void setInitialPos(int x, int y);
 
 	void UpdatePos(float dt); //Update player's position
 	void LimitPlayerSpeed();  // To limit the player speed in both axis
@@ -66,6 +69,8 @@ public:
 private:
 	p2List<player_inputs> inputs; //List that stores the players inputs
 	player_states current_state = ST_UNKNOWN; //Player Starting state
+
+	Collider* playerCollider = nullptr;
 
 	//Position variables
 	fPoint fpPlayerPos = { 0.0f,0.0f }; //Determines player position on the map

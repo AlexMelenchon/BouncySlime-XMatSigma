@@ -15,12 +15,26 @@
 #include "p2Log.h"
 #include"animation.h"
 
-struct Collider;
 class j1App;
 
 struct SDL_Texture; // Struct for texture, to be able to call it from any module
 struct SDL_Rect; // Struct for rect, to be able to call it from any module
 class Animation; //Class for animations
+
+
+struct Collider;
+enum COLLIDER_TYPE
+{
+	COLLIDER_NONE = -1,
+	COLLIDER_WALL,
+	COLLIDER_PLAYER,
+	COLLIDER_START,
+	//COLLIDER_DEATH,
+	//COLLIDER_WIN,
+
+	COLLIDER_MAX
+};
+
 
 class j1Module
 {

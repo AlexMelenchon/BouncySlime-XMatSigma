@@ -6,7 +6,6 @@
 #include "p2Point.h"
 #include "j1Module.h"
 
-// TODO 1: Create a struct for the map layer
 
 struct LayerInfo {
 
@@ -26,6 +25,7 @@ struct LayerInfo {
 		return x + y * width;
 	}
 };
+
 
 struct TileSet
 {
@@ -64,8 +64,8 @@ struct MapData
 	SDL_Color			background_color;
 	MapTypes			type;
 	p2List<TileSet*>	tilesets;
-	// TODO 2: Add a list/array of layers to the map!
 	p2List<LayerInfo*> layerList;
+	p2List<Collider*> colliderList;
 
 };
 
@@ -101,6 +101,7 @@ private:
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	bool load_Layer(pugi::xml_node& node, LayerInfo* layer);
+	bool load_collider(pugi::xml_node& node);
 
 	TileSet* GetTilesetFromTileId(int id) const;
 

@@ -4,6 +4,7 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Collision.h"
+#include "j1Map.h"
 
 
 //Constructor
@@ -28,6 +29,10 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	idleRect->h = 300;
 
 	inputs.start = 0;
+
+
+	playerCollider = new Collider(*idleRect, COLLIDER_PLAYER, this);
+	App->collision->AddControlCollider(playerCollider);
 
 	animPlayerIdle = new Animation();
 	for (pugi::xml_node iterator = player_node.child("sprite"); iterator; iterator = iterator.next_sibling("sprite"))
@@ -58,15 +63,6 @@ bool j1Player::Start()
 
 bool j1Player::PreUpdate()
 {
-	for (int i = 0; i < MAX_COLLIDERS; i++)//deletes all the hitboxes at the start of the frame
-	{
-		if (colliders[i] != nullptr) {
-			colliders[i]->to_delete = true;
-			colliders[i] = nullptr;
-		}
-	}
-
-
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
 	{
 		fpPlayerSpeed.x += fpForce.x;
@@ -116,9 +112,9 @@ bool j1Player::PreUpdate()
 	current_state = state;
 
 	//TO DELETE
-	if (fpPlayerPos.y > 200) {
+	if (fpPlayerPos.y > 525) {
 		inputs.add(IN_JUMP_FINISH);
-		fpPlayerPos.y = 200;
+		fpPlayerPos.y = 525;
 	}
 
 	return true;
@@ -128,7 +124,6 @@ void j1Player::UpdatePos(float dt)
 {
 	fpPlayerSpeed.y += fPlayerAccel * dt;
 
-	checkCollision(fpPlayerSpeed.x * dt, fpPlayerSpeed.y *dt);
 
 	fpPlayerPos.x += fpPlayerSpeed.x * dt;
 	fpPlayerPos.y += fpPlayerSpeed.y * dt;
@@ -137,10 +132,7 @@ void j1Player::UpdatePos(float dt)
 	//	inputs.add(IN_JUMP_FINISH);
 }
 
-void j1Player::checkCollision(float x, float y) 
-{
-	//Check in all directions + (pos+vel); if a collider wall exists in that pos (with a for in j1Collision ?) make the player not go into there.
-}
+
 
 void j1Player::LimitPlayerSpeed() 
 {
@@ -185,15 +177,26 @@ bool j1Player::Update(float dt)
 		break;
 	}
 	//Test Rect
-	for (uint i = 0; i < MAX_COLLIDERS; i++)
-	{
-		colliders[i++] = App->collision->AddCollider({ (int)fpPlayerPos.x, (int)fpPlayerPos.y, animPlayerIdle->frames->w, animPlayerIdle->frames->h }, COLLIDER_PLAYER, this);
-		colliders[i++] = App->collision->AddCollider({ (int)500, (int)100, 100, 500 }, COLLIDER_WALL, this);
+	CalculateCollider(fpPlayerPos);
 
-	}
+	checkCollision(playerCollider);
+
 	
-		return true;
+	return true;
 }
+
+void j1Player::CalculateCollider(fPoint pos) 
+{
+	playerCollider->ReSet((int)fpPlayerPos.x, (int)fpPlayerPos.y, animPlayerIdle->frames->w, animPlayerIdle->frames->h);
+}
+
+void j1Player::checkCollision(Collider* playerCol)
+{
+
+	SDL_Rect result;
+
+}
+
 
 bool j1Player::PostUpdate()
 {
@@ -238,6 +241,12 @@ void j1Player::deAccel(slow_direction slow)
 
 }
 
+void j1Player::setInitialPos(int x, int y)
+{
+	fpPlayerPos.x = x;
+	fpPlayerPos.y = y;
+
+}
 
 player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 {
