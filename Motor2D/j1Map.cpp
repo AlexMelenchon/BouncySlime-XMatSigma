@@ -40,6 +40,7 @@ void j1Map::Draw()
 			for (int x = 0; x < data.width; ++x)
 			{
 				uint tile_id = layer->data->tileArray[layer->data->Get(x, y)];
+				float parallaxSpeed = layer->data->parallaxSpeed;
 				if (tile_id > 0)
 				{
 					TileSet* tileset = GetTilesetFromTileId(tile_id);
@@ -48,7 +49,7 @@ void j1Map::Draw()
 						SDL_Rect r = tileset->GetTileRect(tile_id);
 						iPoint pos = MapToWorld(x, y);
 
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+						App->render->Blit(tileset->texture, pos.x, pos.y, &r,-parallaxSpeed);
 					}
 				}
 			}
@@ -183,9 +184,6 @@ bool j1Map::Load(const char* file_name)
 			LOG("spacing: %d margin: %d", s->spacing, s->margin);
 			item = item->next;
 		}
-
-		// TODO 4: Add info here about your loaded layers
-		// Adapt this code with your own variables
 		
 		p2List_item<LayerInfo*>* item_layer = data.layerList.start;
 		while(item_layer != NULL)
@@ -338,6 +336,7 @@ bool j1Map::load_Layer(pugi::xml_node& node, LayerInfo* layerInfo)
 	layerInfo->name = node.attribute("name").as_string();
 	layerInfo->width = node.attribute("width").as_uint();
 	layerInfo->height = node.attribute("height").as_uint();
+	layerInfo->parallaxSpeed = node.child("properties").child("property").attribute("value").as_float(0.0f);
 
 	//LoadProperties(node, layerInfo->properties);
 	pugi::xml_node layer_data = node.child("data");
