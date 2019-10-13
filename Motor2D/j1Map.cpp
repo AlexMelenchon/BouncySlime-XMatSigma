@@ -397,7 +397,7 @@ bool j1Map::load_collider(pugi::xml_node& node)
 	else if (name == "Start") 
 	{
 		type = COLLIDER_START;
-		App->player->setInitialPos(colliderRect.x, colliderRect.y);
+		App->player->SetPos(colliderRect.x, colliderRect.y);
 	}
 	else
 		type = COLLIDER_NONE;

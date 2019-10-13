@@ -11,6 +11,7 @@
 #include "PugiXml\src\pugixml.hpp"
 #include "p2Point.h"
 #include "SDL/include/SDL_render.h"
+#include "SDL/include/SDL_rect.h"
 #include "p2List.h"
 #include "p2Log.h"
 #include"animation.h"

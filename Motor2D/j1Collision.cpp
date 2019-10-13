@@ -58,47 +58,13 @@ bool j1Collision::Update(float dt)
 
 bool j1Collision::PostUpdate()
 {
-	// Calculate collisions
-	Collider* c1;
-	Collider* c2;
-
-	//for (uint i = 0; i < MAX_COLLIDERS; ++i)
-	//{
-	//	// skip empty colliders
-	//	if (colliders[i] == nullptr)
-	//		continue;
-
-	//	c1 = colliders[i];
-
-	//	// avoid checking collisions already checked
-	//	for (uint k = i + 1; k < MAX_COLLIDERS; ++k)
-	//	{
-	//		// skip empty colliders
-	//		if (colliders[k] == nullptr)
-	//			continue;
-
-	//		c2 = colliders[k];
-
-	//		if (c1->CheckCollision(c2->rect) == true)
-	//		{
-	//			if (matrix[c1->type][c2->type] && c1->callback)
-	//				c1->callback->OnCollision(c1, c2);
-
-	//			if (matrix[c2->type][c1->type] && c2->callback)
-	//				c2->callback->OnCollision(c2, c1);
-	//		}
-	//	}
-	//}
-
 	return true;
 }
 
 void j1Collision::DebugDraw()
 {
-	//if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-		//debug = !debug;
-
-	debug = true;
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+		debug = !debug;
 
 	if (debug == false)
 		return;

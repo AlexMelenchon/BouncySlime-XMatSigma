@@ -10,14 +10,18 @@ enum player_states
 	ST_UNKNOWN,
 
 	ST_GROUND,
-	ST_AIR
+	ST_AIR,
+	ST_FALLING,
+	ST_WALL
 };
 
 enum player_inputs
 {
 	IN_UNKNOWN,
 	IN_JUMP,
-	IN_JUMP_FINISH
+	IN_JUMP_FINISH,
+	IN_FALL,
+	IN_WALL
 };
 
 enum slow_direction
@@ -26,6 +30,16 @@ enum slow_direction
 	SLOW_GENERAL,
 	SLOW_POSITIVE_X,
 	SLOW_NEGATIVE_X
+};
+
+enum collisionDirection 
+{
+	DIRECTION_NONE = -1,
+	DIRECTION_LEFT,
+	DIRECTION_RIGHT,
+	DIRECTION_UP,
+	DIRECTION_DOWN,
+	DIRECTION_MAX
 };
 
 class j1Player : public j1Module
@@ -53,15 +67,16 @@ public:
 	void CalculateCollider(fPoint);
 
 	void checkCollision(Collider*);
+	void RecalculatePos(SDL_Rect, SDL_Rect);
 
-	void setInitialPos(int x, int y);
+	void SetPos(int x, int y);
+	void UpdateState();
 
 	void UpdatePos(float dt); //Update player's position
 	void LimitPlayerSpeed();  // To limit the player speed in both axis
 	void deAccel(slow_direction slow);  //To slow smoothly the player in the x axis: 0.Slow current speed 1. slow the x+, 2. slow the x-
 
-	virtual void OnCollision(Collider*, Collider*) {} //To work on collisions
-
+	p2List<Collider*> colliderList;
 
 	player_states process_fsm(p2List<player_inputs>& inputs);
 
@@ -96,7 +111,7 @@ private:
 	float flPreviousTime = 0;
 	float flCurrentTime = 0;
 	float fGravity = 50.0f;
-
+	bool falling = true;
 
 	// Colliders
 	Collider* colliders[MAX_COLLIDERS];

@@ -44,9 +44,6 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 		frame.h = iterator.attribute("h").as_int();
 		animPlayerIdle->PushBack(frame, iterator.attribute("frames").as_int());
 	}
-
-
-
 	flCurrentTime = App->GetDeltaTime();
 
 	return true;
@@ -55,14 +52,13 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 bool j1Player::Start()
 {
 	playerTex = App->tex->Load("textures/player/idle.png");
-
-
-
 	return true;
 }
 
 bool j1Player::PreUpdate()
 {
+	if (colliderList.start == NULL)
+		colliderList = App->map->data.colliderList;
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
 	{
 		fpPlayerSpeed.x += fpForce.x;
@@ -83,8 +79,9 @@ bool j1Player::PreUpdate()
 	}
 
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && current_state != ST_AIR)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && current_state == ST_GROUND)
 	{
+		fPlayerAccel = 0;
 		fpPlayerSpeed.y = fpForce.y;
 
 		inputs.add(IN_JUMP);
@@ -103,19 +100,43 @@ bool j1Player::PreUpdate()
 	if (flCurrentTime > 0.15)
 		flCurrentTime = 0.15f;
 
+	//Check the player state and update to the next one
+	UpdateState();
+
+
+	return true;
+}
+
+void j1Player::UpdateState() 
+{
+	player_states state = process_fsm(inputs);
+	current_state = state;
+}
+
+bool j1Player::Update(float dt)
+{
+	switch (current_state)
+	{
+	case ST_GROUND:
+		LOG("IDLE\n");
+		fPlayerAccel += fGravity;
+		//current_animation = &idle;
+		break;
+	case ST_AIR:
+		LOG("IN THE AIR ^^^^\n");
+		fPlayerAccel += fGravity;
+		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
+		break;
+	case ST_FALLING:
+		LOG("FALLING \n");
+		fPlayerAccel -= fpForce.y;
+		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
+		break;
+	}
+
 	//Update position
 	LimitPlayerSpeed();
 	UpdatePos(flCurrentTime);
-
-	//Check the player state and upload the new one
-	player_states state = process_fsm(inputs);
-	current_state = state;
-
-	//TO DELETE
-	if (fpPlayerPos.y > 525) {
-		inputs.add(IN_JUMP_FINISH);
-		fpPlayerPos.y = 525;
-	}
 
 	return true;
 }
@@ -128,13 +149,20 @@ void j1Player::UpdatePos(float dt)
 	fpPlayerPos.x += fpPlayerSpeed.x * dt;
 	fpPlayerPos.y += fpPlayerSpeed.y * dt;
 
-	//TODO: UPDATE AND CHECK COLLISION, IF FALSE, WE CONSIDER THE PLAYER IS FALLING
-	//	inputs.add(IN_JUMP_FINISH);
+
+	falling = true;
+	CalculateCollider(fpPlayerPos);
+	checkCollision(playerCollider);
+
+	//If the player is not touching the ground, he is falling
+	if (falling)
+		inputs.add(IN_FALL);
+
+	
+	UpdateState();
 }
 
-
-
-void j1Player::LimitPlayerSpeed() 
+void j1Player::LimitPlayerSpeed()
 {
 	if (fpPlayerSpeed.x > fpPlayerMaxSpeed.x)
 	{
@@ -160,31 +188,6 @@ void j1Player::LimitPlayerSpeed()
 
 }
 
-bool j1Player::Update(float dt)
-{
-	switch (current_state)
-	{
-	case ST_GROUND:
-		LOG("IDLE\n");
-		fPlayerAccel = 0;
-		fpPlayerSpeed.y = 0;
-		//current_animation = &idle;
-		break;
-	case ST_AIR:
-		LOG("IN THE AIR ^^^^\n");
-		fPlayerAccel += fGravity;
-		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
-		break;
-	}
-	//Test Rect
-	CalculateCollider(fpPlayerPos);
-
-	checkCollision(playerCollider);
-
-	
-	return true;
-}
-
 void j1Player::CalculateCollider(fPoint pos) 
 {
 	playerCollider->ReSet((int)fpPlayerPos.x, (int)fpPlayerPos.y, animPlayerIdle->frames->w, animPlayerIdle->frames->h);
@@ -192,9 +195,87 @@ void j1Player::CalculateCollider(fPoint pos)
 
 void j1Player::checkCollision(Collider* playerCol)
 {
+	//Esto no deberían ser todos, sino que solo comprobara los que tiene cerca.
+	for (p2List_item<Collider*>* coll = colliderList.start; coll; coll = coll->next)
+	{
+		switch (coll->data->type) {
 
-	SDL_Rect result;
+		case(COLLIDER_WALL):
+			if (playerCol->CheckCollision(coll->data->rect))
+			{
+				RecalculatePos(playerCol->rect, coll->data->rect);
+			}
+			break;
 
+		}
+
+
+		//MORE CASES TO BE ADDED
+		//CHANGE TO A SWITCH
+	}
+
+}
+
+void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
+{
+	//Determines the direction of the collision
+	bool collDirection[DIRECTION_MAX];
+	if (fpPlayerSpeed.x > 0)
+		collDirection[DIRECTION_LEFT] = true;
+	else
+		collDirection[DIRECTION_RIGHT] = true;
+
+	if (fpPlayerSpeed.y < 0)
+		collDirection[DIRECTION_UP] = true;
+	else
+		collDirection[DIRECTION_DOWN] = true;
+
+	//Calculates distances from the player to the collision
+	int collDiference[DIRECTION_MAX];
+	collDiference[DIRECTION_LEFT] = (collRect.x + collRect.w) - playerRect.x;
+	collDiference[DIRECTION_RIGHT] = (playerRect.x + playerRect.w) - collRect.x;
+	collDiference[DIRECTION_UP] = (collRect.y + collRect.h) - playerRect.y;
+	collDiference[DIRECTION_DOWN] = (playerRect.y + playerRect.h) - collRect.y;
+
+	//If a collision from various aixs is detected, it determines what is the closets one to exit from
+	int directionCheck = NULL;
+
+	for (int i = 0; i < DIRECTION_MAX; ++i) {
+		if (collDirection[i] && directionCheck == NULL) 
+				directionCheck = i;
+		else if (collDiference[i] < collDiference[directionCheck])
+				directionCheck = i;
+		}
+
+	//Then we update the player's position according to it's movement
+	switch (directionCheck) {
+	case DIRECTION_UP:
+		fpPlayerPos.y = collRect.y + collRect.h + playerRect.h;
+		fpPlayerSpeed.y = 0;
+		break;
+	case DIRECTION_DOWN:
+		fpPlayerPos.y = collRect.y - playerRect.h ;
+		fpPlayerSpeed.y = 0;
+		fPlayerAccel = 0;
+		falling = false;
+		inputs.add(IN_JUMP_FINISH);
+		break;
+
+	case DIRECTION_LEFT:
+		fpPlayerPos.x = collRect.x + collRect.w - playerRect.w;
+		fpPlayerSpeed.x = 0;
+		inputs.add(IN_WALL);
+
+		break;
+	case DIRECTION_RIGHT:
+		fpPlayerPos.x = collRect.x - (playerRect.w);
+		fpPlayerSpeed.x = 0;
+		inputs.add(IN_WALL);
+		break;
+	}
+	//We Recalculate the player's collider with the new position
+	CalculateCollider(fpPlayerPos);
+	
 }
 
 
@@ -241,7 +322,7 @@ void j1Player::deAccel(slow_direction slow)
 
 }
 
-void j1Player::setInitialPos(int x, int y)
+void j1Player::SetPos(int x, int y)
 {
 	fpPlayerPos.x = x;
 	fpPlayerPos.y = y;
@@ -262,7 +343,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			switch (last_input)
 			{
 		case IN_JUMP: state = ST_AIR;  break;
-
+		case IN_FALL: state = ST_FALLING; break;
 			}
 		}
 		break;
@@ -272,7 +353,26 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			switch (last_input)
 			{
 			case IN_JUMP_FINISH: state = ST_GROUND; break;
+			case IN_WALL: state: state = ST_WALL; break;
+			}
+		}
+		break;
+		case ST_FALLING:
+		{
+			switch (last_input)
+			{
+			case IN_JUMP_FINISH: state = ST_GROUND; break;
+			case IN_WALL: state: state = ST_WALL; break;
+			}
+		}
+		break;
 
+		case ST_WALL:
+		{
+			switch (last_input)
+			{
+			case IN_FALL: state = ST_FALLING; break;
+			case IN_JUMP: state = ST_AIR; break;
 			}
 		}
 		break;
@@ -281,6 +381,4 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 		}
 	}
 	return state;
-
-
 }
