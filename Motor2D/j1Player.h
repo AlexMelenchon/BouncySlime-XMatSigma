@@ -92,8 +92,8 @@ private:
 	fPoint fpPlayerPos = { 0.0f,0.0f }; //Determines player position on the map
 	fPoint fpPlayerSpeed = { 0.0f,0.0f }; // Determines player speed in the x and y axis
 	float fPlayerAccel = 0.0f; // Determines player acceleration in the x and y axis
-	fPoint fpForce = { -180.0,-500.0f }; //Force applied to the player's movement in both axis
-	float wallForce = 500.0f;
+	fPoint fpForce = { -90.0,-250.0f }; //Force applied to the player's movement in both axis
+	fPoint wallForce = { 200.0f, -350.0f };
 
 	//Position Limits
 	float slowGrade = 1.1f;

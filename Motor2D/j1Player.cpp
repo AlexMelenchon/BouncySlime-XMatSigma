@@ -64,14 +64,14 @@ bool j1Player::PreUpdate()
 		fpPlayerSpeed.x += fpForce.x;
 		deAccel(SLOW_NEGATIVE_X);
 
-		playerFlip = SDL_RendererFlip::SDL_FLIP_HORIZONTAL;
+		playerFlip = SDL_FLIP_HORIZONTAL;
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) 
 	{
 		fpPlayerSpeed.x -= fpForce.x;
 		deAccel(SLOW_POSITIVE_X);
 
-		playerFlip = SDL_RendererFlip::SDL_FLIP_NONE;
+		playerFlip = SDL_FLIP_NONE;
 	}
 	else
 	{
@@ -86,10 +86,8 @@ bool j1Player::PreUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && (current_state == ST_GROUND || current_state == ST_WALL))
 	{
 		fPlayerAccel = 0; //Reset the accel
-		if(current_state == ST_WALL)
-		fpPlayerSpeed.y = fpForce.y/2;
-		else
 		fpPlayerSpeed.y = fpForce.y;
+
 
 		inputs.add(IN_JUMP);
 	}
@@ -142,7 +140,7 @@ bool j1Player::Update(float dt)
 		break;
 	case ST_WALL:
 		LOG("WALLING \n");
-		fPlayerAccel += fGravity/5;
+		fPlayerAccel += fGravity*2;
 		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
 		break;
 	}
@@ -306,6 +304,11 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 
 bool j1Player::PostUpdate()
 {
+	if (fpPlayerSpeed.x > 0)
+		playerFlip = SDL_FLIP_NONE;
+	else if (fpPlayerSpeed.x < 0)
+		playerFlip = SDL_FLIP_HORIZONTAL;
+
 	App->render->Blit(playerTex, (int)playerCollider->rect.x, (int)playerCollider->rect.y, &animPlayerIdle->GetCurrentFrame(), 1.0f, playerFlip);
 	return true;
 }
@@ -405,13 +408,13 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			case IN_FALL: state = ST_FALLING; break;
 			case IN_JUMP: 
 			{ 
-				state = ST_AIR;
-				fpPlayerSpeed.y /= slowGrade;
+ 				state = ST_AIR;
+				fpPlayerSpeed.y = wallForce.y;
 				fPlayerAccel = 0;
 				if(playerFlip == SDL_FLIP_NONE)
-				fpPlayerSpeed.x -= wallForce;
+ 				fpPlayerSpeed.x -= wallForce.x;
 				else
-				fpPlayerSpeed.x -= (wallForce *(-1));
+				fpPlayerSpeed.x += wallForce.x ;
 			
 			}; break;
 			case IN_JUMP_FINISH: state = ST_GROUND; break;
