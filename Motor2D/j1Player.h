@@ -3,7 +3,7 @@
 
 #include "j1Module.h"
 
-#define MAX_COLLIDERS 6
+#define MAXIMUM_COLLIDERS 6
 
 enum player_states
 {
@@ -28,8 +28,9 @@ enum slow_direction
 {
 	SLOW_UNKNOWN,
 	SLOW_GENERAL,
+	SLOW_AIR,
 	SLOW_POSITIVE_X,
-	SLOW_NEGATIVE_X
+	SLOW_NEGATIVE_X,
 };
 
 enum collisionDirection 
@@ -92,9 +93,10 @@ private:
 	fPoint fpPlayerSpeed = { 0.0f,0.0f }; // Determines player speed in the x and y axis
 	float fPlayerAccel = 0.0f; // Determines player acceleration in the x and y axis
 	fPoint fpForce = { -180.0,-500.0f }; //Force applied to the player's movement in both axis
+	float wallForce = 500.0f;
 
 	//Position Limits
-	float slowGrade = 1.25f;
+	float slowGrade = 1.1f;
 	int slowLimit = 200;
 
 	fPoint fpPlayerMaxSpeed = { 650.0f, 750.0f }; // Determines player maximum speed
@@ -115,7 +117,7 @@ private:
 	bool walling = true;
 
 	// Colliders
-	Collider* colliders[MAX_COLLIDERS];
+	Collider* colliders[MAXIMUM_COLLIDERS];
 
 
 	//Animations

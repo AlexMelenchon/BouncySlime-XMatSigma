@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="96" height="42" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="37">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="96" height="42" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="44">
  <tileset firstgid="1" name="Nuvens" tilewidth="16" tileheight="16" tilecount="336" columns="24">
   <image source="Nuvens.png" width="384" height="224"/>
  </tileset>
@@ -24275,12 +24275,19 @@
   <object id="30" name="Floor" x="688.722" y="64.4497" width="79.8485" height="319.576"/>
   <object id="32" name="Floor" x="848.102" y="320.208" width="176.02" height="217.167"/>
   <object id="33" name="Floor" x="930.124" y="221.208" width="95.3333" height="100.667"/>
-  <object id="34" x="1105.79" y="320.541" width="78.3333" height="237"/>
-  <object id="35" x="1265.13" y="383.208" width="112" height="240.917"/>
+  <object id="34" name="Floor" x="1105.79" y="320.541" width="78.3333" height="237"/>
+  <object id="35" name="Floor" x="1265.13" y="383.208" width="112" height="240.917"/>
+  <object id="37" name="Floor" x="400.409" y="62.5" width="446.716" height="65.375"/>
+  <object id="38" name="Floor" x="400.545" y="126.545" width="287.455" height="16.9091"/>
+  <object id="39" name="Floor" x="1296.67" y="80" width="79.3333" height="191"/>
+  <object id="40" name="Floor" x="1455" y="0.25" width="81.25" height="143.5"/>
+  <object id="41" name="Floor" x="1167.75" y="80" width="63.75" height="47.5"/>
+  <object id="42" name="Floor" x="1056.25" y="64" width="64.25" height="47.5"/>
+  <object id="43" name="Floor" x="928" y="64" width="64.5" height="48"/>
  </objectgroup>
  <objectgroup id="10" name="PLAYER_POINTS">
   <object id="11" name="Start" x="77.5795" y="423.727" width="5.25" height="5.25"/>
   <object id="12" name="End" x="402" y="-201" width="81" height="264"/>
-  <object id="36" x="1457.15" y="224.667" width="77.5152" height="238.97"/>
+  <object id="36" name="Floor" x="1457.15" y="224.667" width="77.5152" height="238.97"/>
  </objectgroup>
 </map>

@@ -32,31 +32,28 @@ void j1Map::Draw()
 {
 	if(map_loaded == false)
 		return;
+	p2List_item<LayerInfo*>* layer = data.layerList.start;
 
-	for (p2List_item<LayerInfo*>* layer = data.layerList.start; layer != NULL; layer = layer->next)
+	for (layer; layer != NULL; layer = layer->next)
+	for (int y = 0; y < data.height; ++y)
 	{
-		for (int y = 0; y < data.height; ++y)
+		for (int x = 0; x < data.width; ++x)
 		{
-			for (int x = 0; x < data.width; ++x)
+			int tile_id = layer->data->Get(x, y);
+			if (tile_id > 0)
 			{
-				uint tile_id = layer->data->tileArray[layer->data->Get(x, y)];
-				float parallaxSpeed = layer->data->parallaxSpeed;
-
-				if (tile_id > 0)
+				TileSet* tileset = GetTilesetFromTileId(tile_id);
+				if (tileset != nullptr)
 				{
-					TileSet* tileset = GetTilesetFromTileId(tile_id);
-					if (tileset != nullptr)
-					{
-						SDL_Rect r = tileset->GetTileRect(tile_id);
-						iPoint pos = MapToWorld(x, y);
-	
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r,parallaxSpeed);
-					}
+					SDL_Rect r = tileset->GetTileRect(tile_id);
+					iPoint pos = MapToWorld(x, y);
+
+					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 				}
 			}
-
 		}
 	}
+
 }
 
 iPoint j1Map::MapToWorld(int x, int y) const
@@ -168,6 +165,17 @@ bool j1Map::Load(const char* file_name)
 
 		load_Layer(nodeLayer,layerInfo);
 
+	}
+
+	pugi::xml_node layer;
+	for (layer = map_file.child("map").child("layer"); layer && ret; layer = layer.next_sibling("layer"))
+	{
+		LayerInfo* layerInfo = new LayerInfo();
+
+		ret = load_Layer(layer, layerInfo);
+
+		if (ret == true)
+			data.layerList.add(layerInfo);
 	}
 	// Load colliders info ----------------------------------------------
 	for (pugi::xml_node nodeColliderGroup = map_file.child("map").child("objectgroup"); nodeColliderGroup; nodeColliderGroup = nodeColliderGroup.next_sibling("objectgroup"))
@@ -363,15 +371,13 @@ bool j1Map::load_Layer(pugi::xml_node& node, LayerInfo* layerInfo)
 	{
 		layerInfo->tileArray = new uint[layerInfo->width * layerInfo->height];
 
-		memset(layerInfo->tileArray, 0, sizeof(layerInfo->tileArray));
+		memset(layerInfo->tileArray, 0, layerInfo->width * layerInfo->height);
 
 		uint i = 0;
 		for (pugi::xml_node tile = node.child("data").child("tile"); tile; tile = tile.next_sibling("tile")) {
 			layerInfo->tileArray[i] = tile.attribute("gid").as_uint(0);
 			++i;
 		}
-
-		data.layerList.add(layerInfo);
 
 	}
 

@@ -57,9 +57,7 @@ bool j1Player::Start()
 
 bool j1Player::PreUpdate()
 {
-	//To DELELTE
-	if (colliderList.start == NULL)
-		colliderList = App->map->data.colliderList;
+
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
 	{
@@ -77,13 +75,20 @@ bool j1Player::PreUpdate()
 	}
 	else
 	{
+		if(current_state == ST_GROUND)
 		deAccel(SLOW_GENERAL);
+		else
+		deAccel(SLOW_AIR);
+
 	}
 
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && (current_state == ST_GROUND || current_state == ST_WALL))
 	{
 		fPlayerAccel = 0; //Reset the accel
+		if(current_state == ST_WALL)
+		fpPlayerSpeed.y = fpForce.y/2;
+		else
 		fpPlayerSpeed.y = fpForce.y;
 
 		inputs.add(IN_JUMP);
@@ -169,6 +174,7 @@ void j1Player::UpdatePos(float dt)
 	//If the player is not touching the ground, he is falling
 	if (falling)
 		inputs.add(IN_FALL);
+	//Same if the player's on the wall
 	if (walling)
 		inputs.add(IN_WALL);
 	
@@ -210,15 +216,16 @@ void j1Player::CalculateCollider(fPoint pos)
 void j1Player::checkCollision(Collider* playerCol)
 {
 	//Esto no deberían ser todos, sino que solo comprobara los que tiene cerca.
-	for (p2List_item<Collider*>* coll = colliderList.start; coll; coll = coll->next)
+	p2List_item<Collider*>* colliderList = App->map->data.colliderList.start;
+	for (colliderList; colliderList; colliderList = colliderList->next)
 	{
-		switch (coll->data->type) {
+		switch (colliderList->data->type) {
 
 		case(COLLIDER_WALL):
 
-			if (playerCol->CheckCollision(coll->data->rect))
+			if (playerCol->CheckCollision(colliderList->data->rect))
 			{
-				RecalculatePos(playerCol->rect, coll->data->rect);
+				RecalculatePos(playerCol->rect, colliderList->data->rect);
 			}
 			break;
 		}
@@ -248,21 +255,22 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 	collDirection[DIRECTION_RIGHT] = !(collDiference[DIRECTION_RIGHT] > 0 && fpPlayerSpeed .x< 0);
 	collDirection[DIRECTION_LEFT] = !(collDiference[DIRECTION_RIGHT] > 0 && fpPlayerSpeed.x > 0);
 	collDirection[DIRECTION_UP] = !(collDiference[DIRECTION_UP] > 0 && fpPlayerSpeed.y < 0);
-	collDirection[DIRECTION_DOWN] = !(collDiference[DIRECTION_DOWN] > 0 && fpPlayerSpeed.y > 0);
+	collDirection[DIRECTION_DOWN] = !(collDiference[DIRECTION_DOWN] >= 0 && fpPlayerSpeed.y > 0);
 
 
 
 	//If a collision from various aixs is detected, it determines what is the closets one to exit from
-	int directionCheck = -1;
+	int directionCheck = DIRECTION_NONE;
 
-	for (int i = 0; i < DIRECTION_MAX; ++i) {
-		if (collDirection[i] && directionCheck == -1) 
+	for (int i = 0; i < DIRECTION_MAX; ++i)
+	{
+		if (collDirection[i] && directionCheck == DIRECTION_NONE)
 				directionCheck = i;
 		else if (collDiference[i] < collDiference[directionCheck])
 				directionCheck = i;
-		}
+	}
 
-	//Then we update the player's position according to it's movement
+	//Then we update the player's position & logic according to it's movement
 	switch (directionCheck) {
 	case DIRECTION_UP:
 		fpPlayerPos.y = collRect.y + collRect.h+1;
@@ -287,13 +295,12 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 		walling = true;
 		falling = false;
 		break;
-	case -1:
+	case DIRECTION_NONE:
 		break;
 	}
 
 	//We Recalculate the player's collider with the new position
 	CalculateCollider(fpPlayerPos);
-	
 }
 
 
@@ -325,6 +332,10 @@ void j1Player::deAccel(slow_direction slow)
 
 	case SLOW_GENERAL:
 		fpPlayerSpeed.x /= slowGrade;
+		break;
+
+	case SLOW_AIR:
+		fpPlayerSpeed.x /= 1.05f;
 		break;
 
 	case SLOW_POSITIVE_X:
@@ -379,7 +390,10 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			switch (last_input)
 			{
 			case IN_JUMP_FINISH: state = ST_GROUND; break;
-			case IN_WALL: {state =  ST_WALL;	fPlayerAccel = 0; } break;
+			case IN_WALL: 
+			{
+				state =  ST_WALL;	fPlayerAccel = 0; 
+			} break;
 			}
 		}
 		break;
@@ -389,7 +403,17 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			switch (last_input)
 			{
 			case IN_FALL: state = ST_FALLING; break;
-			case IN_JUMP: state = ST_AIR; break;
+			case IN_JUMP: 
+			{ 
+				state = ST_AIR;
+				fpPlayerSpeed.y /= slowGrade;
+				fPlayerAccel = 0;
+				if(playerFlip == SDL_FLIP_NONE)
+				fpPlayerSpeed.x -= wallForce;
+				else
+				fpPlayerSpeed.x -= (wallForce *(-1));
+			
+			}; break;
 			case IN_JUMP_FINISH: state = ST_GROUND; break;
 			}
 		}

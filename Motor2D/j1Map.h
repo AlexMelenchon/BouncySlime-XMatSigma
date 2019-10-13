@@ -20,9 +20,9 @@ struct LayerInfo {
 	float parallaxSpeed;
 
 
-	inline uint Get(uint x, uint y) const
-	{
-		return x + y * width;
+	inline uint Get(int x, int y) const {
+
+		return tileArray[x + (y * width)];
 	}
 };
 
