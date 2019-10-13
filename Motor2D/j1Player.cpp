@@ -57,8 +57,10 @@ bool j1Player::Start()
 
 bool j1Player::PreUpdate()
 {
+	//To DELELTE
 	if (colliderList.start == NULL)
 		colliderList = App->map->data.colliderList;
+
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
 	{
 		fpPlayerSpeed.x += fpForce.x;
@@ -79,9 +81,9 @@ bool j1Player::PreUpdate()
 	}
 
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && current_state == ST_GROUND)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && (current_state == ST_GROUND || current_state == ST_WALL))
 	{
-		fPlayerAccel = 0;
+		fPlayerAccel = 0; //Reset the accel
 		fpPlayerSpeed.y = fpForce.y;
 
 		inputs.add(IN_JUMP);
@@ -119,7 +121,8 @@ bool j1Player::Update(float dt)
 	{
 	case ST_GROUND:
 		LOG("IDLE\n");
-		fPlayerAccel += fGravity;
+		fPlayerAccel = 0;
+		fpPlayerSpeed.y = 0;
 		//current_animation = &idle;
 		break;
 	case ST_AIR:
@@ -130,6 +133,11 @@ bool j1Player::Update(float dt)
 	case ST_FALLING:
 		LOG("FALLING \n");
 		fPlayerAccel -= fpForce.y;
+		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
+		break;
+	case ST_WALL:
+		LOG("WALLING \n");
+		fPlayerAccel += fGravity/5;
 		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
 		break;
 	}
@@ -143,21 +151,26 @@ bool j1Player::Update(float dt)
 
 void j1Player::UpdatePos(float dt)
 {
-	fpPlayerSpeed.y += fPlayerAccel * dt;
 
+	falling = true;
+	walling = false;
 
 	fpPlayerPos.x += fpPlayerSpeed.x * dt;
 	fpPlayerPos.y += fpPlayerSpeed.y * dt;
 
+	if (current_state != ST_GROUND) {
 
-	falling = true;
+		fpPlayerSpeed.y += fPlayerAccel * dt;
+	}
+
 	CalculateCollider(fpPlayerPos);
 	checkCollision(playerCollider);
 
 	//If the player is not touching the ground, he is falling
 	if (falling)
 		inputs.add(IN_FALL);
-
+	if (walling)
+		inputs.add(IN_WALL);
 	
 	UpdateState();
 }
@@ -191,6 +204,7 @@ void j1Player::LimitPlayerSpeed()
 void j1Player::CalculateCollider(fPoint pos) 
 {
 	playerCollider->ReSet((int)fpPlayerPos.x, (int)fpPlayerPos.y, animPlayerIdle->frames->w, animPlayerIdle->frames->h);
+
 }
 
 void j1Player::checkCollision(Collider* playerCol)
@@ -206,9 +220,7 @@ void j1Player::checkCollision(Collider* playerCol)
 				RecalculatePos(playerCol->rect, coll->data->rect);
 			}
 			break;
-
 		}
-
 
 		//MORE CASES TO BE ADDED
 		//CHANGE TO A SWITCH
@@ -219,17 +231,6 @@ void j1Player::checkCollision(Collider* playerCol)
 void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 {
 	//Determines the direction of the collision
-	bool collDirection[DIRECTION_MAX];
-	if (fpPlayerSpeed.x > 0)
-		collDirection[DIRECTION_LEFT] = true;
-	else
-		collDirection[DIRECTION_RIGHT] = true;
-
-	if (fpPlayerSpeed.y < 0)
-		collDirection[DIRECTION_UP] = true;
-	else
-		collDirection[DIRECTION_DOWN] = true;
-
 	//Calculates distances from the player to the collision
 	int collDiference[DIRECTION_MAX];
 	collDiference[DIRECTION_LEFT] = (collRect.x + collRect.w) - playerRect.x;
@@ -237,20 +238,50 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 	collDiference[DIRECTION_UP] = (collRect.y + collRect.h) - playerRect.y;
 	collDiference[DIRECTION_DOWN] = (playerRect.y + playerRect.h) - collRect.y;
 
+	bool collDirection[DIRECTION_MAX];
+	collDirection[DIRECTION_LEFT] = false;
+	collDirection[DIRECTION_RIGHT] = false;
+	collDirection[DIRECTION_UP] = false;
+	collDirection[DIRECTION_DOWN] = false;
+
+	if (fpPlayerSpeed.x < 0)
+		collDirection[DIRECTION_LEFT] = true;
+
+	else if (fpPlayerSpeed.x > 0)
+		collDirection[DIRECTION_RIGHT] = true;
+
+	if (fpPlayerSpeed.y < 0)
+		collDirection[DIRECTION_UP] = true;
+
+	 else if (fpPlayerSpeed.y > 0)
+		collDirection[DIRECTION_DOWN] = true;
+
+
 	//If a collision from various aixs is detected, it determines what is the closets one to exit from
-	int directionCheck = NULL;
+	int directionCheck = -1;
 
 	for (int i = 0; i < DIRECTION_MAX; ++i) {
-		if (collDirection[i] && directionCheck == NULL) 
+		if (collDirection[i] && directionCheck == -1) 
 				directionCheck = i;
 		else if (collDiference[i] < collDiference[directionCheck])
 				directionCheck = i;
 		}
 
+	if (directionCheck == -1) {
+		for (int i = 0; i < 4; ++i) {
+			if (directionCheck == -1) {
+				directionCheck = i;
+			}
+			else if (collDiference[i] < collDiference[directionCheck]) {
+				directionCheck = i;
+			}
+		}
+	}
+
 	//Then we update the player's position according to it's movement
 	switch (directionCheck) {
 	case DIRECTION_UP:
-		fpPlayerPos.y = collRect.y + collRect.h + playerRect.h;
+		fpPlayerPos.y = collRect.y + collRect.h+1;
 		fpPlayerSpeed.y = 0;
 		break;
 	case DIRECTION_DOWN:
@@ -260,19 +291,20 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 		falling = false;
 		inputs.add(IN_JUMP_FINISH);
 		break;
-
 	case DIRECTION_LEFT:
-		fpPlayerPos.x = collRect.x + collRect.w - playerRect.w;
+		fpPlayerPos.x = collRect.x + collRect.w +1;
 		fpPlayerSpeed.x = 0;
-		inputs.add(IN_WALL);
-
+		walling = true;
+		falling = false;
 		break;
 	case DIRECTION_RIGHT:
-		fpPlayerPos.x = collRect.x - (playerRect.w);
+		fpPlayerPos.x = collRect.x - playerRect.w;
 		fpPlayerSpeed.x = 0;
-		inputs.add(IN_WALL);
+		walling = true;
+		falling = false;
 		break;
 	}
+
 	//We Recalculate the player's collider with the new position
 	CalculateCollider(fpPlayerPos);
 	
@@ -326,7 +358,6 @@ void j1Player::SetPos(int x, int y)
 {
 	fpPlayerPos.x = x;
 	fpPlayerPos.y = y;
-
 }
 
 player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
@@ -353,7 +384,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			switch (last_input)
 			{
 			case IN_JUMP_FINISH: state = ST_GROUND; break;
-			case IN_WALL: state: state = ST_WALL; break;
+			case IN_WALL: state: {state = ST_WALL;	fPlayerAccel = 0; } break;
 			}
 		}
 		break;
@@ -362,7 +393,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			switch (last_input)
 			{
 			case IN_JUMP_FINISH: state = ST_GROUND; break;
-			case IN_WALL: state: state = ST_WALL; break;
+			case IN_WALL: {state =  ST_WALL;	fPlayerAccel = 0; } break;
 			}
 		}
 		break;
@@ -373,6 +404,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			{
 			case IN_FALL: state = ST_FALLING; break;
 			case IN_JUMP: state = ST_AIR; break;
+			case IN_JUMP_FINISH: state = ST_GROUND; break;
 			}
 		}
 		break;

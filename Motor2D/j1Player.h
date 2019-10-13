@@ -112,6 +112,7 @@ private:
 	float flCurrentTime = 0;
 	float fGravity = 50.0f;
 	bool falling = true;
+	bool walling = true;
 
 	// Colliders
 	Collider* colliders[MAX_COLLIDERS];
