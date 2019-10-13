@@ -12,7 +12,8 @@ enum player_states
 	ST_GROUND,
 	ST_AIR,
 	ST_FALLING,
-	ST_WALL
+	ST_WALL,
+	ST_WALL_JUMPING
 };
 
 enum player_inputs
@@ -21,7 +22,8 @@ enum player_inputs
 	IN_JUMP,
 	IN_JUMP_FINISH,
 	IN_FALL,
-	IN_WALL
+	IN_WALL,
+	IN_JUMP_WALL
 };
 
 enum slow_direction
@@ -29,8 +31,9 @@ enum slow_direction
 	SLOW_UNKNOWN,
 	SLOW_GENERAL,
 	SLOW_AIR,
-	SLOW_POSITIVE_X,
-	SLOW_NEGATIVE_X,
+	SLOW_POSITIVE_LIMIT,
+	SLOW_NEGATIVE_LIMIT,
+	SLOW_LIMITS
 };
 
 enum collisionDirection 
@@ -75,7 +78,7 @@ public:
 
 	void UpdatePos(float dt); //Update player's position
 	void LimitPlayerSpeed();  // To limit the player speed in both axis
-	void deAccel(slow_direction slow);  //To slow smoothly the player in the x axis: 0.Slow current speed 1. slow the x+, 2. slow the x-
+	float deAccel(slow_direction slow, float speedAxis, float grade = 0.0f, float limit = 0.0f);  //To slow smoothly the player in the x axis: 0.Slow current speed 1. slow the x+, 2. slow the x-
 
 	p2List<Collider*> colliderList;
 
@@ -115,6 +118,9 @@ private:
 	float fGravity = 50.0f;
 	bool falling = true;
 	bool walling = true;
+	float wallJumpLimit = 0.3f;
+	float wallJumpTimer = 0.0f;
+	collisionDirection wallJumpDirection = DIRECTION_NONE;
 
 	// Colliders
 	Collider* colliders[MAXIMUM_COLLIDERS];

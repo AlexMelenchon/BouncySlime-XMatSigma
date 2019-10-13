@@ -57,28 +57,39 @@ bool j1Player::Start()
 
 bool j1Player::PreUpdate()
 {
-
-
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
 	{
-		fpPlayerSpeed.x += fpForce.x;
-		deAccel(SLOW_NEGATIVE_X);
+
+		if (wallJumpDirection == DIRECTION_RIGHT)
+			fpPlayerSpeed.x += (fpForce.x / 20.0f);
+		else
+			fpPlayerSpeed.x += fpForce.x;
+
+
+	
+		fpPlayerSpeed.x = deAccel(SLOW_NEGATIVE_LIMIT, fpPlayerSpeed.x, slowGrade, slowLimit);
 
 		playerFlip = SDL_FLIP_HORIZONTAL;
 	}
-	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) 
+	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		fpPlayerSpeed.x -= fpForce.x;
-		deAccel(SLOW_POSITIVE_X);
+
+		if (wallJumpDirection == DIRECTION_LEFT)
+			fpPlayerSpeed.x -= fpForce.x / 20.0f;
+		else
+			fpPlayerSpeed.x -= fpForce.x;
+
+
+		fpPlayerSpeed.x = deAccel(SLOW_POSITIVE_LIMIT, fpPlayerSpeed.x, slowGrade, slowLimit);
 
 		playerFlip = SDL_FLIP_NONE;
 	}
 	else
 	{
 		if(current_state == ST_GROUND)
-		deAccel(SLOW_GENERAL);
+		fpPlayerSpeed.x = deAccel(SLOW_GENERAL, fpPlayerSpeed.x, slowGrade);
 		else
-		deAccel(SLOW_AIR);
+		fpPlayerSpeed.x = deAccel(SLOW_GENERAL, fpPlayerSpeed.x, 1.05f);
 
 	}
 
@@ -93,7 +104,7 @@ bool j1Player::PreUpdate()
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		fPlayerAccel -= -fpForce.y;
+		fPlayerAccel -= fpForce.y;
 	}
 
 
@@ -102,7 +113,7 @@ bool j1Player::PreUpdate()
 	flCurrentTime = App->GetDeltaTime();
 
 	//The time gets corrected if it's too high
-	if (flCurrentTime > 0.15)
+	if (flCurrentTime > 0.15f)
 		flCurrentTime = 0.15f;
 
 	//Check the player state and update to the next one
@@ -141,6 +152,19 @@ bool j1Player::Update(float dt)
 	case ST_WALL:
 		LOG("WALLING \n");
 		fPlayerAccel += fGravity*2;
+		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
+		break;
+	case ST_WALL_JUMPING:
+		LOG("WALL JUMPING \n");
+		fPlayerAccel += fGravity;
+
+		wallJumpTimer += flCurrentTime;
+		if (wallJumpTimer > wallJumpLimit)
+		{
+			wallJumpTimer = 0.0f;
+			inputs.add(IN_JUMP);
+			wallJumpDirection = DIRECTION_NONE;
+		}
 		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
 		break;
 	}
@@ -226,6 +250,7 @@ void j1Player::checkCollision(Collider* playerCol)
 				RecalculatePos(playerCol->rect, colliderList->data->rect);
 			}
 			break;
+
 		}
 
 		//MORE CASES TO BE ADDED
@@ -329,28 +354,39 @@ bool j1Player::Save(pugi::xml_node&) const
 	return true;
 }
 
-void j1Player::deAccel(slow_direction slow)
+float j1Player::deAccel(slow_direction slow, float speedAxis, float grade, float limit)
 {
 	switch (slow) {
 
 	case SLOW_GENERAL:
-		fpPlayerSpeed.x /= slowGrade;
+		speedAxis /= grade;
 		break;
 
 	case SLOW_AIR:
-		fpPlayerSpeed.x /= 1.05f;
+		speedAxis /= grade;
 		break;
 
-	case SLOW_POSITIVE_X:
-		if(fpPlayerSpeed.x > slowLimit)
-		fpPlayerSpeed.x /= slowGrade;
+	case SLOW_LIMITS:
+		if (speedAxis > limit)
+			speedAxis /= grade;
+
+		if (speedAxis < -limit)
+			speedAxis /= grade;
 		break;
 
-	case SLOW_NEGATIVE_X:
-		if(fpPlayerSpeed.x < -slowLimit)
-		fpPlayerSpeed.x /= slowGrade;
+	case SLOW_POSITIVE_LIMIT:
+		if(speedAxis > limit)
+			speedAxis /= grade;
 		break;
+
+	case SLOW_NEGATIVE_LIMIT:
+		if(speedAxis < -limit)
+			speedAxis /= grade;
+		break;
+
+
 	}
+	return speedAxis;
 
 }
 
@@ -384,7 +420,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			switch (last_input)
 			{
 			case IN_JUMP_FINISH: state = ST_GROUND; break;
-			case IN_WALL: state: {state = ST_WALL;	fPlayerAccel = 0;} break;
+			case IN_WALL: {state = ST_WALL;	fPlayerAccel = 0;} break;
 			}
 		}
 		break;
@@ -406,18 +442,45 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			switch (last_input)
 			{
 			case IN_FALL: state = ST_FALLING; break;
-			case IN_JUMP: 
-			{ 
- 				state = ST_AIR;
+			case IN_JUMP: {
+				state = ST_WALL_JUMPING; 
 				fpPlayerSpeed.y = wallForce.y;
 				fPlayerAccel = 0;
-				if(playerFlip == SDL_FLIP_NONE)
- 				fpPlayerSpeed.x -= wallForce.x;
+				if (playerFlip == SDL_FLIP_NONE)
+				{
+					fpPlayerSpeed.x -= wallForce.x;
+					wallJumpDirection = DIRECTION_LEFT;
+				}
 				else
-				fpPlayerSpeed.x += wallForce.x ;
-			
-			}; break;
+				{
+					fpPlayerSpeed.x += wallForce.x;
+					wallJumpDirection = DIRECTION_RIGHT;
+				}
+			}  break;
 			case IN_JUMP_FINISH: state = ST_GROUND; break;
+			}
+		}
+		break;
+
+		case ST_WALL_JUMPING:
+		{
+			switch (last_input)
+			{
+			case IN_JUMP: 
+			{
+				state = ST_AIR; 			
+				wallJumpDirection = DIRECTION_NONE;
+			} break;
+			case IN_JUMP_FINISH: {
+				state = ST_GROUND;
+				wallJumpDirection = DIRECTION_NONE;
+			}  break;
+			case IN_WALL: 
+			{
+				state = ST_WALL;	
+				fPlayerAccel = 0; 
+				wallJumpDirection = DIRECTION_NONE;
+			} break;
 			}
 		}
 		break;
