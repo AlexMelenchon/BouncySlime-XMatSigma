@@ -1,7 +1,7 @@
 #ifndef __ModuleCollision_H__
 #define __ModuleCollision_H__
 
-#define MAX_COLLIDERS 20
+#define MAX_COLLIDERS 40
 
 #include "j1Module.h"
 

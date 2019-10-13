@@ -24272,15 +24272,14 @@
   <object id="14" name="Floor" type="0" x="-0.5" y="528.5" width="173" height="144"/>
   <object id="15" name="Floor" x="288.5" y="528.5" width="733.5" height="145.5"/>
   <object id="16" name="Floor" x="513" y="319.727" width="94.3333" height="208.439"/>
-  <object id="29" name="Floor" x="400.048" y="63.5413" width="448.076" height="63"/>
-  <object id="30" name="Floor" x="688.722" y="125.783" width="79.8485" height="258.243"/>
-  <object id="32" name="Floor" x="849.79" y="320.208" width="174.333" height="206.667"/>
+  <object id="30" name="Floor" x="688.722" y="64.4497" width="79.8485" height="319.576"/>
+  <object id="32" name="Floor" x="848.102" y="320.208" width="176.02" height="217.167"/>
   <object id="33" name="Floor" x="930.124" y="221.208" width="95.3333" height="100.667"/>
   <object id="34" x="1105.79" y="320.541" width="78.3333" height="237"/>
   <object id="35" x="1265.13" y="383.208" width="112" height="240.917"/>
  </objectgroup>
  <objectgroup id="10" name="PLAYER_POINTS">
-  <object id="11" name="Start" x="82.4962" y="521.477" width="5.25" height="5.25"/>
+  <object id="11" name="Start" x="77.5795" y="423.727" width="5.25" height="5.25"/>
   <object id="12" name="End" x="402" y="-201" width="81" height="264"/>
   <object id="36" x="1457.15" y="224.667" width="77.5152" height="238.97"/>
  </objectgroup>

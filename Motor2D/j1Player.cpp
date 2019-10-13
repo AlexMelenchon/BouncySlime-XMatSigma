@@ -25,8 +25,8 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 
 	idleRect->x = player_node.child("idle").attribute("x").as_int();
 	idleRect->y = player_node.child("idle").attribute("y").as_int();
-	idleRect->w = 500;
-	idleRect->h = 300;
+	idleRect->w = 35;
+	idleRect->h = 35;
 
 	inputs.start = 0;
 
@@ -215,6 +215,7 @@ void j1Player::checkCollision(Collider* playerCol)
 		switch (coll->data->type) {
 
 		case(COLLIDER_WALL):
+
 			if (playerCol->CheckCollision(coll->data->rect))
 			{
 				RecalculatePos(playerCol->rect, coll->data->rect);
@@ -239,22 +240,16 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 	collDiference[DIRECTION_DOWN] = (playerRect.y + playerRect.h) - collRect.y;
 
 	bool collDirection[DIRECTION_MAX];
-	collDirection[DIRECTION_LEFT] = false;
 	collDirection[DIRECTION_RIGHT] = false;
+	collDirection[DIRECTION_LEFT] = false;
 	collDirection[DIRECTION_UP] = false;
 	collDirection[DIRECTION_DOWN] = false;
 
-	if (fpPlayerSpeed.x < 0)
-		collDirection[DIRECTION_LEFT] = true;
+	collDirection[DIRECTION_RIGHT] = !(collDiference[DIRECTION_RIGHT] > 0 && fpPlayerSpeed .x< 0);
+	collDirection[DIRECTION_LEFT] = !(collDiference[DIRECTION_RIGHT] > 0 && fpPlayerSpeed.x > 0);
+	collDirection[DIRECTION_UP] = !(collDiference[DIRECTION_UP] > 0 && fpPlayerSpeed.y < 0);
+	collDirection[DIRECTION_DOWN] = !(collDiference[DIRECTION_DOWN] > 0 && fpPlayerSpeed.y > 0);
 
-	else if (fpPlayerSpeed.x > 0)
-		collDirection[DIRECTION_RIGHT] = true;
-
-	if (fpPlayerSpeed.y < 0)
-		collDirection[DIRECTION_UP] = true;
-
-	 else if (fpPlayerSpeed.y > 0)
-		collDirection[DIRECTION_DOWN] = true;
 
 
 	//If a collision from various aixs is detected, it determines what is the closets one to exit from
@@ -266,17 +261,6 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 		else if (collDiference[i] < collDiference[directionCheck])
 				directionCheck = i;
 		}
-
-	if (directionCheck == -1) {
-		for (int i = 0; i < 4; ++i) {
-			if (directionCheck == -1) {
-				directionCheck = i;
-			}
-			else if (collDiference[i] < collDiference[directionCheck]) {
-				directionCheck = i;
-			}
-		}
-	}
 
 	//Then we update the player's position according to it's movement
 	switch (directionCheck) {
@@ -292,16 +276,18 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 		inputs.add(IN_JUMP_FINISH);
 		break;
 	case DIRECTION_LEFT:
-		fpPlayerPos.x = collRect.x + collRect.w +1;
+		fpPlayerPos.x = collRect.x + collRect.w;
 		fpPlayerSpeed.x = 0;
 		walling = true;
 		falling = false;
 		break;
 	case DIRECTION_RIGHT:
 		fpPlayerPos.x = collRect.x - playerRect.w;
-		fpPlayerSpeed.x = 0;
+ 		fpPlayerSpeed.x = 0;
 		walling = true;
 		falling = false;
+		break;
+	case -1:
 		break;
 	}
 
@@ -313,7 +299,7 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 
 bool j1Player::PostUpdate()
 {
-	App->render->Blit(playerTex, (int)fpPlayerPos.x, (int)fpPlayerPos.y, &animPlayerIdle->GetCurrentFrame(), 1.0f, playerFlip);
+	App->render->Blit(playerTex, (int)playerCollider->rect.x, (int)playerCollider->rect.y, &animPlayerIdle->GetCurrentFrame(), 1.0f, playerFlip);
 	return true;
 }
 
@@ -384,7 +370,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			switch (last_input)
 			{
 			case IN_JUMP_FINISH: state = ST_GROUND; break;
-			case IN_WALL: state: {state = ST_WALL;	fPlayerAccel = 0; } break;
+			case IN_WALL: state: {state = ST_WALL;	fPlayerAccel = 0;} break;
 			}
 		}
 		break;
