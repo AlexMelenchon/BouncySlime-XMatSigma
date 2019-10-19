@@ -98,6 +98,7 @@ bool j1Scene::CleanUp()
 	LOG("Freeing scene");
 
 	return true;
+
 }
 
 void j1Scene::Camera(float dt)
@@ -124,3 +125,6 @@ void j1Scene::Camera(float dt)
 	App->render->camera.x = cameraPos.x;
 	App->render->camera.y = cameraPos.y;
 }
+
+
+

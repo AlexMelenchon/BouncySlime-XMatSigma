@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="96" height="42" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="26">
  <tileset firstgid="1" name="Nuvens" tilewidth="16" tileheight="16" tilecount="336" columns="24">
-  <image source="Assets/Nuvens.png" width="384" height="224"/>
+  <image source="Nuvens.png" width="384" height="224"/>
  </tileset>
  <tileset firstgid="337" name="Backgroud1" tilewidth="16" tileheight="16" tilecount="336" columns="24">
-  <image source="Assets/Backgroud1.png" width="384" height="224"/>
+  <image source="Backgroud1.png" width="384" height="224"/>
  </tileset>
  <tileset firstgid="673" name="Backgroud3" tilewidth="16" tileheight="16" tilecount="336" columns="24">
-  <image source="Assets/Backgroud3.png" width="384" height="224"/>
+  <image source="Backgroud3.png" width="384" height="224"/>
  </tileset>
  <tileset firstgid="1009" name="Backgroud2" tilewidth="16" tileheight="16" tilecount="336" columns="24">
-  <image source="Assets/Backgroud2.png" width="384" height="224"/>
+  <image source="Backgroud2.png" width="384" height="224"/>
  </tileset>
  <tileset firstgid="1345" name="Assets" tilewidth="16" tileheight="16" tilecount="675" columns="25">
-  <image source="Assets/Assets.png" width="400" height="432"/>
+  <image source="Assets.png" width="400" height="432"/>
   <terraintypes>
    <terrain name="New Terrain" tile="57"/>
   </terraintypes>
