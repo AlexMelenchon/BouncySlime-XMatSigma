@@ -396,6 +396,8 @@ void j1Player::SetPos(int x, int y)
 	fpPlayerPos.y = y;
 }
 
+
+
 player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 {
 	static player_states state = ST_GROUND;
