@@ -39,6 +39,7 @@ enum slow_direction
 enum collisionDirection 
 {
 	DIRECTION_NONE = -1,
+
 	DIRECTION_LEFT,
 	DIRECTION_RIGHT,
 	DIRECTION_UP,
@@ -80,9 +81,12 @@ public:
 	void LimitPlayerSpeed();  // To limit the player speed in both axis
 	float deAccel(slow_direction slow, float speedAxis, float grade = 0.0f, float limit = 0.0f);  //To slow smoothly the player in the x axis: 0.Slow current speed 1. slow the x+, 2. slow the x-
 
+	void OnCollision(Collider* c1, Collider* c2);
+
 	p2List<Collider*> colliderList;
 
 	player_states process_fsm(p2List<player_inputs>& inputs);
+
 
 
 private:

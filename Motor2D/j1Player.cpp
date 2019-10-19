@@ -25,8 +25,8 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 
 	idleRect->x = player_node.child("idle").attribute("x").as_int();
 	idleRect->y = player_node.child("idle").attribute("y").as_int();
-	idleRect->w = 35;
-	idleRect->h = 35;
+	idleRect->w = 30;
+	idleRect->h = 30;
 
 	inputs.start = 0;
 
@@ -65,8 +65,6 @@ bool j1Player::PreUpdate()
 		else
 			fpPlayerSpeed.x += fpForce.x;
 
-
-	
 		fpPlayerSpeed.x = deAccel(SLOW_NEGATIVE_LIMIT, fpPlayerSpeed.x, slowGrade, slowLimit);
 
 		playerFlip = SDL_FLIP_HORIZONTAL;
@@ -178,7 +176,6 @@ bool j1Player::Update(float dt)
 
 void j1Player::UpdatePos(float dt)
 {
-
 	falling = true;
 	walling = false;
 
@@ -191,16 +188,7 @@ void j1Player::UpdatePos(float dt)
 	}
 
 	CalculateCollider(fpPlayerPos);
-	checkCollision(playerCollider);
 
-	//If the player is not touching the ground, he is falling
-	if (falling)
-		inputs.add(IN_FALL);
-	//Same if the player's on the wall
-	if (walling)
-		inputs.add(IN_WALL);
-	
-	UpdateState();
 }
 
 void j1Player::LimitPlayerSpeed()
@@ -231,32 +219,28 @@ void j1Player::LimitPlayerSpeed()
 
 void j1Player::CalculateCollider(fPoint pos) 
 {
-	playerCollider->ReSet((int)fpPlayerPos.x, (int)fpPlayerPos.y, animPlayerIdle->frames->w, animPlayerIdle->frames->h);
+	playerCollider->SetPos((int)fpPlayerPos.x, (int)fpPlayerPos.y);
 
 }
 
-void j1Player::checkCollision(Collider* playerCol)
+void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 {
 	//Esto no deberían ser todos, sino que solo comprobara los que tiene cerca.
-	p2List_item<Collider*>* colliderList = App->map->data.colliderList.start;
-	for (colliderList; colliderList; colliderList = colliderList->next)
-	{
-		switch (colliderList->data->type) {
+
+		switch (coll->type) {
 
 		case(COLLIDER_WALL):
-
-			if (playerCol->CheckCollision(colliderList->data->rect))
-			{
-				RecalculatePos(playerCol->rect, colliderList->data->rect);
-			}
+				RecalculatePos(playerCol->rect, coll->rect);
 			break;
+		case(COLLIDER_DEATH):
+
+			break;
+
 
 		}
 
-		//MORE CASES TO BE ADDED
-		//CHANGE TO A SWITCH
-	}
 
+		//MORE CASES TO BE ADDED
 }
 
 void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
@@ -269,27 +253,15 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 	collDiference[DIRECTION_UP] = (collRect.y + collRect.h) - playerRect.y;
 	collDiference[DIRECTION_DOWN] = (playerRect.y + playerRect.h) - collRect.y;
 
-	bool collDirection[DIRECTION_MAX];
-	collDirection[DIRECTION_RIGHT] = false;
-	collDirection[DIRECTION_LEFT] = false;
-	collDirection[DIRECTION_UP] = false;
-	collDirection[DIRECTION_DOWN] = false;
-
-	collDirection[DIRECTION_RIGHT] = !(collDiference[DIRECTION_RIGHT] > 0 && fpPlayerSpeed .x< 0);
-	collDirection[DIRECTION_LEFT] = !(collDiference[DIRECTION_RIGHT] > 0 && fpPlayerSpeed.x > 0);
-	collDirection[DIRECTION_UP] = !(collDiference[DIRECTION_UP] > 0 && fpPlayerSpeed.y < 0);
-	collDirection[DIRECTION_DOWN] = !(collDiference[DIRECTION_DOWN] >= 0 && fpPlayerSpeed.y > 0);
-
-
 
 	//If a collision from various aixs is detected, it determines what is the closets one to exit from
 	int directionCheck = DIRECTION_NONE;
 
 	for (int i = 0; i < DIRECTION_MAX; ++i)
 	{
-		if (collDirection[i] && directionCheck == DIRECTION_NONE)
+		if (directionCheck == DIRECTION_NONE)
 				directionCheck = i;
-		else if (collDiference[i] < collDiference[directionCheck])
+		else if ((collDiference[i] < collDiference[directionCheck]))
 				directionCheck = i;
 	}
 
@@ -321,6 +293,15 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 	case DIRECTION_NONE:
 		break;
 	}
+
+	//If the player is not touching the ground, he is falling
+	if (falling)
+		inputs.add(IN_FALL);
+	//Same if the player's on the wall
+	if (walling)
+		inputs.add(IN_WALL);
+
+	UpdateState();
 
 	//We Recalculate the player's collider with the new position
 	CalculateCollider(fpPlayerPos);
