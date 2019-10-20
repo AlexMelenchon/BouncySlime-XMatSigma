@@ -3,6 +3,7 @@
 
 #include "PugiXml/src/pugixml.hpp"
 #include "p2List.h"
+#include "p2SString.h"
 #include "p2Point.h"
 #include "j1Module.h"
 
@@ -47,6 +48,13 @@ struct TileSet
 	SDL_Rect GetTileRect(uint tileId);
 };
 
+struct MapInfo
+{
+	p2SString			name;
+	int					position;
+};
+
+
 enum MapTypes
 {
 	MAPTYPE_UNKNOWN = 0,
@@ -65,7 +73,8 @@ struct MapData
 	MapTypes			type;
 	p2List<TileSet*>	tilesets;
 	p2List<LayerInfo*> layerList;
-	p2List<Collider*> colliderList;
+	p2List<MapInfo*>	maplist;
+	p2SString			currentmap;
 
 };
 
@@ -110,6 +119,7 @@ private:
 public:
 
 	MapData data;
+	const char* GetNextMap();
 
 private:
 

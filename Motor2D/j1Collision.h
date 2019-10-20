@@ -1,7 +1,7 @@
 #ifndef __ModuleCollision_H__
 #define __ModuleCollision_H__
 
-#define MAX_COLLIDERS 40
+#define MAX_COLLIDERS 60
 
 #include "j1Module.h"
 
@@ -34,6 +34,15 @@ struct Collider
 		rect.y = y;
 	}
 
+	void ReSet(int x, int y, int w, int h)
+	{
+		rect.x = x;
+		rect.y = y;
+		rect.w = w;
+		rect.h = h;
+	}
+
+
 	void setType(COLLIDER_TYPE type1)
 	{
 		type = type1;
@@ -53,6 +62,7 @@ public:
 	bool Update(float dt) ;
 	bool PostUpdate() ;
 	bool CleanUp() ;
+	bool CleanMap();
 
 	void AddControlCollider(Collider*);
 	void DebugDraw();

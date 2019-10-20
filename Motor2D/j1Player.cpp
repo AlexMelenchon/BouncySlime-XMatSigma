@@ -4,6 +4,7 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Collision.h"
+#include "j1FadeToBlack.h"
 #include "j1Map.h"
 
 
@@ -34,16 +35,22 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	playerCollider = new Collider(*idleRect, COLLIDER_PLAYER, this);
 	App->collision->AddControlCollider(playerCollider);
 
-	animPlayerIdle = new Animation();
-	for (pugi::xml_node iterator = player_node.child("sprite"); iterator; iterator = iterator.next_sibling("sprite"))
-	{
-		SDL_Rect frame;
-		frame.x = iterator.attribute("x").as_int();
-		frame.y = iterator.attribute("y").as_int();
-		frame.w = iterator.attribute("w").as_int();
-		frame.h = iterator.attribute("h").as_int();
-		animPlayerIdle->PushBack(frame, iterator.attribute("frames").as_int());
-	}
+	pugi::xml_node animIterator = player_node.child("animation");
+
+	animIdle.PushBack(animIterator);
+	animIterator = animIterator.next_sibling();
+	animRun.PushBack(animIterator);
+	animIterator = animIterator.next_sibling();
+	animJump.PushBack(animIterator);
+	animIterator = animIterator.next_sibling();
+	animWall.PushBack(animIterator);
+	animIterator = animIterator.next_sibling();
+	animFall.PushBack(animIterator);
+	animIterator = animIterator.next_sibling();
+
+
+
+	currentAnimation = &animIdle;
 	flCurrentTime = App->GetDeltaTime();
 
 	return true;
@@ -219,7 +226,7 @@ void j1Player::LimitPlayerSpeed()
 
 void j1Player::CalculateCollider(fPoint pos) 
 {
-	playerCollider->SetPos((int)fpPlayerPos.x, (int)fpPlayerPos.y);
+	playerCollider->ReSet((int)fpPlayerPos.x, (int)fpPlayerPos.y, currentAnimation->frames->w-15, currentAnimation->frames->h);
 
 }
 
@@ -233,10 +240,13 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 				RecalculatePos(playerCol->rect, coll->rect);
 			break;
 		case(COLLIDER_DEATH):
+			App->fade->FadeToBlack(App->map->data.currentmap.GetString(), 0.35f);
+			break;
+		case(COLLIDER_WIN):
+			App->fade->FadeToBlack(App->map->GetNextMap(), 0.35f);
+			
 
 			break;
-
-
 		}
 
 
@@ -294,6 +304,14 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 		break;
 	}
 
+
+	//We Recalculate the player's collider with the new position
+	CalculateCollider(fpPlayerPos);
+}
+
+
+bool j1Player::PostUpdate()
+{
 	//If the player is not touching the ground, he is falling
 	if (falling)
 		inputs.add(IN_FALL);
@@ -303,19 +321,12 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 
 	UpdateState();
 
-	//We Recalculate the player's collider with the new position
-	CalculateCollider(fpPlayerPos);
-}
-
-
-bool j1Player::PostUpdate()
-{
 	if (fpPlayerSpeed.x > 0)
 		playerFlip = SDL_FLIP_NONE;
 	else if (fpPlayerSpeed.x < 0)
 		playerFlip = SDL_FLIP_HORIZONTAL;
 
-	App->render->Blit(playerTex, (int)playerCollider->rect.x, (int)playerCollider->rect.y, &animPlayerIdle->GetCurrentFrame(), 1.0f, playerFlip);
+	App->render->Blit(playerTex, (int)playerCollider->rect.x-10, (int)playerCollider->rect.y, &currentAnimation->GetCurrentFrame(), 1.0f, playerFlip,0.0f, 17,17);
 	return true;
 }
 
@@ -375,6 +386,14 @@ void j1Player::SetPos(int x, int y)
 {
 	fpPlayerPos.x = x;
 	fpPlayerPos.y = y;
+}
+
+void j1Player::ReSetMovement()
+{
+	fpPlayerSpeed = { 0,0 };
+	fPlayerAccel = 0;
+	float wallJumpLimit = 0.3f;
+	float wallJumpTimer = 0.0f;
 }
 
 player_states j1Player::process_fsm(p2List<player_inputs>& inputs)

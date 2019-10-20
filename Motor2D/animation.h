@@ -32,6 +32,23 @@ public:
 		frames[last_frame++] = rect;
 	}
 
+	void PushBack(pugi::xml_node framesIterator)
+	{
+
+		for (framesIterator = framesIterator.child("sprite"); framesIterator; framesIterator = framesIterator.next_sibling("sprite"))
+		{
+			SDL_Rect frame;
+			frame.x = framesIterator.attribute("x").as_int();
+			frame.y = framesIterator.attribute("y").as_int();
+			frame.w = framesIterator.attribute("w").as_int();
+			frame.h = framesIterator.attribute("h").as_int();
+
+			framesXframe[last_frame] = framesIterator.attribute("frames").as_int();
+			frames[last_frame++] = frame;
+		}
+
+	}
+
 	SDL_Rect& GetCurrentFrame()
 	{//returns the rectangle displaying the current animation
 		//current_frame += speed;

@@ -30,7 +30,15 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
+
 	App->map->Load("mapa97.tmx");
+
+	return true;
+}
+
+bool j1Scene::Reset(const char* map)
+{
+	App->map->Load(map);
 	return true;
 }
 
@@ -64,15 +72,17 @@ bool j1Scene::Update(float dt)
 	//App->render->Blit(img, 0, 0);
 	App->map->Draw();
 
-	p2SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d Mouse Position X:%d Y:%d Mouse Tilset:%d,%d Tileset Type:%d",
+	p2SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d Mouse Position X:%d Y:%d Mouse Tilset:%d,%d Current Map:%s",
 		App->map->data.width, App->map->data.height,
 		App->map->data.tile_width, App->map->data.tile_height,
 		App->map->data.tilesets.count(), App->input->mouse_x - App->render->camera.x,
 		App->input->mouse_y - App->render->camera.y,
 		(App->input->mouse_x - App->render->camera.x) / App->map->data.tile_width,
-		(App->input->mouse_y - App->render->camera.y) / App->map->data.tile_height);
+		(App->input->mouse_y - App->render->camera.y) / App->map->data.tile_height,
+		App->map->data.currentmap.GetString());
 
 	App->win->SetTitle(title.GetString());
+
 	return true;
 }
 

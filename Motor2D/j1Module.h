@@ -31,7 +31,7 @@ enum COLLIDER_TYPE
 	COLLIDER_PLAYER,
 	COLLIDER_START,
 	COLLIDER_DEATH,
-	//COLLIDER_WIN,
+	COLLIDER_WIN,
 
 	COLLIDER_MAX
 };
@@ -96,6 +96,26 @@ public:
 	}
 
 	virtual void OnCollision(Collider*, Collider*) {}
+
+	bool IsEnabled() const { return active; }
+
+	void Enable()
+	{
+		if (active == false)
+		{
+			active = true;
+			Start();
+		}
+	}
+
+	void Disable()
+	{
+		if (active == true)
+		{
+			active = false;
+			CleanUp();
+		}
+	}
 
 
 public:

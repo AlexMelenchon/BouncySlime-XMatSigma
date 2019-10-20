@@ -7,6 +7,7 @@
 #include "j1Collision.h"
 #include "j1Player.h"
 #include "j1Window.h"
+#include "j1Textures.h"
 #include <math.h>
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
@@ -25,6 +26,21 @@ bool j1Map::Awake(pugi::xml_node& config)
 	bool ret = true;
 
 	folder.create(config.child("folder").child_value());
+
+	pugi::xml_node map;
+	int numberOfMaps = 0;
+
+	//Load the list of maps
+	for (map = config.child("level"); map; map = map.next_sibling("level"))
+	{
+		MapInfo* newMap = new MapInfo();
+		newMap->name = map.attribute("name").as_string();
+		newMap->position = numberOfMaps;
+		numberOfMaps++;
+		
+		data.maplist.add(newMap);
+	}
+	data.maplist = data.maplist;
 
 	return ret;
 }
@@ -92,12 +108,16 @@ bool j1Map::CleanUp()
 {
 	LOG("Unloading map");
 
+	map_loaded = false;
+
+
 	// Remove all tilesets
 	p2List_item<TileSet*>* item;
 	item = data.tilesets.start;
 
 	while (item != NULL)
 	{
+		App->tex->UnLoad(item->data->texture);
 		RELEASE(item->data);
 		item = item->next;
 	}
@@ -113,6 +133,19 @@ bool j1Map::CleanUp()
 		item2 = item2->next;
 	}
 	data.layerList.clear();
+
+	// Remove all the stored map info
+	p2List_item<MapInfo*>* item3;
+	item3 = data.maplist.start;
+
+	while (item3 != NULL)
+	{
+		RELEASE(item3->data);
+		item3 = item3->next;
+	}
+	data.maplist.clear();
+
+	App->collision->CleanMap();
 
 	// Clean up the pugui tree
 	map_file.reset();
@@ -134,6 +167,7 @@ bool j1Map::Load(const char* file_name)
 		ret = false;
 	}
 
+	data.currentmap.create(file_name);
 	// Load general info ----------------------------------------------
 	if(ret == true)
 	{
@@ -160,14 +194,6 @@ bool j1Map::Load(const char* file_name)
 	}
 
 	// Load layer info ----------------------------------------------
-	for (pugi::xml_node nodeLayer = map_file.child("map").child("layer"); nodeLayer; nodeLayer = nodeLayer.next_sibling("layer")) 
-	{
-		LayerInfo* layerInfo = new LayerInfo();
-
-		load_Layer(nodeLayer,layerInfo);
-
-	}
-
 	pugi::xml_node layer;
 	for (layer = map_file.child("map").child("layer"); layer && ret; layer = layer.next_sibling("layer"))
 	{
@@ -405,7 +431,15 @@ bool j1Map::load_collider(pugi::xml_node& node)
 	{
 		type = COLLIDER_START;
 		App->player->SetPos(colliderRect.x, colliderRect.y);
+		App->player->ReSetMovement();
+
 	}
+	else if (name == "Death")
+		type = COLLIDER_DEATH;
+	else if (name == "Win")
+		type = COLLIDER_WIN;
+
+
 	else
 		type = COLLIDER_NONE;
 		
@@ -418,13 +452,13 @@ bool j1Map::load_collider(pugi::xml_node& node)
 	{
 		Collider* collision  = new Collider(colliderRect, type, this);
 		App->collision->AddControlCollider(collision);
-		data.colliderList.add(collision);
 	}
 
 	return ret;
 }
 
-SDL_Rect TileSet::GetTileRect(uint tileId) {
+SDL_Rect TileSet::GetTileRect(uint tileId) 
+{
 
 	SDL_Rect toReturn;
 	
@@ -439,4 +473,28 @@ SDL_Rect TileSet::GetTileRect(uint tileId) {
 
 
 	return(toReturn);
+};
+
+
+const char* j1Map::GetNextMap()
+{
+	p2List_item<MapInfo*>* iterator = data.maplist.start;
+
+	while (iterator != NULL)
+	{
+		if (iterator->data->name == App->map->data.currentmap)
+		{
+			iterator = iterator->next;
+			if (iterator == NULL)
+			{
+				iterator = data.maplist.start;
+				return iterator->data->name.GetString();
+			}
+			else
+				return iterator->data->name.GetString();
+			
+		}
+		iterator = iterator->next;
+	}
+
 };

@@ -14,18 +14,38 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_NONE][COLLIDER_WALL] = false;
 	matrix[COLLIDER_NONE][COLLIDER_PLAYER] = false;
 	matrix[COLLIDER_NONE][COLLIDER_START] = false;
+	matrix[COLLIDER_NONE][COLLIDER_DEATH] = false;
+	matrix[COLLIDER_NONE][COLLIDER_WIN] = false;
 	matrix[COLLIDER_NONE][COLLIDER_NONE] = false;
 
 	matrix[COLLIDER_WALL][COLLIDER_WALL] = false;
 	matrix[COLLIDER_WALL][COLLIDER_PLAYER] = true;
 	matrix[COLLIDER_WALL][COLLIDER_START] = false;
+	matrix[COLLIDER_WALL][COLLIDER_DEATH] = false;
+	matrix[COLLIDER_WALL][COLLIDER_WIN] = false;
 	matrix[COLLIDER_WALL][COLLIDER_NONE] = false;
 
 
 	matrix[COLLIDER_PLAYER][COLLIDER_WALL] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_PLAYER] = false;
 	matrix[COLLIDER_PLAYER][COLLIDER_START] = false;
+	matrix[COLLIDER_PLAYER][COLLIDER_DEATH] = true;
+	matrix[COLLIDER_PLAYER][COLLIDER_WIN] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_NONE] = false;
+
+	matrix[COLLIDER_DEATH][COLLIDER_WALL] = false;
+	matrix[COLLIDER_DEATH][COLLIDER_PLAYER] = true;
+	matrix[COLLIDER_DEATH][COLLIDER_START] = false;
+	matrix[COLLIDER_DEATH][COLLIDER_DEATH] = false;
+	matrix[COLLIDER_DEATH][COLLIDER_WIN] = false;
+	matrix[COLLIDER_DEATH][COLLIDER_NONE] = false;
+
+	matrix[COLLIDER_WIN][COLLIDER_WALL] = false;
+	matrix[COLLIDER_WIN][COLLIDER_PLAYER] = true;
+	matrix[COLLIDER_WIN][COLLIDER_START] = false;
+	matrix[COLLIDER_WIN][COLLIDER_DEATH] = false;
+	matrix[COLLIDER_WIN][COLLIDER_WIN] = false;
+	matrix[COLLIDER_WIN][COLLIDER_NONE] = false;
 
 }
 
@@ -51,8 +71,6 @@ bool j1Collision::PreUpdate()
 // Called before render is available
 bool j1Collision::Update(float dt)
 {
-
-
 	Collider* c1;
 	Collider* c2;
 
@@ -83,8 +101,6 @@ bool j1Collision::Update(float dt)
 			}
 		}
 	}
-
-
 
 	return true;
 }
@@ -118,6 +134,12 @@ void j1Collision::DebugDraw()
 		case COLLIDER_PLAYER: // green
 			App->render->DrawQuad(collidersDebug[i]->rect, 0, 255, 0, alpha);
 			break;
+		case COLLIDER_DEATH: // red
+			App->render->DrawQuad(collidersDebug[i]->rect, 255, 0, 0, alpha);
+			break;
+		case COLLIDER_WIN: // white
+			App->render->DrawQuad(collidersDebug[i]->rect, 255, 255, 255, alpha);
+			break;
 
 		}
 	}
@@ -131,6 +153,22 @@ bool j1Collision::CleanUp()
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
 		if (collidersDebug[i] != nullptr)
+		{
+			delete collidersDebug[i];
+			collidersDebug[i] = nullptr;
+		}
+	}
+
+	return true;
+}
+
+bool j1Collision::CleanMap()
+{
+	LOG("Freeing map colliders");
+
+	for (uint i = 0; i < MAX_COLLIDERS; ++i)
+	{
+		if (collidersDebug[i] != nullptr && collidersDebug[i]->type != COLLIDER_PLAYER)
 		{
 			delete collidersDebug[i];
 			collidersDebug[i] = nullptr;

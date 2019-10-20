@@ -24289,8 +24289,8 @@
   <object id="18" name="Death" x="1537.86" y="546.311" width="69.617" height="130.045"/>
  </objectgroup>
  <objectgroup id="9" name="PLAYER_POINTS">
-  <object id="8" name="Start" x="42" y="475" width="20" height="25"/>
-  <object id="12" name="Start" x="42" y="475" width="20" height="25"/>
+  <object id="8" name="Start" x="55" y="484.5" width="20" height="25"/>
+  <object id="12" name="Start" x="55" y="484.5" width="20" height="25"/>
   <object id="19" name="End" x="1298.67" y="18.6667" width="16" height="349.333"/>
   <object id="20" x="516" y="945.333"/>
  </objectgroup>

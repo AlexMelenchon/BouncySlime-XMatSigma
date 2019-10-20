@@ -74,7 +74,8 @@ bool j1Render::Update(float dt)
 
 bool j1Render::PostUpdate()
 {
-	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
+	if (renderer != nullptr)
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);//turns the border rectangles to black
 	SDL_RenderPresent(renderer);
 	return true;
 }

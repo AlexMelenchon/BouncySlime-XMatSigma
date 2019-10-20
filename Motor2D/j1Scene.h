@@ -18,7 +18,10 @@ public:
 	bool Awake();
 
 	// Called before the first frame
-	bool Start();
+	 bool Start();
+
+	 // Called to reset the scene
+	 bool Reset(const char* map);
 
 	// Called before all Updates
 	bool PreUpdate();

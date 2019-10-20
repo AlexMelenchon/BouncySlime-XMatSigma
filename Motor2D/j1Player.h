@@ -71,10 +71,10 @@ public:
 
 	void CalculateCollider(fPoint);
 
-	void checkCollision(Collider*);
 	void RecalculatePos(SDL_Rect, SDL_Rect);
 
 	void SetPos(int x, int y);
+	void ReSetMovement();
 	void UpdateState();
 
 	void UpdatePos(float dt); //Update player's position
@@ -131,7 +131,12 @@ private:
 
 
 	//Animations
-	Animation* animPlayerIdle = nullptr;
+	Animation* currentAnimation = nullptr;
+	Animation animIdle;
+	Animation animJump;
+	Animation animRun;
+	Animation animFall;
+	Animation animWall;
 };
 
 #endif 
