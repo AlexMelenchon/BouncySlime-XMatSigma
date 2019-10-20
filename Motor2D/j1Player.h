@@ -75,6 +75,11 @@ public:
 
 	void SetPos(int x, int y);
 	void ReSetMovement();
+	fPoint getPos()
+	{
+		return fpPlayerPos;
+	}
+
 	void UpdateState();
 
 	void UpdatePos(float dt); //Update player's position
@@ -102,6 +107,7 @@ private:
 	fPoint fpForce = { -90.0,-250.0f }; //Force applied to the player's movement in both axis
 	fPoint wallForce = { 200.0f, -350.0f };
 
+	
 	//Position Limits
 	float slowGrade = 1.1f;
 	int slowLimit = 200;

@@ -8,6 +8,7 @@
 #include "j1Window.h"
 #include "j1Map.h"
 #include "j1Scene.h"
+#include "j1Player.h"
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -30,8 +31,9 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
-
+	App->win->GetWindowSize(width, height);
 	App->map->Load("mapa97.tmx");
+	Hlimit = App->map->data.tile_width * App->map->data.width;
 
 	return true;
 }
@@ -39,6 +41,7 @@ bool j1Scene::Start()
 bool j1Scene::Reset(const char* map)
 {
 	App->map->Load(map);
+	Hlimit = App->map->data.tile_width * App->map->data.width;
 	return true;
 }
 
@@ -51,6 +54,8 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
+	Camera(dt);
+
 	if(App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		App->LoadGame();
 
@@ -103,4 +108,33 @@ bool j1Scene::CleanUp()
 	LOG("Freeing scene");
 
 	return true;
+
 }
+
+void j1Scene::Camera(float dt)
+{
+	fPoint playerPos = App->player->getPos();
+	
+	
+	//We lock up the camera position when the player gets to the mid of the screen
+	if (playerPos.x > width / 2)
+	{
+		cameraPos.x = -(playerPos.x - width / 2);
+	}
+
+	
+	//We lock the camera if we get to the edges
+
+	if (cameraPos.x-width < -Hlimit)
+	{
+		cameraPos.x = (-Hlimit + ((int)width));
+	}
+
+
+
+	App->render->camera.x = cameraPos.x;
+	App->render->camera.y = cameraPos.y;
+}
+
+
+

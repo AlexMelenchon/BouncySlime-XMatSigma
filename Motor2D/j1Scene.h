@@ -35,7 +35,17 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	//Camera logic
+	void Camera(float dt);
+
 private:
+	fPoint cameraPos;
+	uint width = 0u;
+	uint height = 0u;
+	int	 scale = 0;
+	int  Hlimit = 0;
+#define CAMERA_X_LIMIT_Right 1536
+
 };
 
 #endif // __j1SCENE_H__

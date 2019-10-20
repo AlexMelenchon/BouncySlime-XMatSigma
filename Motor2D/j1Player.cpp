@@ -396,6 +396,7 @@ void j1Player::ReSetMovement()
 	float wallJumpTimer = 0.0f;
 }
 
+
 player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 {
 	static player_states state = ST_GROUND;
