@@ -33,7 +33,7 @@
  </tileset>
  <layer id="1" name="SKY" width="96" height="42">
   <properties>
-   <property name="Speed" type="float" value="1"/>
+   <property name="Speed" type="float" value="0.1"/>
   </properties>
   <data>
    <tile gid="5"/>
@@ -4072,7 +4072,7 @@
  </layer>
  <layer id="2" name="FAR_TREES" width="96" height="42">
   <properties>
-   <property name="Speed" type="float" value="1"/>
+   <property name="Speed" type="float" value="0.2"/>
   </properties>
   <data>
    <tile/>
@@ -8111,7 +8111,7 @@
  </layer>
  <layer id="3" name="MEDIUM_TREES" width="96" height="42">
   <properties>
-   <property name="Speed" type="float" value="1"/>
+   <property name="Speed" type="float" value="0.3"/>
   </properties>
   <data>
    <tile/>
@@ -12150,7 +12150,7 @@
  </layer>
  <layer id="4" name="CLOSE_TREES" width="96" height="42">
   <properties>
-   <property name="Speed" type="float" value="1"/>
+   <property name="Speed" type="float" value="0.4"/>
   </properties>
   <data>
    <tile/>
@@ -16188,6 +16188,9 @@
   </data>
  </layer>
  <layer id="6" name="BACKGROUND" width="96" height="42">
+  <properties>
+   <property name="Speed" type="float" value="1"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
@@ -20224,6 +20227,9 @@
   </data>
  </layer>
  <layer id="5" name="LEVEL" width="96" height="42">
+  <properties>
+   <property name="Speed" type="float" value="1"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
@@ -24281,8 +24287,8 @@
   <object id="23" name="Death" x="1248.16" y="670.967" width="111.583" height="30"/>
  </objectgroup>
  <objectgroup id="10" name="PLAYER_POINTS">
-  <object id="24" name="Start" x="40.6667" y="461.333" width="9.66667" height="9"/>
+  <object id="24" name="Start" x="96.6667" y="470" width="9.66667" height="9"/>
   <object id="25" name="End" x="1201.5" y="512.5" width="12.5" height="79.25"/>
-  <object id="26" name="Win" x="124.75" y="440.375" width="12.5" height="79.25"/>
+  <object id="26" name="Win" x="21.4167" y="412.375" width="12.5" height="79.25"/>
  </objectgroup>
 </map>

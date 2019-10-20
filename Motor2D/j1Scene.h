@@ -36,14 +36,15 @@ public:
 	bool CleanUp();
 
 	//Camera logic
-	void Camera(float dt);
+	void Camera();
 
 private:
 	fPoint cameraPos;
 	uint width = 0u;
 	uint height = 0u;
 	int	 scale = 0;
-	int  Hlimit = 0;
+	iPoint  Hlimit = { 0,0 };
+	void CheckCameraLimits();
 #define CAMERA_X_LIMIT_Right 1536
 
 };

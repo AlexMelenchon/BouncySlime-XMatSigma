@@ -24263,11 +24263,11 @@
   </data>
  </layer>
  <objectgroup id="9" name="COLLIDERS">
-  <object id="6" name="Death" x="175.864" y="672.273" width="112.875" height="15.0909"/>
-  <object id="7" name="Death" x="1024" y="671" width="511.667" height="80"/>
-  <object id="9" name="Death" x="1535.63" y="457.542" width="92" height="296"/>
+  <object id="6" name="Death" x="177.864" y="672.523" width="112.875" height="15.0909"/>
+  <object id="7" name="Death" x="1025.67" y="672.833" width="511.667" height="13.6667"/>
+  <object id="9" name="Death" x="1535.63" y="457.542" width="92" height="214"/>
   <object id="14" name="Floor" type="0" x="-0.5" y="528.152" width="176.478" height="144.348"/>
-  <object id="15" name="Floor" x="288.5" y="528.524" width="735.563" height="145.476"/>
+  <object id="15" name="Floor" x="288.5" y="528.524" width="735.563" height="143.476"/>
   <object id="16" name="Floor" x="513" y="319.727" width="94.3333" height="208.439"/>
   <object id="30" name="Floor" x="688.722" y="128.01" width="79.2938" height="256.016"/>
   <object id="32" name="Floor" x="848.102" y="319.98" width="79.8478" height="208.486"/>
@@ -24283,9 +24283,8 @@
   <object id="43" name="Floor" x="928" y="63.9889" width="63.9889" height="48.0111"/>
  </objectgroup>
  <objectgroup id="10" name="PLAYER_POINTS">
-  <object id="11" name="Start" x="78.6704" y="492.636" width="5.25" height="5.25"/>
+  <object id="11" name="Start" x="102.67" y="493.636" width="5.25" height="5.25"/>
   <object id="12" name="Win" x="402" y="-201" width="81" height="264"/>
   <object id="36" name="Floor" x="1456.06" y="223.948" width="79.9215" height="239.689"/>
-  <object id="45" name="Win" x="204" y="289.5" width="81" height="264"/>
  </objectgroup>
 </map>

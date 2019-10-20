@@ -80,6 +80,11 @@ public:
 		return fpPlayerPos;
 	}
 
+	player_states getState()
+	{
+		return current_state;
+	}
+
 	void UpdateState();
 
 	void UpdatePos(float dt); //Update player's position
@@ -92,6 +97,7 @@ public:
 
 	player_states process_fsm(p2List<player_inputs>& inputs);
 
+	bool control_death = false;
 
 
 private:

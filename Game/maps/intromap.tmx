@@ -49,7 +49,7 @@
  </tileset>
  <layer id="1" name="SKY" width="96" height="42">
   <properties>
-   <property name="Speed" type="float" value="1"/>
+   <property name="Speed" type="float" value="0.1"/>
   </properties>
   <data>
    <tile gid="5"/>
@@ -4088,7 +4088,7 @@
  </layer>
  <layer id="2" name="FAR_TREES" width="96" height="42">
   <properties>
-   <property name="Speed" type="float" value="2"/>
+   <property name="Speed" type="float" value="0.2"/>
   </properties>
   <data>
    <tile/>
@@ -8127,7 +8127,7 @@
  </layer>
  <layer id="3" name="MEDIUM_TREES" width="96" height="42">
   <properties>
-   <property name="Speed" type="float" value="3"/>
+   <property name="Speed" type="float" value="0.3"/>
   </properties>
   <data>
    <tile/>
@@ -12166,7 +12166,7 @@
  </layer>
  <layer id="4" name="CLOSE_TREES" width="96" height="42">
   <properties>
-   <property name="Speed" type="float" value="4"/>
+   <property name="Speed" type="float" value="0.4"/>
   </properties>
   <data>
    <tile/>
@@ -16204,6 +16204,9 @@
   </data>
  </layer>
  <layer id="6" name="BACKGROUND" width="96" height="42">
+  <properties>
+   <property name="Spped" type="float" value="1"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
@@ -20240,6 +20243,9 @@
   </data>
  </layer>
  <layer id="5" name="LEVEL" width="96" height="42">
+  <properties>
+   <property name="Speed" type="float" value="1"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
@@ -24291,7 +24297,7 @@
  <objectgroup id="9" name="PLAYER_POINTS">
   <object id="8" name="Start" x="55" y="484.5" width="20" height="25"/>
   <object id="12" name="Start" x="55" y="484.5" width="20" height="25"/>
-  <object id="19" name="End" x="1298.67" y="18.6667" width="16" height="349.333"/>
+  <object id="19" name="Win" x="1298.67" y="18.6667" width="16" height="349.333"/>
   <object id="20" x="516" y="945.333"/>
  </objectgroup>
 </map>

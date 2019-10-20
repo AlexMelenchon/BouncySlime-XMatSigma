@@ -33,28 +33,31 @@ bool j1Scene::Start()
 {
 	App->win->GetWindowSize(width, height);
 	App->map->Load("mapa97.tmx");
-	Hlimit = App->map->data.tile_width * App->map->data.width;
+	Hlimit.x = App->map->data.tile_width * App->map->data.width;
+	Hlimit.y = App->map->data.tile_height * App->map->data.height;
 
 	return true;
 }
 
 bool j1Scene::Reset(const char* map)
 {
+	App->win->GetWindowSize(width, height);
 	App->map->Load(map);
-	Hlimit = App->map->data.tile_width * App->map->data.width;
+	Hlimit.x = App->map->data.tile_width * App->map->data.width;
+	Hlimit.y = App->map->data.tile_height * App->map->data.height;
 	return true;
 }
 
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
+	Camera();
 	return true;
 }
 
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
-	Camera(dt);
 
 	if(App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		App->LoadGame();
@@ -62,17 +65,6 @@ bool j1Scene::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
 		App->SaveGame();
 
-	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->render->camera.y -= 1;
-
-	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->render->camera.y += 1;
-
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->render->camera.x -= 1;
-
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->render->camera.x += 1;
 
 	//App->render->Blit(img, 0, 0);
 	App->map->Draw();
@@ -111,30 +103,46 @@ bool j1Scene::CleanUp()
 
 }
 
-void j1Scene::Camera(float dt)
+void j1Scene::Camera()
 {
+	//Get the current player position
 	fPoint playerPos = App->player->getPos();
-	
-	
-	//We lock up the camera position when the player gets to the mid of the screen
-	if (playerPos.x > width / 2)
-	{
-		cameraPos.x = -(playerPos.x - width / 2);
-	}
+
+	//Calculate the camera acording to the player in both axis
+	cameraPos.x = (-(playerPos.x) + width / 2);
+	cameraPos.y = (-(playerPos.y) + height / 2);
+
+	//Recalculate it taking account the previous camera
+	cameraPos.x += (cameraPos.x - App->render->camera.w) / 10;
+	cameraPos.y += ((cameraPos.y - App->render->camera.y )/10);
 
 	
 	//We lock the camera if we get to the edges
-
-	if (cameraPos.x-width < -Hlimit)
-	{
-		cameraPos.x = (-Hlimit + ((int)width));
-	}
+	CheckCameraLimits();
 
 
-
+	//And then we give the new camera to the render
 	App->render->camera.x = cameraPos.x;
 	App->render->camera.y = cameraPos.y;
+
 }
 
+void j1Scene::CheckCameraLimits()
+{
+	if (cameraPos.x - width < -Hlimit.x)
+		cameraPos.x = (-Hlimit.x + ((int)width));
+
+	if (cameraPos.x > 0)
+		cameraPos.x = 0;
+
+	if (cameraPos.y + height > Hlimit.y)
+		cameraPos.y = (-Hlimit.y + ((int)height));
+
+	if (cameraPos.y < 0)
+		cameraPos.y = App->map->data.tile_height * 6; //No se perque pasa aixo pero el 0 de la cam te'l agafa 6 tiles més de lo que hauria de ser.
+
+
+
+}
 
 

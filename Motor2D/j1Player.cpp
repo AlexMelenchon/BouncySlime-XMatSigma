@@ -240,12 +240,15 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 				RecalculatePos(playerCol->rect, coll->rect);
 			break;
 		case(COLLIDER_DEATH):
-			App->fade->FadeToBlack(App->map->data.currentmap.GetString(), 0.35f);
+			if(control_death == false)
+			App->fade->FadeToBlack(App->map->data.currentmap.GetString(), 0.6f);
+			control_death = true;
+
 			break;
 		case(COLLIDER_WIN):
-			App->fade->FadeToBlack(App->map->GetNextMap(), 0.35f);
-			
-
+			if (control_death == false)
+			App->fade->FadeToBlack(App->map->GetNextMap(), 0.6f);
+			control_death = true;
 			break;
 		}
 

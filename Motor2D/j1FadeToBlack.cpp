@@ -6,6 +6,7 @@
 #include "j1Scene.h"
 #include "j1Map.h"
 #include "j1Input.h"
+#include "j1Player.h"
 #include "j1Collision.h"
 #include "SDL/include/SDL_render.h"
 #include "SDL/include/SDL_timer.h"
@@ -68,6 +69,7 @@ bool j1FadeToBlack::PostUpdate()
 			{
 				current_step = fade_step::none;
 				App->input->Enable();
+				App->player->control_death = false;
 			}
 		} break;
 	}

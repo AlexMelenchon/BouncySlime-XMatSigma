@@ -135,15 +135,7 @@ bool j1Map::CleanUp()
 	data.layerList.clear();
 
 	// Remove all the stored map info
-	p2List_item<MapInfo*>* item3;
-	item3 = data.maplist.start;
 
-	while (item3 != NULL)
-	{
-		RELEASE(item3->data);
-		item3 = item3->next;
-	}
-	data.maplist.clear();
 
 	App->collision->CleanMap();
 
@@ -475,7 +467,6 @@ SDL_Rect TileSet::GetTileRect(uint tileId)
 	return(toReturn);
 };
 
-
 const char* j1Map::GetNextMap()
 {
 	p2List_item<MapInfo*>* iterator = data.maplist.start;
@@ -488,13 +479,15 @@ const char* j1Map::GetNextMap()
 			if (iterator == NULL)
 			{
 				iterator = data.maplist.start;
-				return iterator->data->name.GetString();
+				break;
 			}
 			else
-				return iterator->data->name.GetString();
+				break;
 			
 		}
 		iterator = iterator->next;
 	}
+
+	return iterator->data->name.GetString();
 
 };
