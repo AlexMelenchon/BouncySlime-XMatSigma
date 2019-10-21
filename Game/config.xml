@@ -28,8 +28,8 @@
   <map>
     <folder>maps/</folder>
     <level name="map1.tmx"/>
-    <level name="mapa2.tmx"/>
-    <level name="intromap.tmx"/>
+    <level name="map2.tmx"/>
+    <level name="intro.tmx"/>
   </map>
 
   <player>    
