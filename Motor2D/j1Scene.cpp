@@ -32,7 +32,7 @@ bool j1Scene::Awake()
 bool j1Scene::Start()
 {
 	App->win->GetWindowSize(width, height);
-	App->map->Load("mapa97.tmx");
+	App->map->Load("map1.tmx");
 	Hlimit.x = App->map->data.tile_width * App->map->data.width;
 	Hlimit.y = App->map->data.tile_height * App->map->data.height;
 
@@ -135,13 +135,8 @@ void j1Scene::CheckCameraLimits()
 	if (cameraPos.x > 0)
 		cameraPos.x = 0;
 
-	if (cameraPos.y + height > Hlimit.y)
-		cameraPos.y = (-Hlimit.y + ((int)height));
-
 	if (cameraPos.y < 0)
-		cameraPos.y = App->map->data.tile_height * 6; //No se perque pasa aixo pero el 0 de la cam te'l agafa 6 tiles més de lo que hauria de ser.
-
-
+		cameraPos.y = 0; //No se perque pasa aixo pero el 0 de la cam te'l agafa 6 tiles més de lo que hauria de ser.
 
 }
 
