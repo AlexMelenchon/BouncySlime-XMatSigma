@@ -35,18 +35,13 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	playerCollider = new Collider(*idleRect, COLLIDER_PLAYER, this);
 	App->collision->AddControlCollider(playerCollider);
 
-	pugi::xml_node animIterator = player_node.child("animation");
+	pugi::xml_node animIterator = player_node.child("animations").child("animation");
 
-	animIdle.PushBack(animIterator);
-	animIterator = animIterator.next_sibling();
-	animRun.PushBack(animIterator);
-	animIterator = animIterator.next_sibling();
-	animJump.PushBack(animIterator);
-	animIterator = animIterator.next_sibling();
-	animWall.PushBack(animIterator);
-	animIterator = animIterator.next_sibling();
-	animFall.PushBack(animIterator);
-	animIterator = animIterator.next_sibling();
+	animIdle.loadAnimation(animIterator, "idle");
+	animRun.loadAnimation(animIterator, "run");
+	animWall.loadAnimation(animIterator, "wall");
+	animJump.loadAnimation(animIterator, "jump");
+	animFall.loadAnimation(animIterator, "fall");
 
 
 
@@ -58,7 +53,7 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 
 bool j1Player::Start()
 {
-	playerTex = App->tex->Load("textures/player/idle.png");
+	playerTex = App->tex->Load("textures/player/sprite.png");
 	return true;
 }
 
@@ -142,27 +137,31 @@ bool j1Player::Update(float dt)
 		LOG("IDLE\n");
 		fPlayerAccel = 0;
 		fpPlayerSpeed.y = 0;
-		//current_animation = &idle;
+		if (fpPlayerSpeed.x != 0) {
+			currentAnimation = &animRun;
+		}
+		else {
+			currentAnimation = &animIdle;
+		}
 		break;
 	case ST_AIR:
 		LOG("IN THE AIR ^^^^\n");
 		fPlayerAccel += fGravity;
-		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
+		currentAnimation = &animJump;
 		break;
 	case ST_FALLING:
 		LOG("FALLING \n");
 		fPlayerAccel -= fpForce.y;
-		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
+		currentAnimation = &animFall;
 		break;
 	case ST_WALL:
 		LOG("WALLING \n");
 		fPlayerAccel += fGravity*2;
-		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
+		currentAnimation = &animWall;
 		break;
 	case ST_WALL_JUMPING:
 		LOG("WALL JUMPING \n");
 		fPlayerAccel += fGravity;
-
 		wallJumpTimer += flCurrentTime;
 		if (wallJumpTimer > wallJumpLimit)
 		{
@@ -171,6 +170,7 @@ bool j1Player::Update(float dt)
 			wallJumpDirection = DIRECTION_NONE;
 		}
 		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
+		currentAnimation = &animJump;
 		break;
 	}
 
@@ -328,6 +328,7 @@ bool j1Player::PostUpdate()
 		playerFlip = SDL_FLIP_NONE;
 	else if (fpPlayerSpeed.x < 0)
 		playerFlip = SDL_FLIP_HORIZONTAL;
+
 
 	App->render->Blit(playerTex, (int)playerCollider->rect.x-10, (int)playerCollider->rect.y, &currentAnimation->GetCurrentFrame(), 1.0f, playerFlip,0.0f, 17,17);
 	return true;

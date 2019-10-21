@@ -32,21 +32,25 @@ public:
 		frames[last_frame++] = rect;
 	}
 
-	void PushBack(pugi::xml_node framesIterator)
+	void loadAnimation(pugi::xml_node animationIterator,p2SString name)
 	{
-
-		for (framesIterator = framesIterator.child("sprite"); framesIterator; framesIterator = framesIterator.next_sibling("sprite"))
+		for (animationIterator = animationIterator; animationIterator != NULL; animationIterator = animationIterator.next_sibling("animation"))
 		{
-			SDL_Rect frame;
-			frame.x = framesIterator.attribute("x").as_int();
-			frame.y = framesIterator.attribute("y").as_int();
-			frame.w = framesIterator.attribute("w").as_int();
-			frame.h = framesIterator.attribute("h").as_int();
+			if (name == animationIterator.attribute("name").as_string())
+			{
+				for (pugi::xml_node framesIterator = animationIterator.child("sprite"); framesIterator; framesIterator = framesIterator.next_sibling("sprite"))
+				{
+					SDL_Rect frame;
+					frame.x = framesIterator.attribute("x").as_int();
+					frame.y = framesIterator.attribute("y").as_int();
+					frame.w = framesIterator.attribute("w").as_int();
+					frame.h = framesIterator.attribute("h").as_int();
 
-			framesXframe[last_frame] = framesIterator.attribute("frames").as_int();
-			frames[last_frame++] = frame;
+					this->PushBack(frame, framesIterator.attribute("frames").as_int());
+				}
+				break;
+			}
 		}
-
 	}
 
 	SDL_Rect& GetCurrentFrame()

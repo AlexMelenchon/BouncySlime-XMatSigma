@@ -115,7 +115,7 @@ private:
 
 	
 	//Position Limits
-	float slowGrade = 1.1f;
+	float slowGrade = 1.175f;
 	int slowLimit = 200;
 
 	fPoint fpPlayerMaxSpeed = { 650.0f, 750.0f }; // Determines player maximum speed
