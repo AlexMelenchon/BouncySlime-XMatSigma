@@ -4,7 +4,7 @@
 #include "SDL/include/SDL_rect.h"
 #include "p2Point.h"
 
-#define MAX_FRAMES 40
+#define MAX_FRAMES 50
 
 class Animation
 {
@@ -31,7 +31,8 @@ public:
 	{
 		framesXframe[last_frame] = frXfr;
 		pivotpos[last_frame] = { 0, 0 };
-		frames[last_frame++] = rect;
+		frames[last_frame] = rect;
+		last_frame++;
 	}
 
 	void loadAnimation(pugi::xml_node animationIterator,p2SString name)

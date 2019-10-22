@@ -64,10 +64,6 @@ bool j1Player::PreUpdate()
 	else
 		godInputs();
 	
-
-
-
-
 	//Get the time elapsed since the last frame
 	flPreviousTime = flCurrentTime;
 	flCurrentTime = App->GetDeltaTime();
@@ -187,17 +183,21 @@ bool j1Player::Update(float dt)
 		LOG("GROUND\n");
 		fPlayerAccel = 0;
 		fpPlayerSpeed.y = 0;
-		if (fpPlayerSpeed.x != 0) {
+		if ((fpPlayerSpeed.x > 20.0f) || (fpPlayerSpeed.x < -20.0f))
 			currentAnimation = &animRun;
-		}
-		else {
+		else 
 			currentAnimation = &animIdle;
-		}
 		break;
 	case ST_AIR:
 		LOG("IN THE AIR ^^^^\n");
 		fPlayerAccel += fGravity;
+		if (fpPlayerSpeed.y > 0.0f)
+		{
 		currentAnimation = &animJump;
+		}
+		else
+			currentAnimation = &animFall;
+
 		break;
 	case ST_FALLING:
 		LOG("FALLING \n");
@@ -282,24 +282,24 @@ void j1Player::LimitPlayerSpeed()
 
 void j1Player::CalculateCollider(fPoint pos) 
 {
-	playerCollider->ReSet((int)fpPlayerPos.x, (int)fpPlayerPos.y, currentAnimation->frames->w-15, currentAnimation->frames->h);
+	playerCollider->SetPos((int)fpPlayerPos.x, (int)fpPlayerPos.y);
 
 }
 
 void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 {
-		switch (coll->type) {
+			switch (coll->type) {
 
-		case(COLLIDER_WALL):
-				RecalculatePos(playerCol->rect, coll->rect);
-			break;
-		case(COLLIDER_DEATH):
-			App->fade->FadeToBlack(App->map->data.currentmap.GetString(), 0.4f);
-			break;
-		case(COLLIDER_WIN):
-			App->fade->FadeToBlack(App->map->GetNextMap(), 0.4f);
-			break;
-		}
+			case(COLLIDER_WALL):
+					RecalculatePos(playerCol->rect, coll->rect);
+				break;
+			case(COLLIDER_DEATH):
+				App->fade->FadeToBlack(App->map->data.currentmap.GetString(), 0.4f);
+				break;
+			case(COLLIDER_WIN):
+				App->fade->FadeToBlack(App->map->GetNextMap(), 0.4f);
+				break;
+			}
 
 }
 
@@ -377,8 +377,9 @@ bool j1Player::PostUpdate()
 		playerFlip = SDL_FLIP_HORIZONTAL;
 
 	iPoint pivot = currentAnimation->pivotpos[(int)currentAnimation->current_frame];
+	SDL_Rect* r = &currentAnimation->GetCurrentFrame();
 
-	App->render->Blit(playerTex, (int)playerCollider->rect.x-10, (int)playerCollider->rect.y, &currentAnimation->GetCurrentFrame(), 1.0f, playerFlip,0.0f, pivot.x, pivot.y);
+	App->render->Blit(playerTex, (int)playerCollider->rect.x, (int)playerCollider->rect.y, &currentAnimation->GetCurrentFrame(), 1.0f, playerFlip,0.0f, pivot.x, pivot.y);
 	return true;
 }
 
