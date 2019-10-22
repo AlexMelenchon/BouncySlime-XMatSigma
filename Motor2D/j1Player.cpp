@@ -6,6 +6,7 @@
 #include "j1Collision.h"
 #include "j1FadeToBlack.h"
 #include "j1Map.h"
+#include "j1Audio.h"
 
 
 //Constructor
@@ -43,7 +44,11 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	animJump.loadAnimation(animIterator, "jump");
 	animFall.loadAnimation(animIterator, "fall");
 
-
+	jumpFx.path = player_node.child("fx").child("jump").attribute("path").as_string();
+	deathFx.path = player_node.child("fx").child("death").attribute("path").as_string();
+	landFx.path = player_node.child("fx").child("land").attribute("path").as_string();
+	winFx.path = player_node.child("fx").child("win").attribute("path").as_string();
+	bounceFx.path = player_node.child("fx").child("bounce").attribute("path").as_string();
 
 	currentAnimation = &animIdle;
 	flCurrentTime = App->GetDeltaTime();
@@ -54,6 +59,16 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 bool j1Player::Start()
 {
 	playerTex = App->tex->Load("textures/player/sprite.png");
+	jumpFx.id = App->audio->LoadFx(jumpFx.path.GetString());
+	
+	
+	deathFx.id=App->audio->LoadFx(deathFx.path.GetString());
+	
+	landFx.id=App->audio->LoadFx(landFx.path.GetString());
+	
+	winFx.id=App->audio->LoadFx(winFx.path.GetString());
+	
+	bounceFx.id=App->audio->LoadFx(bounceFx.path.GetString());
 	return true;
 }
 
@@ -122,6 +137,7 @@ void j1Player::standardInputs()
 		fPlayerAccel = 0; //Reset the accel
 		fpPlayerSpeed.y = fpForce.y;
 
+		App->audio->PlayFx(jumpFx.id);
 
 		inputs.add(IN_JUMP);
 	}
@@ -294,9 +310,11 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 					RecalculatePos(playerCol->rect, coll->rect);
 				break;
 			case(COLLIDER_DEATH):
+				App->audio->PlayFx(deathFx.id);
 				App->fade->FadeToBlack(App->map->data.currentmap.GetString(), 0.4f);
 				break;
 			case(COLLIDER_WIN):
+				App->audio->PlayFx(winFx.id);
 				App->fade->FadeToBlack(App->map->GetNextMap(), 0.4f);
 				break;
 			}
@@ -543,7 +561,10 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 		{
 			switch (last_input)
 			{
-			case IN_JUMP_FINISH: state = ST_GROUND; break;
+			case IN_JUMP_FINISH: 
+			state = ST_GROUND; 
+			App->audio->PlayFx(landFx.id);
+			break;
 			case IN_WALL: {state = ST_WALL;	fPlayerAccel = 0;} break;
 			case IN_GOD: state = ST_GOD; break;
 			}
@@ -553,8 +574,15 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 		{
 			switch (last_input)
 			{
+
+			case IN_JUMP_FINISH:
+				state = ST_GROUND;
+				App->audio->PlayFx(landFx.id);
+				break;
+
 			case IN_JUMP_FINISH: state = ST_GROUND; break;
 			case IN_GOD: state = ST_GOD; break;
+
 			case IN_WALL: 
 			{
 				state =  ST_WALL;	

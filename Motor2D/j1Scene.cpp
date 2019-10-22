@@ -26,7 +26,7 @@ bool j1Scene::Awake()
 {
 	LOG("Loading Scene");
 	bool ret = true;
-
+	
 	return ret;
 }
 
@@ -37,7 +37,12 @@ bool j1Scene::Start()
 	App->map->Load(App->map->data.maplist.start->data->name.GetString());
 	Hlimit.x = App->map->data.tile_width * App->map->data.width;
 	Hlimit.y = App->map->data.tile_height * App->map->data.height;
+
+	App->audio->PlayMusic(App->map->data.music.GetString());
+
+
 	cameraOffset = App->map->data.tile_height;
+
 	return true;
 }
 
@@ -170,8 +175,13 @@ void j1Scene::CheckCameraLimits()
 	if (cameraPos.x > 0)
 		cameraPos.x = 0;
 
+
+	if (cameraPos.y + height > Hlimit.y + 16)
+		cameraPos.y = (Hlimit.y+16 - ((int)height));
+
 	if (cameraPos.y + height > Hlimit.y- cameraOffset)
 		cameraPos.y = (Hlimit.y- cameraOffset - ((int)height));
+
 
 	if (cameraPos.y < 0)
 		cameraPos.y = 0;

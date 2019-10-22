@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="120" height="49" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="32">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="120" height="49" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="30">
+ <properties>
+  <property name="music" value="audio/music/loop.ogg"/>
+ </properties>
  <tileset firstgid="1" name="Nuvens" tilewidth="16" tileheight="16" tilecount="336" columns="24">
   <image source="Nuvens.png" width="384" height="224"/>
  </tileset>
@@ -35358,24 +35361,23 @@
   <object id="2" name="Death" x="1168.17" y="783.867" width="753.5" height="13.7218"/>
   <object id="4" name="Floor" type="0" x="0.0275473" y="639.873" width="175.689" height="144.18"/>
   <object id="5" name="Floor" x="306.193" y="642.574" width="861.821" height="141.519"/>
-  <object id="6" name="Floor" x="527.63" y="431.17" width="95.592" height="352.551"/>
+  <object id="6" name="Floor" x="527.63" y="436.625" width="93.0465" height="205.596"/>
   <object id="7" name="Floor" x="752.028" y="205.535" width="79.6134" height="257.048"/>
-  <object id="8" name="Floor" x="960.036" y="432.234" width="207.368" height="351.283"/>
-  <object id="9" name="Floor" x="1040.31" y="336.215" width="127.138" height="446.951"/>
+  <object id="8" name="Floor" x="960.036" y="432.25" width="80.0086" height="208.767"/>
+  <object id="9" name="Floor" x="1040.31" y="336.215" width="127.138" height="305.951"/>
   <object id="10" name="Floor" x="1311.4" y="384.155" width="80.3516" height="239.643"/>
   <object id="11" name="Floor" x="1553.67" y="509.966" width="141.545" height="241.018"/>
   <object id="12" name="Floor" x="463.504" y="144.567" width="415.791" height="64.2866"/>
   <object id="13" name="Floor" x="463.503" y="208.186" width="289.792" height="16.0577"/>
   <object id="14" name="Floor" x="1583.77" y="207.331" width="111.641" height="192.712"/>
-  <object id="15" name="Floor" x="1839.07" y="79.0368" width="81.0067" height="145.014"/>
+  <object id="15" name="Floor" x="1839.07" y="79.0368" width="80.3504" height="144.514"/>
   <object id="16" name="Floor" x="1407.99" y="143.998" width="64.5424" height="48.2562"/>
   <object id="17" name="Floor" x="1183.82" y="79.6009" width="64.2193" height="48.1929"/>
   <object id="18" name="Floor" x="1007.6" y="144.256" width="64.2469" height="48.2046"/>
-  <object id="21" name="Floor" x="1838.46" y="304.063" width="81.5046" height="239.785"/>
+  <object id="21" name="Floor" x="1838.46" y="303.193" width="80.2437" height="240.655"/>
   <object id="24" name="Death" x="1920.81" y="-0.551879" width="92.3709" height="798.317"/>
   <object id="28" name="Floor" x="-3.16667" y="304.333" width="19.8333" height="336.333"/>
   <object id="29" name="Floor" x="16.4167" y="305.083" width="46.9167" height="14.25"/>
-  <object id="30" name="Floor" x="1886.75" y="0.743" width="81.0067" height="145.014"/>
  </objectgroup>
  <objectgroup id="9" name="PLAYER_POSITIONS">
   <object id="22" name="Start" x="42.4017" y="559.083" width="5.27116" height="5.27116"/>
