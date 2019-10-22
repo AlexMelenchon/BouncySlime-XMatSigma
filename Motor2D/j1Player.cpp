@@ -288,8 +288,6 @@ void j1Player::CalculateCollider(fPoint pos)
 
 void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 {
-	//Esto no deberían ser todos, sino que solo comprobara los que tiene cerca.
-
 		switch (coll->type) {
 
 		case(COLLIDER_WALL):
@@ -303,8 +301,6 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 			break;
 		}
 
-
-		//MORE CASES TO BE ADDED
 }
 
 void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
