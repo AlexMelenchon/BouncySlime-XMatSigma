@@ -380,8 +380,9 @@ bool j1Player::PostUpdate()
 	else if (fpPlayerSpeed.x < 0)
 		playerFlip = SDL_FLIP_HORIZONTAL;
 
+	iPoint pivot = currentAnimation->pivotpos[(int)currentAnimation->current_frame];
 
-	App->render->Blit(playerTex, (int)playerCollider->rect.x-10, (int)playerCollider->rect.y, &currentAnimation->GetCurrentFrame(), 1.0f, playerFlip,0.0f, 17,17);
+	App->render->Blit(playerTex, (int)playerCollider->rect.x-10, (int)playerCollider->rect.y, &currentAnimation->GetCurrentFrame(), 1.0f, playerFlip,0.0f, pivot.x, pivot.y);
 	return true;
 }
 

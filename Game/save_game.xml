@@ -6,12 +6,12 @@
 	<audio />
 	<map />
 	<player>
-		<position x="319.768402" y="542.666687" />
-		<speed x="-435.947327" y="-91.6666718" />
-		<state current_state="2" />
-		<falling value="true" />
+		<position x="386.655273" y="606" />
+		<speed x="-0.000246735784" y="0" />
+		<state current_state="1" />
+		<falling value="false" />
 		<walling value="false" />
-		<wallTimer wallJumpTimer="0" />
+		<wallTimer wallJumpTimer="0.0166666675" />
 		<flip value="1" />
 	</player>
 	<scene>
