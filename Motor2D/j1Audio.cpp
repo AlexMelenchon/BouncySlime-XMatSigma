@@ -86,6 +86,7 @@ bool j1Audio::PlayMusic(const char* path, float fade_time)
 
 	if(!active)
 		return false;
+	Mix_VolumeMusic(MIX_MAX_VOLUME/4);
 
 	if(music != NULL)
 	{

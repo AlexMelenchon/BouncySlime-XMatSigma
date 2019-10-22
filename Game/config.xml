@@ -30,6 +30,8 @@
     <level name="map1.tmx"/>
     <level name="map2.tmx"/>
     <level name="intro.tmx"/>
+
+    <music path="audio/music/loop.ogg"/>
   </map>
 
   <player>    
@@ -81,6 +83,13 @@
         <sprite x ="13" y ="8" w ="36" h="36" frames ="5"/>
       </animation>
     </animations>
+    <fx>
+      <jump path="audio/fx/jump.wav"/>
+      <death path="audio/fx/death.wav"/>
+      <land path="audio/fx/land.wav"/>
+      <win path="audio/fx/win.wav"/>
+      <bounce path="audio/fx/bounce.wav"/>
+    </fx>
     </player>
 
 </config>

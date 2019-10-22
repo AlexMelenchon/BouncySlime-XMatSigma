@@ -75,6 +75,7 @@ struct MapData
 	p2List<LayerInfo*> layerList;
 	p2List<MapInfo*>	maplist;
 	p2SString			currentmap;
+	p2SString			music;
 
 };
 

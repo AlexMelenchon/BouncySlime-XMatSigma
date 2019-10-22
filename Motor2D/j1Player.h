@@ -4,7 +4,11 @@
 #include "j1Module.h"
 
 #define MAXIMUM_COLLIDERS 6
-
+struct FX
+{
+	int id = 0;
+	p2SString path;
+};
 enum player_states
 {
 	ST_UNKNOWN,
@@ -148,6 +152,14 @@ private:
 	Animation animRun;
 	Animation animFall;
 	Animation animWall;
+	
+	//Fx
+	FX jumpFx;
+	FX deathFx;
+	FX landFx;
+	FX winFx;
+	FX bounceFx;
+
 };
 
 #endif 
