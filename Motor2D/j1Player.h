@@ -119,7 +119,7 @@ private:
 	fPoint fpPlayerPos = { 0.0f,0.0f }; //Determines player position on the map
 	fPoint fpPlayerSpeed = { 0.0f,0.0f }; // Determines player speed in the x and y axis
 	float fPlayerAccel = 0.0f; // Determines player acceleration in the x and y axis
-	fPoint fpForce = { -90.0,-250.0f }; //Force applied to the player's movement in both axis
+	fPoint fpForce = { -70.0,-220.0f }; //Force applied to the player's movement in both axis
 	fPoint wallForce = { 200.0f, -350.0f };
 	float fGravity = 50.0f;
 
