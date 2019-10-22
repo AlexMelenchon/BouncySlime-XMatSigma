@@ -22,18 +22,18 @@ j1Player::~j1Player()
 bool j1Player::Awake(pugi::xml_node& player_node)
 {
 
-	idleRect = new SDL_Rect();
+	SDL_Rect playerRect;
 	//playerTex = App->tex->Load(player_node.child("path").attribute("value").as_string());	
 
-	idleRect->x = player_node.child("idle").attribute("x").as_int();
-	idleRect->y = player_node.child("idle").attribute("y").as_int();
-	idleRect->w = 25;
-	idleRect->h = 30;
+	playerRect.x = 0;
+	playerRect.y = 0;
+	playerRect.w = 20;
+	playerRect.h = 30;
 
 	inputs.start = 0;
 
 
-	playerCollider = new Collider(*idleRect, COLLIDER_PLAYER, this);
+	playerCollider = new Collider(playerRect, COLLIDER_PLAYER, this);
 	App->collision->AddControlCollider(playerCollider);
 
 	pugi::xml_node animIterator = player_node.child("animations").child("animation");
@@ -53,12 +53,14 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	currentAnimation = &animIdle;
 	flCurrentTime = App->GetDeltaTime();
 
+	auxLoader = player_node;
+
 	return true;
 }
 
 bool j1Player::Start()
 {
-	playerTex = App->tex->Load("textures/player/sprite.png");
+	playerTex = App->tex->Load(auxLoader.child("path").text().as_string());
 	jumpFx.id = App->audio->LoadFx(jumpFx.path.GetString());
 	
 	
@@ -222,7 +224,7 @@ bool j1Player::Update(float dt)
 		break;
 	case ST_WALL:
 		LOG("WALLING \n");
-		fPlayerAccel += fGravity*2;
+		fPlayerAccel += fGravity/2.0f;
 		currentAnimation = &animWall;
 		break;
 	case ST_WALL_JUMPING:
@@ -298,7 +300,9 @@ void j1Player::LimitPlayerSpeed()
 
 void j1Player::CalculateCollider(fPoint pos) 
 {
-	playerCollider->SetPos((int)fpPlayerPos.x, (int)fpPlayerPos.y);
+	iPoint pivot = currentAnimation->pivotpos[(int)currentAnimation->current_frame];
+
+	playerCollider->SetPos((int)fpPlayerPos.x+pivot.x, (int)fpPlayerPos.y);
 
 }
 
@@ -311,11 +315,11 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 				break;
 			case(COLLIDER_DEATH):
 				App->audio->PlayFx(deathFx.id);
-				App->fade->FadeToBlack(App->map->data.currentmap.GetString(), 0.4f);
+				App->fade->FadeToBlack(App->map->data.currentmap.GetString(), 0.7f);
 				break;
 			case(COLLIDER_WIN):
 				App->audio->PlayFx(winFx.id);
-				App->fade->FadeToBlack(App->map->GetNextMap(), 0.4f);
+				App->fade->FadeToBlack(App->map->GetNextMap(), 1.0f);
 				break;
 			}
 
@@ -354,6 +358,7 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 		fpPlayerSpeed.y = 0;
 		fPlayerAccel = 0;
 		falling = false;
+		walling = false;
 		inputs.add(IN_JUMP_FINISH);
 		break;
 	case DIRECTION_LEFT:
@@ -397,7 +402,7 @@ bool j1Player::PostUpdate()
 	iPoint pivot = currentAnimation->pivotpos[(int)currentAnimation->current_frame];
 	SDL_Rect* r = &currentAnimation->GetCurrentFrame();
 
-	App->render->Blit(playerTex, (int)playerCollider->rect.x, (int)playerCollider->rect.y, &currentAnimation->GetCurrentFrame(), 1.0f, playerFlip,0.0f, pivot.x, pivot.y);
+	App->render->Blit(playerTex, (int)fpPlayerPos.x, (int)fpPlayerPos.y, &currentAnimation->GetCurrentFrame(), 1.0f, playerFlip,0.0f, pivot.x, pivot.y);
 	return true;
 }
 
@@ -565,7 +570,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			state = ST_GROUND; 
 			App->audio->PlayFx(landFx.id);
 			break;
-			case IN_WALL: {state = ST_WALL;	fPlayerAccel = 0;} break;
+			case IN_WALL: {state = ST_WALL;	fPlayerAccel = 0; } break;
 			case IN_GOD: state = ST_GOD; break;
 			}
 		}
@@ -584,7 +589,8 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 
 			case IN_WALL: 
 			{
-				state =  ST_WALL;	
+				state =  ST_WALL;
+				fpPlayerSpeed.y = 0;
 				fPlayerAccel = 0; 
 			} 
 			break;
@@ -601,7 +607,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 				state = ST_WALL_JUMPING; 
 				fpPlayerSpeed.y = wallForce.y;
 				fPlayerAccel = 0;
-				if (playerFlip == SDL_FLIP_NONE)
+ 				if (playerFlip == SDL_FLIP_NONE)
 				{
 					fpPlayerSpeed.x -= wallForce.x;
 					wallJumpDirection = DIRECTION_LEFT;
@@ -634,7 +640,8 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			case IN_WALL: 
 			{
 				state = ST_WALL;	
-				fPlayerAccel = 0; 
+				fPlayerAccel = 0;
+				fpPlayerSpeed.y = 0;
 				wallJumpDirection = DIRECTION_NONE;
 			} break;
 			case IN_GOD: state = ST_GOD; break;

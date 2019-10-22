@@ -30,13 +30,15 @@
     <level name="map1.tmx"/>
     <level name="map2.tmx"/>
     <level name="intro.tmx"/>
-
-    <music path="audio/music/loop.ogg"/>
   </map>
 
+  <audio>
+    <volume general="40" music="70"/>
+  </audio>
+
+
   <player>    
-      <path>textures/player</path>
-      <image>sprite.png</image>
+      <path>textures/player/sprite.png</path>
     <animations>
       <animation name ="idle">
         <sprite x ="13" y ="8" w ="36" h="36" frames ="5" pivotx ="20" pivoty="20"/>

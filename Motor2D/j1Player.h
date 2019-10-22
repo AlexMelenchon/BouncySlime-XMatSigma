@@ -134,7 +134,7 @@ private:
 	SDL_RendererFlip playerFlip = SDL_RendererFlip::SDL_FLIP_NONE; //Var that controls if the player is flipped or not
 
 	SDL_Texture* playerTex = nullptr; //Player's spritesheet pointer
-	SDL_Rect* idleRect = nullptr; // The player's rect in order to blit him
+	pugi::xml_node auxLoader;
 
 
 	//Internal control variables

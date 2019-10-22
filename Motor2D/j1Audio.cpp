@@ -50,6 +50,9 @@ bool j1Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 
+	Mix_Volume(-1, config.child("volume").attribute("general").as_int());
+	Mix_VolumeMusic(config.child("volume").attribute("music").as_int());
+
 	return ret;
 }
 

@@ -35361,10 +35361,10 @@
   <object id="2" name="Death" x="1168.17" y="783.867" width="753.5" height="13.7218"/>
   <object id="4" name="Floor" type="0" x="0.0275473" y="639.873" width="175.689" height="144.18"/>
   <object id="5" name="Floor" x="306.193" y="642.574" width="861.821" height="141.519"/>
-  <object id="6" name="Floor" x="527.63" y="436.625" width="93.0465" height="205.596"/>
+  <object id="6" name="Floor" x="527.63" y="436.625" width="93.0465" height="307.971"/>
   <object id="7" name="Floor" x="752.028" y="205.535" width="79.6134" height="257.048"/>
-  <object id="8" name="Floor" x="960.036" y="432.25" width="80.0086" height="208.767"/>
-  <object id="9" name="Floor" x="1040.31" y="336.215" width="127.138" height="305.951"/>
+  <object id="8" name="Floor" x="960.036" y="432.25" width="80.0086" height="351.267"/>
+  <object id="9" name="Floor" x="1040.31" y="336.215" width="127.138" height="447.284"/>
   <object id="10" name="Floor" x="1311.4" y="384.155" width="80.3516" height="239.643"/>
   <object id="11" name="Floor" x="1553.67" y="509.966" width="141.545" height="241.018"/>
   <object id="12" name="Floor" x="463.504" y="144.567" width="415.791" height="64.2866"/>
