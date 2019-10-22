@@ -103,6 +103,8 @@ public:
 	//Returns x,y coordinates in the world
 	iPoint MapToWorld(int x, int y) const;
 
+	//Returns x,y coordinates in the Map
+	iPoint WorldToMap(int x, int y) const;
 
 private:
 

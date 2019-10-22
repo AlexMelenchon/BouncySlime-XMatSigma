@@ -52,25 +52,31 @@ void j1Map::Draw()
 	p2List_item<LayerInfo*>* layer = data.layerList.start;
 
 	for (layer; layer != NULL; layer = layer->next)
-	for (int y = 0; y < data.height; ++y)
 	{
-		for (int x = 0; x < data.width; ++x)
+		for (int y = 0; y < data.height; ++y)
 		{
-			int tile_id = layer->data->Get(x, y);
-			if (tile_id > 0)
+			for (int x = 0; x < data.width; ++x)
 			{
-				TileSet* tileset = GetTilesetFromTileId(tile_id);
-				if (tileset != nullptr)
+				int tile_id = layer->data->Get(x, y);
+				if (tile_id > 0)
 				{
-					SDL_Rect r = tileset->GetTileRect(tile_id);
-					iPoint pos = MapToWorld(x, y);
-					float parallaxSpeed = layer->data->parallaxSpeed;
-					if(parallaxSpeed <= 1.0f)
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r,parallaxSpeed);
+					TileSet* tileset = GetTilesetFromTileId(tile_id);
+					if (tileset != nullptr)
+					{
+						SDL_Rect r = tileset->GetTileRect(tile_id);
+						iPoint pos = MapToWorld(x, y);
+						float parallaxSpeed = layer->data->parallaxSpeed;
+						if (pos.x > -App->render->camera.x * parallaxSpeed/App->win->GetScale() - data.tile_width && pos.x < -App->render->camera.x * parallaxSpeed/App->win->GetScale() + App->win->width)
+							App->render->Blit(tileset->texture, pos.x, pos.y, &r, parallaxSpeed);
+					}
 				}
 			}
 		}
 	}
+
+
+
+
 
 }
 
@@ -80,6 +86,16 @@ iPoint j1Map::MapToWorld(int x, int y) const
 
 	ret.x = x * data.tile_width;
 	ret.y = y * data.tile_width;
+
+	return ret;
+}
+
+iPoint j1Map::WorldToMap(int x, int y) const
+{
+	iPoint ret(0, 0);
+
+	ret.x = x / data.tile_width;
+	ret.y = y / data.tile_width;
 
 	return ret;
 }

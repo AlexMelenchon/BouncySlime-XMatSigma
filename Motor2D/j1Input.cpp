@@ -156,3 +156,11 @@ void j1Input::GetMouseMotion(int& x, int& y)
 	x = mouse_motion_x;
 	y = mouse_motion_y;
 }
+
+void j1Input::ReSetKeys()
+{
+	for (int i = 0; i < MAX_KEYS; ++i)
+	{
+		keyboard[i] = KEY_UP;
+	}
+}

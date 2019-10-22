@@ -59,10 +59,10 @@ bool j1Scene::PreUpdate()
 bool j1Scene::Update(float dt)
 {
 
-	if(App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+	if(App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 		App->LoadGame();
 
-	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
+	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		App->SaveGame();
 
 
@@ -113,8 +113,8 @@ void j1Scene::Camera()
 	cameraPos.y = (-(playerPos.y) + height / 2);
 
 	//Recalculate it taking account the previous camera
-	cameraPos.x += (cameraPos.x - App->render->camera.w) / 10;
-	cameraPos.y += ((cameraPos.y - App->render->camera.y )/10);
+	cameraPos.x += (cameraPos.x * App->win->GetScale() - App->render->camera.w) / 10;
+	cameraPos.y += ((cameraPos.y * App->win->GetScale() - App->render->camera.y )/10);
 
 	
 	//We lock the camera if we get to the edges
@@ -135,8 +135,12 @@ void j1Scene::CheckCameraLimits()
 	if (cameraPos.x > 0)
 		cameraPos.x = 0;
 
+	if (cameraPos.y + height > Hlimit.y + 32)
+		cameraPos.y = (Hlimit.y+32 - ((int)height));
+
 	if (cameraPos.y < 0)
-		cameraPos.y = 0; //No se perque pasa aixo pero el 0 de la cam te'l agafa 6 tiles més de lo que hauria de ser.
+		cameraPos.y = 0;
+
 
 }
 

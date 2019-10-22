@@ -26,7 +26,7 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 
 	idleRect->x = player_node.child("idle").attribute("x").as_int();
 	idleRect->y = player_node.child("idle").attribute("y").as_int();
-	idleRect->w = 30;
+	idleRect->w = 25;
 	idleRect->h = 30;
 
 	inputs.start = 0;
@@ -226,7 +226,7 @@ void j1Player::LimitPlayerSpeed()
 
 void j1Player::CalculateCollider(fPoint pos) 
 {
-	playerCollider->ReSet((int)fpPlayerPos.x, (int)fpPlayerPos.y, currentAnimation->frames->w-15, currentAnimation->frames->h);
+	playerCollider->ReSet((int)fpPlayerPos.x, (int)fpPlayerPos.y, currentAnimation->frames->w, currentAnimation->frames->h);
 
 }
 
@@ -241,13 +241,13 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 			break;
 		case(COLLIDER_DEATH):
 			if(control_death == false)
-			App->fade->FadeToBlack(App->map->data.currentmap.GetString(), 0.6f);
+			App->fade->FadeToBlack(App->map->data.currentmap.GetString(), 0.4f);
 			control_death = true;
 
 			break;
 		case(COLLIDER_WIN):
 			if (control_death == false)
-			App->fade->FadeToBlack(App->map->GetNextMap(), 0.6f);
+			App->fade->FadeToBlack(App->map->GetNextMap(), 0.4f);
 			control_death = true;
 			break;
 		}
@@ -340,13 +340,63 @@ bool j1Player::CleanUp()
 	return true;
 }
 
-bool j1Player::Load(pugi::xml_node&)
+bool j1Player::Load(pugi::xml_node& load)
 {
+	fpPlayerPos.x = load.child("position").attribute("x").as_float();
+	fpPlayerPos.y = load.child("position").attribute("y").as_float();
+	fpPlayerSpeed.x = load.child("speed").attribute("x").as_float();
+	fpPlayerSpeed.y = load.child("speed").attribute("y").as_float();
+	
+	falling = load.child("falling").attribute("value").as_bool();
+	walling = load.child("walling").attribute("value").as_bool();
+	wallJumpTimer = load.child("wallTimer").attribute("wallJumpTimer").as_float();
+
+	switch (load.child("state").attribute("current_state").as_uint())
+	{
+	case 0:
+		current_state = ST_UNKNOWN;
+		break;
+	case 1:
+		current_state = ST_FALLING;
+		break;
+	case 2:
+		current_state = ST_AIR;
+		break;
+	case 3:
+		current_state = ST_FALLING;
+		break;
+	case 4:
+		current_state = ST_WALL;
+		break;
+	case 5:
+		current_state = ST_WALL_JUMPING;
+		break;
+	}
+
+	if (load.child("flip").attribute("value") == 0)
+		playerFlip = SDL_FLIP_NONE;
+	else
+		playerFlip = SDL_FLIP_HORIZONTAL;
+
+
 	return true;
 }
 
-bool j1Player::Save(pugi::xml_node&) const
+bool j1Player::Save(pugi::xml_node& save) const
 {
+	//Save all the player's status variables
+	save.append_child("position").append_attribute("x") = fpPlayerPos.x;
+	save.child("position").append_attribute("y") = fpPlayerPos.y;
+	save.append_child("speed").append_attribute("x") = fpPlayerSpeed.x;
+	save.child("speed").append_attribute("y") = fpPlayerSpeed.y;
+
+	save.append_child("state").append_attribute("current_state") = current_state;
+	save.append_child("falling").append_attribute("value") = falling;
+	save.append_child("walling").append_attribute("value") = walling;
+	save.append_child("wallTimer").append_attribute("wallJumpTimer") = wallJumpTimer;
+
+	save.append_child("flip").append_attribute("value") = playerFlip;
+
 	return true;
 }
 

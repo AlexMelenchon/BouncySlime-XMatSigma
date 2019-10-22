@@ -54,6 +54,7 @@ bool j1FadeToBlack::PostUpdate()
 				App->map->CleanUp();
 				App->scene->Reset(mapToLoad);
 				App->input->Disable();
+				App->input->ReSetKeys();
 				// ---
 				total_time += total_time;
 				start_time = SDL_GetTicks();
