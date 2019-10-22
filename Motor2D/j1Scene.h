@@ -35,6 +35,10 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	//Loads and saves the scene
+	bool Load(pugi::xml_node&);
+	bool Save(pugi::xml_node&) const;
+
 	//Camera logic
 	void Camera();
 
@@ -45,7 +49,7 @@ private:
 	int	 scale = 0;
 	iPoint  Hlimit = { 0,0 };
 	void CheckCameraLimits();
-#define CAMERA_X_LIMIT_Right 1536
+	float cameraOffset = 0;
 
 };
 

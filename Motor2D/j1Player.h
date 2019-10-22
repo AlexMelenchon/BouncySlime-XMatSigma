@@ -17,7 +17,8 @@ enum player_states
 	ST_AIR,
 	ST_FALLING,
 	ST_WALL,
-	ST_WALL_JUMPING
+	ST_WALL_JUMPING,
+	ST_GOD
 };
 
 enum player_inputs
@@ -27,7 +28,8 @@ enum player_inputs
 	IN_JUMP_FINISH,
 	IN_FALL,
 	IN_WALL,
-	IN_JUMP_WALL
+	IN_JUMP_WALL,
+	IN_GOD
 };
 
 enum slow_direction
@@ -77,6 +79,10 @@ public:
 
 	void RecalculatePos(SDL_Rect, SDL_Rect);
 
+	void standardInputs();
+	void godInputs();
+
+
 	void SetPos(int x, int y);
 	void ReSetMovement();
 	fPoint getPos()
@@ -94,14 +100,13 @@ public:
 	void UpdatePos(float dt); //Update player's position
 	void LimitPlayerSpeed();  // To limit the player speed in both axis
 	float deAccel(slow_direction slow, float speedAxis, float grade = 0.0f, float limit = 0.0f);  //To slow smoothly the player in the x axis: 0.Slow current speed 1. slow the x+, 2. slow the x-
+	void GodMode(); //activateGodMode
 
 	void OnCollision(Collider* c1, Collider* c2);
 
 	p2List<Collider*> colliderList;
 
 	player_states process_fsm(p2List<player_inputs>& inputs);
-
-	bool control_death = false;
 
 
 private:
@@ -139,6 +144,7 @@ private:
 	bool walling = true;
 	float wallJumpLimit = 0.3f;
 	float wallJumpTimer = 0.0f;
+	bool god = false;
 	collisionDirection wallJumpDirection = DIRECTION_NONE;
 
 	// Colliders

@@ -13,8 +13,9 @@ public:
 	float speed = 1.0f;
 	float speedinframes = 1.0f;
 	int framesXframe[MAX_FRAMES]; //array of time elapsed in frames for each step of the animation
-
+	iPoint pivotpos[MAX_FRAMES]; //array of (x,y) coordinates, containing the pivot for each animation frame
 	float firstLoopFrame = 0.0f;
+
 	SDL_Rect frames[MAX_FRAMES];
 
 
@@ -26,9 +27,10 @@ public:
 
 public:
 
-	void PushBack(const SDL_Rect& rect, int frXfr)
+	void PushBack(const SDL_Rect& rect, int frXfr, iPoint pivot)
 	{
 		framesXframe[last_frame] = frXfr;
+		pivotpos[last_frame] = { 0, 0 };
 		frames[last_frame++] = rect;
 	}
 
@@ -46,7 +48,7 @@ public:
 					frame.w = framesIterator.attribute("w").as_int();
 					frame.h = framesIterator.attribute("h").as_int();
 
-					this->PushBack(frame, framesIterator.attribute("frames").as_int());
+					this->PushBack(frame, framesIterator.attribute("frames").as_int(), {framesIterator.attribute("pivotx").as_int(), framesIterator.attribute("pivoty").as_int() });
 				}
 				break;
 			}

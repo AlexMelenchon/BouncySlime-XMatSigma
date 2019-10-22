@@ -16,6 +16,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_NONE][COLLIDER_START] = false;
 	matrix[COLLIDER_NONE][COLLIDER_DEATH] = false;
 	matrix[COLLIDER_NONE][COLLIDER_WIN] = false;
+	matrix[COLLIDER_NONE][COLLIDER_GOD] = false;
 	matrix[COLLIDER_NONE][COLLIDER_NONE] = false;
 
 	matrix[COLLIDER_WALL][COLLIDER_WALL] = false;
@@ -23,6 +24,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_WALL][COLLIDER_START] = false;
 	matrix[COLLIDER_WALL][COLLIDER_DEATH] = false;
 	matrix[COLLIDER_WALL][COLLIDER_WIN] = false;
+	matrix[COLLIDER_WALL][COLLIDER_GOD] = false;
 	matrix[COLLIDER_WALL][COLLIDER_NONE] = false;
 
 
@@ -31,6 +33,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_PLAYER][COLLIDER_START] = false;
 	matrix[COLLIDER_PLAYER][COLLIDER_DEATH] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_WIN] = true;
+	matrix[COLLIDER_PLAYER][COLLIDER_GOD] = false;
 	matrix[COLLIDER_PLAYER][COLLIDER_NONE] = false;
 
 	matrix[COLLIDER_DEATH][COLLIDER_WALL] = false;
@@ -38,6 +41,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_DEATH][COLLIDER_START] = false;
 	matrix[COLLIDER_DEATH][COLLIDER_DEATH] = false;
 	matrix[COLLIDER_DEATH][COLLIDER_WIN] = false;
+	matrix[COLLIDER_DEATH][COLLIDER_GOD] = false;
 	matrix[COLLIDER_DEATH][COLLIDER_NONE] = false;
 
 	matrix[COLLIDER_WIN][COLLIDER_WALL] = false;
@@ -45,8 +49,16 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_WIN][COLLIDER_START] = false;
 	matrix[COLLIDER_WIN][COLLIDER_DEATH] = false;
 	matrix[COLLIDER_WIN][COLLIDER_WIN] = false;
+	matrix[COLLIDER_WIN][COLLIDER_GOD] = true;
 	matrix[COLLIDER_WIN][COLLIDER_NONE] = false;
 
+	matrix[COLLIDER_GOD][COLLIDER_WALL] = false;
+	matrix[COLLIDER_GOD][COLLIDER_PLAYER] = true;
+	matrix[COLLIDER_GOD][COLLIDER_START] = false;
+	matrix[COLLIDER_GOD][COLLIDER_DEATH] = false;
+	matrix[COLLIDER_GOD][COLLIDER_WIN] = true;
+	matrix[COLLIDER_GOD][COLLIDER_GOD] = false;
+	matrix[COLLIDER_GOD][COLLIDER_NONE] = false;
 }
 
 // Destructor
@@ -91,14 +103,15 @@ bool j1Collision::Update(float dt)
 
 			c2 = collidersDebug[k];
 
-			if (c1->CheckCollision(c2->rect) == true)
-			{
-				if (matrix[c1->type][c2->type] && c1->callback)
-					c1->callback->OnCollision(c1, c2);
+				if (c1->CheckCollision(c2->rect) == true)
+				{
+					if (matrix[c1->type][c2->type] && c1->callback)
+						c1->callback->OnCollision(c1, c2);
 
-				if (matrix[c2->type][c1->type] && c2->callback)
-					c2->callback->OnCollision(c2, c1);
-			}
+					if (matrix[c2->type][c1->type] && c2->callback)
+						c2->callback->OnCollision(c2, c1);
+				}
+			
 		}
 	}
 
@@ -140,7 +153,9 @@ void j1Collision::DebugDraw()
 		case COLLIDER_WIN: // white
 			App->render->DrawQuad(collidersDebug[i]->rect, 255, 255, 255, alpha);
 			break;
-
+		case COLLIDER_GOD: // white
+			App->render->DrawQuad(collidersDebug[i]->rect, 255, 255, 0, alpha);
+			break;
 		}
 	}
 }
@@ -168,7 +183,7 @@ bool j1Collision::CleanMap()
 
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
-		if (collidersDebug[i] != nullptr && collidersDebug[i]->type != COLLIDER_PLAYER)
+		if (collidersDebug[i] != nullptr && (collidersDebug[i]->type != COLLIDER_PLAYER && collidersDebug[i]->type != COLLIDER_GOD))
 		{
 			delete collidersDebug[i];
 			collidersDebug[i] = nullptr;

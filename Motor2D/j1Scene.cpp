@@ -9,6 +9,8 @@
 #include "j1Map.h"
 #include "j1Scene.h"
 #include "j1Player.h"
+#include "j1FadeToBlack.h"
+
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -32,10 +34,14 @@ bool j1Scene::Awake()
 bool j1Scene::Start()
 {
 	App->win->GetWindowSize(width, height);
-	App->map->Load("map1.tmx");
+	App->map->Load(App->map->data.maplist.start->data->name.GetString());
 	Hlimit.x = App->map->data.tile_width * App->map->data.width;
 	Hlimit.y = App->map->data.tile_height * App->map->data.height;
+
 	App->audio->PlayMusic(App->map->data.music.GetString());
+
+
+	cameraOffset = App->map->data.tile_height;
 
 	return true;
 }
@@ -46,6 +52,7 @@ bool j1Scene::Reset(const char* map)
 	App->map->Load(map);
 	Hlimit.x = App->map->data.tile_width * App->map->data.width;
 	Hlimit.y = App->map->data.tile_height * App->map->data.height;
+	cameraOffset = App->map->data.tile_height;
 	return true;
 }
 
@@ -60,12 +67,24 @@ bool j1Scene::PreUpdate()
 bool j1Scene::Update(float dt)
 {
 
-	if(App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-		App->LoadGame();
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+		App->fade->FadeToBlack(App->map->data.maplist.start->data->name.GetString(), 0.4f);
 
-	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+		App->fade->FadeToBlack(App->map->data.maplist.At(1)->data->name.GetString(), 0.4f);
+
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+		App->fade->FadeToBlack(App->map->data.maplist.At(2)->data->name.GetString(), 0.4f);
+
+
+	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+		App->fade->FadeToBlack(App->map->data.currentmap.GetString(), 0.4f);
+
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		App->SaveGame();
 
+	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
+		App->player->GodMode();
 
 	//App->render->Blit(img, 0, 0);
 	App->map->Draw();
@@ -104,6 +123,26 @@ bool j1Scene::CleanUp()
 
 }
 
+bool j1Scene::Load(pugi::xml_node& load)
+{
+	if (App->map->data.currentmap.GetString() != load.child("current_map").attribute("name").as_string())
+	{
+		App->map->CleanUp();
+		App->scene->Reset(load.child("current_map").attribute("name").as_string());
+	}
+
+
+	return true;
+}
+
+bool j1Scene::Save(pugi::xml_node& save) const
+{
+	//Save all the player's status variables
+	save.append_child("current_map").append_attribute("name") = App->map->data.currentmap.GetString();
+	return true;
+}
+
+
 void j1Scene::Camera()
 {
 	//Get the current player position
@@ -136,8 +175,13 @@ void j1Scene::CheckCameraLimits()
 	if (cameraPos.x > 0)
 		cameraPos.x = 0;
 
+
 	if (cameraPos.y + height > Hlimit.y + 16)
 		cameraPos.y = (Hlimit.y+16 - ((int)height));
+
+	if (cameraPos.y + height > Hlimit.y- cameraOffset)
+		cameraPos.y = (Hlimit.y- cameraOffset - ((int)height));
+
 
 	if (cameraPos.y < 0)
 		cameraPos.y = 0;
