@@ -33,15 +33,7 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
-	App->win->GetWindowSize(width, height);
-	App->map->Load(App->map->data.maplist.start->data->name.GetString());
-	Hlimit.x = App->map->data.tile_width * App->map->data.width;
-	Hlimit.y = App->map->data.tile_height * App->map->data.height;
-
-	App->audio->PlayMusic(App->map->data.music.GetString());
-
-
-	cameraOffset = App->map->data.tile_height;
+	Reset(App->map->data.maplist.start->data->name.GetString());
 
 	return true;
 }
@@ -53,6 +45,7 @@ bool j1Scene::Reset(const char* map)
 	Hlimit.x = App->map->data.tile_width * App->map->data.width;
 	Hlimit.y = App->map->data.tile_height * App->map->data.height;
 	cameraOffset = App->map->data.tile_height;
+	App->audio->PlayMusic(App->map->data.music.GetString());
 	return true;
 }
 

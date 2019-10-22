@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="120" height="49" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="15">
+ <properties>
+  <property name="music" value="audio/music/loop3.ogg"/>
+ </properties>
  <tileset firstgid="1" name="Nuvens" tilewidth="16" tileheight="16" tilecount="336" columns="24">
   <image source="Nuvens.png" width="384" height="224"/>
  </tileset>
