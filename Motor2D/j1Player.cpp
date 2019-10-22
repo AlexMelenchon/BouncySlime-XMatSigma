@@ -580,7 +580,6 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 				App->audio->PlayFx(landFx.id);
 				break;
 
-			case IN_JUMP_FINISH: state = ST_GROUND; break;
 			case IN_GOD: state = ST_GOD; break;
 
 			case IN_WALL: 
