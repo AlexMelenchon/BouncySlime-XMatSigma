@@ -323,13 +323,13 @@ bool j1App::LoadGameNow()
 
 		root = data.child("game_state");
 
-		p2List_item<j1Module*>* item = modules.start;
+		p2List_item<j1Module*>* item = modules.end;
 		ret = true;
 
 		while(item != NULL && ret == true)
 		{
 			ret = item->data->Load(root.child(item->data->name.GetString()));
-			item = item->next;
+			item = item->prev;
 		}
 
 		data.reset();

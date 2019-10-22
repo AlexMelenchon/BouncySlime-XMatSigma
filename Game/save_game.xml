@@ -6,18 +6,20 @@
 	<audio />
 	<map />
 	<player>
-		<position x="484.948792" y="606" />
-		<speed x="166.289215" y="0" />
-		<state current_state="1" />
-		<falling value="false" />
+		<position x="319.768402" y="542.666687" />
+		<speed x="-435.947327" y="-91.6666718" />
+		<state current_state="2" />
+		<falling value="true" />
 		<walling value="false" />
 		<wallTimer wallJumpTimer="0" />
-		<flip value="0" />
+		<flip value="1" />
 	</player>
-	<scene />
+	<scene>
+		<current_map name="map1.tmx" />
+	</scene>
 	<collision />
 	<fade />
 	<renderer>
-		<camera x="-69" y="0" />
+		<camera x="0" y="0" />
 	</renderer>
 </game_state>

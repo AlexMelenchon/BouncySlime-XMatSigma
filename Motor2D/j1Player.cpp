@@ -59,7 +59,34 @@ bool j1Player::Start()
 
 bool j1Player::PreUpdate()
 {
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) 
+	if (!god)
+		standardInputs();
+	else
+		godInputs();
+	
+
+
+
+
+	//Get the time elapsed since the last frame
+	flPreviousTime = flCurrentTime;
+	flCurrentTime = App->GetDeltaTime();
+
+	//The time gets corrected if it's too high
+	if (flCurrentTime > 0.15f)
+		flCurrentTime = 0.15f;
+
+	//Check the player state and update to the next one
+	UpdateState();
+
+
+	return true;
+}
+
+void j1Player::standardInputs()
+{
+
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
 
 		if (wallJumpDirection == DIRECTION_RIGHT)
@@ -86,10 +113,10 @@ bool j1Player::PreUpdate()
 	}
 	else
 	{
-		if(current_state == ST_GROUND)
-		fpPlayerSpeed.x = deAccel(SLOW_GENERAL, fpPlayerSpeed.x, slowGrade);
+		if (current_state == ST_GROUND)
+			fpPlayerSpeed.x = deAccel(SLOW_GENERAL, fpPlayerSpeed.x, slowGrade);
 		else
-		fpPlayerSpeed.x = deAccel(SLOW_GENERAL, fpPlayerSpeed.x, 1.05f);
+			fpPlayerSpeed.x = deAccel(SLOW_GENERAL, fpPlayerSpeed.x, 1.05f);
 
 	}
 
@@ -104,29 +131,52 @@ bool j1Player::PreUpdate()
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		fPlayerAccel -= fpForce.y;
+		fpPlayerSpeed.y -= fpForce.y;
 	}
 
 
-	//Get the time elapsed since the last frame
-	flPreviousTime = flCurrentTime;
-	flCurrentTime = App->GetDeltaTime();
 
-	//The time gets corrected if it's too high
-	if (flCurrentTime > 0.15f)
-		flCurrentTime = 0.15f;
+}
 
-	//Check the player state and update to the next one
-	UpdateState();
+void j1Player::godInputs()
+{
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		fpPlayerSpeed.x = -fpPlayerMaxSpeed.x;
+
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		fpPlayerSpeed.x = fpPlayerMaxSpeed.x;
+
+	}
+	else
+		fpPlayerSpeed.x = 0;
+
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	{
+		fpPlayerSpeed.y = -fpPlayerMaxSpeed.y;
+
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	{
+		fpPlayerSpeed.y = +fpPlayerMaxSpeed.y;
+
+	}
+	else
+		fpPlayerSpeed.y = 0;
 
 
-	return true;
+
 }
 
 void j1Player::UpdateState() 
 {
+	if(!god)
+	{
 	player_states state = process_fsm(inputs);
 	current_state = state;
+	}
 }
 
 bool j1Player::Update(float dt)
@@ -134,7 +184,7 @@ bool j1Player::Update(float dt)
 	switch (current_state)
 	{
 	case ST_GROUND:
-		LOG("IDLE\n");
+		LOG("GROUND\n");
 		fPlayerAccel = 0;
 		fpPlayerSpeed.y = 0;
 		if (fpPlayerSpeed.x != 0) {
@@ -172,6 +222,12 @@ bool j1Player::Update(float dt)
 		//Mix_PlayChannel(-1, App->audio->effects[15], 0);
 		currentAnimation = &animJump;
 		break;
+	case ST_GOD:
+		LOG("GOD \n");
+		falling = false;
+		walling = false;
+		currentAnimation = &animIdle;
+		break;
 	}
 
 	//Update position
@@ -189,8 +245,8 @@ void j1Player::UpdatePos(float dt)
 	fpPlayerPos.x += fpPlayerSpeed.x * dt;
 	fpPlayerPos.y += fpPlayerSpeed.y * dt;
 
-	if (current_state != ST_GROUND) {
-
+	if (current_state != ST_GROUND && current_state != ST_GOD)
+	{
 		fpPlayerSpeed.y += fPlayerAccel * dt;
 	}
 
@@ -226,7 +282,7 @@ void j1Player::LimitPlayerSpeed()
 
 void j1Player::CalculateCollider(fPoint pos) 
 {
-	playerCollider->ReSet((int)fpPlayerPos.x, (int)fpPlayerPos.y, currentAnimation->frames->w, currentAnimation->frames->h);
+	playerCollider->ReSet((int)fpPlayerPos.x, (int)fpPlayerPos.y, currentAnimation->frames->w-15, currentAnimation->frames->h);
 
 }
 
@@ -240,15 +296,10 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 				RecalculatePos(playerCol->rect, coll->rect);
 			break;
 		case(COLLIDER_DEATH):
-			if(control_death == false)
 			App->fade->FadeToBlack(App->map->data.currentmap.GetString(), 0.4f);
-			control_death = true;
-
 			break;
 		case(COLLIDER_WIN):
-			if (control_death == false)
 			App->fade->FadeToBlack(App->map->GetNextMap(), 0.4f);
-			control_death = true;
 			break;
 		}
 
@@ -342,7 +393,7 @@ bool j1Player::CleanUp()
 
 bool j1Player::Load(pugi::xml_node& load)
 {
-	fpPlayerPos.x = load.child("position").attribute("x").as_float();
+	fpPlayerPos.x = load.child("position").attribute("x").as_float() - slowGrade;
 	fpPlayerPos.y = load.child("position").attribute("y").as_float();
 	fpPlayerSpeed.x = load.child("speed").attribute("x").as_float();
 	fpPlayerSpeed.y = load.child("speed").attribute("y").as_float();
@@ -357,7 +408,7 @@ bool j1Player::Load(pugi::xml_node& load)
 		current_state = ST_UNKNOWN;
 		break;
 	case 1:
-		current_state = ST_FALLING;
+		current_state = ST_GROUND;
 		break;
 	case 2:
 		current_state = ST_AIR;
@@ -371,13 +422,15 @@ bool j1Player::Load(pugi::xml_node& load)
 	case 5:
 		current_state = ST_WALL_JUMPING;
 		break;
+	case 6:
+		current_state = ST_GOD;
+		break;
 	}
 
 	if (load.child("flip").attribute("value") == 0)
 		playerFlip = SDL_FLIP_NONE;
 	else
 		playerFlip = SDL_FLIP_HORIZONTAL;
-
 
 	return true;
 }
@@ -450,6 +503,23 @@ void j1Player::ReSetMovement()
 	float wallJumpTimer = 0.0f;
 }
 
+void j1Player::GodMode()
+{
+	if (!god)
+	{
+		playerCollider->setType(COLLIDER_GOD);
+		current_state = ST_GOD;
+		fpPlayerSpeed.y = 0;
+		fpPlayerSpeed.x = 0;
+		god = true;
+	}
+	else if(god)
+	{
+		playerCollider->setType(COLLIDER_PLAYER);
+		inputs.add(IN_FALL);
+		god = false;
+	}
+}
 
 player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 {
@@ -466,6 +536,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			{
 		case IN_JUMP: state = ST_AIR;  break;
 		case IN_FALL: state = ST_FALLING; break;
+		case IN_GOD: state = ST_GOD; break;
 			}
 		}
 		break;
@@ -476,6 +547,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			{
 			case IN_JUMP_FINISH: state = ST_GROUND; break;
 			case IN_WALL: {state = ST_WALL;	fPlayerAccel = 0;} break;
+			case IN_GOD: state = ST_GOD; break;
 			}
 		}
 		break;
@@ -484,10 +556,13 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			switch (last_input)
 			{
 			case IN_JUMP_FINISH: state = ST_GROUND; break;
+			case IN_GOD: state = ST_GOD; break;
 			case IN_WALL: 
 			{
-				state =  ST_WALL;	fPlayerAccel = 0; 
-			} break;
+				state =  ST_WALL;	
+				fPlayerAccel = 0; 
+			} 
+			break;
 			}
 		}
 		break;
@@ -513,6 +588,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 				}
 			}  break;
 			case IN_JUMP_FINISH: state = ST_GROUND; break;
+			case IN_GOD: state = ST_GOD; break;
 			}
 		}
 		break;
@@ -536,11 +612,20 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 				fPlayerAccel = 0; 
 				wallJumpDirection = DIRECTION_NONE;
 			} break;
+			case IN_GOD: state = ST_GOD; break;
+
 			}
 		}
 		break;
 
-
+		case ST_GOD:
+		{
+			switch (last_input)
+			{
+			case IN_FALL: state = ST_FALLING; break;
+			}
+		}
+		break;
 		}
 	}
 	return state;

@@ -70,7 +70,6 @@ bool j1FadeToBlack::PostUpdate()
 			{
 				current_step = fade_step::none;
 				App->input->Enable();
-				App->player->control_death = false;
 			}
 		} break;
 	}
