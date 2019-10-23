@@ -27,8 +27,8 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 
 	playerRect.x = 0;
 	playerRect.y = 0;
-	playerRect.w = 20;
-	playerRect.h = 30;
+	playerRect.w = 36;
+	playerRect.h = 36;
 
 	inputs.start = 0;
 
@@ -103,7 +103,7 @@ void j1Player::standardInputs()
 	{
 
 		if (wallJumpDirection == DIRECTION_RIGHT)
-			fpPlayerSpeed.x += (fpForce.x / 20.0f);
+			fpPlayerSpeed.x += (fpForce.x / 10.0f);
 		else
 			fpPlayerSpeed.x += fpForce.x;
 
@@ -115,7 +115,7 @@ void j1Player::standardInputs()
 	{
 
 		if (wallJumpDirection == DIRECTION_LEFT)
-			fpPlayerSpeed.x -= fpForce.x / 20.0f;
+			fpPlayerSpeed.x -= fpForce.x / 10.0f;
 		else
 			fpPlayerSpeed.x -= fpForce.x;
 
@@ -300,9 +300,8 @@ void j1Player::LimitPlayerSpeed()
 
 void j1Player::CalculateCollider(fPoint pos) 
 {
-	iPoint pivot = currentAnimation->pivotpos[(int)currentAnimation->current_frame];
 
-	playerCollider->SetPos((int)fpPlayerPos.x+pivot.x, (int)fpPlayerPos.y);
+	playerCollider->SetPos((int)fpPlayerPos.x, (int)fpPlayerPos.y);
 
 }
 
@@ -400,8 +399,6 @@ bool j1Player::PostUpdate()
 		playerFlip = SDL_FLIP_HORIZONTAL;
 
 	iPoint pivot = currentAnimation->pivotpos[(int)currentAnimation->current_frame];
-	SDL_Rect* r = &currentAnimation->GetCurrentFrame();
-
 	App->render->Blit(playerTex, (int)fpPlayerPos.x, (int)fpPlayerPos.y, &currentAnimation->GetCurrentFrame(), 1.0f, playerFlip,0.0f, pivot.x, pivot.y);
 	return true;
 }
@@ -570,7 +567,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			state = ST_GROUND; 
 			App->audio->PlayFx(landFx.id);
 			break;
-			case IN_WALL: {state = ST_WALL;	fPlayerAccel = 0; } break;
+			case IN_WALL: {state = ST_WALL;	fPlayerAccel = 0; 	fpPlayerSpeed.y = deAccel(SLOW_GENERAL, fpPlayerSpeed.y, 3.0f);} break;
 			case IN_GOD: state = ST_GOD; break;
 			}
 		}
@@ -590,7 +587,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			case IN_WALL: 
 			{
 				state =  ST_WALL;
-				fpPlayerSpeed.y = 0;
+				fpPlayerSpeed.y = deAccel(SLOW_GENERAL, fpPlayerSpeed.y, 3.0f);
 				fPlayerAccel = 0; 
 			} 
 			break;
@@ -641,7 +638,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			{
 				state = ST_WALL;	
 				fPlayerAccel = 0;
-				fpPlayerSpeed.y = 0;
+				fpPlayerSpeed.y = deAccel(SLOW_GENERAL, fpPlayerSpeed.y, 3.0f);
 				wallJumpDirection = DIRECTION_NONE;
 			} break;
 			case IN_GOD: state = ST_GOD; break;

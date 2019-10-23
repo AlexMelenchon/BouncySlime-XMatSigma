@@ -30,7 +30,7 @@ public:
 	void PushBack(const SDL_Rect& rect, int frXfr, iPoint pivot)
 	{
 		framesXframe[last_frame] = frXfr;
-		pivotpos[last_frame] = { 0, 0 };
+		pivotpos[last_frame] = { pivot.x, pivot.y };
 		frames[last_frame] = rect;
 		last_frame++;
 	}

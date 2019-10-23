@@ -35357,8 +35357,8 @@
   </data>
  </layer>
  <objectgroup id="8" name="COLLIDERS">
-  <object id="1" name="Death" x="175.611" y="783.576" width="116.83" height="15.1517"/>
-  <object id="2" name="Death" x="1168.17" y="783.867" width="753.5" height="13.7218"/>
+  <object id="1" name="Death" x="175.611" y="791.909" width="126.83" height="15.1517"/>
+  <object id="2" name="Death" x="1168.17" y="800.534" width="753.5" height="13.7218"/>
   <object id="4" name="Floor" type="0" x="0.0275473" y="639.873" width="175.689" height="144.18"/>
   <object id="5" name="Floor" x="306.193" y="642.574" width="861.821" height="141.519"/>
   <object id="6" name="Floor" x="527.63" y="436.625" width="93.0465" height="307.971"/>
@@ -35375,7 +35375,7 @@
   <object id="17" name="Floor" x="1183.82" y="79.6009" width="64.2193" height="48.1929"/>
   <object id="18" name="Floor" x="1007.6" y="144.256" width="64.2469" height="48.2046"/>
   <object id="21" name="Floor" x="1838.46" y="303.193" width="80.2437" height="240.655"/>
-  <object id="24" name="Death" x="1920.81" y="-0.551879" width="92.3709" height="798.317"/>
+  <object id="24" name="Death" x="1933.81" y="-0.551879" width="92.3709" height="798.317"/>
   <object id="28" name="Floor" x="-3.16667" y="304.333" width="19.8333" height="336.333"/>
   <object id="29" name="Floor" x="16.4167" y="305.083" width="46.9167" height="14.25"/>
  </objectgroup>
