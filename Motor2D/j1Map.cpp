@@ -9,6 +9,7 @@
 #include "j1Window.h"
 #include "j1Textures.h"
 #include <math.h>
+#include "j1Audio.h"
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -123,6 +124,7 @@ TileSet* j1Map::GetTilesetFromTileId(int id) const
 bool j1Map::CleanUp()
 {
 	LOG("Unloading map");
+	Mix_FadeOutMusic(200);
 
 	map_loaded = false;
 
