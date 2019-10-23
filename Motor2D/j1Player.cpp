@@ -103,7 +103,7 @@ void j1Player::standardInputs()
 	{
 
 		if (wallJumpDirection == DIRECTION_RIGHT)
-			fpPlayerSpeed.x += (fpForce.x / 10.0f);
+			fpPlayerSpeed.x += (fpForce.x / 7.5f);
 		else
 			fpPlayerSpeed.x += fpForce.x;
 
@@ -115,7 +115,7 @@ void j1Player::standardInputs()
 	{
 
 		if (wallJumpDirection == DIRECTION_LEFT)
-			fpPlayerSpeed.x -= fpForce.x / 10.0f;
+			fpPlayerSpeed.x -= fpForce.x / 7.5f;
 		else
 			fpPlayerSpeed.x -= fpForce.x;
 
@@ -391,7 +391,6 @@ bool j1Player::PostUpdate()
 	if (walling)
 		inputs.add(IN_WALL);
 
-	UpdateState();
 
 	if (fpPlayerSpeed.x > 0)
 		playerFlip = SDL_FLIP_NONE;

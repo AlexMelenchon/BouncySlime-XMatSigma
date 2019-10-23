@@ -49,7 +49,6 @@ private:
 	int	 scale = 0;
 	iPoint  Hlimit = { 0,0 };
 	void CheckCameraLimits();
-	float cameraOffset = 0;
 
 };
 
