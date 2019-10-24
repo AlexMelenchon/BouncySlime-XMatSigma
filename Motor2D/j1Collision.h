@@ -1,11 +1,8 @@
 #ifndef __ModuleCollision_H__
 #define __ModuleCollision_H__
 
-#define MAX_COLLIDERS 60
 
 #include "j1Module.h"
-
-
 
 struct Collider
 {
@@ -26,8 +23,6 @@ struct Collider
 		callback(nullptr)
 	{};
 
-
-
 	void SetPos(int x, int y)
 	{
 		rect.x = x;
@@ -41,8 +36,6 @@ struct Collider
 		rect.w = w;
 		rect.h = h;
 	}
-
-
 	void setType(COLLIDER_TYPE type1)
 	{
 		type = type1;
@@ -55,22 +48,51 @@ class j1Collision : public j1Module
 {
 public:
 
+	//--------INTERNAL CONTROL---------//
+	//Constructor
 	j1Collision();
+
+	//Destructor
 	~j1Collision();
 
-	bool PreUpdate() ;
-	bool Update(float dt) ;
-	bool PostUpdate() ;
-	bool CleanUp() ;
+	// Called before render is available
+	bool Awake(pugi::xml_node&);
+
+	// Called each loop iteration
+	bool PreUpdate();
+
+	// Called each loop iteration
+	bool Update(float dt);
+
+	// Called each loop iteration
+	bool PostUpdate();
+
+	// Called before quitting
+	bool CleanUp();
+
+
+	//--------COLLISION ---------//
+	//Cleans only the colliders in map
 	bool CleanMap();
 
-	void AddControlCollider(Collider*);
+	//Adds a collider
+	void AddCollider(Collider*);
+
+	//Draws the colliders on hte screen
 	void DebugDraw();
 
 private:
 
-	Collider* collidersDebug[MAX_COLLIDERS];
+	//Maximum colliders
+	int maxColliders = 0;
+
+	//Collider Array
+	Collider** colliders;
+
+	//Collider collision matrix
 	bool matrix[COLLIDER_MAX][COLLIDER_MAX];
+
+	//Draw Mode
 	bool debug = false;
 };
 

@@ -21,38 +21,51 @@ j1Player::~j1Player()
 
 bool j1Player::Awake(pugi::xml_node& player_node)
 {
+	//State Machine start
+	inputs.start = 0; 
+	
+	//Movement load
+	fpForce.x = player_node.child("movementForce").attribute("x").as_float();
+	fpForce.y = player_node.child("movementForce").attribute("y").as_float();
 
-	SDL_Rect playerRect;
-	//playerTex = App->tex->Load(player_node.child("path").attribute("value").as_string());	
+	wallForce.x = player_node.child("wallForce").attribute("x").as_float();
+	wallForce.y = player_node.child("wallForce").attribute("y").as_float();
 
-	playerRect.x = 0;
-	playerRect.y = 0;
-	playerRect.w = 36;
-	playerRect.h = 36;
+	fGravity = player_node.child("gravity").text().as_float();
 
-	inputs.start = 0;
+	fSlowGrade = player_node.child("slowGrade").text().as_float();
+	iSlowLimit = player_node.child("slowLimit").text().as_int();
+
+	fpPlayerMaxSpeed.x = player_node.child("limitSpeed").attribute("x").as_float();
+	fpPlayerMaxSpeed.y = player_node.child("limitSpeed").attribute("y").as_float();
+
+	wallJumpLimit = player_node.child("wallJumpLimit").text().as_float();
 
 
-	playerCollider = new Collider(playerRect, COLLIDER_PLAYER, this);
-	App->collision->AddControlCollider(playerCollider);
 
+
+	//Animation vars load
 	pugi::xml_node animIterator = player_node.child("animations").child("animation");
-
 	animIdle.loadAnimation(animIterator, "idle");
 	animRun.loadAnimation(animIterator, "run");
 	animWall.loadAnimation(animIterator, "wall");
 	animJump.loadAnimation(animIterator, "jump");
 	animFall.loadAnimation(animIterator, "fall");
 
+	currentAnimation = &animIdle;
+
+
+	//Sfx load
 	jumpFx.path = player_node.child("fx").child("jump").attribute("path").as_string();
 	deathFx.path = player_node.child("fx").child("death").attribute("path").as_string();
 	landFx.path = player_node.child("fx").child("land").attribute("path").as_string();
 	winFx.path = player_node.child("fx").child("win").attribute("path").as_string();
 	bounceFx.path = player_node.child("fx").child("bounce").attribute("path").as_string();
 
-	currentAnimation = &animIdle;
+	//We start the time
 	flCurrentTime = App->GetDeltaTime();
 
+	//Assign the value to the auxiliar node
 	auxLoader = player_node;
 
 	return true;
@@ -61,16 +74,21 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 bool j1Player::Start()
 {
 	playerTex = App->tex->Load(auxLoader.child("path").text().as_string());
+
+	//Collision load
+	SDL_Rect playerRect = { 0,0 };
+	playerRect.w = auxLoader.child("collider").attribute("w").as_float();
+	playerRect.h = auxLoader.child("collider").attribute("h").as_float();
+	playerCollider = new Collider(playerRect, COLLIDER_PLAYER, this);
+	App->collision->AddCollider(playerCollider);
+	
+	
 	jumpFx.id = App->audio->LoadFx(jumpFx.path.GetString());
-	
-	
 	deathFx.id=App->audio->LoadFx(deathFx.path.GetString());
-	
 	landFx.id=App->audio->LoadFx(landFx.path.GetString());
-	
 	winFx.id=App->audio->LoadFx(winFx.path.GetString());
-	
 	bounceFx.id=App->audio->LoadFx(bounceFx.path.GetString());
+
 	return true;
 }
 
@@ -107,7 +125,7 @@ void j1Player::standardInputs()
 		else
 			fpPlayerSpeed.x += fpForce.x;
 
-		fpPlayerSpeed.x = deAccel(SLOW_NEGATIVE_LIMIT, fpPlayerSpeed.x, slowGrade, slowLimit);
+		fpPlayerSpeed.x = deAccel(SLOW_NEGATIVE_LIMIT, fpPlayerSpeed.x, fSlowGrade, iSlowLimit);
 
 		playerFlip = SDL_FLIP_HORIZONTAL;
 	}
@@ -120,14 +138,14 @@ void j1Player::standardInputs()
 			fpPlayerSpeed.x -= fpForce.x;
 
 
-		fpPlayerSpeed.x = deAccel(SLOW_POSITIVE_LIMIT, fpPlayerSpeed.x, slowGrade, slowLimit);
+		fpPlayerSpeed.x = deAccel(SLOW_POSITIVE_LIMIT, fpPlayerSpeed.x, fSlowGrade, iSlowLimit);
 
 		playerFlip = SDL_FLIP_NONE;
 	}
 	else
 	{
 		if (current_state == ST_GROUND)
-			fpPlayerSpeed.x = deAccel(SLOW_GENERAL, fpPlayerSpeed.x, slowGrade);
+			fpPlayerSpeed.x = deAccel(SLOW_GENERAL, fpPlayerSpeed.x, fSlowGrade);
 		else
 			fpPlayerSpeed.x = deAccel(SLOW_GENERAL, fpPlayerSpeed.x, 1.05f);
 
@@ -410,7 +428,7 @@ bool j1Player::CleanUp()
 
 bool j1Player::Load(pugi::xml_node& load)
 {
-	fpPlayerPos.x = load.child("position").attribute("x").as_float() - slowGrade;
+	fpPlayerPos.x = load.child("position").attribute("x").as_float() - fSlowGrade;
 	fpPlayerPos.y = load.child("position").attribute("y").as_float();
 	fpPlayerSpeed.x = load.child("speed").attribute("x").as_float();
 	fpPlayerSpeed.y = load.child("speed").attribute("y").as_float();

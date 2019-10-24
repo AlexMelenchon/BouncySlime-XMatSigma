@@ -66,7 +66,7 @@ void j1Map::Draw()
 					{
 						SDL_Rect r = tileset->GetTileRect(tile_id);
 						iPoint pos = MapToWorld(x, y);
-						float parallaxSpeed = layer->data->parallaxSpeed;
+						float parallaxSpeed = layer->data->fParallaxSpeed;
 						if (pos.x > -App->render->camera.x * parallaxSpeed/App->win->GetScale() - data.tile_width && pos.x < -App->render->camera.x * parallaxSpeed/App->win->GetScale() + App->win->width)
 							App->render->Blit(tileset->texture, pos.x, pos.y, &r, parallaxSpeed);
 					}
@@ -209,7 +209,7 @@ bool j1Map::Load(const char* file_name)
 	{
 		LayerInfo* layerInfo = new LayerInfo();
 
-		ret = load_Layer(layer, layerInfo);
+		ret = loadLayer(layer, layerInfo);
 
 		if (ret == true)
 			data.layerList.add(layerInfo);
@@ -219,7 +219,7 @@ bool j1Map::Load(const char* file_name)
 	{
 		for (pugi::xml_node nodeCollider = nodeColliderGroup.child("object"); nodeCollider; nodeCollider = nodeCollider.next_sibling("object"))
 		{
-			load_collider(nodeCollider);
+			loadCollider(nodeCollider);
 		}
 
 	}
@@ -386,14 +386,14 @@ bool j1Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 }
 
 
-bool j1Map::load_Layer(pugi::xml_node& node, LayerInfo* layerInfo)
+bool j1Map::loadLayer(pugi::xml_node& node, LayerInfo* layerInfo)
 {
 	bool ret = true;
 
 	layerInfo->name = node.attribute("name").as_string();
 	layerInfo->width = node.attribute("width").as_uint();
 	layerInfo->height = node.attribute("height").as_uint();
-	layerInfo->parallaxSpeed = node.child("properties").child("property").attribute("value").as_float(0.0f);
+	layerInfo->fParallaxSpeed = node.child("properties").child("property").attribute("value").as_float(0.0f);
 
 	//LoadProperties(node, layerInfo->properties);
 	pugi::xml_node layer_data = node.child("data");
@@ -422,7 +422,7 @@ bool j1Map::load_Layer(pugi::xml_node& node, LayerInfo* layerInfo)
 	return ret;
 }
 
-bool j1Map::load_collider(pugi::xml_node& node)
+bool j1Map::loadCollider(pugi::xml_node& node)
 {
 	bool ret = true;
 
@@ -462,7 +462,7 @@ bool j1Map::load_collider(pugi::xml_node& node)
 	else if (type != COLLIDER_START)
 	{
 		Collider* collision  = new Collider(colliderRect, type, this);
-		App->collision->AddControlCollider(collision);
+		App->collision->AddCollider(collision);
 	}
 
 	return ret;

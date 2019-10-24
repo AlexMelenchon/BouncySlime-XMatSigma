@@ -10,7 +10,8 @@ struct SDL_Surface;
 class j1Textures : public j1Module
 {
 public:
-
+	//--------INTERNAL CONTROL---------//
+	//Constructor
 	j1Textures();
 
 	// Destructor
