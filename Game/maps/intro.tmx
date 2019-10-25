@@ -34,6 +34,9 @@
  <tileset firstgid="1685" name="Nuvens" tilewidth="16" tileheight="16" tilecount="336" columns="24">
   <image source="Nuvens.png" width="384" height="224"/>
  </tileset>
+ <tileset firstgid="2021" name="Chest1 Image1 x0.5" tilewidth="43" tileheight="38" tilecount="1" columns="1">
+  <image source="Chest1 Image1 x0.5.png" width="43" height="38"/>
+ </tileset>
  <layer id="10" name="SKY" width="150" height="69">
   <properties>
    <property name="speed" type="float" value="0.1"/>
@@ -59161,7 +59164,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="2021"/>
    <tile/>
    <tile/>
    <tile/>
