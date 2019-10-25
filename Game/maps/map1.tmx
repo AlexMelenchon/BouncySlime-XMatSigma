@@ -52118,11 +52118,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
    <tile gid="1336"/>
+   <tile gid="1337"/>
+   <tile gid="1337"/>
+   <tile gid="1337"/>
+   <tile gid="1337"/>
    <tile gid="1338"/>
    <tile gid="1338"/>
    <tile gid="1338"/>
@@ -57843,11 +57843,11 @@
    <tile gid="1341"/>
    <tile gid="1341"/>
    <tile gid="1342"/>
+   <tile gid="1342"/>
+   <tile gid="1342"/>
+   <tile gid="1342"/>
+   <tile gid="1342"/>
    <tile gid="1343"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -62217,7 +62217,7 @@
   <object id="46" name="Death" x="1186.43" y="229.778" width="41.62" height="9.534"/>
   <object id="56" name="Floor" x="1536.09" y="608.566" width="31.495" height="15.5343"/>
   <object id="58" name="Floor" x="-0.329302" y="641.473" width="17.6058" height="334.629"/>
-  <object id="59" name="Floor" x="17.8905" y="641.125" width="109.522" height="12.3685"/>
+  <object id="59" name="Floor" x="17.8905" y="641.125" width="175.522" height="12.3685"/>
   <object id="60" name="Floor" x="1711.42" y="702.733" width="31.495" height="15.5343"/>
   <object id="81" name="Floor" x="1344.17" y="959.199" width="47.498" height="145.238"/>
   <object id="82" name="Floor" x="1472.03" y="864.063" width="47.8313" height="109.571"/>
@@ -62231,7 +62231,7 @@
   <object id="91" name="Death" x="167.856" y="1111.23" width="2243.38" height="9.534"/>
   <object id="92" name="Death" x="2208.09" y="532.369" width="111.438" height="11.8976"/>
   <object id="94" name="Floor" x="2288.8" y="0.192833" width="30.9391" height="271.962"/>
-  <object id="95" name="Floor" x="2177.02" y="18.5115" width="109.522" height="12.3685"/>
+  <object id="95" name="Floor" x="2112.02" y="18.5115" width="174.522" height="12.3685"/>
  </objectgroup>
  <objectgroup id="8" name="PLAYER_POSITIONS"/>
 </map>
