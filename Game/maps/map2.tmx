@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="37">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="39">
  <properties>
   <property name="music" value="audio/music/loop2.ogg"/>
  </properties>
@@ -62183,7 +62183,7 @@
   <object id="4" name="Floor" x="624.365" y="591.889" width="80" height="240.5"/>
   <object id="5" name="Floor" x="879.904" y="528.058" width="80" height="240.5"/>
   <object id="6" name="Floor" x="623.865" y="368.139" width="80" height="144.5"/>
-  <object id="7" name="Floor" x="1921.11" y="371.053" width="79.7395" height="79.9167"/>
+  <object id="7" name="Floor" x="1920.56" y="368.235" width="79.7395" height="79.9167"/>
   <object id="8" name="Floor" x="1137.92" y="464.827" width="79.8333" height="79.4167"/>
   <object id="9" name="Floor" x="1392.92" y="448.327" width="79.8333" height="79.4167"/>
   <object id="10" name="Floor" x="2049.59" y="559.827" width="79.8333" height="240.356"/>
@@ -62202,14 +62202,14 @@
   <object id="23" name="Death" x="2243.96" y="1008.02" width="12.1199" height="79.7841"/>
   <object id="24" name="Floor" x="1679.96" y="464.167" width="79.8333" height="79.4167"/>
   <object id="25" name="Floor" x="1870.75" y="672.25" width="49.3333" height="79.4167"/>
-  <object id="26" name="Death" x="2001.01" y="371.402" width="12.1199" height="79.7841"/>
-  <object id="27" name="Death" x="1908.9" y="370.984" width="12.1199" height="79.9716"/>
-  <object id="28" name="Death" x="1921.1" y="370.956" width="12.1199" height="79.7841" rotation="-90"/>
-  <object id="29" name="Death" x="1921.05" y="463.189" width="12.1199" height="79.7841" rotation="-90"/>
+  <object id="26" name="Death" x="2000.46" y="368.129" width="12.1199" height="79.7841"/>
+  <object id="27" name="Death" x="1908.17" y="368.075" width="12.1199" height="79.9716"/>
   <object id="30" name="Death" x="176.607" y="752.441" width="12.1199" height="79.7841"/>
   <object id="31" name="Death" x="355.94" y="575.775" width="12.1199" height="79.7841"/>
   <object id="32" name="Death" x="176.19" y="0.85795" width="12.1199" height="240.284"/>
   <object id="33" name="Death" x="2048" y="864.035" width="12.1199" height="79.9403"/>
+  <object id="37" name="Death" x="1920.06" y="355.636" width="79.7056" height="12.3354"/>
+  <object id="38" name="Death" x="1919.94" y="447.911" width="79.7056" height="12.3354"/>
  </objectgroup>
  <objectgroup id="13" name="PLAYER_POSITIONS">
   <object id="35" name="Start" x="55.5895" y="874.121" width="22.6667" height="23.3333"/>
