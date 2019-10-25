@@ -2,6 +2,7 @@
 <map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="96">
  <properties>
   <property name="music" value="audio/music/loop.ogg"/>
+  <property name="speed" type="float" value="1"/>
  </properties>
  <tileset firstgid="1" name="Nuvens" tilewidth="16" tileheight="16" spacing="1" margin="1" tilecount="286" columns="22">
   <image source="Nuvens.png" width="384" height="224"/>
@@ -51835,6 +51836,9 @@
   </data>
  </layer>
  <layer id="6" name="LEVEL" width="150" height="69">
+  <properties>
+   <property name="speed" type="float" value="1"/>
+  </properties>
   <data>
    <tile/>
    <tile/>
