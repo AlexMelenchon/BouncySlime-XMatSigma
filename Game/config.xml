@@ -11,6 +11,7 @@
   </renderer>
 
   <collision>
+    <maxColliders>50</maxColliders>
   </collision>
 
   <window>
@@ -38,8 +39,15 @@
   </audio>
 
 
-  <player>    
-      <path>textures/player/sprite.png</path>
+  <player>
+    <movementForce x="-70.0f" y="-220.0f" />
+    <wallForce x="300.0f" y="-350.0f" />
+    <gravity>50.0f</gravity>
+    <slowGrade>1.175f</slowGrade>
+    <slowLimit>200</slowLimit>
+    <limitSpeed x="650.0f" y="750.0f" />
+    <wallJumpLimit>0.3f</wallJumpLimit>
+    <collider w="32" h="32" />
     <animations>
       <animation name ="idle">
         <sprite x ="13" y ="8" w ="36" h="36" frames ="5" pivotx ="20" pivoty="20"/>
@@ -92,6 +100,7 @@
       <win path="audio/fx/win.wav"/>
       <bounce path="audio/fx/bounce.wav"/>
     </fx>
-    </player>
+    <path>textures/player/sprite.png</path>
+  </player>
 
 </config>

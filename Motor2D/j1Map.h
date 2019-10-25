@@ -14,13 +14,10 @@ struct LayerInfo {
 	uint width = 0u;
 	uint height = 0u;
 	uint* tileArray = nullptr;
-	~LayerInfo() {};
-
-
 	uint size = 0;
-	float parallaxSpeed;
+	float fParallaxSpeed;
 
-
+	//Gets the layer id from the position
 	inline uint Get(int x, int y) const {
 
 		return tileArray[x + (y * width)];
@@ -32,18 +29,18 @@ struct TileSet
 {
 
 	p2SString			name;
-	int					firstgid;
-	int					margin;
-	int					spacing;
-	int					tile_width;
-	int					tile_height;
-	SDL_Texture*		texture;
-	int					tex_width;
-	int					tex_height;
-	int					num_tiles_width;
-	int					num_tiles_height;
-	int					offset_x;
-	int					offset_y;
+	int					firstgid = 0;
+	int					margin = 0;
+	int					spacing = 0;
+	int					tile_width = 0;
+	int					tile_height = 0;
+	SDL_Texture*		texture = nullptr;
+	int					tex_width = 0;
+	int					tex_height = 0;
+	int					num_tiles_width = 0;
+	int					num_tiles_height = 0;
+	int					offset_x = 0;
+	int					offset_y = 0;
 
 	SDL_Rect GetTileRect(uint tileId);
 };
@@ -51,7 +48,7 @@ struct TileSet
 struct MapInfo
 {
 	p2SString			name;
-	int					position;
+	int					position = 0; // Map position in the game's loop
 };
 
 
@@ -65,11 +62,11 @@ enum MapTypes
 // ----------------------------------------------------
 struct MapData
 {
-	int					width;
-	int					height;
-	int					tile_width;
-	int					tile_height;
-	SDL_Color			background_color;
+	int					width = 0;
+	int					height = 0;
+	int					tile_width = 0;
+	int					tile_height = 0;
+	SDL_Color			background_color = {0,0,0,0};
 	MapTypes			type;
 	p2List<TileSet*>	tilesets;
 	p2List<LayerInfo*> layerList;
@@ -83,7 +80,8 @@ struct MapData
 class j1Map : public j1Module
 {
 public:
-
+	//----------INTERNAL CONTROL-----------//
+	//Constructor
 	j1Map();
 
 	// Destructor
@@ -98,6 +96,7 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	//-------------MAP--------------//
 	// Load new map
 	bool Load(const char* path);
 
@@ -109,15 +108,15 @@ public:
 
 private:
 
+	//Load map data
 	bool LoadMap();
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
-	bool load_Layer(pugi::xml_node& node, LayerInfo* layer);
-	bool load_collider(pugi::xml_node& node);
+	bool loadLayer(pugi::xml_node& node, LayerInfo* layer);
+	bool loadCollider(pugi::xml_node& node);
 
+	//Gets an id and return its tileset
 	TileSet* GetTilesetFromTileId(int id) const;
-
-
 
 public:
 

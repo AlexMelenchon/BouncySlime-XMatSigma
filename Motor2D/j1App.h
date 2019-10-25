@@ -20,7 +20,7 @@ class j1FadeToBlack;
 class j1App
 {
 public:
-
+	//--------INTERNAL CONTROL---------//
 	// Constructor
 	j1App(int argc, char* args[]);
 
@@ -76,13 +76,16 @@ private:
 	// Call modules after each loop iteration
 	bool PostUpdate();
 
-	// Load / Save
+	//--------SAVE & LOAD ---------//
+	//Says that we want to load and iterates with all modules' load functions
 	bool LoadGameNow();
+	//Says that we want to save and iterates with all modules' save functions
 	bool SavegameNow() const;
 
 public:
 
-	// Modules
+	//--------MODULES---------//
+
 	j1Window*			win;
 	j1Input*			input;
 	j1Render*			render;
@@ -95,16 +98,18 @@ public:
 	j1FadeToBlack*		 fade;
 
 private:
-
+	//--------INTERNAL CONTROL---------//
 	p2List<j1Module*>	modules;
 	uint				frames;
 	float				dt;
 	int					argc;
 	char**				args;
 
+	//--------PROJECT---------//
 	p2SString			title;
 	p2SString			organization;
 
+	//--------SAVE & LOAD ---------//
 	mutable bool		want_to_save;
 	bool				want_to_load;
 	p2SString			load_game;
