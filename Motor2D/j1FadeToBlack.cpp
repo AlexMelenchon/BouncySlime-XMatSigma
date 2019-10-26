@@ -12,9 +12,15 @@
 #include "SDL/include/SDL_render.h"
 #include "SDL/include/SDL_timer.h"
 
+//Contructor
 j1FadeToBlack::j1FadeToBlack()
-{ }
+{}
 
+//Destructor
+j1FadeToBlack::~j1FadeToBlack()
+{}
+
+// Called before render is available
 bool j1FadeToBlack::Awake(pugi::xml_node& config)
 {
 	name.create("fade");
@@ -24,8 +30,7 @@ bool j1FadeToBlack::Awake(pugi::xml_node& config)
 	return true;
 }
 
-j1FadeToBlack::~j1FadeToBlack()
-{}
+
 
 // Load assets
 bool j1FadeToBlack::Start()
@@ -35,7 +40,7 @@ bool j1FadeToBlack::Start()
 	return true;
 }
 
-// Update: draw background
+// Called each loop iteration: draw fading background
 bool j1FadeToBlack::PostUpdate()
 {
 	bool ret = true;
@@ -82,11 +87,13 @@ bool j1FadeToBlack::PostUpdate()
 	return ret;
 }
 
-// Fade to black. At mid point deactivate one module, then activate the other
+
+
+
+// Fade to black. At mid point deactivate one map, then activate the desired one
 bool j1FadeToBlack::FadeToBlack(const char* mapName, int id, float time)
 {
 	bool ret = false;
-
 
 	if(current_step == fade_step::none)
 	{

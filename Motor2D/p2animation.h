@@ -9,14 +9,13 @@
 class Animation
 {
 public:
-	bool loop = true;
-	float speed = 1.0f;
-	float speedinframes = 1.0f;
+	bool loop = true; // Set to flase in pushback so the animation does not loop
+	float speed = 1.0f; //Animation speed;
 	int framesXframe[MAX_FRAMES]; //array of time elapsed in frames for each step of the animation
 	iPoint pivotpos[MAX_FRAMES]; //array of (x,y) coordinates, containing the pivot for each animation frame
-	float firstLoopFrame = 0.0f;
+	float firstLoopFrame = 0.0f; //The frame to loop
 
-	SDL_Rect frames[MAX_FRAMES];
+	SDL_Rect frames[MAX_FRAMES]; //Number of frames per animation
 
 
 public:
@@ -27,6 +26,8 @@ public:
 
 public:
 
+
+  //Loads a frae of an animation
 	void PushBack(const SDL_Rect& rect, int frXfr, int pivotX, int pivotY)
 	{
 		framesXframe[last_frame] = frXfr;
@@ -36,6 +37,7 @@ public:
 		last_frame++;
 	}
 
+	//Searchs if an animation exists, then loads it
 	void loadAnimation(pugi::xml_node animationIterator,p2SString name)
 	{
 		for (animationIterator = animationIterator; animationIterator != NULL; animationIterator = animationIterator.next_sibling("animation"))

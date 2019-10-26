@@ -29,13 +29,6 @@ struct Collider
 		rect.y = y;
 	}
 
-	void ReSet(int x, int y, int w, int h)
-	{
-		rect.x = x;
-		rect.y = y;
-		rect.w = w;
-		rect.h = h;
-	}
 	void setType(COLLIDER_TYPE type1)
 	{
 		type = type1;
@@ -81,6 +74,9 @@ public:
 	//Draws the colliders on hte screen
 	void DebugDraw();
 
+	//Draw Mode / Activates DebugDraw()
+	bool debug = false;
+
 private:
 
 	//Maximum colliders
@@ -92,8 +88,6 @@ private:
 	//Collider collision matrix
 	bool matrix[COLLIDER_MAX][COLLIDER_MAX];
 
-	//Draw Mode
-	bool debug = false;
 };
 
 #endif // __ModuleCollision_H__

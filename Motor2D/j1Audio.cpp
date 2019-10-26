@@ -7,6 +7,7 @@
 #include "SDL_mixer\include\SDL_mixer.h"
 #pragma comment( lib, "SDL_mixer/libx86/SDL2_mixer.lib" )
 
+//Constructor
 j1Audio::j1Audio() : j1Module()
 {
 	music = NULL;
@@ -50,8 +51,21 @@ bool j1Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 
-	Mix_Volume(-1, config.child("volume").attribute("general").as_int());
-	Mix_VolumeMusic(config.child("volume").attribute("music").as_int());
+	//Load the volume for fx & music
+	musicVolume = config.child("volume").attribute("music").as_int();
+	fxVolume = config.child("volume").attribute("general").as_int();
+
+	return ret;
+}
+
+// Called each loop iteration
+bool j1Audio::PreUpdate()
+{
+	bool ret = true;
+
+	//Volume control
+	Mix_Volume(-1, fxVolume);
+	Mix_VolumeMusic(musicVolume);
 
 	return ret;
 }
@@ -89,7 +103,6 @@ bool j1Audio::PlayMusic(const char* path, float fade_time)
 
 	if(!active)
 		return false;
-	Mix_VolumeMusic(MIX_MAX_VOLUME/4);
 
 	if(music != NULL)
 	{
@@ -174,4 +187,20 @@ bool j1Audio::PlayFx(unsigned int id, int repeat)
 	}
 
 	return ret;
+}
+
+bool j1Audio::Load(pugi::xml_node& load)
+{
+	Mix_VolumeMusic(load.child("volume").attribute("music").as_int());
+	Mix_Volume(-1, load.child("volume").attribute("fx").as_int());
+
+	return true;
+}
+
+bool j1Audio::Save(pugi::xml_node& save) const
+{
+	save.append_child("volume").append_attribute("music") = musicVolume;
+	save.child("volume").append_attribute("fx") = fxVolume;
+
+	return true;
 }
