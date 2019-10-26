@@ -132,9 +132,6 @@ public:
 	//Updates the current state
 	void UpdateState();
 
-	//When the player's state turns ground
-	void inGround();
-
 	//When the player's state turns wall
 	void InWall();
 

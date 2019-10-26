@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="24">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="25">
  <properties>
   <property name="music" value="audio/music/loop3.ogg"/>
  </properties>
@@ -59014,7 +59014,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="2021"/>
    <tile/>
    <tile/>
    <tile/>
@@ -59164,7 +59164,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="2021"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>

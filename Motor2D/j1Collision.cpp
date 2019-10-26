@@ -9,6 +9,9 @@ j1Collision::j1Collision()
 {
 	name.create("collision");
 
+	for (uint i = 0; i < maxColliders; ++i)
+		colliders[i] = nullptr;
+
 	//Matrix creation: decide which type of colliders will collide
 
 	matrix[COLLIDER_NONE][COLLIDER_WALL] = false;
@@ -78,8 +81,7 @@ bool j1Collision::Awake(pugi::xml_node& config)
 
 	colliders = new Collider* [maxColliders];
 
-	for (uint i = 0; i < maxColliders; ++i)
-		colliders[i] = nullptr;
+
 	
 	if (maxColliders == 0 || colliders == nullptr)
 	{
@@ -210,8 +212,6 @@ bool j1Collision::CleanMap()
 {
 	LOG("Freeing map colliders");
 
-	if (colliders != nullptr)
-	{
 		for (uint i = 0; i < maxColliders; ++i)
 		{
 			if (colliders[i] != nullptr && (colliders[i]->type != COLLIDER_PLAYER && colliders[i]->type != COLLIDER_GOD))
@@ -220,7 +220,7 @@ bool j1Collision::CleanMap()
 				colliders[i] = nullptr;
 			}
 		}
-	}
+
 
 	return true;
 }
