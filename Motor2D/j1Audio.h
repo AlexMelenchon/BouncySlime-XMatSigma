@@ -38,6 +38,17 @@ public:
 	// Play a previously loaded WAV
 	bool PlayFx(unsigned int fx, int repeat = 0);
 
+	//--------SAVE & LOAD---------//
+//Called when loading a save
+	bool Load(pugi::xml_node&);
+
+	//Called to save the game
+	bool Save(pugi::xml_node&) const;
+
+	//Volume for sfx & music
+	uint musicVolume = 0;
+	uint fxVolume = 0;
+
 private:
 	//--------AUDIO---------//
 	//Pointer to the level's track
