@@ -34,6 +34,9 @@
  <tileset firstgid="1685" name="Nuvens" tilewidth="16" tileheight="16" tilecount="336" columns="24">
   <image source="Nuvens.png" width="384" height="224"/>
  </tileset>
+ <tileset firstgid="2021" name="Chest1 Image1 x0.5" tilewidth="43" tileheight="38" tilecount="1" columns="1">
+  <image source="Chest1 Image1 x0.5.png" width="43" height="38"/>
+ </tileset>
  <layer id="10" name="SKY" width="150" height="69">
   <properties>
    <property name="speed" type="float" value="0.1"/>
@@ -57681,11 +57684,11 @@
    <tile gid="199"/>
    <tile gid="198"/>
    <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
+   <tile gid="199"/>
    <tile gid="200"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -59161,7 +59164,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="2021"/>
    <tile/>
    <tile/>
    <tile/>
@@ -62188,7 +62191,7 @@
   <object id="13" name="Death" x="623.5" y="1107.83" width="562" height="24"/>
   <object id="14" name="Death" x="1406.94" y="1109" width="994" height="24"/>
   <object id="15" name="Death" x="170" y="1108" width="231.333" height="24"/>
-  <object id="17" name="Floor" x="-1.33317" y="625.667" width="129.666" height="11.3333"/>
+  <object id="17" name="Floor" x="-1.33317" y="625.667" width="190.166" height="11.3333"/>
   <object id="18" name="Death" x="1887.82" y="819.942" width="80.2393" height="12"/>
   <object id="19" name="Floor" x="1183.99" y="960.207" width="223.981" height="144.132"/>
   <object id="23" name="Floor" x="-1" y="637.5" width="17.5" height="322"/>
