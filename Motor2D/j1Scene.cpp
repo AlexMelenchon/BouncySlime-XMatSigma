@@ -74,19 +74,19 @@ bool j1Scene::Update(float dt)
 
 	//Loads the 1st map
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-		App->fade->FadeToBlack(App->map->data.maplist.start->data->name.GetString(), mapFadeTime);
-
+		App->fade->FadeToBlack(App->map->data.maplist.start->data->name.GetString(),NULL , mapFadeTime);
+	
 	//Loads the 2nd map
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-		App->fade->FadeToBlack(App->map->data.maplist.At(1)->data->name.GetString(), mapFadeTime);
+		App->fade->FadeToBlack(App->map->data.maplist.At(1)->data->name.GetString(), NULL ,mapFadeTime);
 
 	//Loads the 3rd map
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
-		App->fade->FadeToBlack(App->map->data.maplist.At(2)->data->name.GetString(), mapFadeTime);
+		App->fade->FadeToBlack(App->map->data.maplist.At(2)->data->name.GetString(), NULL ,  mapFadeTime);
 
 	//Reloads current map (a.k.a player's death)
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
-		App->fade->FadeToBlack(App->map->data.currentmap.GetString(), 0.4f);
+		App->fade->FadeToBlack(App->map->data.currentmap.GetString(), NULL , mapFadeTime);
 
 	//Saves the game
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)

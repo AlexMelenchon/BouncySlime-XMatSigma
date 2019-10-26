@@ -26,11 +26,13 @@ public:
 
 public:
 
-	//Loads an animation
-	void PushBack(const SDL_Rect& rect, int frXfr, iPoint pivot)
+
+  //Loads a frae of an animation
+	void PushBack(const SDL_Rect& rect, int frXfr, int pivotX, int pivotY)
 	{
 		framesXframe[last_frame] = frXfr;
-		pivotpos[last_frame] = { pivot.x, pivot.y };
+		pivotpos[last_frame].x = pivotX; 
+		pivotpos[last_frame].y = pivotY;	
 		frames[last_frame] = rect;
 		last_frame++;
 	}
@@ -50,7 +52,7 @@ public:
 					frame.w = framesIterator.attribute("w").as_int();
 					frame.h = framesIterator.attribute("h").as_int();
 
-					this->PushBack(frame, framesIterator.attribute("frames").as_int(), {framesIterator.attribute("pivotx").as_int(), framesIterator.attribute("pivoty").as_int() });
+					this->PushBack(frame, framesIterator.attribute("frames").as_int(), framesIterator.attribute("pivotx").as_int(), framesIterator.attribute("pivoty").as_int() );
 				}
 				break;
 			}

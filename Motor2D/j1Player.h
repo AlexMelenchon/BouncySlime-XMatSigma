@@ -266,6 +266,9 @@ private:
 	//Auxiliar node in order to be able to load the texture & rect
 	pugi::xml_node auxLoader;
 
+
+	int pivotX;
+	int pivotY;
 };
 
 #endif 
