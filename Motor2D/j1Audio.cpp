@@ -55,6 +55,15 @@ bool j1Audio::Awake(pugi::xml_node& config)
 	musicVolume = config.child("volume").attribute("music").as_int();
 	fxVolume = config.child("volume").attribute("general").as_int();
 
+	return ret;
+}
+
+// Called each loop iteration
+bool j1Audio::PreUpdate()
+{
+	bool ret = true;
+
+	//Volume control
 	Mix_Volume(-1, fxVolume);
 	Mix_VolumeMusic(musicVolume);
 

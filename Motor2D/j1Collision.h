@@ -29,13 +29,6 @@ struct Collider
 		rect.y = y;
 	}
 
-	void ReSet(int x, int y, int w, int h)
-	{
-		rect.x = x;
-		rect.y = y;
-		rect.w = w;
-		rect.h = h;
-	}
 	void setType(COLLIDER_TYPE type1)
 	{
 		type = type1;

@@ -24,6 +24,9 @@ public:
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
 
+	// Called each loop iteration
+	bool PreUpdate();
+
 	// Called before quitting
 	bool CleanUp();
 
