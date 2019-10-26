@@ -200,7 +200,7 @@ bool j1Collision::CleanUp()
 		}
 	}
 
-	delete colliders;
+	delete[] colliders;
 
 	return true;
 }
