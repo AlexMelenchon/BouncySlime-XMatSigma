@@ -16,7 +16,7 @@ public:
 	virtual ~j1Scene();
 
 	// Called before render is available
-	bool Awake();
+	bool Awake(pugi::xml_node&);
 
 	// Called before the first frame
 	 bool Start();
@@ -55,6 +55,8 @@ private:
 	uint height = 0u;
 	//The limits of the camera
 	iPoint  Hlimit = { 0,0 };
+	//Fade time to change maps
+	float mapFadeTime = 0.0f;
 
 };
 

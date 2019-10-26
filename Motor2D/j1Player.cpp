@@ -41,7 +41,11 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 
 	wallJumpLimit = player_node.child("wallJumpLimit").text().as_float();
 
-
+	//Create the player's collider
+	SDL_Rect playerRect = { 0,0,0,0 };
+	playerRect.w = player_node.child("collider").attribute("w").as_float();
+	playerRect.h = player_node.child("collider").attribute("h").as_float();
+	playerCollider = new Collider(playerRect, COLLIDER_PLAYER, this);
 
 
 	//Animation vars load
@@ -66,6 +70,7 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	flCurrentTime = App->GetDeltaTime();
 
 	//Assign the value to the auxiliar node
+	//We need this in order to load things later in start whose modules are not awoken yet
 	auxLoader = player_node;
 
 	return true;
@@ -73,13 +78,10 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 
 bool j1Player::Start()
 {
+	//Load the player's textures
 	playerTex = App->tex->Load(auxLoader.child("path").text().as_string());
 
 	//Collision load
-	SDL_Rect playerRect = { 0,0 };
-	playerRect.w = auxLoader.child("collider").attribute("w").as_float();
-	playerRect.h = auxLoader.child("collider").attribute("h").as_float();
-	playerCollider = new Collider(playerRect, COLLIDER_PLAYER, this);
 	App->collision->AddCollider(playerCollider);
 	
 	

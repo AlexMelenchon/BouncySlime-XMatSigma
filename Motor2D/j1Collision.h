@@ -81,6 +81,9 @@ public:
 	//Draws the colliders on hte screen
 	void DebugDraw();
 
+	//Draw Mode / Activates DebugDraw()
+	bool debug = false;
+
 private:
 
 	//Maximum colliders
@@ -92,8 +95,6 @@ private:
 	//Collider collision matrix
 	bool matrix[COLLIDER_MAX][COLLIDER_MAX];
 
-	//Draw Mode
-	bool debug = false;
 };
 
 #endif // __ModuleCollision_H__

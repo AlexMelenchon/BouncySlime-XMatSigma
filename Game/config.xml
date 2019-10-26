@@ -26,16 +26,19 @@
     <path>data.zip</path>
   </file_system>
 
+  <scene>
+    <mapFadeTime>0.7f</mapFadeTime>
+  </scene>
+
   <map>
     <folder>maps/</folder>
     <level name="intro.tmx"/>
     <level name="map2.tmx"/>
     <level name="map1.tmx"/>
-    
   </map>
 
   <audio>
-    <volume general="40" music="70"/>
+    <volume general="50" music="30"/>
   </audio>
 
 

@@ -4,11 +4,12 @@
 #include "j1Collision.h"
 #include "j1Player.h"
 
+//Constructor
 j1Collision::j1Collision()
 {
 	name.create("collision");
 
-
+	//Matrix creation: decide which type of colliders will collide
 
 	matrix[COLLIDER_NONE][COLLIDER_WALL] = false;
 	matrix[COLLIDER_NONE][COLLIDER_PLAYER] = false;
@@ -72,6 +73,7 @@ bool j1Collision::Awake(pugi::xml_node& config)
 	bool ret = true;
 
 
+	//Create the number of colliders desired
 	maxColliders = config.child("maxColliders").text().as_int();
 
 	colliders = new Collider* [maxColliders];
@@ -79,7 +81,6 @@ bool j1Collision::Awake(pugi::xml_node& config)
 	for (uint i = 0; i < maxColliders; ++i)
 		colliders[i] = nullptr;
 	
-
 	if (maxColliders == 0 || colliders == nullptr)
 	{
 		LOG("Could not init colliders");
@@ -89,6 +90,7 @@ bool j1Collision::Awake(pugi::xml_node& config)
 	return ret;
 }
 
+// Called each loop iteration
 bool j1Collision::PreUpdate()
 {
 	// Remove all colliders scheduled for deletion
@@ -104,12 +106,13 @@ bool j1Collision::PreUpdate()
 	return true;
 }
 
-// Called before render is available
+// Called each loop iteration
 bool j1Collision::Update(float dt)
 {
 	Collider* c1;
 	Collider* c2;
 
+	//Checks if all colliders are colliding with each other
 	for (uint i = 0; i < maxColliders; ++i)
 	{
 		// skip empty colliders
@@ -142,6 +145,7 @@ bool j1Collision::Update(float dt)
 	return true;
 }
 
+// Called each loop iteration
 bool j1Collision::PostUpdate()
 {
 	DebugDraw();
@@ -151,8 +155,6 @@ bool j1Collision::PostUpdate()
 
 void j1Collision::DebugDraw()
 {
-	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
-		debug = !debug;
 
 	if (debug == false)
 		return;
@@ -203,6 +205,7 @@ bool j1Collision::CleanUp()
 	return true;
 }
 
+//Cleans the map colliders only
 bool j1Collision::CleanMap()
 {
 	LOG("Freeing map colliders");
@@ -219,6 +222,7 @@ bool j1Collision::CleanMap()
 	return true;
 }
 
+//Adds a collider
 void j1Collision::AddCollider(Collider* collider)
 {
 

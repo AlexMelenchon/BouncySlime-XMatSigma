@@ -42,6 +42,7 @@ struct TileSet
 	int					offset_x = 0;
 	int					offset_y = 0;
 
+	//Return a rect in a specified id in the tileset
 	SDL_Rect GetTileRect(uint tileId);
 };
 
