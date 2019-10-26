@@ -217,8 +217,11 @@ private:
 	// Limits the time elapsed between frames so the movement doesn't break
 	float fInFramesLimit = 0.0f;
 
-	// 	//Fade time to change maps or death
+	// Fade time to change maps or death
 	float playerFadeTime = 0.0f;
+
+	// The amount of force needed to be able to fall from a wall
+	float wallForceToMove = 0.0f;
 
 	//To check if the player is falling
 	bool falling = false;

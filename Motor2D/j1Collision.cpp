@@ -210,12 +210,15 @@ bool j1Collision::CleanMap()
 {
 	LOG("Freeing map colliders");
 
-	for (uint i = 0; i < maxColliders; ++i)
+	if (colliders != nullptr)
 	{
-		if (colliders[i] != nullptr && (colliders[i]->type != COLLIDER_PLAYER && colliders[i]->type != COLLIDER_GOD))
+		for (uint i = 0; i < maxColliders; ++i)
 		{
-			delete colliders[i];
-			colliders[i] = nullptr;
+			if (colliders[i] != nullptr && (colliders[i]->type != COLLIDER_PLAYER && colliders[i]->type != COLLIDER_GOD))
+			{
+				delete colliders[i];
+				colliders[i] = nullptr;
+			}
 		}
 	}
 

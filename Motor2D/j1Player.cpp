@@ -103,29 +103,6 @@ bool j1Player::Start()
 
 	return true;
 }
-
-// Called each loop iteration
-bool j1Player::PreUpdate()
-{
-	if (!god)
-		standardInputs();
-	else
-		godInputs();
-	
-	//Get the time elapsed since the last frame
-	flPreviousTime = flCurrentTime;
-	flCurrentTime = App->GetDeltaTime();
-
-	//The time gets corrected if it's too high
-	if (flCurrentTime > fInFramesLimit)
-		flCurrentTime = fInFramesLimit;
-
-	//Check the player state and update to the next one
-	UpdateState();
-
-	return true;
-}
-
 //Standard Movement
 void j1Player::standardInputs()
 {
@@ -219,6 +196,28 @@ void j1Player::godInputs()
 
 }
 
+// Called each loop iteration
+bool j1Player::PreUpdate()
+{
+	if (!god)
+		standardInputs();
+	else
+		godInputs();
+	
+	//Get the time elapsed since the last frame
+	flPreviousTime = flCurrentTime;
+	flCurrentTime = App->GetDeltaTime();
+
+	//The time gets corrected if it's too high
+	if (flCurrentTime > fInFramesLimit)
+		flCurrentTime = fInFramesLimit;
+
+	//Check the player state and update to the next one
+	UpdateState();
+
+	return true;
+}
+
 //Updates the current state
 void j1Player::UpdateState() 
 {
@@ -282,7 +281,7 @@ bool j1Player::Update(float dt)
 		LOG("WALL JUMPING \n");
 		fPlayerAccel += fGravity;
 		wallJumpTimer += flCurrentTime;
-		if (wallJumpTimer > wallJumpLimit) //When the player jumps, there's a limit in his speed to make him not stick to the wall for ever
+ 		if (wallJumpTimer > wallJumpLimit) //When the player jumps, there's a limit in his speed to make him not stick to the wall for ever
 		{
 			wallJumpTimer = 0.0f;
 			inputs.add(IN_JUMP);
@@ -302,7 +301,7 @@ bool j1Player::Update(float dt)
 	//Limit & update position
 	LimitPlayerSpeed();
 	UpdatePos(flCurrentTime);
-
+	
 	return true;
 }
 
@@ -635,7 +634,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 				break;
 			case IN_WALL: 
 			{
-				state = ST_WALL;	
+				state = ST_WALL;
 				InWall();
 			} 
 				break;
@@ -672,7 +671,11 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 		{
 			switch (last_input)
 			{
-			case IN_FALL: state = ST_FALLING; break;
+			case IN_FALL:
+			{
+				state = ST_FALLING;
+			}
+				break;
 			case IN_JUMP: 
 			{
 				state = ST_WALL_JUMPING; 
@@ -691,8 +694,17 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			}  
 				break;
 
-			case IN_JUMP_FINISH: state = ST_GROUND; break;
-			case IN_GOD: state = ST_GOD; break;
+			case IN_JUMP_FINISH:
+			{
+				state = ST_GROUND; 
+
+			}
+				break;
+			case IN_GOD:
+			{
+				state = ST_GOD;
+			}
+				break;
 			}
 		}
 		break;
@@ -736,10 +748,11 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 	return state;
 }
 
-
+//When the player's state turns wall
 void j1Player::InWall()
 {
 	fPlayerAccel = 0;
 	fpPlayerSpeed.y = deAccel(SLOW_GENERAL, fpPlayerSpeed.y, fSlowGradeWall);
 	wallJumpDirection = DIRECTION_NONE;
+	wallForceToMove = 0;
 }
