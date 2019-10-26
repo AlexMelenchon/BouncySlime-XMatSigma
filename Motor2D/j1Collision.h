@@ -4,6 +4,8 @@
 
 #include "j1Module.h"
 
+#define MAX_COLLIDERS 60
+
 struct Collider
 {
 	SDL_Rect rect;
@@ -48,9 +50,6 @@ public:
 	//Destructor
 	~j1Collision();
 
-	// Called before render is available
-	bool Awake(pugi::xml_node&);
-
 	// Called each loop iteration
 	bool PreUpdate();
 
@@ -83,7 +82,7 @@ private:
 	int maxColliders = 0;
 
 	//Collider Array
-	Collider** colliders;
+	Collider* colliders[MAX_COLLIDERS];
 
 	//Collider collision matrix
 	bool matrix[COLLIDER_MAX][COLLIDER_MAX];

@@ -9,7 +9,7 @@ j1Collision::j1Collision()
 {
 	name.create("collision");
 
-	for (uint i = 0; i < maxColliders; ++i)
+	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 		colliders[i] = nullptr;
 
 	//Matrix creation: decide which type of colliders will collide
@@ -68,35 +68,11 @@ j1Collision::j1Collision()
 j1Collision::~j1Collision()
 {}
 
-
-// Called before render is available
-bool j1Collision::Awake(pugi::xml_node& config)
-{
-	LOG("Awaking colliders");
-	bool ret = true;
-
-
-	//Create the number of colliders desired
-	maxColliders = config.child("maxColliders").text().as_int();
-
-	colliders = new Collider* [maxColliders];
-
-
-	
-	if (maxColliders == 0 || colliders == nullptr)
-	{
-		LOG("Could not init colliders");
-		ret = false;
-	}
-
-	return ret;
-}
-
 // Called each loop iteration
 bool j1Collision::PreUpdate()
 {
 	// Remove all colliders scheduled for deletion
-	for (uint i = 0; i < maxColliders; ++i)
+	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
 		if (colliders[i] != nullptr && colliders[i]->to_delete == true)
 		{
@@ -115,7 +91,7 @@ bool j1Collision::Update(float dt)
 	Collider* c2;
 
 	//Checks if all colliders are colliding with each other
-	for (uint i = 0; i < maxColliders; ++i)
+	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
 		// skip empty colliders
 		if (colliders[i] == nullptr)
@@ -124,7 +100,7 @@ bool j1Collision::Update(float dt)
 		c1 = colliders[i];
 
 		// avoid checking collisions already checked
-		for (uint k = i + 1; k < maxColliders; ++k)
+		for (uint k = i + 1; k < MAX_COLLIDERS; ++k)
 		{
 			// skip empty colliders
 			if (colliders[k] == nullptr)
@@ -162,7 +138,7 @@ void j1Collision::DebugDraw()
 		return;
 
 	Uint8 alpha = 80;
-	for (uint i = 0; i < maxColliders; ++i)
+	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
 		if (colliders[i] == nullptr)
 			continue;
@@ -193,7 +169,7 @@ bool j1Collision::CleanUp()
 {
 	LOG("Freeing all colliders");
 
-	for (uint i = 0; i < maxColliders; ++i)
+	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
 		if (colliders[i] != nullptr)
 		{
@@ -201,8 +177,6 @@ bool j1Collision::CleanUp()
 			colliders[i] = nullptr;
 		}
 	}
-
-	delete[] colliders;
 
 	return true;
 }
@@ -212,7 +186,7 @@ bool j1Collision::CleanMap()
 {
 	LOG("Freeing map colliders");
 
-		for (uint i = 0; i < maxColliders; ++i)
+		for (uint i = 0; i < MAX_COLLIDERS; ++i)
 		{
 			if (colliders[i] != nullptr && (colliders[i]->type != COLLIDER_PLAYER && colliders[i]->type != COLLIDER_GOD))
 			{
@@ -229,7 +203,7 @@ bool j1Collision::CleanMap()
 void j1Collision::AddCollider(Collider* collider)
 {
 
-	for (uint i = 0; i < maxColliders; ++i)
+	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
 		if (colliders[i] == nullptr)
 		{

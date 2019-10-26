@@ -15,7 +15,16 @@ struct LayerInfo {
 	uint height = 0u;
 	uint* tileArray = nullptr;
 	uint size = 0;
-	float fParallaxSpeed;
+	float fParallaxSpeed = 0.0f;
+
+	LayerInfo() : tileArray(NULL)
+	{}
+
+	~LayerInfo()
+	{
+		RELEASE(tileArray);
+	}
+
 
 	//Gets the layer id from the position
 	inline uint Get(int x, int y) const {

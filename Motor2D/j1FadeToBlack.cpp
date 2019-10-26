@@ -97,10 +97,10 @@ bool j1FadeToBlack::FadeToBlack(const char* mapName, int id, float time)
 
 	if(current_step == fade_step::none)
 	{
-		App->audio->PlayFx(id);
 		current_step = fade_step::fade_to_black;
 		start_time = SDL_GetTicks();
 		total_time = (Uint32)(time * 0.5f * 1000.0f);
+		App->audio->PlayFx(id);
 		mapToLoad = mapName;
 		ret = true;
 	}

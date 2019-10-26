@@ -10,10 +10,6 @@
     <vsync value="true"/>
   </renderer>
 
-  <collision>
-    <maxColliders>50</maxColliders>
-  </collision>
-
   <window>
     <resolution width="1024" height="768" scale="1"/>
     <fullscreen value="false"/>
@@ -38,7 +34,7 @@
   </map>
 
   <audio>
-    <volume general="50" music="30"/>
+    <volume general="25" music="15"/>
   </audio>
 
 

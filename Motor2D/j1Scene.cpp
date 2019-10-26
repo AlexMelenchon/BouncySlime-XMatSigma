@@ -54,7 +54,7 @@ bool j1Scene::Reset(const char* map)
 	Hlimit.y = App->map->data.tile_height * App->map->data.height;
 
 	//Start the music
-	App->audio->PlayMusic(App->map->data.music.GetString());
+	App->audio->PlayMusic(App->map->data.music.GetString(),0.0f);
 
 	return true;
 }
