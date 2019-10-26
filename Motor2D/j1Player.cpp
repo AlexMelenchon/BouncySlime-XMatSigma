@@ -332,11 +332,10 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 				break;
 			case(COLLIDER_DEATH):
 				App->audio->PlayFx(deathFx.id);
-				App->fade->FadeToBlack(App->map->data.currentmap.GetString(), 0.7f);
+				App->fade->FadeToBlack(App->map->data.currentmap.GetString(), deathFx.id, 0.7f);
 				break;
 			case(COLLIDER_WIN):
-				App->audio->PlayFx(winFx.id);
-				App->fade->FadeToBlack(App->map->GetNextMap(), 1.0f);
+				App->fade->FadeToBlack(App->map->GetNextMap(),winFx.id, 1.0f );
 				break;
 			}
 
@@ -415,8 +414,9 @@ bool j1Player::PostUpdate()
 	else if (fpPlayerSpeed.x < 0)
 		playerFlip = SDL_FLIP_HORIZONTAL;
 
-	iPoint pivot = currentAnimation->pivotpos[(int)currentAnimation->current_frame];
-	App->render->Blit(playerTex, (int)fpPlayerPos.x, (int)fpPlayerPos.y, &currentAnimation->GetCurrentFrame(), 1.0f, playerFlip,0.0f, pivot.x, pivot.y);
+	
+
+	App->render->Blit(playerTex, (int)fpPlayerPos.x, (int)fpPlayerPos.y, &currentAnimation->GetCurrentFrame(), 1.0f, playerFlip,0.0f, (currentAnimation->pivotpos->x), (currentAnimation->GetCurrentFrame().h / 2));
 	return true;
 }
 

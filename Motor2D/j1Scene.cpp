@@ -60,17 +60,17 @@ bool j1Scene::Update(float dt)
 {
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-		App->fade->FadeToBlack(App->map->data.maplist.start->data->name.GetString(), 0.4f);
+		App->fade->FadeToBlack(App->map->data.maplist.start->data->name.GetString(),NULL , 0.4f);
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-		App->fade->FadeToBlack(App->map->data.maplist.At(1)->data->name.GetString(), 0.4f);
+		App->fade->FadeToBlack(App->map->data.maplist.At(1)->data->name.GetString(), NULL , 0.4f);
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
-		App->fade->FadeToBlack(App->map->data.maplist.At(2)->data->name.GetString(), 0.4f);
+		App->fade->FadeToBlack(App->map->data.maplist.At(2)->data->name.GetString(), NULL ,  0.4f);
 
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
-		App->fade->FadeToBlack(App->map->data.currentmap.GetString(), 0.4f);
+		App->fade->FadeToBlack(App->map->data.currentmap.GetString(), NULL , 0.4f);
 
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		App->SaveGame();

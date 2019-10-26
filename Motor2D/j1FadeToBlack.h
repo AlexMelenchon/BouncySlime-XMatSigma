@@ -20,7 +20,7 @@ public:
 	bool PostUpdate();
 
 	//--------FADE---------//
-	bool FadeToBlack(const char* mapNumber, float time = 2.0f);
+	bool FadeToBlack(const char* mapNumber, int id, float time = 2.0f);
 
 private:
 	//--------FADE---------//

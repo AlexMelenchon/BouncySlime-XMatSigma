@@ -7,6 +7,7 @@
 #include "j1Map.h"
 #include "j1Input.h"
 #include "j1Player.h"
+#include "j1Audio.h"
 #include "j1Collision.h"
 #include "SDL/include/SDL_render.h"
 #include "SDL/include/SDL_timer.h"
@@ -82,13 +83,14 @@ bool j1FadeToBlack::PostUpdate()
 }
 
 // Fade to black. At mid point deactivate one module, then activate the other
-bool j1FadeToBlack::FadeToBlack(const char* mapName, float time)
+bool j1FadeToBlack::FadeToBlack(const char* mapName, int id, float time)
 {
 	bool ret = false;
 
 
 	if(current_step == fade_step::none)
 	{
+		App->audio->PlayFx(id);
 		current_step = fade_step::fade_to_black;
 		start_time = SDL_GetTicks();
 		total_time = (Uint32)(time * 0.5f * 1000.0f);
