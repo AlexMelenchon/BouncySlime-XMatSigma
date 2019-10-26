@@ -107,14 +107,14 @@ public:
 
 
 	//--------COLLISION ---------//
-	//Sets the collider to the playre's position
+	//Sets the collider to the player's position
 	void CalculateCollider(fPoint);
 
-	//Distributes collisions
-	void OnCollision(Collider* c1, Collider* c2); 
+	//If a collision is detected by the j1Collision, distributes collisions
+	void OnCollision(Collider* c1, Collider* c2);
 
-	//Calculates collisions
-	void RecalculatePos(SDL_Rect, SDL_Rect); 
+	//Calculate the collisions with the enviroment
+	void RecalculatePos(SDL_Rect, SDL_Rect);
 
 
 	//--------INPUTS---------//
@@ -132,7 +132,13 @@ public:
 	//Updates the current state
 	void UpdateState();
 
-	//Iterates the states
+	//When the player's state turns ground
+	void inGround();
+
+	//When the player's state turns wall
+	void InWall();
+
+	//Iterates the states taking in account the inputs
 	player_states process_fsm(p2List<player_inputs>& inputs); 
 
 
@@ -152,7 +158,7 @@ public:
 
 private:
 
-	//--------POSITION ---------//
+	//--------MOVEMENT ---------//
 	//Determines player position on the map
 	fPoint fpPlayerPos = { 0.0f,0.0f }; 
 
@@ -170,10 +176,16 @@ private:
 
 	float fGravity = 0.0f;
 
-	
-	//--------LIMIT POSITION ---------//
+	//LIMITS---
 	//The amount in which a speed will be divided to per frame.
-	float fSlowGrade = 0.0f; 
+	float fSlowGrade = 0.0f;
+
+	//The amount in which a speed will be divided to per frame in hte air
+	float fSlowGradeAir = 0.0f;
+
+	//The amount in which a speed will be divided to per frame.
+	float fSlowGradeWall = 0.0f;
+
 
 	//The limit in order to perfom an slow in a speed
 	int iSlowLimit = 0; 
@@ -197,10 +209,16 @@ private:
 
 	//--------INTERNAL CONTROL---------//
 	// Prrevious time of the ms elapsed since the last frame
-	float flPreviousTime = 0; 
+	float flPreviousTime = 0.0f; 
 
 	// Actual time of the ms elapsed since the last frame
-	float flCurrentTime = 0;
+	float flCurrentTime = 0.0f;
+
+	// Limits the time elapsed between frames so the movement doesn't break
+	float fInFramesLimit = 0.0f;
+
+	// 	//Fade time to change maps or death
+	float playerFadeTime = 0.0f;
 
 	//To check if the player is falling
 	bool falling = false;
