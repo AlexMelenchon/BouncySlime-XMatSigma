@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="96">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="97">
  <properties>
   <property name="music" value="audio/music/loop.ogg"/>
   <property name="speed" type="float" value="1"/>
@@ -62232,10 +62232,11 @@
   <object id="88" name="Floor" x="495.918" y="975.381" width="657.498" height="128.571"/>
   <object id="89" name="Death" x="1152.4" y="742.441" width="814.287" height="9.534"/>
   <object id="90" name="Death" x="2208.34" y="836.203" width="111.438" height="11.8976"/>
-  <object id="91" name="Death" x="167.856" y="1111.23" width="2243.38" height="9.534"/>
+  <object id="91" name="Death" x="167.856" y="1115.73" width="2243.38" height="9.534"/>
   <object id="92" name="Death" x="2208.09" y="532.369" width="111.438" height="11.8976"/>
   <object id="94" name="Floor" x="2288.8" y="0.192833" width="30.9391" height="271.962"/>
   <object id="95" name="Floor" x="2112.02" y="18.5115" width="174.522" height="12.3685"/>
+  <object id="96" name="Death" x="2412.64" y="-167.767" width="197.38" height="1347.53"/>
  </objectgroup>
  <objectgroup id="8" name="PLAYER_POSITIONS"/>
 </map>

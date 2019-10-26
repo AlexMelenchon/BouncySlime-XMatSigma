@@ -33,7 +33,7 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
-	Reset(App->map->data.maplist.start->data->name.GetString());
+	Reset(App->map->data.maplist.start->data->name.GetString()); //Loads the first map
 
 	return true;
 }
@@ -74,6 +74,9 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		App->SaveGame();
+
+	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
+		App->LoadGame();
 
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 		App->player->GodMode();
@@ -117,7 +120,9 @@ bool j1Scene::CleanUp()
 
 bool j1Scene::Load(pugi::xml_node& load)
 {
-	if (App->map->data.currentmap.GetString() != load.child("current_map").attribute("name").as_string())
+	p2SString currentmap = App->map->data.currentmap.GetString();
+
+	if (currentmap != load.child("current_map").attribute("name").as_string())
 	{
 		App->map->CleanUp();
 		App->scene->Reset(load.child("current_map").attribute("name").as_string());
