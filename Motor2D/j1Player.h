@@ -110,7 +110,7 @@ public:
 	//Sets the collider to the player's position
 	void CalculateCollider(fPoint);
 
-	//If a collision is detected by the j1Collision, distributes collisions
+	//If a collision is detected by the j1Collision, distributes collisions according to it's type
 	void OnCollision(Collider* c1, Collider* c2);
 
 	//Calculate the collisions with the enviroment

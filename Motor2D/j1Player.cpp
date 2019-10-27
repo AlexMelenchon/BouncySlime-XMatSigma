@@ -359,7 +359,7 @@ void j1Player::CalculateCollider(fPoint pos)
 	playerCollider->SetPos((int)fpPlayerPos.x, (int)fpPlayerPos.y);
 }
 
-//Distributes collisions
+//Distributes collisions according to it's type
 void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 {
 			switch (coll->type) {
@@ -449,7 +449,7 @@ bool j1Player::PostUpdate()
 	else if (fpPlayerSpeed.x < 0)
 		playerFlip = SDL_FLIP_HORIZONTAL;
 
-//And finally we blit
+	//And finally we blit
 	App->render->Blit(playerTex, (int)fpPlayerPos.x, (int)fpPlayerPos.y, &currentAnimation->GetCurrentFrame(), 1.0f, playerFlip,0.0f, (currentAnimation->pivotpos->x), (currentAnimation->GetCurrentFrame().h / 2));
 
 	return true;

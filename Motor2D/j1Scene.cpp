@@ -37,14 +37,16 @@ bool j1Scene::Awake(pugi::xml_node& scene_config)
 // Called before the first frame
 bool j1Scene::Start()
 {
-	Reset(App->map->data.maplist.start->data->name.GetString()); //Loads the first map
+	//Loads the first map
+	Reset(App->map->data.maplist.start->data->name.GetString()); 
 
 	return true;
 }
 
 bool j1Scene::Reset(const char* map)
 {
-	App->win->GetWindowSize(width, height);//Gets the current window width & height
+	//Gets the current window width & height
+	App->win->GetWindowSize(width, height);
 
 	//Loads the map
 	App->map->Load(map);
