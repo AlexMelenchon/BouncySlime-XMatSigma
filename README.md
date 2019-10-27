@@ -41,11 +41,14 @@ F10:God mode
 
 ## Team Members:
 
-Alex Melenchón Maza
+Alex Melenchón Maza:
+ -  Main Programmer
  - https://github.com/AlexMelenchon
 
 David Carrasquet Iniesta: 
+ - Main designer
  - https://github.com/davidcarrasquet
+ 
 
 ## Credits
 
