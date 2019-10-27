@@ -4,13 +4,13 @@ Being a slime provides you with this awesome advantage: WALL JUMPING! What are y
 This project is made by sophomore students from CITM.
 
 
-##Link to our Github Project:
+## Link to our Github Project:
 https://github.com/AlexMelenchon/BouncySlime-XMatSigma
 
 
-##Game Keys:
+## Game Keys:
 
-###Keyboard control:
+### Keyboard control:
 
 - A: Move left
 - D: Move right
@@ -20,7 +20,7 @@ https://github.com/AlexMelenchon/BouncySlime-XMatSigma
 -NumPad +: Volume up
 -NumPad -: Volume down
 
-###Debug Options:
+### Debug Options:
 
 F1: Load the tutorial map
 F2: Load the first map
@@ -31,7 +31,7 @@ F6: Load game
 F9: Draw colliders in screen
 F10:God mode
 
-##Innovations:
+## Innovations:
 - Volume control in-game
 - Forward-propagation collision system
 - Camera culling with parallax
@@ -39,17 +39,17 @@ F10:God mode
 
 
 
-##Team Members:
+## Team Members:
 
-Alex Melenchón Maza
+Alex MelenchÃ³n Maza
  - https://github.com/AlexMelenchon
 
 David Carrasquet Iniesta: 
  - https://github.com/davidcarrasquet
 
-##Credits
+## Credits
 
-###Art:
+### Art:
 
  Level tileset by: Anokolisa
  https://anokolisa.itch.io/
@@ -57,14 +57,14 @@ David Carrasquet Iniesta:
  Player by: Bayat Games
  https://bayat.itch.io/
 
-###Music:
+### Music:
  Loop musics by: Pascal Belisle
  https://soundcloud.com/pascalbelisle
  
  Sound effects by: Nintendo, ripped by Sound-Resource
  https://www.sounds-resource.com/wii/ssbb/
 
-##License:
+## License:
 GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
 You can check the full license in our project
 
