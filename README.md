@@ -33,10 +33,10 @@ F10:God mode
 
 ## Innovations:
 - Volume control in-game
-- Forward-propagation collision system
+- Forward-propagation collision system, colliders are loaded from an object layer of the tmx
 - Camera culling with parallax
 - Animations load from XML document
-
+- Music loads from tmx
 
 
 ## Team Members:
