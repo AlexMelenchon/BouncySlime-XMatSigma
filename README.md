@@ -4,52 +4,57 @@ Being a slime provides you with this awesome advantage: WALL JUMPING! What are y
 This project is made by sophomore students from CITM.
 
 
-##Link to our Github Project:
+## Link to our Github Project:
 https://github.com/AlexMelenchon/BouncySlime-XMatSigma
 
 
-##Game Keys:
+## Game Keys:
 
-###Keyboard control:
+### Keyboard control:
 
 - A: Move left
 - D: Move right
 - S: Move down
 - Space: Jump (When wall jumping, jump first, then direct the jump)
           
--NumPad +: Volume up
--NumPad -: Volume down
+- NumPad +: Volume up
+- NumPad -: Volume down
 
-###Debug Options:
+- Esc: Exit game
 
-F1: Load the tutorial map
-F2: Load the first map
-F3: Load the second map
-F4: Reset the current map
-F5: Save game
-F6: Load game
-F9: Draw colliders in screen
-F10:God mode
+### Debug Options:
 
-##Innovations:
+- F1: Load the tutorial map
+- F2: Load the first map
+- F3: Load the second map
+- F4: Reset the current map
+- F5: Save game
+- F6: Load game
+- F9: Draw colliders in screen
+- F10:God mode
+
+## Innovations:
 - Volume control in-game
-- Forward-propagation collision system
+- Forward-propagation collision system, colliders are loaded from an object layer of the tmx
 - Camera culling with parallax
 - Animations load from XML document
+- Music loads from tmx
 
 
+## Team Members:
 
-##Team Members:
-
-Alex Melenchón Maza
+Alex MelenchÃ³n Maza:
+ -  Main Programmer
  - https://github.com/AlexMelenchon
 
 David Carrasquet Iniesta: 
+ - Main designer
  - https://github.com/davidcarrasquet
+ 
 
-##Credits
+## Credits
 
-###Art:
+### Art:
 
  Level tileset by: Anokolisa
  https://anokolisa.itch.io/
@@ -57,14 +62,14 @@ David Carrasquet Iniesta:
  Player by: Bayat Games
  https://bayat.itch.io/
 
-###Music:
+### Music:
  Loop musics by: Pascal Belisle
  https://soundcloud.com/pascalbelisle
  
  Sound effects by: Nintendo, ripped by Sound-Resource
  https://www.sounds-resource.com/wii/ssbb/
 
-##License:
+## License:
 GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
 You can check the full license in our project
 
