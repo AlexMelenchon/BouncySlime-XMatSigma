@@ -3,16 +3,18 @@
 	<input />
 	<window />
 	<textures />
-	<audio />
+	<audio>
+		<volume music="15" fx="25" />
+	</audio>
 	<map />
 	<player>
-		<position x="880.325989" y="880" />
-		<speed x="-79.7246628" y="0" />
+		<position x="96.7218246" y="928" />
+		<speed x="1.17076135" y="0" />
 		<state current_state="1" />
 		<falling value="false" />
 		<walling value="false" />
 		<wallTimer wallJumpTimer="0" />
-		<flip value="1" />
+		<flip value="0" />
 	</player>
 	<scene>
 		<current_map name="intro.tmx" />
@@ -20,6 +22,6 @@
 	<collision />
 	<fade />
 	<renderer>
-		<camera x="-509" y="-336" />
+		<camera x="0" y="-336" />
 	</renderer>
 </game_state>

@@ -191,8 +191,8 @@ bool j1Audio::PlayFx(unsigned int id, int repeat)
 
 bool j1Audio::Load(pugi::xml_node& load)
 {
-	Mix_VolumeMusic(load.child("volume").attribute("music").as_int());
-	Mix_Volume(-1, load.child("volume").attribute("fx").as_int());
+	musicVolume = load.child("volume").attribute("music").as_int();
+	fxVolume = load.child("volume").attribute("fx").as_int();
 
 	return true;
 }
