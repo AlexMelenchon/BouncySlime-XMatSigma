@@ -17,19 +17,21 @@ https://github.com/AlexMelenchon/BouncySlime-XMatSigma
 - S: Move down
 - Space: Jump (When wall jumping, jump first, then direct the jump)
           
--NumPad +: Volume up
--NumPad -: Volume down
+- NumPad +: Volume up
+- NumPad -: Volume down
+
+- Esc: Exit game
 
 ### Debug Options:
 
-F1: Load the tutorial map
-F2: Load the first map
-F3: Load the second map
-F4: Reset the current map
-F5: Save game
-F6: Load game
-F9: Draw colliders in screen
-F10:God mode
+- F1: Load the tutorial map
+- F2: Load the first map
+- F3: Load the second map
+- F4: Reset the current map
+- F5: Save game
+- F6: Load game
+- F9: Draw colliders in screen
+- F10:God mode
 
 ## Innovations:
 - Volume control in-game
