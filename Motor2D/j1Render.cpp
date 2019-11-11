@@ -5,7 +5,7 @@
 #include "j1Render.h"
 #include "j1Player.h"
 
-#define VSYNC true
+#define VSYNC false
 
 j1Render::j1Render() : j1Module()
 {

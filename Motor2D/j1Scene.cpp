@@ -106,6 +106,9 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 		App->player->GodMode();
 
+	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+		App->windowControl = !App->windowControl;
+
 	//Turns volume up
 	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN && (App->audio->musicVolume < 100 && App->audio->fxVolume < 100))
 	{
@@ -124,18 +127,22 @@ bool j1Scene::Update(float dt)
 	//Draws the current map
 	App->map->Draw();
 
-	//Sets the window title
-	p2SString title("%s - %s || Map:%dx%d Tiles:%dx%d Tilesets:%d Mouse Position X:%d Y:%d Mouse Tilset:%d,%d Current Map:%s",
-		App->GetTitle(), App->GetOrganization(),
-		App->map->data.width, App->map->data.height,
-		App->map->data.tile_width, App->map->data.tile_height,
-		App->map->data.tilesets.count(), App->input->mouse_x - App->render->camera.x,
-		App->input->mouse_y - App->render->camera.y,
-		(App->input->mouse_x - App->render->camera.x) / App->map->data.tile_width,
-		(App->input->mouse_y - App->render->camera.y) / App->map->data.tile_height,
-		App->map->data.currentmap.GetString());
+	//Sets the window title for the map info
 
-	App->win->SetTitle(title.GetString());
+	if (App->windowControl)
+	{
+		p2SString title("%s - %s || Map:%dx%d Tiles:%dx%d Tilesets:%d Mouse Position X:%d Y:%d Mouse Tilset:%d,%d Current Map:%s",
+			App->GetTitle(), App->GetOrganization(),
+			App->map->data.width, App->map->data.height,
+			App->map->data.tile_width, App->map->data.tile_height,
+			App->map->data.tilesets.count(), App->input->mouse_x - App->render->camera.x,
+			App->input->mouse_y - App->render->camera.y,
+			(App->input->mouse_x - App->render->camera.x) / App->map->data.tile_width,
+			(App->input->mouse_y - App->render->camera.y) / App->map->data.tile_height,
+			App->map->data.currentmap.GetString());
+
+		App->win->SetTitle(title.GetString());
+	}
 
 	return true;
 }

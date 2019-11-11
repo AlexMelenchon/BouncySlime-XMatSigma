@@ -19,9 +19,16 @@
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 {
+	//Internal Control
 	frames = 0;
 	want_to_save = want_to_load = false;
 
+	//Framerate Control
+	gameTimer = new j1Timer();
+	gamePerfTimer = new j1PerfTimer();
+	lastSecFrames = new j1Timer();
+
+	//Modules
 	input = new j1Input();
 	win = new j1Window();
 	render = new j1Render();
@@ -165,6 +172,7 @@ pugi::xml_node j1App::LoadConfig(pugi::xml_document& config_file) const
 // ---------------------------------------------
 void j1App::PrepareUpdate()
 {
+	lastFrameTimer.Start();
 }
 
 // ---------------------------------------------
@@ -175,6 +183,34 @@ void j1App::FinishUpdate()
 
 	if(want_to_load == true)
 		LoadGameNow();
+
+	// Amount of time since game start (use a low resolution timer)
+	float seconds_since_startup = gameTimer->ReadSec();
+
+	// Average FPS for the whole game life
+	frame_count++;
+	float avg_fps = frame_count / seconds_since_startup;
+
+	// Amount of ms took the last update
+	last_frame_ms = lastFrameTimer.ReadMs();
+	dt = (float)last_frame_ms / 100;
+
+	// Amount of frames during the last second
+	if (lastSecFrames->Read() >= 1000)
+	{
+		lastSecFrames->Start();
+		frames_on_last_update = last_second_frame_count;
+		last_second_frame_count = 0;
+	}
+
+	if (!windowControl)
+	{
+		static char title[256];
+		sprintf_s(title, 256, "FPS: %i Av.FPS: %.2f Last Frame Ms: %u",
+			frames_on_last_update, avg_fps, last_frame_ms);
+
+		App->win->SetTitle(title);
+	}
 }
 
 // Call modules before each loop iteration

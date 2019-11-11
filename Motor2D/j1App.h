@@ -3,6 +3,8 @@
 
 #include "p2List.h"
 #include "j1Module.h"
+#include "j1PerfTimer.h"
+#include "j1Timer.h"
 #include "PugiXml\src\pugixml.hpp"
 
 // Modules
@@ -97,11 +99,14 @@ public:
 	j1Collision*		collision;
 	j1FadeToBlack*		 fade;
 
+	//-----FRAME CONTROL------//
+	bool windowControl = false; //Changes the title of the window
+
 private:
 	//--------INTERNAL CONTROL---------//
 	p2List<j1Module*>	modules;
-	uint				frames;
-	float				dt;
+	uint				frames = 0u;
+	float				dt = 0.0f;
 	int					argc;
 	char**				args;
 
@@ -114,6 +119,19 @@ private:
 	bool				want_to_load;
 	p2SString			load_game;
 	mutable p2SString	save_game;
+
+
+	//-----FRAME CONTROL------//
+	j1Timer* gameTimer = nullptr;
+	j1PerfTimer* gamePerfTimer = nullptr;
+	j1Timer* lastSecFrames = nullptr;
+	j1PerfTimer lastFrameTimer;
+
+	uint64 frame_count = 0u;
+	uint last_second_frame_count = 0u;
+
+	uint32 last_frame_ms = 0u;
+	uint32 frames_on_last_update = 0u;
 };
 
 extern j1App* App;
