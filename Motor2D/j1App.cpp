@@ -189,21 +189,22 @@ void j1App::FinishUpdate()
 
 	// Average FPS for the whole game life
 	frame_count++;
-	float avg_fps = frame_count / seconds_since_startup;
+	float avg_fps = float(frame_count) / seconds_since_startup;
 
 	// Amount of ms took the last update
 	last_frame_ms = lastFrameTimer.ReadMs();
-	dt = (float)last_frame_ms / 100;
+	dt = (float)last_frame_ms / 1000.0f;
 
 	// Amount of frames during the last second
+	last_second_frame_count++;
 	if (lastSecFrames->Read() >= 1000)
 	{
-		lastSecFrames->Start();
 		frames_on_last_update = last_second_frame_count;
 		last_second_frame_count = 0;
+		lastSecFrames->Start();
 	}
 
-	if (!windowControl)
+	if (!windowTitleControl)
 	{
 		static char title[256];
 		sprintf_s(title, 256, "%s - %s || FPS: %i Av.FPS: %.2f Last Frame Ms: %u",
@@ -419,5 +420,5 @@ bool j1App::SavegameNow() const
 
 float j1App::GetDeltaTime() const
 {
-	return 1.0f / 60.0f;
+	return dt;
 }

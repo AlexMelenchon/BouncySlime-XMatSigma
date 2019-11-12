@@ -106,8 +106,9 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 		App->player->GodMode();
 
+	//Changes the Window Title Display
 	if (App->input->GetKey(SDL_SCANCODE_F12) == KEY_DOWN)
-		App->windowControl = !App->windowControl;
+		App->windowTitleControl = !App->windowTitleControl;
 
 	//Turns volume up
 	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN && (App->audio->musicVolume < 100 && App->audio->fxVolume < 100))
@@ -128,7 +129,7 @@ bool j1Scene::Update(float dt)
 	App->map->Draw();
 
 	//Sets the window title for the map info
-	if (App->windowControl)
+	if (App->windowTitleControl)
 	{
 		p2SString title("%s - %s || Map:%dx%d Tiles:%dx%d Tilesets:%d Mouse Position X:%d Y:%d Mouse Tilset:%d,%d Current Map:%s",
 			App->GetTitle(), App->GetOrganization(),

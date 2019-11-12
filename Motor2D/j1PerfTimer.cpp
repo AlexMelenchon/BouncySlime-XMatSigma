@@ -26,7 +26,7 @@ void j1PerfTimer::Start()
 // ---------------------------------------------
 double j1PerfTimer::ReadMs() const
 {
-	return ((SDL_GetPerformanceCounter() - started_at) / 1000) / frequency;
+	return ((SDL_GetPerformanceCounter() - started_at) * 1000.0f) / (double)frequency;
 
 }
 

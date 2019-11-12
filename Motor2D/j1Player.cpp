@@ -203,14 +203,6 @@ bool j1Player::PreUpdate()
 		standardInputs();
 	else
 		godInputs();
-	
-	//Get the time elapsed since the last frame
-	flPreviousTime = flCurrentTime;
-	flCurrentTime = App->GetDeltaTime();
-
-	//The time gets corrected if it's too high
-	if (flCurrentTime > fInFramesLimit)
-		flCurrentTime = fInFramesLimit;
 
 	//Check the player state and update to the next one
 	UpdateState();
@@ -297,6 +289,14 @@ bool j1Player::Update(float dt)
 		currentAnimation = &animIdle;
 		break;
 	}
+
+	//Get the time elapsed since the last frame
+	flCurrentTime = App->GetDeltaTime();
+
+	//The time gets corrected if it's too high
+	if (flCurrentTime > fInFramesLimit)
+		flCurrentTime = fInFramesLimit;
+
 
 	//Limit & update position
 	LimitPlayerSpeed();

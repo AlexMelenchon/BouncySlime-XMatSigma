@@ -205,9 +205,6 @@ private:
 
 
 	//--------INTERNAL CONTROL---------//
-	// Prrevious time of the ms elapsed since the last frame
-	float flPreviousTime = 0.0f; 
-
 	// Actual time of the ms elapsed since the last frame
 	float flCurrentTime = 0.0f;
 

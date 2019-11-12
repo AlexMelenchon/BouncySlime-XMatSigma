@@ -100,7 +100,7 @@ public:
 	j1FadeToBlack*		 fade;
 
 	//-----FRAME CONTROL------//
-	bool windowControl = false; //Changes the title of the window
+	bool windowTitleControl = false; //Changes the title of the window
 
 private:
 	//--------INTERNAL CONTROL---------//
