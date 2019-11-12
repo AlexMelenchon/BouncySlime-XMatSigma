@@ -106,7 +106,7 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 		App->player->GodMode();
 
-	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F12) == KEY_DOWN)
 		App->windowControl = !App->windowControl;
 
 	//Turns volume up
