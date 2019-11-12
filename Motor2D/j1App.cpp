@@ -206,8 +206,10 @@ void j1App::FinishUpdate()
 	if (!windowControl)
 	{
 		static char title[256];
-		sprintf_s(title, 256, "FPS: %i Av.FPS: %.2f Last Frame Ms: %u",
-			frames_on_last_update, avg_fps, last_frame_ms);
+		sprintf_s(title, 256, "%s - %s || FPS: %i Av.FPS: %.2f Last Frame Ms: %u",
+			App->GetTitle(), App->GetOrganization(),
+			frames_on_last_update, avg_fps, 
+			last_frame_ms);
 
 		App->win->SetTitle(title);
 	}

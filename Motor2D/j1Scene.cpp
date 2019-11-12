@@ -128,7 +128,6 @@ bool j1Scene::Update(float dt)
 	App->map->Draw();
 
 	//Sets the window title for the map info
-
 	if (App->windowControl)
 	{
 		p2SString title("%s - %s || Map:%dx%d Tiles:%dx%d Tilesets:%d Mouse Position X:%d Y:%d Mouse Tilset:%d,%d Current Map:%s",
