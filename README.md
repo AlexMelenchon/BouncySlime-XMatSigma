@@ -32,6 +32,7 @@ https://github.com/AlexMelenchon/BouncySlime-XMatSigma
 - F6: Load game
 - F9: Draw colliders in screen
 - F10:God mode
+- F12: Change title info display (Frame or Map Data)
 
 ## Innovations:
 - Volume control in-game
