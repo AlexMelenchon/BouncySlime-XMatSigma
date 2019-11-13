@@ -94,7 +94,7 @@ public:
 	void UpdatePos(float dt); 
 
 	// Limits the player speed in both axis
-	void LimitPlayerSpeed();  
+	void LimitPlayerSpeed(float dt);  
 
 	//Smoothly slows an speed axis
 	float deAccel(slow_direction slow, float speedAxis, float grade = 0.0f, float limit = 0.0f);  
@@ -170,6 +170,9 @@ private:
 
 	//Force applied to the player when jumping off a wall
 	fPoint wallForce = { 0.0f, 0.0f };
+	
+	//Used to have an smooth leave of the wall
+	float wallingLeave = 0.0f;
 
 	float fGravity = 0.0f;
 
@@ -182,7 +185,6 @@ private:
 
 	//The amount in which a speed will be divided to per frame.
 	float fSlowGradeWall = 0.0f;
-
 
 	//The limit in order to perfom an slow in a speed
 	int iSlowLimit = 0; 
@@ -226,8 +228,14 @@ private:
 	// The thime limit to restrain the player's movement will be restrained after jumping of a wall
 	float wallJumpLimit = 0.0f;
 
-	// Controls the time elapseed since the player jumped of a wall
+	// Controls the time elapsed since the player jumped of a wall
 	float wallJumpTimer = 0.0f;
+
+	// Controls the time elapsed since the player wants to leave the wall and actually leaves (jump breathing room)
+	float wallJumpLeaveControl = 0.0f;
+
+	// Controls the time elapsed since the player wants to leave the wall and actually leaves (jump breathing room)
+	float flipSpeed = 0.0f;
 
 	//The player's direction when jumping off a wall
 	collisionDirection wallJumpDirection = DIRECTION_NONE;

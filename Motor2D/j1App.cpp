@@ -99,6 +99,8 @@ bool j1App::Awake()
 		app_config = config.child("app");
 		title.create(app_config.child("title").child_value());
 		organization.create(app_config.child("organization").child_value());
+		capTime =  app_config.child("frameCap").attribute("time").as_int();
+		frameCap = app_config.child("frameCap").attribute("isOn").as_bool();
 	}
 
 	if(ret == true)
@@ -177,7 +179,7 @@ void j1App::PrepareUpdate()
 
 	//Controls pause of the game
 	if (!pause)
-		dt = lastFrameTimer.ReadSec() ;
+		dt = lastFrameTimer.ReadSec();
 	else
 		dt = 0.0f;
 
@@ -198,7 +200,7 @@ void j1App::FinishUpdate()
 	float seconds_since_startup = gameTimer->ReadSec();
 
 	// Average FPS for the whole game life
-	float avg_fps = float(frame_count) / seconds_since_startup;
+	avg_fps = float(frame_count) / seconds_since_startup;
 
 	// Amount of ms took the last update
 	last_frame_ms = lastFrameTimer.Read();
@@ -211,22 +213,14 @@ void j1App::FinishUpdate()
 		lastSecFrames->Start();
 	}
 
-	if (!windowTitleControl)
-	{
-		static char title[256];
-		sprintf_s(title, 256, "%s - %s || FPS: %i Av.FPS: %.2f Last Frame Ms: %u",
-			App->GetTitle(), App->GetOrganization(),
-			frames_on_last_update, avg_fps, 
-			last_frame_ms);
-
-		App->win->SetTitle(title);
-	}
-
-	if (last_frame_ms < (1000 / 30))
-	{
-		SDL_Delay(1000 / 30 - last_frame_ms);
-	}
-
+	if (frameCap)
+		if (last_frame_ms < 1000 / capTime)
+		{
+			uint32 delay = MAX(0, (int)capTime - (int)last_frame_ms);
+			//LOG("Should wait: %i", delay);
+			//j1PerfTimer delayTimer;
+			SDL_Delay(delay);
+		}
 
 }
 

@@ -103,6 +103,24 @@ public:
 	bool windowTitleControl = false; //Changes the title of the window
 	bool pause = false;
 
+	j1Timer* gameTimer = nullptr;
+	j1PerfTimer* gamePerfTimer = nullptr;
+	j1Timer* lastSecFrames = nullptr;
+	j1Timer lastFrameTimer;
+
+	uint64 frame_count = 0u;
+	uint last_second_frame_count = 0u;
+
+	uint32 last_frame_ms = 0u;
+	uint32 frames_on_last_update = 0u;
+
+	float avg_fps = 0.0f;
+
+	uint capTime = 0u;
+	bool frameCap = false;
+	float aux = 0.0f;
+
+
 private:
 	//--------INTERNAL CONTROL---------//
 	p2List<j1Module*>	modules;
@@ -121,18 +139,6 @@ private:
 	p2SString			load_game;
 	mutable p2SString	save_game;
 
-
-	//-----FRAME CONTROL------//
-	j1Timer* gameTimer = nullptr;
-	j1PerfTimer* gamePerfTimer = nullptr;
-	j1Timer* lastSecFrames = nullptr;
-	j1Timer lastFrameTimer;
-
-	uint64 frame_count = 0u;
-	uint last_second_frame_count = 0u;
-
-	uint32 last_frame_ms = 0u;
-	uint32 frames_on_last_update = 0u;
 };
 
 extern j1App* App;

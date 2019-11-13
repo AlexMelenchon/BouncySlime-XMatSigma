@@ -111,8 +111,14 @@ bool j1Scene::Update(float dt)
 		App->windowTitleControl = !App->windowTitleControl;
 
 	//Sets Pause in the Game
-	if (App->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
+	{
 		App->pause = !App->pause;
+	}
+
+	//Un-caps the framerate
+	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
+		App->frameCap = !App->frameCap;
 
 	//Turns volume up
 	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN && (App->audio->musicVolume < 100 && App->audio->fxVolume < 100))
@@ -144,6 +150,23 @@ bool j1Scene::Update(float dt)
 			(App->input->mouse_x - App->render->camera.x) / App->map->data.tile_width,
 			(App->input->mouse_y - App->render->camera.y) / App->map->data.tile_height,
 			App->map->data.currentmap.GetString());
+
+		App->win->SetTitle(title.GetString());
+	}
+	else
+	{
+		p2SString cap;
+		if (App->frameCap)
+			cap.create("ON");
+		else
+			cap.create("OFF");
+
+
+		p2SString title("%s - %s || FPS: %i Av.FPS: %.2f || FrameCap: %s FrameLimit: %i || Last Frame Ms: %u ",
+			App->GetTitle(), App->GetOrganization(),
+			App->frames_on_last_update, App->avg_fps,
+			cap.GetString(), App->capTime,
+			App->last_frame_ms);
 
 		App->win->SetTitle(title.GetString());
 	}
