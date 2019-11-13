@@ -107,8 +107,12 @@ bool j1Scene::Update(float dt)
 		App->player->GodMode();
 
 	//Changes the Window Title Display
-	if (App->input->GetKey(SDL_SCANCODE_F12) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
 		App->windowTitleControl = !App->windowTitleControl;
+
+	//Sets Pause in the Game
+	if (App->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
+		App->pause = !App->pause;
 
 	//Turns volume up
 	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN && (App->audio->musicVolume < 100 && App->audio->fxVolume < 100))

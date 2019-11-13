@@ -101,6 +101,7 @@ public:
 
 	//-----FRAME CONTROL------//
 	bool windowTitleControl = false; //Changes the title of the window
+	bool pause = false;
 
 private:
 	//--------INTERNAL CONTROL---------//
@@ -125,7 +126,7 @@ private:
 	j1Timer* gameTimer = nullptr;
 	j1PerfTimer* gamePerfTimer = nullptr;
 	j1Timer* lastSecFrames = nullptr;
-	j1PerfTimer lastFrameTimer;
+	j1Timer lastFrameTimer;
 
 	uint64 frame_count = 0u;
 	uint last_second_frame_count = 0u;

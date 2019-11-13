@@ -79,9 +79,6 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	//We need this in order to load things later in start whose modules are not awoken yet
 	auxLoader = player_node;
 
-	//We start the time
-	flCurrentTime = App->GetDeltaTime();
-
 	return true;
 }
 // Called before the first frame
@@ -223,6 +220,10 @@ void j1Player::UpdateState()
 // Called each loop iteration
 bool j1Player::Update(float dt)
 {
+	if (dt == 0.0f)
+		return true;
+
+
 	//Logic for every playe state
 	switch (current_state)
 	{
@@ -291,12 +292,11 @@ bool j1Player::Update(float dt)
 	}
 
 	//Get the time elapsed since the last frame
-	flCurrentTime = App->GetDeltaTime();
+	flCurrentTime = dt;
 
-	//The time gets corrected if it's too high
+	//Check if the framerate exceeds the limit, so the physics does not get crazy
 	if (flCurrentTime > fInFramesLimit)
 		flCurrentTime = fInFramesLimit;
-
 
 	//Limit & update position
 	LimitPlayerSpeed();

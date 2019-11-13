@@ -172,7 +172,17 @@ pugi::xml_node j1App::LoadConfig(pugi::xml_document& config_file) const
 // ---------------------------------------------
 void j1App::PrepareUpdate()
 {
+	frame_count++;
+	last_second_frame_count++;
+
+	//Controls pause of the game
+	if (!pause)
+		dt = lastFrameTimer.ReadSec() ;
+	else
+		dt = 0.0f;
+
 	lastFrameTimer.Start();
+
 }
 
 // ---------------------------------------------
@@ -188,15 +198,12 @@ void j1App::FinishUpdate()
 	float seconds_since_startup = gameTimer->ReadSec();
 
 	// Average FPS for the whole game life
-	frame_count++;
 	float avg_fps = float(frame_count) / seconds_since_startup;
 
 	// Amount of ms took the last update
-	last_frame_ms = lastFrameTimer.ReadMs();
-	dt = (float)last_frame_ms / 1000.0f;
+	last_frame_ms = lastFrameTimer.Read();
 
 	// Amount of frames during the last second
-	last_second_frame_count++;
 	if (lastSecFrames->Read() >= 1000)
 	{
 		frames_on_last_update = last_second_frame_count;
@@ -214,6 +221,13 @@ void j1App::FinishUpdate()
 
 		App->win->SetTitle(title);
 	}
+
+	if (last_frame_ms < (1000 / 30))
+	{
+		SDL_Delay(1000 / 30 - last_frame_ms);
+	}
+
+
 }
 
 // Call modules before each loop iteration
