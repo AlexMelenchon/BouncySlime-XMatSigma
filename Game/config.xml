@@ -43,7 +43,7 @@
     <movement>
       <movementForce x="-70.0f" y="-220.0f" />
       <wallForce x="300.0f" y="-350.0f" />
-      <gravity>2000.0f</gravity>
+      <gravity>50.0f</gravity>
       <slowGrade>1.175f</slowGrade>
       <slowGradeAir>1.05f</slowGradeAir>
       <slowGradeWall>7.5f</slowGradeWall>

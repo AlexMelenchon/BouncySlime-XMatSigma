@@ -259,7 +259,7 @@ bool j1Player::Update(float dt)
 
 	case ST_AIR:
 		LOG("IN THE AIR ^^^^\n");
-		fPlayerAccel += fGravity * dt;
+		fPlayerAccel += fGravity *dt * VEL_TO_WORLD;
 
 		//We check the player's speed and select his animation accordingly
 		if (fpPlayerSpeed.y > 0.0f)
@@ -274,19 +274,19 @@ bool j1Player::Update(float dt)
 
 	case ST_FALLING:
 		LOG("FALLING \n");
-		fPlayerAccel -= fpForce.y;
+		fPlayerAccel += fGravity*2.0f *dt * VEL_TO_WORLD;
 		currentAnimation = &animFall;
 		break;
 
 	case ST_WALL:
 		LOG("WALLING \n");
-		fPlayerAccel += fGravity/2.0f * dt;;
+		fPlayerAccel += fGravity/2.0f;
 		currentAnimation = &animWall;
 		break;
 
 	case ST_WALL_JUMPING:
 		LOG("WALL JUMPING \n");
-		fPlayerAccel += fGravity * dt;;
+		fPlayerAccel += fGravity   *dt * VEL_TO_WORLD;
 		wallJumpTimer += dt;
  		if (wallJumpTimer > wallJumpLimit) //When the player jumps, there's a limit in his speed to make him not stick to the wall for ever
 		{
@@ -308,8 +308,7 @@ bool j1Player::Update(float dt)
 	//Get the time elapsed since the last frame; used for timers
 	flCurrentTime = dt;
 
-	//Limit & update position
-	LimitPlayerSpeed(dt);
+	//Update position
 	UpdatePos(dt);
 	
 	return true;
@@ -327,6 +326,13 @@ void j1Player::UpdatePos(float dt)
 		fpPlayerSpeed.y += fPlayerAccel * dt;
 	}
 
+
+	//Limit Speed
+
+	//LimitPlayerSpeed(dt);
+
+	fpPlayerSpeed.x += 1 * dt * VEL_TO_WORLD;
+
 	fpPlayerPos.x +=  fpPlayerSpeed.x * dt;
 	fpPlayerPos.y += fpPlayerSpeed.y * dt;
 
@@ -339,28 +345,28 @@ void j1Player::UpdatePos(float dt)
 void j1Player::LimitPlayerSpeed(float dt)
 {
 	//X+
-	if (fpPlayerSpeed.x * dt > fpPlayerMaxSpeed.x)
+	if (fpPlayerSpeed.x > fpPlayerMaxSpeed.x * dt)
 	{
-		fpPlayerSpeed.x = fpPlayerMaxSpeed.x;
+		fpPlayerSpeed.x = fpPlayerMaxSpeed.x * dt;
 	}
 
 	//X-
-	if (fpPlayerSpeed.x * dt < -fpPlayerMaxSpeed.x)
+	if (fpPlayerSpeed.x  < -fpPlayerMaxSpeed.x * dt)
 	{
-		fpPlayerSpeed.x = -fpPlayerMaxSpeed.x;
+		fpPlayerSpeed.x = -fpPlayerMaxSpeed.x * dt;
 	}
 
 	//Y+
-	if (fpPlayerSpeed.y * dt > fpPlayerMaxSpeed.y)
+	if (fpPlayerSpeed.y  > fpPlayerMaxSpeed.y * dt)
 	{
-		fpPlayerSpeed.y = fpPlayerMaxSpeed.y;
+		fpPlayerSpeed.y = fpPlayerMaxSpeed.y * dt;
 		fPlayerAccel = fPlayerAccel;
 	}
 
 	//Y-
-	if (fpPlayerSpeed.y *dt < -fpPlayerMaxSpeed.y)
+	if (fpPlayerSpeed.y < -fpPlayerMaxSpeed.y * dt)
 	{
-		fpPlayerSpeed.y = -fpPlayerMaxSpeed.y;
+		fpPlayerSpeed.y = -fpPlayerMaxSpeed.y * dt;
 		fPlayerAccel = fPlayerAccel;
 	}
 }
