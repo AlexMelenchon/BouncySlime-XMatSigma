@@ -420,7 +420,7 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 	//Then we update the player's position & logic according to it's movement & the minimum result that we just calculated
 	switch (directionCheck) {
 	case DIRECTION_UP:
-		fpPlayerPos.y = collRect.y + collRect.h+1;
+		fpPlayerPos.y = collRect.y + collRect.h+2;
 		fpPlayerSpeed.y = 0;
 		break;
 	case DIRECTION_DOWN:

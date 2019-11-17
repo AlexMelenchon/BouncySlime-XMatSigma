@@ -8,6 +8,7 @@ struct FX
 	int id = 0;
 	p2SString path;
 };
+
 enum player_states
 {
 	ST_UNKNOWN,
@@ -234,7 +235,7 @@ private:
 	// Controls the time elapsed since the player wants to leave the wall and actually leaves (jump breathing room)
 	float wallJumpLeaveControl = 0.0f;
 
-	// Controls the time elapsed since the player wants to leave the wall and actually leaves (jump breathing room)
+	// The speed needed so the sprite flips
 	float flipSpeed = 0.0f;
 
 	//The player's direction when jumping off a wall
@@ -272,8 +273,6 @@ private:
 	pugi::xml_node auxLoader;
 
 
-	int pivotX;
-	int pivotY;
 };
 
 #endif 
