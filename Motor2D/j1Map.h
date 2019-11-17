@@ -8,6 +8,8 @@
 #include "j1Module.h"
 
 
+
+
 struct LayerInfo {
 
 	p2SString name;
@@ -16,6 +18,8 @@ struct LayerInfo {
 	uint* tileArray = nullptr;
 	uint size = 0;
 	float fParallaxSpeed = 0.0f;
+	bool navigation;
+	bool draw;
 
 	LayerInfo() : tileArray(NULL)
 	{}
@@ -124,7 +128,6 @@ private:
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	bool loadLayer(pugi::xml_node& node, LayerInfo* layer);
 	bool loadCollider(pugi::xml_node& node);
-
 	//Gets an id and return its tileset
 	TileSet* GetTilesetFromTileId(int id) const;
 
@@ -132,6 +135,8 @@ public:
 
 	MapData data;
 	const char* GetNextMap();
+	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
+
 
 private:
 

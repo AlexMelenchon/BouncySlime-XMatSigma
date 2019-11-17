@@ -14,6 +14,7 @@
 #include "j1App.h"
 #include "j1FadeToBlack.h"
 #include "j1Collision.h"
+#include "j1Pathfinding.h"
 
 
 // Constructor
@@ -39,6 +40,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	player = new j1Player();
 	collision = new j1Collision();
 	fade = new j1FadeToBlack();
+	pathfinding = new j1PathFinding();
 	
 	// Reverse order of CleanUp
 	AddModule(input);
@@ -47,6 +49,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 	AddModule(map);
 	AddModule(player);
+	AddModule(pathfinding);
 	AddModule(scene);
 	AddModule(collision);
 	AddModule(fade);

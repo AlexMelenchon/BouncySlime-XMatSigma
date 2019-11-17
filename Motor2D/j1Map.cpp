@@ -65,25 +65,28 @@ void j1Map::Draw()
 	//Iterate all layers that are avaliable
 	for (layer; layer != NULL; layer = layer->next) 	
 	{
-		for (int y = 0; y < data.height; ++y) //From array to array 2D
+		if (layer->data->draw == true)
 		{
-			for (int x = 0; x < data.width; ++x) //From array to array 2D
+			for (int y = 0; y < data.height; ++y) //From array to array 2D
 			{
-				int tile_id = layer->data->Get(x, y); //We get the id in each position
-				if (tile_id > 0)
+				for (int x = 0; x < data.width; ++x) //From array to array 2D
 				{
-					TileSet* tileset = GetTilesetFromTileId(tile_id); //We get the tileset of the layer
-					if (tileset != nullptr)
+					int tile_id = layer->data->Get(x, y); //We get the id in each position
+					if (tile_id > 0)
 					{
-						SDL_Rect r = tileset->GetTileRect(tile_id);
-						wPos = MapToWorld(x, y);
-						parallaxSpeed = layer->data->fParallaxSpeed;
+						TileSet* tileset = GetTilesetFromTileId(tile_id); //We get the tileset of the layer
+						if (tileset != nullptr)
+						{
+							SDL_Rect r = tileset->GetTileRect(tile_id);
+							wPos = MapToWorld(x, y);
+							parallaxSpeed = layer->data->fParallaxSpeed;
 
-						//Camera culling: x axis
-						if (wPos.x > -camera.x * parallaxSpeed/ scale - data.tile_width && wPos.x < -camera.x * parallaxSpeed/ scale + camera.w)
-							//Camera culling: y axis
-							if(wPos.y > -camera.y * parallaxSpeed / scale - data.tile_height && wPos.y < -camera.y + camera.h)
-							App->render->Blit(tileset->texture, wPos.x, wPos.y, &r, parallaxSpeed);
+							//Camera culling: x axis
+							if (wPos.x > -camera.x * parallaxSpeed / scale - data.tile_width && wPos.x < -camera.x * parallaxSpeed / scale + camera.w)
+								//Camera culling: y axis
+								if (wPos.y > -camera.y * parallaxSpeed / scale - data.tile_height && wPos.y < -camera.y + camera.h)
+									App->render->Blit(tileset->texture, wPos.x, wPos.y, &r, parallaxSpeed);
+						}
 					}
 				}
 			}
@@ -91,7 +94,56 @@ void j1Map::Draw()
 	}	
 
 }
+bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
+{
+	bool ret = false;
+	p2List_item<LayerInfo*>* item;
+	item = data.layerList.start;
 
+	for (item = data.layerList.start; item != NULL; item = item->next)
+	{
+		LayerInfo* layer = item->data;
+
+		if (!layer->navigation)
+		{
+			continue;
+		}
+
+			uchar* map = new uchar[layer->width*layer->height];
+			memset(map, 1, layer->width*layer->height);
+
+			for (int y = 0; y < data.height; ++y)
+			{
+				for (int x = 0; x < data.width; ++x)
+				{
+					int i = (y*layer->width) + x;
+
+					int tile_id = layer->Get(x, y);
+					TileSet* tileset = (tile_id > 0) ? GetTilesetFromTileId(tile_id) : NULL;
+
+					if (tileset != NULL)
+					{
+						map[i] = (tile_id - tileset->firstgid) > 0 ? 0 : 1;
+						/*TileType* ts = tileset->GetTileType(tile_id);
+						if(ts != NULL)
+						{
+							map[i] = ts->properties.Get("walkable", 1);
+						}*/
+					}
+				}
+			}
+
+			*buffer = map;
+			width = data.width;
+			height = data.height;
+			ret = true;
+
+			break;
+	}
+	
+
+	return ret;
+}
 //Returns x,y coordinates in the world
 iPoint j1Map::MapToWorld(int x, int y) const
 {
@@ -427,7 +479,11 @@ bool j1Map::loadLayer(pugi::xml_node& node, LayerInfo* layerInfo)
 	layerInfo->name = node.attribute("name").as_string();
 	layerInfo->width = node.attribute("width").as_uint();
 	layerInfo->height = node.attribute("height").as_uint();
+	layerInfo->navigation = node.child("properties").child("navigation").attribute("value").as_bool();
+	layerInfo->draw = node.child("properties").child("draw").attribute("value").as_bool();
 	layerInfo->fParallaxSpeed = node.child("properties").child("property").attribute("value").as_float(0.0f);
+	
+	
 
 	pugi::xml_node layer_data = node.child("data");
 
