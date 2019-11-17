@@ -4,10 +4,11 @@
   <app>
     <title>Bouncy Slime</title>
     <organization>UPC</organization>
+    <frameCap isOn ="false" time="30"/>
   </app>
 	
   <renderer>
-    <vsync value="true"/>
+    <vsync value="false"/>
   </renderer>
 
   <window>
@@ -58,6 +59,8 @@
      <inFramesLimit>0.15f</inFramesLimit>
       <playerFadeTime>0.85f</playerFadeTime>
        <wallJumpLimit>0.3f</wallJumpLimit>
+      <wallJumpLeave>0.3f</wallJumpLeave>
+      <flipSpeed>10.0f</flipSpeed>
     </internal>
     
     <animations>
