@@ -328,7 +328,6 @@ void j1Player::UpdatePos(float dt)
 
 
 	//Limit Speed
-
 	//LimitPlayerSpeed(dt);
 
 	fpPlayerSpeed.x += 1 * dt * VEL_TO_WORLD;
@@ -595,7 +594,7 @@ void j1Player::ReSetMovement()
 {
 	fpPlayerSpeed = { 0,0 };
 	fPlayerAccel = 0;
-	float wallJumpTimer = 0.0f;
+	wallJumpTimer = 0.0f;
 }
 
 //Controls god mode

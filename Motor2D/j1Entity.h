@@ -6,81 +6,77 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "p2SString.h"
+#include "p2Defs.h"
+#include "j1Collision.h"
 
-struct FX
+//struct FX
+//{
+//	int id = 0;
+//	p2SString path;
+//};
+//
+//
+//enum collisionDirection
+//{
+//	DIRECTION_NONE = -1,
+//
+//	DIRECTION_LEFT,
+//	DIRECTION_RIGHT,
+//	DIRECTION_UP,
+//	DIRECTION_DOWN,
+//	DIRECTION_MAX
+//};
+
+enum  class entityType
 {
-	int id = 0;
-	p2SString path;
+	NO_TYPE,
+	PLAYER,
+	FLYING_ENEMY,
+	LAND_ENEMY,
 };
 
-
-enum collisionDirection
-{
-	DIRECTION_NONE = -1,
-
-	DIRECTION_LEFT,
-	DIRECTION_RIGHT,
-	DIRECTION_UP,
-	DIRECTION_DOWN,
-	DIRECTION_MAX
-};
-
-
-class Entity
+class j1Entity
 {
 public:
-	enum entityType
-	{
-		NO_TYPE,
-		PLAYER,
-		FLYING_ENEMY,
-		LAND_ENEMY,
-	};
-
-public:
-	Entity();
-	Entity(entityType type);
-	~Entity();
-
 	//--------INTERNAL CONTROL---------//
 	//Constructor
-	Entity();
+	j1Entity();
 
 	//Secondary Constructor
-	Entity(entityType type);
+	j1Entity(entityType type);
 
 	//Destructor
-	~Entity();
+	~j1Entity();
 
 	// Called before render is available
 	virtual bool Awake(pugi::xml_node&) { return true; };;
 
 	// Called before the first frame
-	bool Start() { return true; };
+	virtual bool Start() { return true; };
 
 	// Called each loop iteration
-	bool PreUpdate() { return true; };
+	virtual bool PreUpdate() { return true; };
 
 	// Called each loop iteration
-	bool Update(float dt) { return true; };
+	virtual bool Update(float dt) { return true; };
 
 	// Called each loop iteration
-	bool PostUpdate() { return true; };
+	virtual bool PostUpdate() { return true; };
 
 	// Called before quitting
-	virtual bool CleanUp() {};
+	virtual bool CleanUp() { return true;  };
+
+	// Checks if the entity is scheduled to delete
+	bool to_delete = false;
 
 	//--------SAVE & LOAD---------//
 	//Called when loading a save
-	virtual bool Load(pugi::xml_node&) {};
+	virtual bool Load(pugi::xml_node&) { return true;  };
 
 	//Called to save the game
-	virtual bool Save(pugi::xml_node&) const  const {};
+	virtual bool Save(pugi::xml_node&) const  const { return true; };
 
 	//--------POSITION ----------//
-	//Update entity's position
-	void UpdatePos(float dt);
-
 	// Limits the entity speed in both axis
 	void LimitSpeed(float dt);
 
@@ -88,7 +84,7 @@ public:
 	void SetPos(int x, int y);
 
 	//Resets the entity's movement completly
-	void ReSetMovement();
+	virtual void ReSetMovement();
 
 
 	//--------COLLISION ---------//
@@ -96,15 +92,24 @@ public:
 	void CalculateCollider(fPoint);
 
 	//If a collision is detected by the j1Collision, distributes collisions according to it's type
-	void OnCollision(Collider* c1, Collider* c2);
+	virtual void OnCollision(Collider* c1, Collider* c2) {};
 
 	//Calculate the collisions with the enviroment
-	void RecalculatePos(SDL_Rect, SDL_Rect);
+	virtual void RecalculatePos(SDL_Rect, SDL_Rect) {};
 
 
 	//--------STATE MACHiNE---------//
 	//Updates the current state
-	void UpdateState();
+	virtual void UpdateState() {};
+
+	//--------DRAW---------//
+	//Blits the entity into the world
+	void Draw();
+
+	//Calculates if the entity is flipped or not
+	void FlipControl();
+
+
 
 private:
 	//--------ENTITY ---------//
