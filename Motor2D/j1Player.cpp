@@ -58,7 +58,7 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	fInFramesLimit = player_node.child("internal").child("inFramesLimit").text().as_float();
 	playerFadeTime = player_node.child("internal").child("playerFadeTime").text().as_float();
 	wallJumpLimit = player_node.child("internal").child("wallJumpLimit").text().as_float();
-	wallJumpLeaveControl = player_node.child("internal").child("wallJumpLimit").text().as_float();
+	wallJumpLeaveControl = player_node.child("internal").child("wallJumpLeave").text().as_float();
 	flipSpeed = player_node.child("internal").child("flipSpeed").text().as_float();
 
 	//Animation vars load
@@ -213,7 +213,7 @@ void j1Player::godInputs()
 // Called each loop iteration
 bool j1Player::PreUpdate()
 {
-	if (!App->pause)
+	if (!App->pause && current_state != ST_DEAD)
 	{
 		if (!god)
 			standardInputs();
@@ -334,11 +334,8 @@ void j1Player::UpdatePos(float dt)
 		fpSpeed.y += fAccel * dt;
 	}
 
-
 	//Limit Speed
-	//LimitPlayerSpeed(dt);
-
-	fpSpeed.x += 1 * dt * VEL_TO_WORLD;
+	//LimitSpeed(dt);
 
 	fpPosition.x += fpSpeed.x * dt;
 	fpPosition.y += fpSpeed.y * dt;
@@ -454,7 +451,6 @@ bool j1Player::CleanUp()
 //Called when loading a save
 bool j1Player::Load(pugi::xml_node& load)
 {
-	load = load.child("player");
 
 	fpPosition.x = load.child("position").attribute("x").as_float() - fSlowGrade;
 	fpPosition.y = load.child("position").attribute("y").as_float();
@@ -501,7 +497,6 @@ bool j1Player::Load(pugi::xml_node& load)
 //Called when loading a save
 bool j1Player::Save(pugi::xml_node& save) const
 {
-	save = save.child("player");
 
 	//Save all the player's status variables
 	save.append_child("position").append_attribute("x") = fpPosition.x;
@@ -766,5 +761,5 @@ void j1Player::InWall()
 	fAccel = 0;
 	fpSpeed.y = deAccel(SLOW_GENERAL, fpSpeed.y, fSlowGradeWall);
 	wallJumpDirection = DIRECTION_NONE;
-	wallForceToMove = 0;
+	wallJumpTimer = 0.0f;
 }

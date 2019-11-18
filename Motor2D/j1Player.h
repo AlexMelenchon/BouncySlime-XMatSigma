@@ -162,9 +162,6 @@ private:
 	// Fade time to change maps or death
 	float playerFadeTime = 0.0f;
 
-	// The amount of force needed to be able to fall from a wall
-	float wallForceToMove = 0.0f;
-
 	// To check if the player is near a wall
 	bool walling = false;
 
@@ -173,6 +170,8 @@ private:
 
 	// Controls the time elapsed since the player jumped of a wall
 	float wallJumpTimer = 0.0f;
+
+	int aux = 0;
 
 	// Controls the time elapsed since the player wants to leave the wall and actually leaves (jump breathing room)
 	float wallJumpLeaveControl = 0.0f;

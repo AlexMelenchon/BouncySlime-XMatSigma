@@ -202,7 +202,6 @@ bool j1Collision::CleanMap()
 //Adds a collider
 void j1Collision::AddCollider(Collider* collider)
 {
-
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
 		if (colliders[i] == nullptr)

@@ -134,6 +134,9 @@ public:
 	// Determines player acceleration in the x and y axis
 	float fAccel = 0.0f;
 
+	// Determines player acceleration in the x and y axis
+	float fAccelX = 0.0f;
+
 	float fGravity = 0.0f;
 
 	//LIMITS---

@@ -73,7 +73,7 @@ void j1Entity::CalculateCollider(fPoint pos)
 //Blits the entity into the world
 void j1Entity::Draw()
 {
-	App->render->Blit(Text, (int)fpPosition.x, (int)fpPosition.y, &currentAnimation->GetCurrentFrame(), 1.0f, Flip, 0.0f, (currentAnimation->pivotpos->x), (currentAnimation->GetCurrentFrame().h / 2));
+	App->render->Blit(Text, (int)fpPosition.x, (int)fpPosition.y, &currentAnimation->GetCurrentFrame(App->GetDeltaTime()), 1.0f, Flip, 0.0f, (currentAnimation->pivotpos->x), (currentAnimation->GetCurrentFrame(App->GetDeltaTime()).h / 2));
 }
 
 //Calculates if the entity is flipped or not

@@ -61,20 +61,18 @@ public:
 		}
 	}
 
-	SDL_Rect& GetCurrentFrame()
+	SDL_Rect& GetCurrentFrame(float dt)
 	{
 		//returns the rectangle displaying the current animation
-		//current_frame += speed;
-		float auxframe2 = current_frame;
-		float auxframe = (1.0f / (framesXframe[(int)current_frame]));
-		current_frame += auxframe;// frames per frame (24 frames x sec) 
+		//TODO animation acording to speed
+		current_frame += speed * dt;
 		//!!have to do it for the actual game speed
 		if (current_frame >= last_frame) {
 			current_frame = (loop) ? firstLoopFrame : -1;
 			animEnded = true;
 			loops++;
 		}
-		return frames[(int)auxframe2];
+		return frames[(int)current_frame];
 	}
 
 	bool Finished() const

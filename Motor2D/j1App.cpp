@@ -216,13 +216,11 @@ void j1App::FinishUpdate()
 		lastSecFrames->Start();
 	}
 
+	//Waits a certain amount of time if
 	if (frameCap)
 		if (last_frame_ms < 1000 / capTime)
 		{
-			uint32 delay = MAX(0, (int)capTime - (int)last_frame_ms);
-			//LOG("Should wait: %i", delay);
-			//j1PerfTimer delayTimer;
-			SDL_Delay(delay);
+			SDL_Delay((1000 / capTime) - last_frame_ms);
 		}
 
 }

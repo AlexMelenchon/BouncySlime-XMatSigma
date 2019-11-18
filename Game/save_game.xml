@@ -7,21 +7,22 @@
 		<volume music="15" fx="25" />
 	</audio>
 	<map />
-	<player>
-		<position x="96.7218246" y="928" />
-		<speed x="1.17076135" y="0" />
-		<state current_state="1" />
-		<falling value="false" />
+	<entities>
+		<position x="1362.85327" y="870.27655" />
+		<speed x="400.000031" y="-118.173981" />
+		<state current_state="2" />
+		<falling value="true" />
 		<walling value="false" />
 		<wallTimer wallJumpTimer="0" />
 		<flip value="0" />
-	</player>
+	</entities>
+	<pathfinding />
 	<scene>
 		<current_map name="intro.tmx" />
 	</scene>
 	<collision />
 	<fade />
 	<renderer>
-		<camera x="0" y="-336" />
+		<camera x="-1034" y="-336" />
 	</renderer>
 </game_state>
