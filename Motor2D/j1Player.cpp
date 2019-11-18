@@ -560,8 +560,8 @@ float j1Player::deAccel(slow_direction slow, float speedAxis, float grade, float
 //Changes the player's position
 void j1Player::SetPos(int x, int y)
 {
-	fpPlayerPos.x = x;
-	fpPlayerPos.y = y;
+	fpPosition.x = x;
+	fpPosition.y = y;
 
 	inputs.add(IN_JUMP_FINISH);
 }

@@ -85,6 +85,9 @@ public:
 	//Resets the player's movement completly
 	void ReSetMovement();
 
+	//Set the entity's position from other modules such as j1Map
+	void SetPos(int x, int y);
+
 
 	//--------COLLISION ---------//
 	//If a collision is detected by the j1Collision, distributes collisions according to it's type

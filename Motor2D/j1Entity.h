@@ -81,7 +81,7 @@ public:
 	void LimitSpeed(float dt);
 
 	//Set the entity's position from other modules such as j1Map
-	void SetPos(int x, int y);
+	virtual void SetPos(int x, int y);
 
 	//Resets the entity's movement completly
 	virtual void ReSetMovement();
