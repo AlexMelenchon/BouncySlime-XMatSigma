@@ -3,6 +3,8 @@
 
 #include "SDL/include/SDL_rect.h"
 #include "p2Point.h"
+#include "PugiXml\src\pugixml.hpp"
+#include "p2SString.h"
 
 #define MAX_FRAMES 50
 
@@ -60,7 +62,8 @@ public:
 	}
 
 	SDL_Rect& GetCurrentFrame()
-	{//returns the rectangle displaying the current animation
+	{
+		//returns the rectangle displaying the current animation
 		//current_frame += speed;
 		float auxframe2 = current_frame;
 		float auxframe = (1.0f / (framesXframe[(int)current_frame]));

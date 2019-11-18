@@ -7,12 +7,15 @@
 #include "j1FadeToBlack.h"
 #include "j1Map.h"
 #include "j1Audio.h"
+#include "j1EntityManager.h"
 
 
 //Constructor
-j1Player::j1Player() : j1Module()
+j1Player::j1Player() : j1Entity()
 {
-	name.create("player");
+	if (App->entities->player == nullptr)
+		App->entities->player = this;
+
 }
 
 // Destructor
@@ -21,6 +24,7 @@ j1Player::~j1Player()
 
 bool j1Player::Awake(pugi::xml_node& player_node)
 {
+	player_node = player_node.child("player");
 	//State Machine start
 	inputs.start = 0; 
 	
@@ -40,15 +44,15 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 
 	iSlowLimit = player_node.child("movement").child("slowLimit").text().as_int();
 
-	fpPlayerMaxSpeed.x = player_node.child("movement").child("limitSpeed").attribute("x").as_float();
-	fpPlayerMaxSpeed.y = player_node.child("movement").child("limitSpeed").attribute("y").as_float();
+	fpMaxSpeed.x = player_node.child("movement").child("limitSpeed").attribute("x").as_float();
+	fpMaxSpeed.y = player_node.child("movement").child("limitSpeed").attribute("y").as_float();
 
 
 	//Create the player's collider
 	SDL_Rect playerRect = { 0,0,0,0 };
 	playerRect.w = player_node.child("collision").child("collider").attribute("w").as_float();
 	playerRect.h = player_node.child("collision").child("collider").attribute("h").as_float();
-	playerCollider = new Collider(playerRect, COLLIDER_PLAYER, this);
+	collider = new Collider(playerRect, COLLIDER_PLAYER, this);
 
 	//Internal variables load
 	fInFramesLimit = player_node.child("internal").child("inFramesLimit").text().as_float();
@@ -89,10 +93,10 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 bool j1Player::Start()
 {
 	//Load the player's textures
-	playerTex = App->tex->Load(auxLoader.child("path").text().as_string());
+	Text = App->tex->Load(auxLoader.child("path").text().as_string());
 
 	//Collision load
-	App->collision->AddCollider(playerCollider);
+	App->collision->AddCollider(collider);
 	
 	//Fx load
 	jumpFx.id = App->audio->LoadFx(jumpFx.path.GetString());
@@ -111,20 +115,20 @@ void j1Player::standardInputs()
 	{
 
 		if (wallJumpDirection == DIRECTION_RIGHT)
-			fpPlayerSpeed.x += (fpForce.x / fSlowGradeWall);
+			fpSpeed.x += (fpForce.x / fSlowGradeWall);
 		else
 		{
 			if (current_state == ST_WALL)
 			{
 				wallingLeave += flCurrentTime;
 					if (wallingLeave > wallJumpLeaveControl)
-						fpPlayerSpeed.x += fpForce.x;
+						fpSpeed.x += fpForce.x;
 			}
 			else
-				fpPlayerSpeed.x += fpForce.x;
+				fpSpeed.x += fpForce.x;
 		}
 
-		fpPlayerSpeed.x = deAccel(SLOW_NEGATIVE_LIMIT, fpPlayerSpeed.x, fSlowGrade, iSlowLimit);
+		fpSpeed.x = deAccel(SLOW_NEGATIVE_LIMIT, fpSpeed.x, fSlowGrade, iSlowLimit);
 
 	}
 	//Moving right
@@ -132,38 +136,38 @@ void j1Player::standardInputs()
 	{
 
 		if (wallJumpDirection == DIRECTION_LEFT)
-			fpPlayerSpeed.x -= (fpForce.x / fSlowGradeWall);
+			fpSpeed.x -= (fpForce.x / fSlowGradeWall);
 		else
 		{
 			if (current_state == ST_WALL)
 			{
 				wallingLeave += flCurrentTime;
 				if (wallingLeave > wallJumpLeaveControl)
-					fpPlayerSpeed.x -= fpForce.x;
+					fpSpeed.x -= fpForce.x;
 			}
 			else
-				fpPlayerSpeed.x -= fpForce.x;
+				fpSpeed.x -= fpForce.x;
 		}
 
 
-		fpPlayerSpeed.x = deAccel(SLOW_POSITIVE_LIMIT, fpPlayerSpeed.x, fSlowGrade, iSlowLimit);
+		fpSpeed.x = deAccel(SLOW_POSITIVE_LIMIT, fpSpeed.x, fSlowGrade, iSlowLimit);
 
 	}
 	else
 	{
 		//If neither key is pressed, we slow the player in both directions
 		if (current_state == ST_GROUND)
-			fpPlayerSpeed.x = deAccel(SLOW_GENERAL, fpPlayerSpeed.x, fSlowGrade);
+			fpSpeed.x = deAccel(SLOW_GENERAL, fpSpeed.x, fSlowGrade);
 		else
-			fpPlayerSpeed.x = deAccel(SLOW_GENERAL, fpPlayerSpeed.x, fSlowGradeAir);
+			fpSpeed.x = deAccel(SLOW_GENERAL, fpSpeed.x, fSlowGradeAir);
 
 	}
 
 	//Jump
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && (current_state == ST_GROUND || current_state == ST_WALL))
 	{
-		fPlayerAccel = 0; //Reset the accel
-		fpPlayerSpeed.y = fpForce.y; //Add the jump force to the speed
+		fAccel = 0; //Reset the accel
+		fpSpeed.y = fpForce.y; //Add the jump force to the speed
 
 		App->audio->PlayFx(jumpFx.id);
 
@@ -172,7 +176,7 @@ void j1Player::standardInputs()
 	//Increasing speed to go down
 	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		fpPlayerSpeed.y -= fpForce.y;
+		fpSpeed.y -= fpForce.y;
 	}
 }
 
@@ -181,29 +185,29 @@ void j1Player::godInputs()
 {
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		fpPlayerSpeed.x = -fpPlayerMaxSpeed.x;
+		fpSpeed.x = -fpMaxSpeed.x;
 
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		fpPlayerSpeed.x = fpPlayerMaxSpeed.x;
+		fpSpeed.x = fpMaxSpeed.x;
 
 	}
 	else
-		fpPlayerSpeed.x = 0;
+		fpSpeed.x = 0;
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
-		fpPlayerSpeed.y = -fpPlayerMaxSpeed.y;
+		fpSpeed.y = -fpMaxSpeed.y;
 
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		fpPlayerSpeed.y = +fpPlayerMaxSpeed.y;
+		fpSpeed.y = +fpMaxSpeed.y;
 
 	}
 	else
-		fpPlayerSpeed.y = 0;
+		fpSpeed.y = 0;
 }
 
 // Called each loop iteration
@@ -245,10 +249,10 @@ bool j1Player::Update(float dt)
 	case ST_GROUND:
 		LOG("GROUND\n");
 		//The axis Y is 0
-		fPlayerAccel = 0;
-		fpPlayerSpeed.y = 0;
+		fAccel = 0;
+		fpSpeed.y = 0;
 		//We check the player's speed and select his animation accordingly
-		if ((fpPlayerSpeed.x > -fpForce.x) || (fpPlayerSpeed.x < fpForce.x))
+		if ((fpSpeed.x > -fpForce.x) || (fpSpeed.x < fpForce.x))
 		{
 			currentAnimation = &animRun;
 		}
@@ -260,10 +264,10 @@ bool j1Player::Update(float dt)
 
 	case ST_AIR:
 		LOG("IN THE AIR ^^^^\n");
-		fPlayerAccel += fGravity *dt * VEL_TO_WORLD;
+		fAccel += fGravity *dt * VEL_TO_WORLD;
 
 		//We check the player's speed and select his animation accordingly
-		if (fpPlayerSpeed.y > 0.0f)
+		if (fpSpeed.y > 0.0f)
 		{
 		currentAnimation = &animJump;
 		}
@@ -275,19 +279,19 @@ bool j1Player::Update(float dt)
 
 	case ST_FALLING:
 		LOG("FALLING \n");
-		fPlayerAccel += fGravity*2.0f *dt * VEL_TO_WORLD;
+		fAccel += fGravity*2.0f *dt * VEL_TO_WORLD;
 		currentAnimation = &animFall;
 		break;
 
 	case ST_WALL:
 		LOG("WALLING \n");
-		fPlayerAccel += fGravity/2.0f;
+		fAccel += fGravity/2.0f;
 		currentAnimation = &animWall;
 		break;
 
 	case ST_WALL_JUMPING:
 		LOG("WALL JUMPING \n");
-		fPlayerAccel += fGravity   *dt * VEL_TO_WORLD;
+		fAccel += fGravity   *dt * VEL_TO_WORLD;
 		wallJumpTimer += dt;
  		if (wallJumpTimer > wallJumpLimit) //When the player jumps, there's a limit in his speed to make him not stick to the wall for ever
 		{
@@ -327,57 +331,21 @@ void j1Player::UpdatePos(float dt)
 	//The update the player's position & speed according to it's logic
 	if (current_state != ST_GROUND && current_state != ST_GOD)
 	{
-		fpPlayerSpeed.y += fPlayerAccel * dt;
+		fpSpeed.y += fAccel * dt;
 	}
 
 
 	//Limit Speed
 	//LimitPlayerSpeed(dt);
 
-	fpPlayerSpeed.x += 1 * dt * VEL_TO_WORLD;
+	fpSpeed.x += 1 * dt * VEL_TO_WORLD;
 
-	fpPlayerPos.x +=  fpPlayerSpeed.x * dt;
-	fpPlayerPos.y += fpPlayerSpeed.y * dt;
+	fpPosition.x += fpSpeed.x * dt;
+	fpPosition.y += fpSpeed.y * dt;
 
 
 	//We set the collider in hte player's position
-	CalculateCollider(fpPlayerPos);
-}
-
-// Limits the player speed in both axis
-void j1Player::LimitPlayerSpeed(float dt)
-{
-	//X+
-	if (fpPlayerSpeed.x > fpPlayerMaxSpeed.x * dt)
-	{
-		fpPlayerSpeed.x = fpPlayerMaxSpeed.x * dt;
-	}
-
-	//X-
-	if (fpPlayerSpeed.x  < -fpPlayerMaxSpeed.x * dt)
-	{
-		fpPlayerSpeed.x = -fpPlayerMaxSpeed.x * dt;
-	}
-
-	//Y+
-	if (fpPlayerSpeed.y  > fpPlayerMaxSpeed.y * dt)
-	{
-		fpPlayerSpeed.y = fpPlayerMaxSpeed.y * dt;
-		fPlayerAccel = fPlayerAccel;
-	}
-
-	//Y-
-	if (fpPlayerSpeed.y < -fpPlayerMaxSpeed.y * dt)
-	{
-		fpPlayerSpeed.y = -fpPlayerMaxSpeed.y * dt;
-		fPlayerAccel = fPlayerAccel;
-	}
-}
-
-//Sets the collider to the player's position
-void j1Player::CalculateCollider(fPoint pos) 
-{
-	playerCollider->SetPos((int)fpPlayerPos.x, (int)fpPlayerPos.y);
+	CalculateCollider(fpPosition);
 }
 
 //Distributes collisions according to it's type
@@ -424,28 +392,28 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 	//Then we update the player's position & logic according to it's movement & the minimum result that we just calculated
 	switch (directionCheck) {
 	case DIRECTION_UP:
-		fpPlayerPos.y = collRect.y + collRect.h+2;
-		fpPlayerSpeed.y = 0;
+		fpPosition.y = collRect.y + collRect.h+2;
+		fpSpeed.y = 0;
 		break;
 	case DIRECTION_DOWN:
-		fpPlayerPos.y = collRect.y - playerRect.h ;
-		fpPlayerSpeed.y = 0;
-		fPlayerAccel = 0;
+		fpPosition.y = collRect.y - playerRect.h ;
+		fpSpeed.y = 0;
+		fAccel = 0;
 		falling = false;
 		walling = false;
 		inputs.add(IN_JUMP_FINISH);
 		break;
 	case DIRECTION_LEFT:
-		fpPlayerPos.x = collRect.x + collRect.w;
-		if(fpPlayerSpeed.x < 0)
-		fpPlayerSpeed.x = 0;
+		fpPosition.x = collRect.x + collRect.w;
+		if(fpSpeed.x < 0)
+			fpSpeed.x = 0;
 		walling = true;
 		falling = false;
 		break;
 	case DIRECTION_RIGHT:
-		fpPlayerPos.x = collRect.x - playerRect.w;
-		if (fpPlayerSpeed.x > 0)
- 		fpPlayerSpeed.x = 0;
+		fpPosition.x = collRect.x - playerRect.w;
+		if (fpSpeed.x > 0)
+			fpSpeed.x = 0;
 		walling = true;
 		falling = false;
 		break;
@@ -454,7 +422,7 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 	}
 
 	//We Recalculate the player's collider with the new position
-	CalculateCollider(fpPlayerPos);
+	CalculateCollider(fpPosition);
 }
 
 // Called each loop iteration
@@ -468,13 +436,10 @@ bool j1Player::PostUpdate()
 		inputs.add(IN_WALL);
 
 	//We set the flip accoording to the player's spped in x
-	if (fpPlayerSpeed.x > flipSpeed)
-		playerFlip = SDL_FLIP_NONE;
-	else if (fpPlayerSpeed.x < -flipSpeed)
-		playerFlip = SDL_FLIP_HORIZONTAL;
+	FlipControl();
 
 	//And finally we blit
-	App->render->Blit(playerTex, (int)fpPlayerPos.x, (int)fpPlayerPos.y, &currentAnimation->GetCurrentFrame(), 1.0f, playerFlip,0.0f, (currentAnimation->pivotpos->x), (currentAnimation->GetCurrentFrame().h / 2));
+	Draw();
 
 	return true;
 }
@@ -482,17 +447,19 @@ bool j1Player::PostUpdate()
 // Called before quitting
 bool j1Player::CleanUp()
 {
-	App->tex->UnLoad(playerTex);
+	App->tex->UnLoad(Text);
 	return true;
 }
 
 //Called when loading a save
 bool j1Player::Load(pugi::xml_node& load)
 {
-	fpPlayerPos.x = load.child("position").attribute("x").as_float() - fSlowGrade;
-	fpPlayerPos.y = load.child("position").attribute("y").as_float();
-	fpPlayerSpeed.x = load.child("speed").attribute("x").as_float();
-	fpPlayerSpeed.y = load.child("speed").attribute("y").as_float();
+	load = load.child("player");
+
+	fpPosition.x = load.child("position").attribute("x").as_float() - fSlowGrade;
+	fpPosition.y = load.child("position").attribute("y").as_float();
+	fpSpeed.x = load.child("speed").attribute("x").as_float();
+	fpSpeed.y = load.child("speed").attribute("y").as_float();
 	
 	falling = load.child("falling").attribute("value").as_bool();
 	walling = load.child("walling").attribute("value").as_bool();
@@ -524,9 +491,9 @@ bool j1Player::Load(pugi::xml_node& load)
 	}
 
 	if (load.child("flip").attribute("value") == 0)
-		playerFlip = SDL_FLIP_NONE;
+		Flip = SDL_FLIP_NONE;
 	else
-		playerFlip = SDL_FLIP_HORIZONTAL;
+		Flip = SDL_FLIP_HORIZONTAL;
 
 	return true;
 }
@@ -534,18 +501,20 @@ bool j1Player::Load(pugi::xml_node& load)
 //Called when loading a save
 bool j1Player::Save(pugi::xml_node& save) const
 {
+	save = save.child("player");
+
 	//Save all the player's status variables
-	save.append_child("position").append_attribute("x") = fpPlayerPos.x;
-	save.child("position").append_attribute("y") = fpPlayerPos.y;
-	save.append_child("speed").append_attribute("x") = fpPlayerSpeed.x;
-	save.child("speed").append_attribute("y") = fpPlayerSpeed.y;
+	save.append_child("position").append_attribute("x") = fpPosition.x;
+	save.child("position").append_attribute("y") = fpPosition.y;
+	save.append_child("speed").append_attribute("x") = fpSpeed.x;
+	save.child("speed").append_attribute("y") = fpSpeed.y;
 
 	save.append_child("state").append_attribute("current_state") = current_state;
 	save.append_child("falling").append_attribute("value") = falling;
 	save.append_child("walling").append_attribute("value") = walling;
 	save.append_child("wallTimer").append_attribute("wallJumpTimer") = wallJumpTimer;
 
-	save.append_child("flip").append_attribute("value") = playerFlip;
+	save.append_child("flip").append_attribute("value") = Flip;
 
 	return true;
 }
@@ -587,6 +556,7 @@ float j1Player::deAccel(slow_direction slow, float speedAxis, float grade, float
 
 }
 
+
 //Changes the player's position
 void j1Player::SetPos(int x, int y)
 {
@@ -596,11 +566,12 @@ void j1Player::SetPos(int x, int y)
 	inputs.add(IN_JUMP_FINISH);
 }
 
+
 //Resets the player's movement
 void j1Player::ReSetMovement()
 {
-	fpPlayerSpeed = { 0,0 };
-	fPlayerAccel = 0;
+	fpSpeed = { 0,0 };
+	fAccel = 0;
 	wallJumpTimer = 0.0f;
 }
 
@@ -610,16 +581,16 @@ void j1Player::GodMode()
 	//God mode is turned on
 	if (!god)
 	{
-		playerCollider->setType(COLLIDER_GOD);
+		collider->setType(COLLIDER_GOD);
 		current_state = ST_GOD;
-		fpPlayerSpeed.y = 0;
-		fpPlayerSpeed.x = 0;
+		fpSpeed.y = 0;
+		fpSpeed.x = 0;
 		god = true;
 	}
 	//God mode is turned off
 	else if(god)
 	{
-		playerCollider->setType(COLLIDER_PLAYER);
+		collider->setType(COLLIDER_PLAYER);
 		inputs.add(IN_FALL);
 		god = false;
 	}
@@ -708,16 +679,16 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			case IN_JUMP: 
 			{   
 				state = ST_WALL_JUMPING; 
-				fpPlayerSpeed.y = wallForce.y; //The player's initial speed  when jumping off a wall
-				fPlayerAccel = 0;
- 				if (playerFlip == SDL_FLIP_NONE)
+				fpSpeed.y = wallForce.y; //The player's initial speed  when jumping off a wall
+				fAccel = 0;
+ 				if (Flip == SDL_FLIP_NONE)
 				{
-					fpPlayerSpeed.x -= wallForce.x;
+					fpSpeed.x -= wallForce.x;
 					wallJumpDirection = DIRECTION_LEFT;
 				}
 				else
 				{
-					fpPlayerSpeed.x += wallForce.x;
+					fpSpeed.x += wallForce.x;
 					wallJumpDirection = DIRECTION_RIGHT;
 				}
 				wallingLeave = 0.0f;
@@ -792,8 +763,8 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 //When the player's state turns wall
 void j1Player::InWall()
 {
-	fPlayerAccel = 0;
-	fpPlayerSpeed.y = deAccel(SLOW_GENERAL, fpPlayerSpeed.y, fSlowGradeWall);
+	fAccel = 0;
+	fpSpeed.y = deAccel(SLOW_GENERAL, fpSpeed.y, fSlowGradeWall);
 	wallJumpDirection = DIRECTION_NONE;
 	wallForceToMove = 0;
 }

@@ -3,6 +3,7 @@
 
 
 #include "j1Module.h"
+#include "j1Entity.h"
 
 #define MAX_COLLIDERS 60
 
@@ -11,9 +12,9 @@ struct Collider
 	SDL_Rect rect;
 	bool to_delete = false;
 	COLLIDER_TYPE type;
-	j1Module* callback = nullptr;
+	j1Entity* callback = nullptr;
 
-	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, j1Module* callback = nullptr) :
+	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, j1Entity* callback = nullptr) :
 		rect(rectangle),
 		type(type),
 		callback(callback)

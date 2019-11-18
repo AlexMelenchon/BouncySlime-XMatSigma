@@ -38,18 +38,18 @@
     <volume general="25" music="15"/>
   </audio>
 
-
-  <player>
-    <movement>
-      <movementForce x="-70.0f" y="-220.0f" />
-      <wallForce x="300.0f" y="-350.0f" />
-      <gravity>50.0f</gravity>
-      <slowGrade>1.175f</slowGrade>
-      <slowGradeAir>1.05f</slowGradeAir>
-      <slowGradeWall>7.5f</slowGradeWall>
-      <slowLimit>200</slowLimit>
-      <limitSpeed x="650.0f" y="750.0f" />
-    </movement>
+  <entities>
+    <player>
+      <movement>
+        <movementForce x="-70.0f" y="-220.0f" />
+        <wallForce x="300.0f" y="-350.0f" />
+        <gravity>50.0f</gravity>
+        <slowGrade>1.175f</slowGrade>
+        <slowGradeAir>1.05f</slowGradeAir>
+        <slowGradeWall>7.5f</slowGradeWall>
+        <slowLimit>200</slowLimit>
+        <limitSpeed x="650.0f" y="750.0f" />
+      </movement>
 
     <collision>
       <collider w="32" h="32" />
@@ -123,6 +123,7 @@
     </fx>
     
     <path>textures/player/sprite.png</path>
-  </player>
-
+  
+    </player>
+  </entities>
 </config>

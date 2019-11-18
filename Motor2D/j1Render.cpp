@@ -4,6 +4,7 @@
 #include "j1Window.h"
 #include "j1Render.h"
 #include "j1Player.h"
+#include "j1EntityManager.h"
 
 #define VSYNC false
 
@@ -140,11 +141,7 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 {
 	bool ret = true;
 	uint scale = App->win->GetScale();
-	
-
-	fPoint playerPos = App->player->getPos();
-
-	
+		
 
 	SDL_Rect rect;
 	rect.x = (int)(camera.x * speed) + x * scale;

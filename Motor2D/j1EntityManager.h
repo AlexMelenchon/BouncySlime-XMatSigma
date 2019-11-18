@@ -48,7 +48,11 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 	//--------ENTITY MANAGEMENT---------//
+	//Function that adds entities
 	j1Entity* AddEntity(entityType type, iPoint position);
+	//Since player is used in other modules, we are going to have a pointer only to him
+	j1Player* player = nullptr;
+
 private:
 	p2List<j1Entity*> EntityList;
 };
