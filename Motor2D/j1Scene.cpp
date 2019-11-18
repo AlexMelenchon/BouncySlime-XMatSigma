@@ -11,6 +11,7 @@
 #include "j1Player.h"
 #include "j1FadeToBlack.h"
 #include "j1Collision.h"
+#include "j1EntityManager.h"
 
 //Constructor
 j1Scene::j1Scene() : j1Module()
@@ -104,7 +105,7 @@ bool j1Scene::Update(float dt)
 
 	//Activates player's god mode
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
-		App->player->GodMode();
+		App->entities->player->GodMode();
 
 	//Changes the Window Title Display
 	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
@@ -215,7 +216,7 @@ bool j1Scene::Save(pugi::xml_node& save) const
 void j1Scene::Camera()
 {
 	//Get the current player position
-	fPoint playerPos = App->player->getPos();
+	fPoint playerPos = App->entities->player->getPos();
 
 	//Calculate the camera acording to the player in both axis
 	cameraPos.x = (-(playerPos.x) + width / 2);

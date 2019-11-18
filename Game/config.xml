@@ -38,85 +38,85 @@
     <volume general="25" music="15"/>
   </audio>
 
+  <entities>
+    <player>
+      <movement>
+        <movementForce x="-70.0f" y="-220.0f" />
+        <wallForce x="300.0f" y="-350.0f" />
+        <gravity>50.0f</gravity>
+        <slowGrade>1.175f</slowGrade>
+        <slowGradeAir>1.05f</slowGradeAir>
+        <slowGradeWall>7.5f</slowGradeWall>
+        <slowLimit>200</slowLimit>
+        <limitSpeed x="650.0f" y="750.0f" />
+      </movement>
 
-  <player>
-    <movement>
-      <movementForce x="-70.0f" y="-220.0f" />
-      <wallForce x="300.0f" y="-350.0f" />
-      <gravity>50.0f</gravity>
-      <slowGrade>1.175f</slowGrade>
-      <slowGradeAir>1.05f</slowGradeAir>
-      <slowGradeWall>7.5f</slowGradeWall>
-      <slowLimit>200</slowLimit>
-      <limitSpeed x="650.0f" y="750.0f" />
-    </movement>
+      <collision>
+        <collider w="32" h="32" />
+      </collision>
 
-    <collision>
-      <collider w="32" h="32" />
-    </collision>
-    
-    <internal>
-     <inFramesLimit>0.15f</inFramesLimit>
-      <playerFadeTime>0.85f</playerFadeTime>
-       <wallJumpLimit>0.3f</wallJumpLimit>
-      <wallJumpLeave>0.3f</wallJumpLeave>
-      <flipSpeed>10.0f</flipSpeed>
-    </internal>
-    
-    <animations>
-      <animation name ="idle">
-        <sprite x ="12" y ="8" w ="37" h="38" frames ="15" pivotx ="18" pivoty="20"/>
-        <sprite x ="52" y ="7" w ="36" h="37" frames ="15"  pivotx ="19" pivoty="20"/>
-        <sprite x ="93" y ="7" w ="37" h="38" frames ="15"  pivotx ="18" pivoty="20"/>
-        <sprite x ="134" y ="7" w ="37" h="38" frames ="15" pivotx ="18" pivoty="20"/>
-        <sprite x ="174" y ="7" w ="37" h="38" frames ="15"  pivotx ="18" pivoty="20"/>
-        <sprite x ="215" y ="7" w ="37" h="38" frames ="15" pivotx ="18" pivoty="20"/>
-        <sprite x ="256" y ="7" w ="37" h="38" frames ="15"  pivotx ="18" pivoty="20"/>
-        <sprite x ="296" y ="7" w ="36" h="38" frames ="15"  pivotx ="18" pivoty="20"/>
-        <sprite x ="337" y ="7" w ="37" h="38" frames ="15"  pivotx ="18" pivoty="20"/>
-        <sprite x ="378" y ="7" w ="37" h="37" frames ="15"  pivotx ="17" pivoty="20"/>
-        <sprite x ="419" y ="7" w ="36" h="37" frames ="15"  pivotx ="17" pivoty="20"/>
-        <sprite x ="459" y ="8" w ="37" h="37" frames ="15"  pivotx ="18" pivoty="20"/>
-      </animation>
-      <animation name ="run">
-        <sprite x ="30" y ="73" w ="33" h="37" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="72" y ="73" w ="34" h="36" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="115" y ="73" w ="34" h="38" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="158" y ="72" w ="36" h="38" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="200" y ="72" w ="34" h="39" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="242" y ="72" w ="34" h="38" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="283" y ="72" w ="34" h="38" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="329" y ="72" w ="41" h="38" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="378" y ="73" w ="46" h="36" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="433" y ="73" w ="50  " h="36" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="61" y ="123" w ="49" h="38" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="122" y ="122" w ="49" h="39" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="178" y ="122" w ="46" h="39" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="232" y ="121" w ="40" h="40" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="282" y ="121" w ="35" h="40" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="325" y ="121" w ="33" h="39" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="368" y ="122" w ="33" h="38" frames ="5"  pivotx ="20" pivoty="20"/>
-        <sprite x ="409" y ="121" w ="36" h="36" frames ="5"  pivotx ="20" pivoty="20"/>
-      </animation>
-      <animation name ="jump">
-        <sprite x ="90" y ="193" w ="34" h="39" frames ="5"  pivotx ="20" pivoty="20"/>
-      </animation>
-      <animation name ="wall">
-        <sprite x ="177" y ="191" w ="36" h="43" frames ="1"  pivotx ="20" pivoty="20"/>
-      </animation>
-      <animation name ="fall">
-        <sprite x ="31" y ="193" w ="39" h="40" frames ="1"  pivotx ="20" pivoty="20"/>
-      </animation>
-    </animations>
-    <fx>
-      <jump path="audio/fx/jump.wav"/>
-      <death path="audio/fx/death.wav"/>
-      <land path="audio/fx/land.wav"/>
-      <win path="audio/fx/win.wav"/>
-      <bounce path="audio/fx/bounce.wav"/>
-    </fx>
-    
-    <path>textures/player/sprite.png</path>
-  </player>
+      <internal>
+        <inFramesLimit>0.15f</inFramesLimit>
+        <playerFadeTime>0.85f</playerFadeTime>
+        <wallJumpLimit>0.3f</wallJumpLimit>
+        <wallJumpLeave>0.3f</wallJumpLeave>
+        <flipSpeed>10.0f</flipSpeed>
+      </internal>
 
+      <animations>
+        <animation name ="idle">
+          <sprite x ="12" y ="8" w ="37" h="38" frames ="15" pivotx ="18" pivoty="20"/>
+          <sprite x ="52" y ="7" w ="36" h="37" frames ="15"  pivotx ="19" pivoty="20"/>
+          <sprite x ="93" y ="7" w ="37" h="38" frames ="15"  pivotx ="18" pivoty="20"/>
+          <sprite x ="134" y ="7" w ="37" h="38" frames ="15" pivotx ="18" pivoty="20"/>
+          <sprite x ="174" y ="7" w ="37" h="38" frames ="15"  pivotx ="18" pivoty="20"/>
+          <sprite x ="215" y ="7" w ="37" h="38" frames ="15" pivotx ="18" pivoty="20"/>
+          <sprite x ="256" y ="7" w ="37" h="38" frames ="15"  pivotx ="18" pivoty="20"/>
+          <sprite x ="296" y ="7" w ="36" h="38" frames ="15"  pivotx ="18" pivoty="20"/>
+          <sprite x ="337" y ="7" w ="37" h="38" frames ="15"  pivotx ="18" pivoty="20"/>
+          <sprite x ="378" y ="7" w ="37" h="37" frames ="15"  pivotx ="17" pivoty="20"/>
+          <sprite x ="419" y ="7" w ="36" h="37" frames ="15"  pivotx ="17" pivoty="20"/>
+          <sprite x ="459" y ="8" w ="37" h="37" frames ="15"  pivotx ="18" pivoty="20"/>
+        </animation>
+        <animation name ="run">
+          <sprite x ="30" y ="73" w ="33" h="37" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="72" y ="73" w ="34" h="36" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="115" y ="73" w ="34" h="38" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="158" y ="72" w ="36" h="38" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="200" y ="72" w ="34" h="39" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="242" y ="72" w ="34" h="38" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="283" y ="72" w ="34" h="38" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="329" y ="72" w ="41" h="38" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="378" y ="73" w ="46" h="36" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="433" y ="73" w ="50  " h="36" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="61" y ="123" w ="49" h="38" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="122" y ="122" w ="49" h="39" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="178" y ="122" w ="46" h="39" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="232" y ="121" w ="40" h="40" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="282" y ="121" w ="35" h="40" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="325" y ="121" w ="33" h="39" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="368" y ="122" w ="33" h="38" frames ="5"  pivotx ="20" pivoty="20"/>
+          <sprite x ="409" y ="121" w ="36" h="36" frames ="5"  pivotx ="20" pivoty="20"/>
+        </animation>
+        <animation name ="jump">
+          <sprite x ="90" y ="193" w ="34" h="39" frames ="5"  pivotx ="20" pivoty="20"/>
+        </animation>
+        <animation name ="wall">
+          <sprite x ="177" y ="191" w ="36" h="43" frames ="1"  pivotx ="20" pivoty="20"/>
+        </animation>
+        <animation name ="fall">
+          <sprite x ="31" y ="193" w ="39" h="40" frames ="1"  pivotx ="20" pivoty="20"/>
+        </animation>
+      </animations>
+      <fx>
+        <jump path="audio/fx/jump.wav"/>
+        <death path="audio/fx/death.wav"/>
+        <land path="audio/fx/land.wav"/>
+        <win path="audio/fx/win.wav"/>
+        <bounce path="audio/fx/bounce.wav"/>
+      </fx>
+
+      <path>textures/player/sprite.png</path>
+    </player>
+  </entities>
 </config>

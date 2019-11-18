@@ -2,11 +2,12 @@
 #include "j1App.h"
 #include "j1Render.h"
 #include "j1Textures.h"
+#include "j1Player.h"
 
 //Constructor
 j1EntityManager::j1EntityManager()
 {
-	name.create("entitycontroller");
+	name.create("entities");
 }
 
 //Destructor
@@ -60,13 +61,13 @@ bool j1EntityManager::PreUpdate()
 		else
 		tmp = tmp->next;
 	}
-
+	tmp = EntityList.start;
 	while (tmp != nullptr)
 	{
 		ret = tmp->data->PreUpdate();
 		tmp = tmp->next;
 	}
-	return ret;
+	return true;
 }
 
 bool j1EntityManager::Update(float dt)
@@ -137,7 +138,8 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position)
 	switch (type)
 	{
 	case entityType::PLAYER:
-		//tmp = new Player();
+		if(player == nullptr)
+		tmp = new j1Player();
 		break;
 	case entityType::FLYING_ENEMY:
 		break;
@@ -145,8 +147,10 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position)
 		break;
 	}
 	if (tmp)
-		//	j1Entity.add(tmp);
-		true;
+		EntityList.add(tmp);
+	
 
 	return tmp;
 }
+
+

@@ -5,11 +5,11 @@
 #include "j1Textures.h"
 #include "j1Map.h"
 #include "j1Collision.h"
-#include "j1Player.h"
 #include "j1Window.h"
 #include "j1Textures.h"
 #include <math.h>
 #include "j1Audio.h"
+#include "j1EntityManager.h"
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -483,8 +483,8 @@ bool j1Map::loadCollider(pugi::xml_node& node)
 	else if (name == "Start")
 	{
 		type = COLLIDER_START;
-		App->player->SetPos(colliderRect.x, colliderRect.y);
-		App->player->ReSetMovement();
+		App->entities->player->SetPos(colliderRect.x, colliderRect.y);
+		App->entities->player->ReSetMovement();
 		return ret;
 	}
 	else
@@ -498,7 +498,7 @@ bool j1Map::loadCollider(pugi::xml_node& node)
 	}
 	else
 	{
-		Collider* collision  = new Collider(colliderRect, type, this);
+		Collider* collision  = new Collider(colliderRect, type, nullptr);
 		App->collision->AddCollider(collision);
 	}
 

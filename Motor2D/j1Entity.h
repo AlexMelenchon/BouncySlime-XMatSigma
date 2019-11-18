@@ -2,30 +2,29 @@
 #define __j1ENTITY_H__
 
 #include "p2Point.h"
-#include "p2animation.h"
 #include "p2Log.h"
 #include "j1App.h"
 #include "p2SString.h"
 #include "p2Defs.h"
-#include "j1Collision.h"
+#include "p2animation.h"
 
-//struct FX
-//{
-//	int id = 0;
-//	p2SString path;
-//};
-//
-//
-//enum collisionDirection
-//{
-//	DIRECTION_NONE = -1,
-//
-//	DIRECTION_LEFT,
-//	DIRECTION_RIGHT,
-//	DIRECTION_UP,
-//	DIRECTION_DOWN,
-//	DIRECTION_MAX
-//};
+struct FX
+{
+	int id = 0;
+	p2SString path;
+};
+
+
+enum collisionDirection
+{
+	DIRECTION_NONE = -1,
+
+	DIRECTION_LEFT,
+	DIRECTION_RIGHT,
+	DIRECTION_UP,
+	DIRECTION_DOWN,
+	DIRECTION_MAX
+};
 
 enum  class entityType
 {
@@ -35,9 +34,12 @@ enum  class entityType
 	LAND_ENEMY,
 };
 
+
 class j1Entity
 {
 public:
+//FUNCTIONS-----------------------------
+
 	//--------INTERNAL CONTROL---------//
 	//Constructor
 	j1Entity();
@@ -66,8 +68,6 @@ public:
 	// Called before quitting
 	virtual bool CleanUp() { return true;  };
 
-	// Checks if the entity is scheduled to delete
-	bool to_delete = false;
 
 	//--------SAVE & LOAD---------//
 	//Called when loading a save
@@ -92,7 +92,7 @@ public:
 	void CalculateCollider(fPoint);
 
 	//If a collision is detected by the j1Collision, distributes collisions according to it's type
-	virtual void OnCollision(Collider* c1, Collider* c2) {};
+	virtual void OnCollision(Collider*, Collider*) {};
 
 	//Calculate the collisions with the enviroment
 	virtual void RecalculatePos(SDL_Rect, SDL_Rect) {};
@@ -109,9 +109,18 @@ public:
 	//Calculates if the entity is flipped or not
 	void FlipControl();
 
+	//--------EXTERNAL---------//
+	//Returns the entity's position
+	fPoint getPos()
+	{
+		return fpPosition;
+	}
 
 
-private:
+
+
+//VARIABLES-----------------------------
+
 	//--------ENTITY ---------//
 	entityType type;
 
@@ -133,7 +142,7 @@ private:
 
 	//--------COLLISION ---------//
 	//The entity's collider
-	Collider* Collider = nullptr;
+	Collider* collider = nullptr;
 
 	//--------RENDER---------//
 	//Controls if the player is flipped or not
@@ -148,6 +157,9 @@ private:
 
 	// The speed needed so the sprite flips
 	float flipSpeed = 0.0f;
+
+	// Checks if the entity is scheduled to delete
+	bool to_delete = false;
 
 	//--------ANIMATIONS---------//
 	Animation* currentAnimation = nullptr;

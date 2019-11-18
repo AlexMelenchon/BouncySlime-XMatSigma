@@ -7,6 +7,7 @@
 #include "j1Map.h"
 #include "j1Scene.h"
 #include "j1Entity.h"
+#include "j1Collision.h"
 
 //Constructor
 j1Entity::j1Entity()
@@ -66,7 +67,7 @@ void j1Entity::SetPos(int x, int y)
 //Sets the collider to the player's position
 void j1Entity::CalculateCollider(fPoint pos)
 {
-	Collider->SetPos((int)fpPosition.x, (int)fpPosition.y);
+	collider->SetPos((int)fpPosition.x, (int)fpPosition.y);
 }
 
 //Blits the entity into the world
