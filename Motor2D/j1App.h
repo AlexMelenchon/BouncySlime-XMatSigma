@@ -19,6 +19,7 @@ class j1Player;
 class j1Collision;
 class j1FadeToBlack;
 class j1EntityManager;
+class j1PathFinding;
 
 class j1App
 {
@@ -99,6 +100,7 @@ public:
 	j1EntityManager*	entities;
 	j1Collision*		collision;
 	j1FadeToBlack*		 fade;
+	j1PathFinding*		pathfinding;
 
 	//-----FRAME CONTROL------//
 	bool windowTitleControl = false; //Changes the title of the window

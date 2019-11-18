@@ -58,6 +58,9 @@ private:
 	//Fade time to change maps
 	float mapFadeTime = 0.0f;
 
+	SDL_Texture* debug_tex;
 };
+
+
 
 #endif // __j1SCENE_H__
