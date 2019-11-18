@@ -18,7 +18,8 @@ enum player_states
 	ST_FALLING,
 	ST_WALL,
 	ST_WALL_JUMPING,
-	ST_GOD
+	ST_GOD,
+	ST_DEAD
 };
 
 enum player_inputs
@@ -29,7 +30,8 @@ enum player_inputs
 	IN_FALL,
 	IN_WALL,
 	IN_JUMP_WALL,
-	IN_GOD
+	IN_GOD,
+	IN_DEATH
 };
 
 enum slow_direction
@@ -177,6 +179,8 @@ private:
 
 	float fGravity = 0.0f;
 
+	bool death = false;
+
 	//LIMITS---
 	//The amount in which a speed will be divided to per frame.
 	float fSlowGrade = 0.0f;
@@ -252,6 +256,7 @@ private:
 	Animation animRun;
 	Animation animFall;
 	Animation animWall;
+	Animation animDeath;
 	
 	//--------MUSIC---------//
 	FX jumpFx;

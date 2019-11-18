@@ -107,6 +107,12 @@
       <animation name ="fall">
         <sprite x ="31" y ="193" w ="39" h="40" frames ="1"  pivotx ="20" pivoty="20"/>
       </animation>
+      <animation name ="death">
+        <sprite x ="39" y ="234" w ="37" h="38" frames ="200"  pivotx ="20" pivoty="20"/>
+        <sprite x ="68" y ="234" w ="37" h="38" frames ="200"  pivotx ="20" pivoty="20"/>
+        <sprite x ="104" y ="234" w ="37" h="38" frames ="200"  pivotx ="20" pivoty="20"/>
+        <sprite x ="140" y ="234" w ="37" h="38" frames ="200"  pivotx ="20" pivoty="20"/>
+      </animation>
     </animations>
     <fx>
       <jump path="audio/fx/jump.wav"/>

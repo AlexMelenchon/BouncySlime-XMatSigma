@@ -64,6 +64,7 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	animWall.loadAnimation(animIterator, "wall");
 	animJump.loadAnimation(animIterator, "jump");
 	animFall.loadAnimation(animIterator, "fall");
+	animDeath.loadAnimation(animIterator, "death");
 
 	currentAnimation = &animIdle;
 
@@ -303,6 +304,9 @@ bool j1Player::Update(float dt)
 		walling = false;
 		currentAnimation = &animIdle;
 		break;
+	case ST_DEAD:
+		LOG("Git Gud \n");
+		currentAnimation = &animDeath;
 	}
 
 	//Get the time elapsed since the last frame; used for timers
@@ -382,10 +386,11 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 			switch (coll->type) {
 
 			case(COLLIDER_WALL):
-					RecalculatePos(playerCol->rect, coll->rect);
+				RecalculatePos(playerCol->rect, coll->rect);
 				break;
 			case(COLLIDER_DEATH):
-				App->fade->FadeToBlack(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
+				inputs.add(IN_DEATH);
+				if(current_state == ST_DEAD) App->fade->FadeToBlack(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);								
 				break;
 			case(COLLIDER_WIN):
 				App->fade->FadeToBlack(App->map->GetNextMap(),winFx.id,playerFadeTime );				
@@ -587,6 +592,8 @@ void j1Player::SetPos(int x, int y)
 {
 	fpPlayerPos.x = x;
 	fpPlayerPos.y = y;
+
+	inputs.add(IN_JUMP_FINISH);
 }
 
 //Resets the player's movement
@@ -635,6 +642,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 		case IN_JUMP: state = ST_AIR;  break;
 		case IN_FALL: state = ST_FALLING; break;
 		case IN_GOD: state = ST_GOD; break;
+		case IN_DEATH: state = ST_DEAD; break;
 			}
 		}
 		break;
@@ -657,7 +665,9 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 				break;
 
 			case IN_GOD: state = ST_GOD; break;
+			case IN_DEATH: state = ST_DEAD; break;
 			}
+
 		}
 		break;
 		case ST_FALLING:
@@ -680,6 +690,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 				InWall();
 			} 
 			break;
+			case IN_DEATH: state = ST_DEAD; break;
 			}
 		}
 		break;
@@ -725,6 +736,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 				wallingLeave = 0.0f;
 			}
 				break;
+			case IN_DEATH: state = ST_DEAD; break;
 			}
 		}
 		break;
@@ -755,13 +767,22 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 				break;
 
 			case IN_GOD: state = ST_GOD; break;
-
+			case IN_DEATH: state = ST_DEAD; break;
 			}
 		}
 		break;
 
 		case ST_GOD:
 		{}
+		break;
+
+		case ST_DEAD:
+		{
+			switch (last_input)
+			{
+			case IN_JUMP_FINISH: state = ST_GROUND; break;
+			}
+		}
 		break;
 		}
 	}
