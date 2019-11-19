@@ -314,6 +314,9 @@ bool j1Player::Update(float dt)
 	}
 
 	//Get the time elapsed since the last frame; used for timers
+	if (dt > fInFramesLimit)
+		dt = 0.15;
+
 	flCurrentTime = dt;
 
 	//Update position
