@@ -65,17 +65,22 @@ bool j1Render::Start()
 // Called each loop iteration
 bool j1Render::PreUpdate()
 {
+	BROFILER_CATEGORY("Render Pre-Update", Profiler::Color::GreenYellow)
+
 	SDL_RenderClear(renderer);
 	return true;
 }
 
 bool j1Render::Update(float dt)
 {
+	BROFILER_CATEGORY("Render Pre-Update", Profiler::Color::GreenYellow)
+
 	return true;
 }
 
 bool j1Render::PostUpdate()
 {
+	BROFILER_CATEGORY("Render Post-Update", Profiler::Color::GreenYellow)
 	if (renderer != nullptr)
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);//turns the border rectangles to black
 	SDL_RenderPresent(renderer);
@@ -139,6 +144,8 @@ iPoint j1Render::ScreenToWorld(int x, int y) const
 // Blit to screen
 bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, SDL_RendererFlip flip, double angle, int pivot_x, int pivot_y) const
 {
+	BROFILER_CATEGORY("Render Blit", Profiler::Color::GreenYellow)
+
 	bool ret = true;
 	uint scale = App->win->GetScale();
 		

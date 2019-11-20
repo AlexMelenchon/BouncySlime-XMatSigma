@@ -61,6 +61,9 @@ bool j1Audio::Awake(pugi::xml_node& config)
 // Called each loop iteration
 bool j1Audio::PreUpdate()
 {
+	BROFILER_CATEGORY("Audio Pre-Update", Profiler::Color::Turquoise);
+
+
 	bool ret = true;
 
 	//Volume control

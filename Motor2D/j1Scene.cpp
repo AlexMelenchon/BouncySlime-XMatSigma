@@ -82,6 +82,8 @@ bool j1Scene::Reset(const char* map)
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
+	BROFILER_CATEGORY("Scene Pre-Update", Profiler::Color::Orange)
+
 	//Camera logic
 	Camera();
 
@@ -114,6 +116,8 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
+	BROFILER_CATEGORY("Scene Update", Profiler::Color::Orange)
+
 	//--------DEBUG---------//
 
 	//Loads the 1st map
@@ -236,6 +240,9 @@ bool j1Scene::Update(float dt)
 // Called each loop iteration
 bool j1Scene::PostUpdate()
 {
+
+	BROFILER_CATEGORY("Scene Post-Update", Profiler::Color::Orange)
+
 	bool ret = true;
 
 	if(App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)

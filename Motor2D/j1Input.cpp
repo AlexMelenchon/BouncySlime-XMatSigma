@@ -49,6 +49,8 @@ bool j1Input::Start()
 // Called each loop iteration / all keys states' control
 bool j1Input::PreUpdate()
 {
+	BROFILER_CATEGORY("Input Pre-Update", Profiler::Color::Chartreuse)
+
 	static SDL_Event event;
 	
 	const Uint8* keys = SDL_GetKeyboardState(NULL);

@@ -213,6 +213,7 @@ void j1Player::godInputs()
 // Called each loop iteration
 bool j1Player::PreUpdate()
 {
+	BROFILER_CATEGORY("Player Pre-Update", Profiler::Color::Magenta)
 	if (!App->pause && current_state != ST_DEAD)
 	{
 		if (!god)
@@ -239,6 +240,7 @@ void j1Player::UpdateState()
 // Called each loop iteration
 bool j1Player::Update(float dt)
 {
+	BROFILER_CATEGORY("Player Update", Profiler::Color::Magenta)
 	if (dt == 0.0f)
 		return true;
 
@@ -428,6 +430,7 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 // Called each loop iteration
 bool j1Player::PostUpdate()
 {
+	BROFILER_CATEGORY("Player Post-Update", Profiler::Color::Magenta)
 	//If the player is not touching the ground, he is falling
 	if (falling)
 		inputs.add(IN_FALL);

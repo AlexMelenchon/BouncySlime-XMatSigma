@@ -49,6 +49,8 @@ bool j1Map::Awake(pugi::xml_node& config)
 //Draws the current map (is called in the scene)
 void j1Map::Draw()
 {
+ BROFILER_CATEGORY("Map Draw", Profiler::Color::Aqua)
+
 	if(map_loaded == false)
 		return;
 	p2List_item<LayerInfo*>* layer = data.layerList.start;

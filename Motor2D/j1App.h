@@ -5,6 +5,7 @@
 #include "j1Module.h"
 #include "j1PerfTimer.h"
 #include "j1Timer.h"
+#include "Brofiler/include/Brofiler.h"
 #include "PugiXml\src\pugixml.hpp"
 
 // Modules

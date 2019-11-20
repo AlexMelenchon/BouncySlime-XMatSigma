@@ -187,9 +187,9 @@ int PathNode::CalculateF(const iPoint& destination)
 // ----------------------------------------------------------------------------------
 int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 {
-
-	/*if (!IsWalkable(origin) || !IsWalkable(destination))
-		return -1;*/
+	BROFILER_CATEGORY("Pathfinding", Profiler::Color::Red)
+	if (!IsWalkable(origin) || !IsWalkable(destination))
+		return -1;
 
 	
 

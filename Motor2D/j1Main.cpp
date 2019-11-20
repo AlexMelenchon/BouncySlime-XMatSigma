@@ -10,6 +10,10 @@
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
 
+//Profiler
+#include "Brofiler/include/Brofiler.h"
+#pragma comment (lib, "Brofiler/libx86/ProfilerCore32.lib")
+
 enum MainState
 {
 	CREATE = 1,
@@ -78,10 +82,11 @@ int main(int argc, char* args[])
 
 			// Loop all modules until we are asked to leave ---------------------
 		case LOOP:
+		{BROFILER_FRAME("MainLoop")
 			if (App->Update() == false)
 				state = CLEAN;
-			break;
-
+		break;
+		}
 			// Cleanup allocated memory -----------------------------------------
 		case CLEAN:
 			LOG("CLEANUP PHASE ===============================");
