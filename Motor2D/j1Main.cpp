@@ -10,9 +10,11 @@
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
 
-//Profiler
+
+//Profilier include
 #include "Brofiler/include/Brofiler.h"
-#pragma comment (lib, "Brofiler/libx86/ProfilerCore32.lib")
+#pragma comment( lib, "Brofiler/libx86/ProfilerCore32.lib" )
+
 
 enum MainState
 {
