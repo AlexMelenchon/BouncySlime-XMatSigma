@@ -4,7 +4,7 @@
   <app>
     <title>Bouncy Slime</title>
     <organization>UPC</organization>
-    <frameCap isOn ="false" time="30"/>
+    <frameCap isOn ="true" time="30"/>
   </app>
 	
   <renderer>
