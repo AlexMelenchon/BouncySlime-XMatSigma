@@ -365,6 +365,9 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 			case(COLLIDER_WIN):
 				App->fade->FadeToBlack(App->map->GetNextMap(),winFx.id,playerFadeTime );				
 				break;
+			case(COLLIDER_ENEMY):				
+				App->fade->FadeToBlack(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
+				break;
 			}
 }
 

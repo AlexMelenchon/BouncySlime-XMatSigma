@@ -1,7 +1,13 @@
+#ifndef __j1LANDENEMY_H__
+#define __j1LANDENEMY_H__
+
+
+
 #include "j1Entity.h"
 #include "p2Defs.h"
 #include "p2List.h"
 #include "p2Point.h"
+#include "p2DynArray.h"
 
 #define CHASING_DISTANCE 20
 
@@ -42,6 +48,8 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	//--------POSITION ---------//
+	void UpdatePos(float dt);
 
 	//--------COLLISION ---------//
 	
@@ -52,7 +60,7 @@ public:
 	void RecalculatePos(SDL_Rect, SDL_Rect);
 
 
-
+private:
 	//--------MOVEMENT ---------//
 	
 	//STATE
@@ -60,5 +68,8 @@ public:
 	void UpdateState(); 
 	state enemy_state;
 	p2DynArray<iPoint> path;
-
+	
 };
+
+
+#endif // !

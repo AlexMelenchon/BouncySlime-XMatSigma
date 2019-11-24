@@ -3,6 +3,7 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Player.h"
+#include "j1LandEnemy.h"
 
 //Constructor
 j1EntityManager::j1EntityManager()
@@ -21,6 +22,7 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	bool ret = false;
 
 	AddEntity(entityType::PLAYER, { 0,0 });
+	App->entities->AddEntity(entityType::LAND_ENEMY, { 400, 935 });
 
 	p2List_item<j1Entity*>* tmp = EntityList.start;
 	while (tmp != nullptr)
@@ -149,6 +151,9 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position)
 	case entityType::FLYING_ENEMY:
 		break;
 	case entityType::LAND_ENEMY:
+		tmp = new j1LandEnemy();
+		tmp->fpPosition.x = position.x;
+		tmp->fpPosition.y = position.y;
 		break;
 	}
 	if (tmp)

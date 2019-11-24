@@ -12,27 +12,48 @@
 #include "j1Entity.h"
 #include "j1Pathfinding.h"
 
-bool j1LandEnemy::Awake(pugi::xml_node &)
-{
 
-	return false;
+j1LandEnemy::j1LandEnemy() : j1Entity()
+{	
+
+}
+
+j1LandEnemy ::~j1LandEnemy()
+{}
+
+
+bool j1LandEnemy::Awake(pugi::xml_node &awake)
+{
+	SDL_Rect playerRect = { 0,0,0,0 };
+	playerRect.w = 37;
+	playerRect.h = 38;
+	collider = new Collider(playerRect, COLLIDER_ENEMY, this);
+	
+	return true;
 }
 
 bool j1LandEnemy::Start()
 {
-	return false;
+	Text = App->tex->Load("textures/player/landEnemy.png");
+
+	//Collision load
+	App->collision->AddCollider(collider);
+
+	return true;
 }
 
 bool j1LandEnemy::PreUpdate()
 {
 	UpdateState();
 
-	return false;
+	return true;
 }
 
 bool j1LandEnemy::Update(float dt)
 {
+	currentAnimation = App->entities->player->currentAnimation;
 
+	bool ret = true;
 	switch (enemy_state)
 	{
 	case state::ST_UNKNOWN:
@@ -47,21 +68,45 @@ bool j1LandEnemy::Update(float dt)
 
 		App->pathfinding->CreatePath(App->map->WorldToMap(fpPosition.x, fpPosition.y), App->map->WorldToMap(App->entities->player->fpPosition.x, App->entities->player->fpPosition.y));
 		path = *App->pathfinding->GetLastPath();
-
-
-
+		
+		break;
 	}
-	return false;
+	UpdatePos(dt);
+	return true;
 }
 
 bool j1LandEnemy::PostUpdate()
 {
-	return false;
+	Draw();
+	return true;
 }
 
 bool j1LandEnemy::CleanUp()
 {
-	return false;
+
+	return true;
+}
+
+void j1LandEnemy::UpdatePos(float dt)
+{
+	//If the logic does not demostrate the opposite, the player is always falling and not touching the wall
+	falling = true;
+	
+
+	//The update the player's position & speed according to it's logic
+	
+		fpSpeed.y += fAccel * dt;
+	
+
+	//Limit Speed
+	//LimitSpeed(dt);
+
+	fpPosition.x += fpSpeed.x * dt;
+	fpPosition.y += fpSpeed.y * dt;
+
+
+	//We set the collider in hte player's position
+	CalculateCollider(fpPosition);
 }
 
 
@@ -72,9 +117,6 @@ void j1LandEnemy::OnCollision(Collider* entityCol, Collider* coll)
 
 	case(COLLIDER_WALL):
 		RecalculatePos(entityCol->rect, coll->rect);
-		break;
-	case(COLLIDER_PLAYER):
-		App->entities->player->inputs.add(IN_DEATH);
 		break;
 	}
 }
@@ -131,7 +173,7 @@ void j1LandEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 	}
 	//We Recalculate the entity's collider with the new position
 	
-	
+	CalculateCollider(fpPosition);
 	
 }
 

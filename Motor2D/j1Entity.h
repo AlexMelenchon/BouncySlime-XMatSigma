@@ -85,7 +85,9 @@ public:
 
 	//Resets the entity's movement completly
 	virtual void ReSetMovement();
-
+	
+	//Update entities's position
+	virtual void UpdatePos(float dt) {};
 
 	//--------COLLISION ---------//
 	//Sets the collider to the player's position

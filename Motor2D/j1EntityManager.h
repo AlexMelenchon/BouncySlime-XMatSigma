@@ -5,10 +5,12 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "j1Player.h"
+#include "j1LandEnemy.h"
 #include "p2Defs.h"
 #include "j1Entity.h"
 
 class j1Entity;
+
 
 class j1EntityManager : public j1Module
 {
@@ -52,7 +54,7 @@ public:
 	j1Entity* AddEntity(entityType type, iPoint position);
 	//Since player is used in other modules, we are going to have a pointer only to him
 	j1Player* player = nullptr;
-	j1LandEnemy* landEnemy;
+	j1LandEnemy* landEnemy = nullptr;
 
 private:
 	p2List<j1Entity*> EntityList;
