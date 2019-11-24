@@ -53,7 +53,7 @@ void j1Map::Draw()
 
 	if(map_loaded == false)
 		return;
-	p2List_item<LayerInfo*>* layer = data.layerList.start;
+	p2List_item<LayerInfo*>* layerIt = data.layerList.start;
 	
 	//Variables that do not change between layers
 	float scale = App->win->GetScale();
@@ -65,15 +65,17 @@ void j1Map::Draw()
 	float parallaxSpeed;
 
 	//Iterate all layers that are avaliable
-	for (layer; layer != NULL; layer = layer->next) 	
+	for (layerIt; layerIt != NULL; layerIt = layerIt->next)
 	{
-		if (layer->data->draw == true)
+		LayerInfo* layer = layerIt->data;
+
+		if (layer->draw == true)
 		{
 			for (int y = 0; y < data.height; ++y) //From array to array 2D
 			{
 				for (int x = 0; x < data.width; ++x) //From array to array 2D
 				{
-					int tile_id = layer->data->Get(x, y); //We get the id in each position
+					int tile_id = layer->Get(x, y); //We get the id in each position
 					if (tile_id > 0)
 					{
 						TileSet* tileset = GetTilesetFromTileId(tile_id); //We get the tileset of the layer
@@ -81,7 +83,7 @@ void j1Map::Draw()
 						{
 							SDL_Rect r = tileset->GetTileRect(tile_id);
 							wPos = MapToWorld(x, y);
-							parallaxSpeed = layer->data->fParallaxSpeed;
+							parallaxSpeed = layer->fParallaxSpeed;
 
 							//Camera culling: x axis
 							if (wPos.x > -camera.x * parallaxSpeed / scale - data.tile_width && wPos.x < -camera.x * parallaxSpeed / scale + camera.w)
@@ -125,7 +127,10 @@ bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 
 					if (tileset != NULL)
 					{
-						map[i] = (tile_id - tileset->firstgid) > 0 ? 0 : 1;
+						if(tile_id > 0)
+						map[i] = 0;
+						else
+						map[i] = 1;
 						/*TileType* ts = tileset->GetTileType(tile_id);
 						if(ts != NULL)
 						{

@@ -82,6 +82,7 @@
     <ClCompile Include="j1Entity.cpp" />
     <ClCompile Include="j1EntityManager.cpp" />
     <ClCompile Include="j1FadeToBlack.cpp" />
+    <ClCompile Include="j1FlyingEnemy.cpp" />
     <ClCompile Include="j1Main.cpp" />
     <ClCompile Include="j1App.cpp" />
     <ClCompile Include="j1Audio.cpp" />
@@ -101,6 +102,7 @@
   <ItemGroup>
     <ClInclude Include="j1Entity.h" />
     <ClInclude Include="j1EntityManager.h" />
+    <ClInclude Include="j1FlyingEnemy.h" />
     <ClInclude Include="j1Pathfinding.h" />
     <ClInclude Include="j1PerfTimer.h" />
     <ClInclude Include="j1Timer.h" />

@@ -137,8 +137,6 @@ private:
 	//Used to have an smooth leave of the wall
 	float wallingLeave = 0.0f;
 
-	float fGravity = 0.0f;
-
 	//LIMITS---
 	//The amount in which a speed will be divided to per frame.
 	float fSlowGrade = 0.0f;
@@ -170,8 +168,6 @@ private:
 
 	// Controls the time elapsed since the player jumped of a wall
 	float wallJumpTimer = 0.0f;
-
-	int aux = 0;
 
 	// Controls the time elapsed since the player wants to leave the wall and actually leaves (jump breathing room)
 	float wallJumpLeaveControl = 0.0f;

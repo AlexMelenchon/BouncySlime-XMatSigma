@@ -58,6 +58,9 @@
     <ClCompile Include="j1Pathfinding.cpp">
       <Filter>Desenvolupament  ========\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="j1FlyingEnemy.cpp">
+      <Filter>Desenvolupament  ========\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -137,6 +140,9 @@
     </ClInclude>
     <ClInclude Include="j1Pathfinding.h">
       <Filter>Desenvolupament  ========\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1FlyingEnemy.h">
+      <Filter>Desenvolupament  ========\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
