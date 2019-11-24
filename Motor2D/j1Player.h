@@ -125,6 +125,9 @@ public:
 		return current_state;
 	}
 
+	//--------STATE MACHiNE---------//
+	//List that stores the players inputs
+	p2List<player_inputs> inputs;
 private:
 
 	//--------MOVEMENT ---------//
@@ -193,9 +196,7 @@ private:
 	FX winFx;
 	FX bounceFx;
 
-	//--------STATE MACHiNE---------//
-	//List that stores the players inputs
-	p2List<player_inputs> inputs; 
+	
 
 	//Player Starting state
 	player_states current_state = ST_UNKNOWN; 
