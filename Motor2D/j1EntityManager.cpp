@@ -21,15 +21,21 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 {
 	bool ret = false;
 
-	AddEntity(entityType::PLAYER, { 0,0 });
-	App->entities->AddEntity(entityType::LAND_ENEMY, { 400, 935 });
+	landEnemyNode = config.child("landEnemy");
+	flyEnemyNode = config.child("flyingEnemy");
+	playerNode = config.child("player");
 
 	p2List_item<j1Entity*>* tmp = EntityList.start;
+	if (tmp == nullptr)
+		ret = true;
+	else
 	while (tmp != nullptr)
 	{
 		ret = tmp->data->Awake(config);
 		tmp = tmp->next;
 	}
+
+
 	return ret;
 }
 
@@ -38,11 +44,20 @@ bool j1EntityManager::Start()
 	bool ret = false;
 
 	p2List_item<j1Entity*>* tmp = EntityList.start;
+
+	if (tmp == nullptr)
+		ret = true;
+	else
 	while (tmp != nullptr)
 	{
 		ret = tmp->data->Start();
 		tmp = tmp->next;
 	}
+
+
+	//Create the player
+	AddEntity(entityType::PLAYER, { 0,0 });
+
 	return ret;
 }
 
@@ -59,19 +74,24 @@ bool j1EntityManager::PreUpdate()
 		if (tmp->data->to_delete == true)
 		{
 			tmp = tmp->next;
-			//TODO: func that releases enemy data in their cpp
+			tmp->data->CleanUp(); //TODO: entities cleanUp + Collider
 			EntityList.del(tmp->prev);
 		}
 		else
 		tmp = tmp->next;
 	}
+
 	tmp = EntityList.start;
+
+	if (tmp == nullptr)
+		ret = true;
+	else
 	while (tmp != nullptr)
 	{
 		ret = tmp->data->PreUpdate();
 		tmp = tmp->next;
 	}
-	return true;
+	return ret;
 }
 
 bool j1EntityManager::Update(float dt)
@@ -141,26 +161,66 @@ bool j1EntityManager::Load(pugi::xml_node& file)
 j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position)
 {
 	j1Entity* tmp = nullptr;
+	pugi::xml_node config;
 
 	switch (type)
 	{
 	case entityType::PLAYER:
 		if(player == nullptr)
 		tmp = new j1Player();
+		config = playerNode;
 		break;
 	case entityType::FLYING_ENEMY:
+		config = flyEnemyNode;
 		break;
 	case entityType::LAND_ENEMY:
 		tmp = new j1LandEnemy();
-		tmp->fpPosition.x = position.x;
-		tmp->fpPosition.y = position.y;
+		config = landEnemyNode;
+
 		break;
 	}
 	if (tmp)
-		EntityList.add(tmp);
-	
+	{
+		if (position.x != 0 && position.y != 0)
+			tmp->SetPos(position.x, position.y);
+
+		InitEntity(EntityList.add(tmp)->data, config);
+
+	}
 
 	return tmp;
 }
 
+
+bool j1EntityManager::InitEntity(j1Entity* tmp, pugi::xml_node& config)
+{
+	bool ret = false;
+
+	ret = tmp->Awake(config);
+	ret = tmp->Start();
+
+	return ret;
+}
+
+bool j1EntityManager::CleanMapEnt()
+{
+	bool ret = false;
+
+	p2List_item<j1Entity*>* tmp = EntityList.start;
+
+	while (tmp != nullptr)
+	{
+		if (tmp->data->type != entityType::PLAYER)
+		{
+			tmp->data->CleanUp(); //TODO: entities cleanUp + Collider
+			RELEASE(tmp->data);
+			EntityList.del(tmp);
+			tmp = tmp->prev;
+		}
+		else
+			tmp = tmp->next;
+	}
+
+	return ret;
+}
 

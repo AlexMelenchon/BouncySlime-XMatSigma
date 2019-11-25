@@ -15,6 +15,7 @@
 
 j1LandEnemy::j1LandEnemy() : j1Entity()
 {	
+	this->type = entityType::LAND_ENEMY;
 
 }
 
@@ -24,10 +25,10 @@ j1LandEnemy ::~j1LandEnemy()
 
 bool j1LandEnemy::Awake(pugi::xml_node &awake)
 {
-	SDL_Rect playerRect = { 0,0,0,0 };
-	playerRect.w = 37;
-	playerRect.h = 38;
-	collider = new Collider(playerRect, COLLIDER_ENEMY, this);
+	SDL_Rect entityRect = { 0,0,0,0 };
+	entityRect.w = 37;
+	entityRect.h = 38;
+	collider = new Collider(entityRect, COLLIDER_ENEMY, this);
 	
 	return true;
 }
@@ -83,7 +84,8 @@ bool j1LandEnemy::PostUpdate()
 
 bool j1LandEnemy::CleanUp()
 {
-
+	App->tex->UnLoad(Text);
+	path.Clear();
 	return true;
 }
 

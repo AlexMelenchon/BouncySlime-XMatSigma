@@ -16,6 +16,7 @@ j1Player::j1Player() : j1Entity()
 	if (App->entities->player == nullptr)
 		App->entities->player = this;
 
+	this->type = entityType::PLAYER;
 }
 
 // Destructor
@@ -24,7 +25,6 @@ j1Player::~j1Player()
 
 bool j1Player::Awake(pugi::xml_node& player_node)
 {
-	player_node = player_node.child("player");
 	//State Machine start
 	inputs.start = 0; 
 	

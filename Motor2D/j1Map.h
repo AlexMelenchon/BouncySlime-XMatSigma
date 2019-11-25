@@ -18,8 +18,8 @@ struct LayerInfo {
 	uint* tileArray = nullptr;
 	uint size = 0;
 	float fParallaxSpeed = 0.0f;
-	bool navigation;
-	bool draw;
+	bool navigation = false;
+	bool draw = true;
 
 	LayerInfo() : tileArray(NULL)
 	{}

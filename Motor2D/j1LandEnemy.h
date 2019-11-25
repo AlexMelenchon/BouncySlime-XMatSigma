@@ -1,15 +1,13 @@
 #ifndef __j1LANDENEMY_H__
 #define __j1LANDENEMY_H__
 
-
-
 #include "j1Entity.h"
 #include "p2Defs.h"
 #include "p2List.h"
 #include "p2Point.h"
 #include "p2DynArray.h"
 
-#define CHASING_DISTANCE 20
+#define CHASING_DISTANCE 2000
 
  enum class state : int
 {

@@ -131,11 +131,6 @@ bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 						map[i] = 0;
 						else
 						map[i] = 1;
-						/*TileType* ts = tileset->GetTileType(tile_id);
-						if(ts != NULL)
-						{
-							map[i] = ts->properties.Get("walkable", 1);
-						}*/
 					}
 				}
 			}
@@ -247,6 +242,9 @@ bool j1Map::CleanUp()
 
 	// Remove all the collision stored related to the map
 	App->collision->CleanMap();
+
+	// Remove all the entities stored related to the map
+	App->entities->CleanMapEnt();
 
 	// Clean up the pugui tree
 	map_file.reset();
@@ -486,11 +484,22 @@ bool j1Map::loadLayer(pugi::xml_node& node, LayerInfo* layerInfo)
 	layerInfo->name = node.attribute("name").as_string();
 	layerInfo->width = node.attribute("width").as_uint();
 	layerInfo->height = node.attribute("height").as_uint();
-	layerInfo->navigation = node.child("properties").child("navigation").attribute("value").as_bool();
-	layerInfo->draw = node.child("properties").child("draw").attribute("value").as_bool();
-	layerInfo->fParallaxSpeed = node.child("properties").child("property").attribute("value").as_float(0.0f);
-	
-	
+
+	//We create string to compare the attributes we have strored in teh layers
+	p2SString speed("speed");
+	p2SString navigation("navigation");
+	p2SString draw("draw");
+
+	for (pugi::xml_node propIterator = node.child("properties").first_child(); propIterator; propIterator = propIterator.next_sibling())
+	{
+		if(speed == propIterator.attribute("name").as_string())
+			layerInfo->fParallaxSpeed = propIterator.attribute("value").as_float(0.0f);
+		if (navigation == propIterator.attribute("name").as_string())
+			layerInfo->navigation = propIterator.attribute("value").as_bool(true);
+		if (draw == propIterator.attribute("name").as_string())
+			layerInfo->draw = propIterator.attribute("value").as_bool(true);
+
+	}	
 
 	pugi::xml_node layer_data = node.child("data");
 
@@ -548,6 +557,16 @@ bool j1Map::loadCollider(pugi::xml_node& node)
 		type = COLLIDER_START;
 		App->entities->player->SetPos(colliderRect.x, colliderRect.y);
 		App->entities->player->ReSetMovement();
+		return ret;
+	}
+	else if (name == "EnemyL")
+	{
+		j1Entity* tmp = App->entities->AddEntity(entityType::LAND_ENEMY, { colliderRect.x, colliderRect.y });
+		return ret;
+	}
+	else if (name == "EnemyF")
+	{
+		//App->entities->AddEntity(entityType::FLYING_ENEMY, { 400, 935 });
 		return ret;
 	}
 	else

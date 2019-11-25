@@ -73,7 +73,6 @@ void j1Entity::CalculateCollider(fPoint pos)
 //Blits the entity into the world
 void j1Entity::Draw()
 {
-
 	App->render->Blit(Text, (int)round(fpPosition.x), (int)round(fpPosition.y), &currentAnimation->GetCurrentFrame(App->GetDeltaTime()), 1.0f, Flip, 0.0f, (currentAnimation->pivotpos->x), (currentAnimation->GetCurrentFrame(App->GetDeltaTime()).h / 2));
 }
 
