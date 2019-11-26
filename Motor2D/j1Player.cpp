@@ -31,6 +31,8 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	//Movement load
 	fpForce.x = player_node.child("movement").child("movementForce").attribute("x").as_float();
 	fpForce.y = player_node.child("movement").child("movementForce").attribute("y").as_float();
+	fpForceMiniJump.x = player_node.child("movement").child("miniMovementForce").attribute("x").as_float();
+	fpForceMiniJump.y = player_node.child("movement").child("miniMovementForce").attribute("y").as_float();
 
 	wallForce.x = player_node.child("movement").child("wallForce").attribute("x").as_float();
 	wallForce.y = player_node.child("movement").child("wallForce").attribute("y").as_float();
@@ -166,12 +168,7 @@ void j1Player::standardInputs()
 	//Jump
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && (current_state == ST_GROUND || current_state == ST_WALL))
 	{
-		fAccel = 0; //Reset the accel
-		fpSpeed.y = fpForce.y; //Add the jump force to the speed
-
-		App->audio->PlayFx(jumpFx.id);
-
-		inputs.add(IN_JUMP);
+		Jump(fpForce.y, jumpFx.id);
 	}
 	//Increasing speed to go down
 	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
@@ -366,8 +363,18 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 				App->fade->FadeToBlack(App->map->GetNextMap(),winFx.id,playerFadeTime );				
 				break;
 			case(COLLIDER_ENEMY):
-				inputs.add(IN_DEATH);
-				App->fade->FadeToBlack(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
+				//PLAYER DIES, because he didn't collide from ABOVE
+				if (CheckCollisionDir(playerCol->rect, coll->rect) != DIRECTION_DOWN)
+				{
+					inputs.add(IN_DEATH);
+					App->fade->FadeToBlack(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
+				}
+				//ENEMY DIES
+				else
+				{
+					coll->to_delete = true;
+					Jump(fpForceMiniJump.y, jumpFx.id);
+				}
 				break;
 			}
 }
@@ -415,7 +422,7 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 }
 
 // Called each loop iteration
-bool j1Player::PostUpdate(bool debug)
+bool j1Player::PostUpdate()
 {
 	BROFILER_CATEGORY("Player Post-Update", Profiler::Color::Magenta)
 	//If the player is not touching the ground, he is falling
@@ -755,4 +762,15 @@ void j1Player::InWall()
 	fpSpeed.y = deAccel(SLOW_GENERAL, fpSpeed.y, fSlowGradeWall);
 	wallJumpDirection = DIRECTION_NONE;
 	wallJumpTimer = 0.0f;
+}
+
+//The action of jumping
+void j1Player::Jump(float forcey, int fxId)
+{
+	fAccel = 0; //Reset the accel
+	fpSpeed.y = forcey; //Add the jump force to the speed
+
+	App->audio->PlayFx(fxId);
+
+	inputs.add(IN_JUMP);
 }

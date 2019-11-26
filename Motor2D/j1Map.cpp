@@ -98,6 +98,7 @@ void j1Map::Draw()
 	}	
 
 }
+
 bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 {
 	bool ret = false;
@@ -205,8 +206,6 @@ SDL_Rect TileSet::GetTileRect(uint tileId)
 
 	return(toReturn);
 };
-
-
 
 // Called before quitting
 bool j1Map::CleanUp()

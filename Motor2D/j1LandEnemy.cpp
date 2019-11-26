@@ -36,6 +36,7 @@ bool j1LandEnemy::Awake(pugi::xml_node &awake)
 
 bool j1LandEnemy::Start()
 {
+	//The enemy's texture load
 	Text = App->tex->Load("textures/player/landEnemy.png");
 
 	//Collision load

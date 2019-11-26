@@ -63,7 +63,10 @@ public:
 	virtual bool Update(float dt) { return true; };
 
 	// Called each loop iteration
+		//Entity (pathfinding debug)
 	virtual bool PostUpdate(bool debug) { return true; };
+		//Player
+	virtual bool PostUpdate() { return true; };
 
 	// Called before quitting
 	virtual bool CleanUp() { return true;  };
@@ -120,9 +123,7 @@ public:
 
 
 
-
-//VARIABLES-----------------------------
-
+public:
 	//--------ENTITY ---------//
 	entityType type;
 

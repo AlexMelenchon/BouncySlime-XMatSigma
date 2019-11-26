@@ -65,7 +65,7 @@ public:
 	j1Player* player = nullptr;
 
 	//Config awake nodes; in order to awake entities in-game
-	pugi::xml_node landEnemyNode;
+	pugi::xml_node landNode;
 	pugi::xml_node flyEnemyNode;
 	pugi::xml_node playerNode;
 

@@ -62,7 +62,7 @@ public:
 	bool Update(float dt);
 
 	// Called each loop iteration
-	bool PostUpdate(bool debug);
+	bool PostUpdate();
 
 	// Called before quitting
 	bool CleanUp();
@@ -88,6 +88,9 @@ public:
 
 	//Set the entity's position from other modules such as j1Map
 	void SetPos(int x, int y);
+
+	//The action of jumping
+	void Jump(float forceY, int fxId);
 
 
 	//--------COLLISION ---------//
@@ -134,6 +137,9 @@ private:
 	//--------MOVEMENT ---------//
 	//Force applied to the player's movement in both axis
 	fPoint fpForce = { 0.0f,0.0f }; 
+
+	//Force applied to the player's when killing an enemy
+	fPoint fpForceMiniJump = { 0.0f,0.0f };
 
 	//Force applied to the player when jumping off a wall
 	fPoint wallForce = { 0.0f, 0.0f };
