@@ -11,6 +11,7 @@
 #include "j1EntityManager.h"
 #include "j1Entity.h"
 #include "j1Pathfinding.h"
+#include "j1Scene.h"
 
 
 j1LandEnemy::j1LandEnemy() : j1Entity()
@@ -76,9 +77,19 @@ bool j1LandEnemy::Update(float dt)
 	return true;
 }
 
-bool j1LandEnemy::PostUpdate()
+bool j1LandEnemy::PostUpdate(bool debug)
 {
 	Draw();
+
+	if (debug)
+	{
+		for (uint i = 0; i < this->path.Count(); ++i)
+		{
+			iPoint pos = App->map->MapToWorld(this->path.At(i)->x, this->path.At(i)->y);
+			App->render->Blit(App->entities->debug_tex, pos.x, pos.y);
+		}
+	}
+
 	return true;
 }
 
@@ -97,7 +108,7 @@ void j1LandEnemy::UpdatePos(float dt)
 
 	//The update the player's position & speed according to it's logic
 	
-		fpSpeed.y += fAccel * dt;
+	fpSpeed.y += fAccel * dt;
 	
 
 	//Limit Speed

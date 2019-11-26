@@ -63,7 +63,7 @@ public:
 	virtual bool Update(float dt) { return true; };
 
 	// Called each loop iteration
-	virtual bool PostUpdate() { return true; };
+	virtual bool PostUpdate(bool debug) { return true; };
 
 	// Called before quitting
 	virtual bool CleanUp() { return true;  };

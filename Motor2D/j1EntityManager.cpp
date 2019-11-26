@@ -43,6 +43,9 @@ bool j1EntityManager::Start()
 {
 	bool ret = false;
 
+	//Load the texture to do the debug pathfinding
+	debug_tex = App->tex->Load("maps/path2.png");
+
 	p2List_item<j1Entity*>* tmp = EntityList.start;
 
 	if (tmp == nullptr)
@@ -116,7 +119,7 @@ bool j1EntityManager::PostUpdate()
 	p2List_item<j1Entity*>* tmp = EntityList.start;
 	while (tmp != nullptr)
 	{
-		tmp->data->PostUpdate();
+		tmp->data->PostUpdate(debug);
 		tmp = tmp->next;
 	}
 	return ret;
@@ -125,6 +128,9 @@ bool j1EntityManager::PostUpdate()
 bool j1EntityManager::CleanUp()
 {
 	bool ret = true;
+
+	App->tex->UnLoad(debug_tex);
+
 	p2List_item<j1Entity*>* tmp = EntityList.start;
 	while (tmp != nullptr)
 	{

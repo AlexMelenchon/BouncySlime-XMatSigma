@@ -41,6 +41,8 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	bool debug = false;
+
 
 	//--------SAVE & LOAD---------//
 	//Called when loading a save
@@ -66,6 +68,9 @@ public:
 	pugi::xml_node landEnemyNode;
 	pugi::xml_node flyEnemyNode;
 	pugi::xml_node playerNode;
+
+	//--------PATHFINDING---------//
+	SDL_Texture* debug_tex;
 
 private:
 	p2List<j1Entity*> EntityList;
