@@ -64,11 +64,6 @@ public:
 	//Since player is used in other modules, we are going to have a pointer only to him
 	j1Player* player = nullptr;
 
-	//Config awake nodes; in order to awake entities in-game
-	pugi::xml_node landNode;
-	pugi::xml_node flyEnemyNode;
-	pugi::xml_node playerNode;
-
 	//--------PATHFINDING---------//
 	SDL_Texture* debug_tex;
 
