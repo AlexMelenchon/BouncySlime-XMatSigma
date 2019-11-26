@@ -568,7 +568,7 @@ void j1Player::SetPos(int x, int y)
 	fpPosition.x = x;
 	fpPosition.y = y;
 
-	current_state = ST_GROUND;
+	inputs.add(IN_DEATH_FINISH);
 }
 
 
@@ -756,7 +756,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 		{
 			switch (last_input)
 			{
-			case IN_JUMP_FINISH: state = ST_GROUND; break;
+			case IN_DEATH_FINISH: state = ST_GROUND; break;
 			}
 		}
 		break;
