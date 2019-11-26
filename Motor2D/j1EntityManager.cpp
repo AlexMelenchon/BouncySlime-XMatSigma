@@ -5,6 +5,7 @@
 #include "j1Player.h"
 #include "j1LandEnemy.h"
 #include "j1Map.h"
+#include "j1Collision.h"
 
 //Constructor
 j1EntityManager::j1EntityManager()
@@ -75,11 +76,12 @@ bool j1EntityManager::PreUpdate()
 	// Remove all entities scheduled for deletion
 	while (tmp != nullptr)
 	{
-		if (tmp->data->to_delete == true)
+		if (tmp->data->collider->to_delete == true)
 		{
-			tmp = tmp->next;
 			tmp->data->CleanUp(); //TODO: entities cleanUp + Collider
-			EntityList.del(tmp->prev);
+			RELEASE(tmp->data);
+			EntityList.del(tmp);
+			tmp = tmp->prev;
 		}
 		else
 		tmp = tmp->next;

@@ -42,6 +42,7 @@
     <player>
       <movement>
         <movementForce x="-70.0f" y="-220.0f" />
+        <miniMovementForce x="0.0f" y="-100.0f" />
         <wallForce x="300.0f" y="-350.0f" />
         <gravity>50.0f</gravity>
         <slowGrade>1.175f</slowGrade>
