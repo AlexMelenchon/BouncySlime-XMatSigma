@@ -24,20 +24,39 @@ j1LandEnemy ::~j1LandEnemy()
 {}
 
 
-bool j1LandEnemy::Awake(pugi::xml_node &awake)
+bool j1LandEnemy::Awake(pugi::xml_node& land_node)
 {
-	SDL_Rect entityRect = { 0,0,0,0 };
-	entityRect.w = 37;
-	entityRect.h = 38;
-	collider = new Collider(entityRect, COLLIDER_ENEMY, this);
-	
+	//Movement load
+	fGravity = land_node.child("movement").child("gravity").text().as_float();
+
+	//Create the player's collider
+	SDL_Rect enemyRect = { 0,0,0,0 };
+	enemyRect.w = land_node.child("collision").child("collider").attribute("w").as_float();
+	enemyRect.h = land_node.child("collision").child("collider").attribute("h").as_float();
+
+	collider = new Collider(enemyRect, COLLIDER_ENEMY, this);
+
+	//Internal variables load
+	pathTimer = land_node.child("internal").child("pathTimer").text().as_float();
+
+	pugi::xml_node animIterator = land_node.child("animations").child("animation");
+	animIdle.loadAnimation(animIterator, "idle");
+	animRun.loadAnimation(animIterator, "run");
+	animWall.loadAnimation(animIterator, "wall");
+	animJump.loadAnimation(animIterator, "jump");
+	animFall.loadAnimation(animIterator, "fall");
+	animDeath.loadAnimation(animIterator, "death");
+
+	currentAnimation = &animIdle;
+
+	auxLoader = land_node;
 	return true;
 }
 
 bool j1LandEnemy::Start()
 {
 	//The enemy's texture load
-	Text = App->tex->Load("textures/player/landEnemy.png");
+	Text = App->tex->Load(auxLoader.child("path").text().as_string());
 
 	//Collision load
 	App->collision->AddCollider(collider);

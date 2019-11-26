@@ -188,7 +188,7 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position)
 		break;
 	case entityType::LAND_ENEMY:
 		tmp = new j1LandEnemy();
-		config = config.child("landEnemy");
+		config = config.child("landenemy");
 
 		break;
 	}
