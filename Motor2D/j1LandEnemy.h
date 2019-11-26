@@ -61,12 +61,23 @@ public:
 private:
 	//--------MOVEMENT ---------//
 	bool GetPathfinding();
+
+	//--------INTERNAL CONTROÑ ---------//
+	float pathTimer;
 	
 	//--------STATE ---------//
 	//determines what the enemy is doing
 	void UpdateState(); 
 	state enemy_state;
 	p2DynArray<iPoint> path;
+
+	//--------ANIMATIONS---------//
+	Animation animIdle;
+	Animation animJump;
+	Animation animRun;
+	Animation animFall;
+	Animation animWall;
+	Animation animDeath;
 	
 };
 

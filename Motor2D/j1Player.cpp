@@ -422,7 +422,7 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 }
 
 // Called each loop iteration
-bool j1Player::PostUpdate(bool debug)
+bool j1Player::PostUpdate()
 {
 	BROFILER_CATEGORY("Player Post-Update", Profiler::Color::Magenta)
 	//If the player is not touching the ground, he is falling

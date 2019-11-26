@@ -62,7 +62,7 @@ public:
 	bool Update(float dt);
 
 	// Called each loop iteration
-	bool PostUpdate(bool debug);
+	bool PostUpdate();
 
 	// Called before quitting
 	bool CleanUp();
