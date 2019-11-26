@@ -7,7 +7,7 @@
 #include "p2Point.h"
 #include "p2DynArray.h"
 
-#define CHASING_DISTANCE 2000
+#define CHASING_DISTANCE 200
 
  enum class state : int
 {

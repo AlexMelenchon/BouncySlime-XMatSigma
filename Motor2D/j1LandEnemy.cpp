@@ -17,7 +17,7 @@
 j1LandEnemy::j1LandEnemy() : j1Entity()
 {	
 	this->type = entityType::LAND_ENEMY;
-
+	
 }
 
 j1LandEnemy ::~j1LandEnemy()
@@ -70,13 +70,24 @@ bool j1LandEnemy::Update(float dt)
 		}
 	case state::ST_CHASING:
 		{
-
 		GetPathfinding();
+		
+		iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
 
-		}
+
+		//The update the player's position & speed according to it's logic
+		if (fpPosition.x < current.x)
+			fpSpeed.x = 30;
+		if (fpPosition.x > current.x)
+			fpSpeed.x = -30;
+
+		path.Pop(current);
 		break;
+		}
+		
 	}
 	UpdatePos(dt);
+	
 	return ret;
 }
 
@@ -105,13 +116,14 @@ bool j1LandEnemy::CleanUp()
 
 void j1LandEnemy::UpdatePos(float dt)
 {
-	//If the logic does not demostrate the opposite, the player is always falling and not touching the wall
+	//If the logic does not demostrate tshe opposite, the player is always falling and not touching the wall
 	falling = true;
-	
 
-	//The update the player's position & speed according to it's logic
+	//path.Flip();
 	
-	fpSpeed.y += fAccel * dt;
+	
+	
+	//fpSpeed.y += fAccel * dt;
 	
 
 	//Limit Speed
@@ -120,9 +132,11 @@ void j1LandEnemy::UpdatePos(float dt)
 	fpPosition.x += fpSpeed.x * dt;
 	fpPosition.y += fpSpeed.y * dt;
 
-
+	
+	
 	//We set the collider in hte player's position
 	CalculateCollider(fpPosition);
+	
 }
 
 
@@ -195,7 +209,7 @@ void j1LandEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 
 void j1LandEnemy::UpdateState()
 {
-	if (abs(abs(App->entities->player->fpPosition.x) - abs(fpPosition.x)) < CHASING_DISTANCE)
+	if (abs(abs(App->entities->player->fpPosition.x) - abs(fpPosition.x)) < CHASING_DISTANCE && App->entities->player->getState() != ST_DEAD)
 	{
 		enemy_state = state::ST_CHASING;
 	}
