@@ -59,22 +59,25 @@ bool j1LandEnemy::Update(float dt)
 	switch (enemy_state)
 	{
 	case state::ST_UNKNOWN:
-
+		{
+		ret = false;
 		break;
-
+		}
 	case state::ST_IDLE:
+		{
 
 		break;
-
+		}
 	case state::ST_CHASING:
+		{
 
-		App->pathfinding->CreatePath(App->map->WorldToMap(fpPosition.x, fpPosition.y), App->map->WorldToMap(App->entities->player->fpPosition.x, App->entities->player->fpPosition.y));
-		path = *App->pathfinding->GetLastPath();
-		
+		GetPathfinding();
+
+		}
 		break;
 	}
 	UpdatePos(dt);
-	return true;
+	return ret;
 }
 
 bool j1LandEnemy::PostUpdate(bool debug)
@@ -83,9 +86,9 @@ bool j1LandEnemy::PostUpdate(bool debug)
 
 	if (debug)
 	{
-		for (uint i = 0; i < this->path.Count(); ++i)
+		for (uint i = 0; i < path.Count(); ++i)
 		{
-			iPoint pos = App->map->MapToWorld(this->path.At(i)->x, this->path.At(i)->y);
+			iPoint pos = App->map->MapToWorld(path.At(i)->x, path.At(i)->y);
 			App->render->Blit(App->entities->debug_tex, pos.x, pos.y);
 		}
 	}
@@ -198,4 +201,22 @@ void j1LandEnemy::UpdateState()
 	}
 	else
 		enemy_state = state::ST_IDLE;
+}
+
+
+bool j1LandEnemy::GetPathfinding()
+{
+	path.Clear();
+	App->pathfinding->CreatePath(App->map->WorldToMap(fpPosition.x, fpPosition.y), App->map->WorldToMap(App->entities->player->fpPosition.x, App->entities->player->fpPosition.y));
+
+	uint pathCount = App->pathfinding->GetLastPath()->Count();
+	if (pathCount <= 0) return false;
+	for (uint i = 0; i < pathCount; i++)
+	{
+		path.PushBack(*App->pathfinding->GetLastPath()->At(i));
+	}
+
+
+	return true;
+
 }

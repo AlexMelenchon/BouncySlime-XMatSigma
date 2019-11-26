@@ -60,8 +60,9 @@ public:
 
 private:
 	//--------MOVEMENT ---------//
+	bool GetPathfinding();
 	
-	//STATE
+	//--------STATE ---------//
 	//determines what the enemy is doing
 	void UpdateState(); 
 	state enemy_state;

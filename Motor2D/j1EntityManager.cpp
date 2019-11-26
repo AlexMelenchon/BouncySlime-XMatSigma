@@ -4,6 +4,7 @@
 #include "j1Textures.h"
 #include "j1Player.h"
 #include "j1LandEnemy.h"
+#include "j1Map.h"
 
 //Constructor
 j1EntityManager::j1EntityManager()
@@ -120,6 +121,7 @@ bool j1EntityManager::PostUpdate()
 	while (tmp != nullptr)
 	{
 		tmp->data->PostUpdate(debug);
+
 		tmp = tmp->next;
 	}
 	return ret;

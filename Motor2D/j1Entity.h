@@ -149,6 +149,9 @@ public:
 	//The entity's collider
 	Collider* collider = nullptr;
 
+	//Checks the direction of the collision
+	int CheckCollisionDir(SDL_Rect playerRect, SDL_Rect collRect);
+
 	//--------RENDER---------//
 	//Controls if the player is flipped or not
 	SDL_RendererFlip Flip = SDL_RendererFlip::SDL_FLIP_NONE;
@@ -172,6 +175,7 @@ public:
 	//--------AUXILIAR---------//
 	//Auxiliar node in order to be able to load the texture & rect
 	pugi::xml_node auxLoader;
+
 };
 
 #endif

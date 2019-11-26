@@ -85,3 +85,29 @@ void j1Entity::FlipControl()
 	else if (fpSpeed.x < -flipSpeed)
 		Flip = SDL_FLIP_HORIZONTAL;
 }
+
+//Checks the direction of the collision
+int j1Entity::CheckCollisionDir(SDL_Rect playerRect, SDL_Rect collRect)
+{
+	//Determines the direction of the collision
+	//Calculates distances from the player to the collision
+	int collDiference[DIRECTION_MAX];
+	collDiference[DIRECTION_LEFT] = (collRect.x + collRect.w) - playerRect.x;
+	collDiference[DIRECTION_RIGHT] = (playerRect.x + playerRect.w) - collRect.x;
+	collDiference[DIRECTION_UP] = (collRect.y + collRect.h) - playerRect.y;
+	collDiference[DIRECTION_DOWN] = (playerRect.y + playerRect.h) - collRect.y;
+
+
+	//If a collision from various aixs is detected, it determines what is the closets one to exit from
+	int directionCheck = DIRECTION_NONE;
+
+	for (int i = 0; i < DIRECTION_MAX; ++i)
+	{
+		if (directionCheck == DIRECTION_NONE)
+			directionCheck = i;
+		else if ((collDiference[i] < collDiference[directionCheck]))
+			directionCheck = i;
+	}
+
+	return directionCheck;
+}
