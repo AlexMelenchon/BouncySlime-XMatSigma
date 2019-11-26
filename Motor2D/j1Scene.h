@@ -59,6 +59,8 @@ private:
 	float mapFadeTime = 0.0f;
 
 	SDL_Texture* debug_tex;
+
+	p2DynArray<iPoint> debugPath;
 };
 
 

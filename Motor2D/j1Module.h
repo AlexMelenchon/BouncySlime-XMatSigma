@@ -15,6 +15,7 @@
 #include "p2List.h"
 #include "p2Log.h"
 #include"p2animation.h"
+#include "p2DynArray.h"
 #include "Brofiler/include/Brofiler.h"
 
 class j1App;

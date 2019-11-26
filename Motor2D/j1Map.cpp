@@ -560,7 +560,7 @@ bool j1Map::loadCollider(pugi::xml_node& node)
 	}
 	else if (name == "EnemyL")
 	{
-		j1Entity* tmp = App->entities->AddEntity(entityType::LAND_ENEMY, { colliderRect.x, colliderRect.y });
+		App->entities->AddEntity(entityType::LAND_ENEMY, { colliderRect.x, colliderRect.y });
 		return ret;
 	}
 	else if (name == "EnemyF")

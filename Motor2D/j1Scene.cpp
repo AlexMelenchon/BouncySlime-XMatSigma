@@ -93,11 +93,17 @@ bool j1Scene::PreUpdate()
 	iPoint p = App->render->ScreenToWorld(x, y);
 	p = App->map->WorldToMap(p.x, p.y);
 
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && App->entities->debug)
 	{
 		if (origin_selected == true)
 		{
+			debugPath.Clear();
 			App->pathfinding->CreatePath(origin, p);
+			uint pathCount = App->pathfinding->GetLastPath()->Count();
+			for (uint i = 0; i < pathCount; i++)
+			{
+				debugPath.PushBack(*App->pathfinding->GetLastPath()->At(i));
+			}
 			origin_selected = false;
 		}
 		else
@@ -227,11 +233,10 @@ bool j1Scene::Update(float dt)
 
 	App->render->Blit(debug_tex, p.x, p.y);
 
-	const p2DynArray<iPoint>* path = App->pathfinding->GetLastPath();
-
-	for (uint i = 0; i < path->Count(); ++i)
+	if(debugPath.Count() > 0)
+	for (uint i = 0; i < debugPath.Count(); ++i)
 	{
-		iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+		iPoint pos = App->map->MapToWorld(debugPath.At(i)->x, debugPath.At(i)->y);
 		App->render->Blit(debug_tex, pos.x, pos.y);
 	}
 
