@@ -66,9 +66,6 @@ bool j1Scene::Reset(const char* map)
 
 	}
 	
-	
-	
-
 	// Limit for the end of the map
 	Hlimit.x = App->map->data.tile_width * App->map->data.width; 
 	Hlimit.y = App->map->data.tile_height * App->map->data.height;
@@ -146,7 +143,11 @@ bool j1Scene::Update(float dt)
 
 	//Activates collider debug draw mode
 	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
+	{
 		App->collision->debug = !App->collision->debug;
+		App->entities->debug = !App->entities->debug;
+
+	}
 
 	//Activates player's god mode
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
@@ -217,7 +218,7 @@ bool j1Scene::Update(float dt)
 		App->win->SetTitle(title.GetString());
 	}
 
-	// Debug pathfinding ------------------------------
+	// Debug pathfinding w/ mouse ------------------------------
 	int x, y;
 	App->input->GetMousePosition(x, y);
 	iPoint p = App->render->ScreenToWorld(x, y);
@@ -226,13 +227,13 @@ bool j1Scene::Update(float dt)
 
 	App->render->Blit(debug_tex, p.x, p.y);
 
-	const p2DynArray<iPoint>* path = App->pathfinding->GetLastPath();
+	//const p2DynArray<iPoint>* path = App->pathfinding->GetLastPath();
 
-	for (uint i = 0; i < path->Count(); ++i)
-	{
-		iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-		App->render->Blit(debug_tex, pos.x, pos.y);
-	}
+	//for (uint i = 0; i < path->Count(); ++i)
+	//{
+	//	iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+	//	App->render->Blit(debug_tex, pos.x, pos.y);
+	//}
 
 	return true;
 }
@@ -255,6 +256,9 @@ bool j1Scene::PostUpdate()
 bool j1Scene::CleanUp()
 {
 	LOG("Freeing scene");
+
+	App->tex->UnLoad(debug_tex);
+
 	return true;
 }
 

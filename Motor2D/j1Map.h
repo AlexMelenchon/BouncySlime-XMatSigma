@@ -10,8 +10,8 @@
 
 
 
-struct LayerInfo {
-
+struct LayerInfo 
+{
 	p2SString name;
 	uint width = 0u;
 	uint height = 0u;

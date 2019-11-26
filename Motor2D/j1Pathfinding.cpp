@@ -210,10 +210,8 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 
 	PathNode start(0, origin.DistanceTo(destination), origin, nullptr);
 	opened.list.add(start);
-	int i = 0;
 
 	while (opened.list.count() > 0) {
-		i++;
 		p2List_item<PathNode>* lowest = opened.GetNodeLowestScore();
 
 		PathNode* current = &closed.list.add(lowest->data)->data;
@@ -222,7 +220,6 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 
 		if (current->pos == destination)
 		{
-			LOG("%i", i);
 			last_path.Clear();
 			PathNode* iterator = current;
 
