@@ -25,7 +25,8 @@ enum player_inputs
 	IN_WALL,
 	IN_JUMP_WALL,
 	IN_GOD,
-	IN_DEATH
+	IN_DEATH,
+	IN_DEATH_FINISH
 };
 
 enum slow_direction
@@ -61,7 +62,7 @@ public:
 	bool Update(float dt);
 
 	// Called each loop iteration
-	bool PostUpdate();
+	bool PostUpdate(bool debug);
 
 	// Called before quitting
 	bool CleanUp();

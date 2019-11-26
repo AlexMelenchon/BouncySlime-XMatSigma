@@ -360,12 +360,13 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 				break;
 			case(COLLIDER_DEATH):
 				inputs.add(IN_DEATH);
-				if(current_state == ST_DEAD) App->fade->FadeToBlack(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);								
+				App->fade->FadeToBlack(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);								
 				break;
 			case(COLLIDER_WIN):
 				App->fade->FadeToBlack(App->map->GetNextMap(),winFx.id,playerFadeTime );				
 				break;
-			case(COLLIDER_ENEMY):				
+			case(COLLIDER_ENEMY):
+				inputs.add(IN_DEATH);
 				App->fade->FadeToBlack(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
 				break;
 			}
@@ -431,7 +432,7 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 }
 
 // Called each loop iteration
-bool j1Player::PostUpdate()
+bool j1Player::PostUpdate(bool debug)
 {
 	BROFILER_CATEGORY("Player Post-Update", Profiler::Color::Magenta)
 	//If the player is not touching the ground, he is falling
@@ -567,7 +568,7 @@ void j1Player::SetPos(int x, int y)
 	fpPosition.x = x;
 	fpPosition.y = y;
 
-	inputs.add(IN_JUMP_FINISH);
+	current_state = ST_GROUND;
 }
 
 
