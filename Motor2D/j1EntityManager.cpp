@@ -23,10 +23,6 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 {
 	bool ret = false;
 
-	flyEnemyNode = config.child("flyingEnemy");
-	playerNode = config.child("player");
-	landNode = config.child("landenemy");
-
 	p2List_item<j1Entity*>* tmp = EntityList.start;
 	if (tmp == nullptr)
 		ret = true;
@@ -173,23 +169,26 @@ bool j1EntityManager::Load(pugi::xml_node& file)
 j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position)
 {
 	j1Entity* tmp = nullptr;
-	pugi::xml_node config;
+	pugi::xml_document	config_file;
+	pugi::xml_node		config;
+
+	config = App->LoadConfig(config_file).child("entities");
 
 	switch (type)
 	{
 	case entityType::PLAYER:
 		if(player == nullptr)
 		tmp = new j1Player();
-		config = playerNode;
+		config = config.child("player");
 
 		break;
 	case entityType::FLYING_ENEMY:
-		config = flyEnemyNode;
+		config = config.child("flyEnemy");
 
 		break;
 	case entityType::LAND_ENEMY:
 		tmp = new j1LandEnemy();
-		config = landNode;
+		config = config.child("landEnemy");
 
 		break;
 	}
@@ -198,7 +197,10 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position)
 		if (position.x != 0 && position.y != 0)
 			tmp->SetPos(position.x, position.y);
 
-		InitEntity(EntityList.add(tmp)->data, config);
+		tmp->Awake(config);
+		tmp->Start();
+
+		EntityList.add(tmp);
 
 	}
 

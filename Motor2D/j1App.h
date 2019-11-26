@@ -62,10 +62,10 @@ public:
 	//Used in the physics calculations of the game
 	float GetDeltaTime() const;
 
-private:
-
 	// Load config file
 	pugi::xml_node LoadConfig(pugi::xml_document&) const;
+
+private:
 
 	// Call modules before each loop iteration
 	void PrepareUpdate();
