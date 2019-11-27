@@ -75,6 +75,7 @@ private:
 
 	//--------INTERNAL CONTROÑ ---------//
 	float pathTimer;
+	float timer = 0.f;
 	
 	//--------STATE ---------//
 	//determines what the enemy is doing
