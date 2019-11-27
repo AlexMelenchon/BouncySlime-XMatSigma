@@ -4,6 +4,7 @@
 #include "j1Textures.h"
 #include "j1Player.h"
 #include "j1LandEnemy.h"
+#include "j1FlyingEnemy.h"
 #include "j1Map.h"
 #include "j1Collision.h"
 
@@ -204,7 +205,8 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position)
 
 		break;
 	case entityType::FLYING_ENEMY:
-		config = entConfig.child("flyEnemy");
+		tmp = new j1FlyingEnemy();
+		config = entConfig.child("flyingenemy");
 
 		break;
 	case entityType::LAND_ENEMY:

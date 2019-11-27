@@ -90,6 +90,8 @@ private:
 	Animation animFall;
 	Animation animWall;
 	Animation animDeath;
+
+	SDL_Rect enemyRect = { 0,0,0,0 };
 	
 };
 

@@ -73,7 +73,7 @@ bool j1LandEnemy::PreUpdate()
 
 bool j1LandEnemy::Update(float dt)
 {
-
+	
 	timer += dt;
 
 
@@ -87,6 +87,7 @@ bool j1LandEnemy::Update(float dt)
 		}
 	case state::ST_IDLE:
 		{
+		currentAnimation = &animIdle;
 		path.Clear();
 		fpSpeed.x = 0;
 		fpSpeed.y = 0;
@@ -94,6 +95,7 @@ bool j1LandEnemy::Update(float dt)
 		}
 	case state::ST_CHASING:
 		{
+		currentAnimation = &animRun;
 
 		if (timer > 0.25)
 		{
@@ -109,9 +111,15 @@ bool j1LandEnemy::Update(float dt)
 
 			//The update the player's position & speed according to it's logic
 			if (fpPosition.x < current.x && abs(fpPosition.x - App->entities->player->fpPosition.x) > App->entities->player->collider->rect.w / 2)
+			{
 				fpSpeed.x = 60;
+				Flip = SDL_FLIP_HORIZONTAL;
+			}
 			else if (fpPosition.x > current.x && abs(fpPosition.x - App->entities->player->fpPosition.x) > App->entities->player->collider->rect.w / 2)
+			{
 				fpSpeed.x = -60;
+				Flip = SDL_FLIP_NONE;
+			}				
 			else
 				fpSpeed.x = 0;
 

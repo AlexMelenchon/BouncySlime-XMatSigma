@@ -16,6 +16,7 @@
 #include "j1Collision.h"
 #include "j1Pathfinding.h"
 #include "j1LandEnemy.h"
+#include "j1FlyingEnemy.h"
 
 
 // Constructor
