@@ -3,21 +3,26 @@
 	<input />
 	<window />
 	<textures />
-	<audio />
+	<audio>
+		<volume music="15" fx="25" />
+	</audio>
 	<map />
-	<player>
-		<position x="491" y="606" />
-		<speed x="0" y="0" />
-		<state current_state="1" />
-		<falling value="false" />
-		<walling value="true" />
+	<entities>
+		<position x="1362.85327" y="870.27655" />
+		<speed x="400.000031" y="-118.173981" />
+		<state current_state="2" />
+		<falling value="true" />
+		<walling value="false" />
 		<wallTimer wallJumpTimer="0" />
 		<flip value="0" />
-	</player>
-	<scene />
+	</entities>
+	<pathfinding />
+	<scene>
+		<current_map name="intro.tmx" />
+	</scene>
 	<collision />
 	<fade />
 	<renderer>
-		<camera x="-79" y="0" />
+		<camera x="-1034" y="-336" />
 	</renderer>
 </game_state>

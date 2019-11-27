@@ -1,20 +1,20 @@
 #ifndef __ModuleCollision_H__
 #define __ModuleCollision_H__
 
-#define MAX_COLLIDERS 60
 
 #include "j1Module.h"
+#include "j1Entity.h"
 
-
+#define MAX_COLLIDERS 60
 
 struct Collider
 {
 	SDL_Rect rect;
 	bool to_delete = false;
 	COLLIDER_TYPE type;
-	j1Module* callback = nullptr;
+	j1Entity* callback = nullptr;
 
-	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, j1Module* callback = nullptr) :
+	Collider(SDL_Rect rectangle, COLLIDER_TYPE type, j1Entity* callback = nullptr) :
 		rect(rectangle),
 		type(type),
 		callback(callback)
@@ -26,22 +26,11 @@ struct Collider
 		callback(nullptr)
 	{};
 
-
-
 	void SetPos(int x, int y)
 	{
 		rect.x = x;
 		rect.y = y;
 	}
-
-	void ReSet(int x, int y, int w, int h)
-	{
-		rect.x = x;
-		rect.y = y;
-		rect.w = w;
-		rect.h = h;
-	}
-
 
 	void setType(COLLIDER_TYPE type1)
 	{
@@ -55,23 +44,50 @@ class j1Collision : public j1Module
 {
 public:
 
+	//--------INTERNAL CONTROL---------//
+	//Constructor
 	j1Collision();
+
+	//Destructor
 	~j1Collision();
 
-	bool PreUpdate() ;
-	bool Update(float dt) ;
-	bool PostUpdate() ;
-	bool CleanUp() ;
+	// Called each loop iteration
+	bool PreUpdate();
+
+	// Called each loop iteration
+	bool Update(float dt);
+
+	// Called each loop iteration
+	bool PostUpdate();
+
+	// Called before quitting
+	bool CleanUp();
+
+
+	//--------COLLISION ---------//
+	//Cleans only the colliders in map
 	bool CleanMap();
 
-	void AddControlCollider(Collider*);
+	//Adds a collider
+	void AddCollider(Collider*);
+
+	//Draws the colliders on hte screen
 	void DebugDraw();
+
+	//Draw Mode / Activates DebugDraw()
+	bool debug = false;
 
 private:
 
-	Collider* collidersDebug[MAX_COLLIDERS];
+	//Maximum colliders
+	int maxColliders = 0;
+
+	//Collider Array
+	Collider* colliders[MAX_COLLIDERS];
+
+	//Collider collision matrix
 	bool matrix[COLLIDER_MAX][COLLIDER_MAX];
-	bool debug = false;
+
 };
 
 #endif // __ModuleCollision_H__

@@ -5,11 +5,11 @@
 #include "j1Textures.h"
 #include "j1Map.h"
 #include "j1Collision.h"
-#include "j1Player.h"
 #include "j1Window.h"
 #include "j1Textures.h"
 #include <math.h>
 #include "j1Audio.h"
+#include "j1EntityManager.h"
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -46,41 +46,108 @@ bool j1Map::Awake(pugi::xml_node& config)
 	return ret;
 }
 
+//Draws the current map (is called in the scene)
 void j1Map::Draw()
 {
+ BROFILER_CATEGORY("Map Draw", Profiler::Color::Aqua)
+
 	if(map_loaded == false)
 		return;
-	p2List_item<LayerInfo*>* layer = data.layerList.start;
+	p2List_item<LayerInfo*>* layerIt = data.layerList.start;
+	
+	//Variables that do not change between layers
+	float scale = App->win->GetScale();
+	SDL_Rect camera = App->render->camera;
 
-	for (layer; layer != NULL; layer = layer->next)
+	//Create internal variables here in order to not create 1 for each loop iteration
+	iPoint wPos = { 0,0 };
+	SDL_Rect r;
+	float parallaxSpeed;
+
+	//Iterate all layers that are avaliable
+	for (layerIt; layerIt != NULL; layerIt = layerIt->next)
 	{
-		for (int y = 0; y < data.height; ++y)
+		LayerInfo* layer = layerIt->data;
+
+		if (layer->draw == true)
 		{
-			for (int x = 0; x < data.width; ++x)
+			for (int y = 0; y < data.height; ++y) //From array to array 2D
 			{
-				int tile_id = layer->data->Get(x, y);
-				if (tile_id > 0)
+				for (int x = 0; x < data.width; ++x) //From array to array 2D
 				{
-					TileSet* tileset = GetTilesetFromTileId(tile_id);
-					if (tileset != nullptr)
+					int tile_id = layer->Get(x, y); //We get the id in each position
+					if (tile_id > 0)
 					{
-						SDL_Rect r = tileset->GetTileRect(tile_id);
-						iPoint pos = MapToWorld(x, y);
-						float parallaxSpeed = layer->data->parallaxSpeed;
-						if (pos.x > -App->render->camera.x * parallaxSpeed/App->win->GetScale() - data.tile_width && pos.x < -App->render->camera.x * parallaxSpeed/App->win->GetScale() + App->win->width)
-							App->render->Blit(tileset->texture, pos.x, pos.y, &r, parallaxSpeed);
+						TileSet* tileset = GetTilesetFromTileId(tile_id); //We get the tileset of the layer
+						if (tileset != nullptr)
+						{
+							SDL_Rect r = tileset->GetTileRect(tile_id);
+							wPos = MapToWorld(x, y);
+							parallaxSpeed = layer->fParallaxSpeed;
+
+							//Camera culling: x axis
+							if (wPos.x > -camera.x * parallaxSpeed / scale - data.tile_width && wPos.x < -camera.x * parallaxSpeed / scale + camera.w)
+								//Camera culling: y axis
+								if (wPos.y > -camera.y * parallaxSpeed / scale - data.tile_height && wPos.y < -camera.y + camera.h)
+									App->render->Blit(tileset->texture, wPos.x, wPos.y, &r, parallaxSpeed);
+						}
 					}
 				}
 			}
 		}
-	}
-
-
-
-
+	}	
 
 }
 
+bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
+{
+	bool ret = false;
+	p2List_item<LayerInfo*>* item;
+	item = data.layerList.start;
+
+	for (item = data.layerList.start; item != NULL; item = item->next)
+	{
+		LayerInfo* layer = item->data;
+
+		if (!layer->navigation)
+		{
+			continue;
+		}
+
+			uchar* map = new uchar[layer->width*layer->height];
+			memset(map, 1, layer->width*layer->height);
+
+			for (int y = 0; y < data.height; ++y)
+			{
+				for (int x = 0; x < data.width; ++x)
+				{
+					int i = (y*layer->width) + x;
+
+					int tile_id = layer->Get(x, y);
+					TileSet* tileset = (tile_id > 0) ? GetTilesetFromTileId(tile_id) : NULL;
+
+					if (tileset != NULL)
+					{
+						if(tile_id > 0)
+						map[i] = 0;
+						else
+						map[i] = 1;
+					}
+				}
+			}
+
+			*buffer = map;
+			width = data.width;
+			height = data.height;
+			ret = true;
+
+			break;
+	}
+	
+
+	return ret;
+}
+//Returns x,y coordinates in the world
 iPoint j1Map::MapToWorld(int x, int y) const
 {
 	iPoint ret;
@@ -91,6 +158,7 @@ iPoint j1Map::MapToWorld(int x, int y) const
 	return ret;
 }
 
+//Returns x,y coordinates in the Map
 iPoint j1Map::WorldToMap(int x, int y) const
 {
 	iPoint ret(0, 0);
@@ -101,6 +169,7 @@ iPoint j1Map::WorldToMap(int x, int y) const
 	return ret;
 }
 
+//Gives the tileset of an specific id
 TileSet* j1Map::GetTilesetFromTileId(int id) const
 {
 	p2List_item<TileSet*>* item = data.tilesets.start;
@@ -119,6 +188,24 @@ TileSet* j1Map::GetTilesetFromTileId(int id) const
 	return set;
 }
 
+//Return a rect in a specified id in the tileset
+SDL_Rect TileSet::GetTileRect(uint tileId)
+{
+
+	SDL_Rect toReturn;
+
+	int relative_id = tileId - firstgid;
+
+	toReturn.w = tile_width;
+	toReturn.h = tile_height;
+
+	toReturn.x = margin + ((toReturn.w + spacing) * (relative_id % num_tiles_width));
+	toReturn.y = margin + ((toReturn.h + spacing) * (relative_id / num_tiles_width));
+
+
+
+	return(toReturn);
+};
 
 // Called before quitting
 bool j1Map::CleanUp()
@@ -152,10 +239,11 @@ bool j1Map::CleanUp()
 	}
 	data.layerList.clear();
 
-	// Remove all the stored map info
-
-
+	// Remove all the collision stored related to the map
 	App->collision->CleanMap();
+
+	// Remove all the entities stored related to the map
+	App->entities->CleanMapEnt();
 
 	// Clean up the pugui tree
 	map_file.reset();
@@ -209,7 +297,7 @@ bool j1Map::Load(const char* file_name)
 	{
 		LayerInfo* layerInfo = new LayerInfo();
 
-		ret = load_Layer(layer, layerInfo);
+		ret = loadLayer(layer, layerInfo);
 
 		if (ret == true)
 			data.layerList.add(layerInfo);
@@ -219,7 +307,7 @@ bool j1Map::Load(const char* file_name)
 	{
 		for (pugi::xml_node nodeCollider = nodeColliderGroup.child("object"); nodeCollider; nodeCollider = nodeCollider.next_sibling("object"))
 		{
-			load_collider(nodeCollider);
+			loadCollider(nodeCollider);
 		}
 
 	}
@@ -324,6 +412,7 @@ bool j1Map::LoadMap()
 	return ret;
 }
 
+//Loads all the information we need from the tileset (.tmx)
 bool j1Map::LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set)
 {
 	bool ret = true;
@@ -349,6 +438,7 @@ bool j1Map::LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set)
 	return ret;
 }
 
+//Loads the image from the tileset (.png)
 bool j1Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 {
 	bool ret = true;
@@ -385,17 +475,31 @@ bool j1Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 	return ret;
 }
 
-
-bool j1Map::load_Layer(pugi::xml_node& node, LayerInfo* layerInfo)
+//Loads a layer from the tileset
+bool j1Map::loadLayer(pugi::xml_node& node, LayerInfo* layerInfo)
 {
 	bool ret = true;
 
 	layerInfo->name = node.attribute("name").as_string();
 	layerInfo->width = node.attribute("width").as_uint();
 	layerInfo->height = node.attribute("height").as_uint();
-	layerInfo->parallaxSpeed = node.child("properties").child("property").attribute("value").as_float(0.0f);
 
-	//LoadProperties(node, layerInfo->properties);
+	//We create string to compare the attributes we have strored in teh layers
+	p2SString speed("speed");
+	p2SString navigation("navigation");
+	p2SString draw("draw");
+
+	for (pugi::xml_node propIterator = node.child("properties").first_child(); propIterator; propIterator = propIterator.next_sibling())
+	{
+		if(speed == propIterator.attribute("name").as_string())
+			layerInfo->fParallaxSpeed = propIterator.attribute("value").as_float(0.0f);
+		if (navigation == propIterator.attribute("name").as_string())
+			layerInfo->navigation = propIterator.attribute("value").as_bool(true);
+		if (draw == propIterator.attribute("name").as_string())
+			layerInfo->draw = propIterator.attribute("value").as_bool(true);
+
+	}	
+
 	pugi::xml_node layer_data = node.child("data");
 
 
@@ -422,69 +526,65 @@ bool j1Map::load_Layer(pugi::xml_node& node, LayerInfo* layerInfo)
 	return ret;
 }
 
-bool j1Map::load_collider(pugi::xml_node& node)
+//Loads colliders and sorts each type
+bool j1Map::loadCollider(pugi::xml_node& node)
 {
 	bool ret = true;
 
+	//First we store all the info
 	SDL_Rect colliderRect;
 
 	colliderRect.x = node.attribute("x").as_int();
 	colliderRect.y = node.attribute("y").as_int();
 	colliderRect.w = node.attribute("width").as_int();
 	colliderRect.h = node.attribute("height").as_int();
-
-	COLLIDER_TYPE type;
 	p2SString name = node.attribute("name").as_string();
+
+
+	//Then we asign a type for each collider
+	COLLIDER_TYPE type;
 
 	if (name == "Floor")
 		type = COLLIDER_WALL;
-	else if (name == "Start") 
-	{
-		type = COLLIDER_START;
-		App->player->SetPos(colliderRect.x, colliderRect.y);
-		App->player->ReSetMovement();
 
-	}
 	else if (name == "Death")
 		type = COLLIDER_DEATH;
 	else if (name == "Win")
 		type = COLLIDER_WIN;
-
-
+	else if (name == "Start")
+	{
+		type = COLLIDER_START;
+		App->entities->player->SetPos(colliderRect.x, colliderRect.y);
+		App->entities->player->ReSetMovement();
+		return ret;
+	}
+	else if (name == "EnemyL")
+	{
+		App->entities->AddEntity(entityType::LAND_ENEMY, { colliderRect.x, colliderRect.y });
+		return ret;
+	}
+	else if (name == "EnemyF")
+	{
+		//App->entities->AddEntity(entityType::FLYING_ENEMY, { 400, 935 });
+		return ret;
+	}
 	else
 		type = COLLIDER_NONE;
 		
+	//If there is no error, we add the collider to the list
 	if (type == COLLIDER_NONE)
 	{
 		LOG("Error loading collider. Type not especified");
 		ret = false;
 	}
-	else if (type != COLLIDER_START)
+	else
 	{
-		Collider* collision  = new Collider(colliderRect, type, this);
-		App->collision->AddControlCollider(collision);
+		Collider* collision  = new Collider(colliderRect, type, nullptr);
+		App->collision->AddCollider(collision);
 	}
 
 	return ret;
 }
-
-SDL_Rect TileSet::GetTileRect(uint tileId) 
-{
-
-	SDL_Rect toReturn;
-	
-	int relative_id = tileId - firstgid;
-
-	toReturn.w = tile_width;
-	toReturn.h = tile_height;
-
-	toReturn.x = margin + ((toReturn.w + spacing) * (relative_id % num_tiles_width));
-	toReturn.y = margin + ((toReturn.h + spacing) * (relative_id / num_tiles_width));
-
-
-
-	return(toReturn);
-};
 
 const char* j1Map::GetNextMap()
 {

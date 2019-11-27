@@ -7,6 +7,7 @@
 
 #define MAX_KEYS 300
 
+//Constructor
 j1Input::j1Input() : j1Module()
 {
 	name.create("input");
@@ -45,9 +46,11 @@ bool j1Input::Start()
 	return true;
 }
 
-// Called each loop iteration
+// Called each loop iteration / all keys states' control
 bool j1Input::PreUpdate()
 {
+	BROFILER_CATEGORY("Input Pre-Update", Profiler::Color::Chartreuse)
+
 	static SDL_Event event;
 	
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
@@ -157,6 +160,7 @@ void j1Input::GetMouseMotion(int& x, int& y)
 	y = mouse_motion_y;
 }
 
+//Sets all keys to not being pressed
 void j1Input::ReSetKeys()
 {
 	for (int i = 0; i < MAX_KEYS; ++i)

@@ -132,40 +132,24 @@ public:
 	}
 
 	/**
-* Deletes last item from the list
+* Deletes first item from the list
 */
 	bool Pop(tdata& item)
 	{
 		bool result = false;
 
-		p2List_item<tdata>* last = GetLast();
-
-		if (last != NULL)
+		if (start != nullptr)
 		{
-			p2List_item<tdata>* tmp = start;
-
-			if (tmp == last)
-			{
-				// Only one item left in the qeue
-				item = start->data;
-				delete start;
-				start = NULL;
-			}
-			else
-			{
-				while (tmp->next != last)
-					tmp = tmp->next;
-
-				item = tmp->next->data;
-				delete tmp->next;
-				tmp->next = NULL;
-			}
-
+			p2List_item<tdata>* new_start = start->next;
+			item = start->data;
+			RELEASE(start);
+			start = new_start;
 			result = true;
 		}
 
 		return result;
 	}
+
 	/**
 	* Destroy and free all mem
 	*/
@@ -336,18 +320,6 @@ public:
 		return (-1);
 	}
 
-	/**
-* Get last item
-*/
-	p2List_item<tdata>* GetLast()
-	{
-		p2List_item<tdata>* tmp = start;
-
-		while (tmp != NULL && tmp->next != NULL)
-			tmp = tmp->next;
-
-		return tmp;
-	}
 
 	void InsertAfter(uint position, const p2List<tdata>& list)
 	{

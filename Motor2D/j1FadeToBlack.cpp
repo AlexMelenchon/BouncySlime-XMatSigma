@@ -7,13 +7,20 @@
 #include "j1Map.h"
 #include "j1Input.h"
 #include "j1Player.h"
+#include "j1Audio.h"
 #include "j1Collision.h"
 #include "SDL/include/SDL_render.h"
 #include "SDL/include/SDL_timer.h"
 
+//Contructor
 j1FadeToBlack::j1FadeToBlack()
-{ }
+{}
 
+//Destructor
+j1FadeToBlack::~j1FadeToBlack()
+{}
+
+// Called before render is available
 bool j1FadeToBlack::Awake(pugi::xml_node& config)
 {
 	name.create("fade");
@@ -23,8 +30,7 @@ bool j1FadeToBlack::Awake(pugi::xml_node& config)
 	return true;
 }
 
-j1FadeToBlack::~j1FadeToBlack()
-{}
+
 
 // Load assets
 bool j1FadeToBlack::Start()
@@ -34,7 +40,7 @@ bool j1FadeToBlack::Start()
 	return true;
 }
 
-// Update: draw background
+// Called each loop iteration: draw fading background
 bool j1FadeToBlack::PostUpdate()
 {
 	bool ret = true;
@@ -81,17 +87,20 @@ bool j1FadeToBlack::PostUpdate()
 	return ret;
 }
 
-// Fade to black. At mid point deactivate one module, then activate the other
-bool j1FadeToBlack::FadeToBlack(const char* mapName, float time)
+
+
+
+// Fade to black. At mid point deactivate one map, then activate the desired one
+bool j1FadeToBlack::FadeToBlack(const char* mapName, int id, float time)
 {
 	bool ret = false;
-
 
 	if(current_step == fade_step::none)
 	{
 		current_step = fade_step::fade_to_black;
 		start_time = SDL_GetTicks();
 		total_time = (Uint32)(time * 0.5f * 1000.0f);
+		App->audio->PlayFx(id);
 		mapToLoad = mapName;
 		ret = true;
 	}

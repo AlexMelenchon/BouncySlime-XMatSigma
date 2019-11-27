@@ -10,18 +10,27 @@
 #include "j1Audio.h"
 #include "j1Scene.h"
 #include "j1Map.h"
-#include "j1Player.h"
+#include "j1EntityManager.h"
 #include "j1App.h"
 #include "j1FadeToBlack.h"
 #include "j1Collision.h"
+#include "j1Pathfinding.h"
+#include "j1LandEnemy.h"
 
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 {
+	//Internal Control
 	frames = 0;
 	want_to_save = want_to_load = false;
 
+	//Framerate Control
+	gameTimer = new j1Timer();
+	gamePerfTimer = new j1PerfTimer();
+	lastSecFrames = new j1Timer();
+
+	//Modules
 	input = new j1Input();
 	win = new j1Window();
 	render = new j1Render();
@@ -29,9 +38,10 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	audio = new j1Audio();
 	scene = new j1Scene();
 	map = new j1Map();
-	player = new j1Player();
+	entities = new j1EntityManager();
 	collision = new j1Collision();
 	fade = new j1FadeToBlack();
+	pathfinding = new j1PathFinding();
 	
 	// Reverse order of CleanUp
 	AddModule(input);
@@ -39,7 +49,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(map);
-	AddModule(player);
+	AddModule(entities);
+	AddModule(pathfinding);
 	AddModule(scene);
 	AddModule(collision);
 	AddModule(fade);
@@ -92,6 +103,8 @@ bool j1App::Awake()
 		app_config = config.child("app");
 		title.create(app_config.child("title").child_value());
 		organization.create(app_config.child("organization").child_value());
+		capTime =  app_config.child("frameCap").attribute("time").as_int();
+		frameCap = app_config.child("frameCap").attribute("isOn").as_bool();
 	}
 
 	if(ret == true)
@@ -126,6 +139,7 @@ bool j1App::Start()
 }
 
 // Called each loop iteration
+
 bool j1App::Update()
 {
 	bool ret = true;
@@ -165,6 +179,17 @@ pugi::xml_node j1App::LoadConfig(pugi::xml_document& config_file) const
 // ---------------------------------------------
 void j1App::PrepareUpdate()
 {
+	frame_count++;
+	last_second_frame_count++;
+
+	//Controls pause of the game
+	if (!pause)
+		dt = lastFrameTimer.ReadSec();
+	else
+		dt = 0.0f;
+
+	lastFrameTimer.Start();
+
 }
 
 // ---------------------------------------------
@@ -175,6 +200,31 @@ void j1App::FinishUpdate()
 
 	if(want_to_load == true)
 		LoadGameNow();
+
+	// Amount of time since game start (use a low resolution timer)
+	float seconds_since_startup = gameTimer->ReadSec();
+
+	// Average FPS for the whole game life
+	avg_fps = float(frame_count) / seconds_since_startup;
+
+	// Amount of ms took the last update
+	last_frame_ms = lastFrameTimer.Read();
+
+	// Amount of frames during the last second
+	if (lastSecFrames->Read() >= 1000)
+	{
+		frames_on_last_update = last_second_frame_count;
+		last_second_frame_count = 0;
+		lastSecFrames->Start();
+	}
+
+	//Waits a certain amount of time if
+	if (frameCap)
+		if (last_frame_ms < 1000 / capTime)
+		{
+			SDL_Delay((1000 / capTime) - last_frame_ms);
+		}
+
 }
 
 // Call modules before each loop iteration
@@ -291,6 +341,7 @@ void j1App::LoadGame()
 	// we should be checking if that file actually exist
 	// from the "GetSaveGames" list
 	want_to_load = true;
+	//load_game.create("%s%s", fs->GetSaveDirectory(), file);
 }
 
 // ---------------------------------------
@@ -380,5 +431,5 @@ bool j1App::SavegameNow() const
 
 float j1App::GetDeltaTime() const
 {
-	return 1.0f / 60.0f;
+	return dt;
 }

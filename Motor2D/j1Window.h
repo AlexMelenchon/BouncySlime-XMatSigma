@@ -9,7 +9,8 @@ struct SDL_Surface;
 class j1Window : public j1Module
 {
 public:
-
+	//--------INTERNAL CONTROL---------//
+	//Constructor
 	j1Window();
 
 	// Destructor
@@ -21,6 +22,7 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	//--------WINDOW---------//
 	// Changae title
 	void SetTitle(const char* new_title);
 
@@ -31,15 +33,16 @@ public:
 	uint GetScale() const;
 
 public:
+	//--------WINDOW---------//
 	//The window we'll be rendering to
-	SDL_Window* window;
+	SDL_Window* window = nullptr;
 
 	//The surface contained by the window
 	SDL_Surface* screen_surface;
 	p2SString	title;
-	uint		width;
-	uint		height;
-	uint		scale;
+	uint		width = 0u;
+	uint		height = 0u;
+	uint		scale = 0u;
 
 private:
 

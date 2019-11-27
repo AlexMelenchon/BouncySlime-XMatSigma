@@ -3,6 +3,9 @@
 
 #include "p2List.h"
 #include "j1Module.h"
+#include "j1PerfTimer.h"
+#include "j1Timer.h"
+#include "Brofiler/include/Brofiler.h"
 #include "PugiXml\src\pugixml.hpp"
 
 // Modules
@@ -16,11 +19,14 @@ class j1Map;
 class j1Player;
 class j1Collision;
 class j1FadeToBlack;
+class j1EntityManager;
+class j1PathFinding;
+class j1LandEnemy;
 
 class j1App
 {
 public:
-
+	//--------INTERNAL CONTROL---------//
 	// Constructor
 	j1App(int argc, char* args[]);
 
@@ -56,10 +62,10 @@ public:
 	//Used in the physics calculations of the game
 	float GetDeltaTime() const;
 
-private:
-
 	// Load config file
 	pugi::xml_node LoadConfig(pugi::xml_document&) const;
+
+private:
 
 	// Call modules before each loop iteration
 	void PrepareUpdate();
@@ -76,13 +82,16 @@ private:
 	// Call modules after each loop iteration
 	bool PostUpdate();
 
-	// Load / Save
+	//--------SAVE & LOAD ---------//
+	//Says that we want to load and iterates with all modules' load functions
 	bool LoadGameNow();
+	//Says that we want to save and iterates with all modules' save functions
 	bool SavegameNow() const;
 
 public:
 
-	// Modules
+	//--------MODULES---------//
+
 	j1Window*			win;
 	j1Input*			input;
 	j1Render*			render;
@@ -90,25 +99,51 @@ public:
 	j1Audio*			audio;
 	j1Scene*			scene;
 	j1Map*				map;
-	j1Player*			player;
+	j1EntityManager*	entities;
 	j1Collision*		collision;
 	j1FadeToBlack*		 fade;
+	j1PathFinding*		pathfinding;
+
+	//-----FRAME CONTROL------//
+	bool windowTitleControl = false; //Changes the title of the window
+	bool pause = false;
+
+	j1Timer* gameTimer = nullptr;
+	j1PerfTimer* gamePerfTimer = nullptr;
+	j1Timer* lastSecFrames = nullptr;
+	j1Timer lastFrameTimer;
+
+	uint64 frame_count = 0u;
+	uint last_second_frame_count = 0u;
+
+	uint32 last_frame_ms = 0u;
+	uint32 frames_on_last_update = 0u;
+
+	float avg_fps = 0.0f;
+
+	uint capTime = 0u;
+	bool frameCap = false;
+	float aux = 0.0f;
+
 
 private:
-
+	//--------INTERNAL CONTROL---------//
 	p2List<j1Module*>	modules;
-	uint				frames;
-	float				dt;
+	uint				frames = 0u;
+	float				dt = 0.0f;
 	int					argc;
 	char**				args;
 
+	//--------PROJECT---------//
 	p2SString			title;
 	p2SString			organization;
 
+	//--------SAVE & LOAD ---------//
 	mutable bool		want_to_save;
 	bool				want_to_load;
 	p2SString			load_game;
 	mutable p2SString	save_game;
+
 };
 
 extern j1App* App;

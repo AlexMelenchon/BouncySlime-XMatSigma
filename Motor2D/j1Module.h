@@ -14,7 +14,9 @@
 #include "SDL/include/SDL_rect.h"
 #include "p2List.h"
 #include "p2Log.h"
-#include"animation.h"
+#include"p2animation.h"
+#include "p2DynArray.h"
+#include "Brofiler/include/Brofiler.h"
 
 class j1App;
 
@@ -27,24 +29,30 @@ struct Collider;
 enum COLLIDER_TYPE
 {
 	COLLIDER_NONE = -1,
+
 	COLLIDER_WALL,
 	COLLIDER_PLAYER,
 	COLLIDER_START,
 	COLLIDER_DEATH,
 	COLLIDER_WIN,
 	COLLIDER_GOD,
+	COLLIDER_ENEMY,
 
 	COLLIDER_MAX
 };
+
+#define VEL_TO_WORLD 40
 
 
 class j1Module
 {
 public:
-
+	//--------INTERNAL CONTROL---------//
+	//Constructor if active
 	j1Module() : active(false)
 	{}
 
+	//Called before everything else
 	void Init()
 	{
 		active = true;
@@ -86,20 +94,25 @@ public:
 		return true;
 	}
 
+	// Loads the game
 	virtual bool Load(pugi::xml_node&)
 	{
 		return true;
 	}
 
+	//Saves the game
 	virtual bool Save(pugi::xml_node&) const
 	{
 		return true;
 	}
 
+	//Distributes collisions
 	virtual void OnCollision(Collider*, Collider*) {}
 
+	//Checks if the module is disabled, and doesn't iterate it if dnot active
 	bool IsEnabled() const { return active; }
 
+	//Active a module
 	void Enable()
 	{
 		if (active == false)
@@ -109,6 +122,7 @@ public:
 		}
 	}
 
+	//Disables a module
 	void Disable()
 	{
 		if (active == true)
@@ -120,8 +134,10 @@ public:
 
 
 public:
-
+	//--------INTERNAL CONTROL---------//
+	//A name for each module
 	p2SString	name;
+	//Sets if a module is active (if not, it doesn't iterate with it)
 	bool		active;
 
 };

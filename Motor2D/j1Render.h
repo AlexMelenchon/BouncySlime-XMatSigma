@@ -8,7 +8,9 @@
 class j1Render : public j1Module
 {
 public:
+	//--------INTERNAL CONTROL---------//
 
+	//Constructor
 	j1Render();
 
 	// Destructor
@@ -28,13 +30,14 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	// Load / Save
+	//--------LOAD & SAVE---------//
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 
-	// Blit
+	//--------BLIT---------//
 	void SetViewPort(const SDL_Rect& rect);
 	void ResetViewPort();
+	iPoint ScreenToWorld(int x, int y) const;
 	bool Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section = NULL, float speed = 1.0f, SDL_RendererFlip flip = SDL_FLIP_NONE, double angle = 0, int pivot_x = INT_MAX, int pivot_y = INT_MAX) const;
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool filled = true, bool use_camera = true) const;
 	bool DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true) const;
@@ -44,11 +47,11 @@ public:
 	void SetBackgroundColor(SDL_Color color);
 
 public:
-
-	SDL_Renderer*	renderer;
-	SDL_Rect		camera;
-	SDL_Rect		viewport;
-	SDL_Color		background;
+	//--------RENDER-------//
+	SDL_Renderer*	renderer = nullptr;
+	SDL_Rect		camera = {0,0,0,0};
+	SDL_Rect		viewport = { 0,0,0,0 };
+	SDL_Color		background = { 0,0,0,0 };;
 };
 
 #endif // __j1RENDER_H__

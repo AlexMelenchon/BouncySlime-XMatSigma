@@ -7,16 +7,23 @@
 class j1FadeToBlack : public j1Module
 {
 public:
+	//--------INTERNAL CONTROL---------//
+	//Constructor
 	j1FadeToBlack();
+	//Destructor
 	~j1FadeToBlack();
-
+	// Called before render is avaliable
 	bool Awake(pugi::xml_node& config);
+	// Called before the first frame iteration
 	bool Start();
+	// Called each loop iteration
 	bool PostUpdate();
-	bool FadeToBlack(const char* mapNumber, float time = 2.0f);
+
+	//--------FADE---------//
+	bool FadeToBlack(const char* mapNumber, int id, float time = 2.0f);
 
 private:
-
+	//--------FADE---------//
 	enum fade_step
 	{
 		none,

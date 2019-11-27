@@ -1,14 +1,8 @@
 #ifndef __j1PLAYER_H__
 #define __j1PLAYER_H__
 
-#include "j1Module.h"
+#include "j1Entity.h"
 
-#define MAXIMUM_COLLIDERS 6
-struct FX
-{
-	int id = 0;
-	p2SString path;
-};
 enum player_states
 {
 	ST_UNKNOWN,
@@ -18,7 +12,8 @@ enum player_states
 	ST_FALLING,
 	ST_WALL,
 	ST_WALL_JUMPING,
-	ST_GOD
+	ST_GOD,
+	ST_DEAD
 };
 
 enum player_inputs
@@ -29,7 +24,9 @@ enum player_inputs
 	IN_FALL,
 	IN_WALL,
 	IN_JUMP_WALL,
-	IN_GOD
+	IN_GOD,
+	IN_DEATH,
+	IN_DEATH_FINISH
 };
 
 enum slow_direction
@@ -42,130 +39,174 @@ enum slow_direction
 	SLOW_LIMITS
 };
 
-enum collisionDirection 
-{
-	DIRECTION_NONE = -1,
-
-	DIRECTION_LEFT,
-	DIRECTION_RIGHT,
-	DIRECTION_UP,
-	DIRECTION_DOWN,
-	DIRECTION_MAX
-};
-
-class j1Player : public j1Module
+class j1Player : public j1Entity
 {
 public:
+	//--------INTERNAL CONTROL---------//
 	//Constructor
 	j1Player();
+
 	//Destructor
 	~j1Player();
+
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
+
 	// Called before the first frame
 	bool Start();
+
 	// Called each loop iteration
 	bool PreUpdate();
+
 	// Called each loop iteration
 	bool Update(float dt);
+
 	// Called each loop iteration
 	bool PostUpdate();
+
 	// Called before quitting
 	bool CleanUp();
+
+
+	//--------SAVE & LOAD---------//
+	//Called when loading a save
 	bool Load(pugi::xml_node&);
+
+	//Called to save the game
 	bool Save(pugi::xml_node&) const;
 
-	void CalculateCollider(fPoint);
 
+	//--------POSITION ----------//
+	//Update player's position
+	void UpdatePos(float dt); 
+
+	//Smoothly slows an speed axis
+	float deAccel(slow_direction slow, float speedAxis, float grade = 0.0f, float limit = 0.0f);  
+
+	//Resets the player's movement completly
+	void ReSetMovement();
+
+	//Set the entity's position from other modules such as j1Map
+	void SetPos(int x, int y);
+
+	//The action of jumping
+	void Jump(float forceY, int fxId);
+
+
+	//--------COLLISION ---------//
+	//If a collision is detected by the j1Collision, distributes collisions according to it's type
+	void OnCollision(Collider* c1, Collider* c2);
+
+	//Calculate the collisions with the enviroment
 	void RecalculatePos(SDL_Rect, SDL_Rect);
 
+
+	//--------INPUTS---------//
+	//Standard Movement
 	void standardInputs();
-	void godInputs();
+
+	//Controls in God Mode movement
+	void godInputs(); 
+
+	//Controls God Mode
+	void GodMode(); 
 
 
-	void SetPos(int x, int y);
-	void ReSetMovement();
-	fPoint getPos()
-	{
-		return fpPlayerPos;
-	}
+	//--------STATE MACHiNE---------//
+	//Updates the current state
+	void UpdateState();
 
+	//When the player's state turns wall
+	void InWall();
+
+	//Iterates the states taking in account the inputs
+	player_states process_fsm(p2List<player_inputs>& inputs); 
+
+	//--------EXTERNAL---------//
+	//Returns the player's state
 	player_states getState()
 	{
 		return current_state;
 	}
 
-	void UpdateState();
-
-	void UpdatePos(float dt); //Update player's position
-	void LimitPlayerSpeed();  // To limit the player speed in both axis
-	float deAccel(slow_direction slow, float speedAxis, float grade = 0.0f, float limit = 0.0f);  //To slow smoothly the player in the x axis: 0.Slow current speed 1. slow the x+, 2. slow the x-
-	void GodMode(); //activateGodMode
-
-	void OnCollision(Collider* c1, Collider* c2);
-
-	p2List<Collider*> colliderList;
-
-	player_states process_fsm(p2List<player_inputs>& inputs);
-
-
+	//--------STATE MACHiNE---------//
+	//List that stores the players inputs
+	p2List<player_inputs> inputs;
 private:
-	p2List<player_inputs> inputs; //List that stores the players inputs
-	player_states current_state = ST_UNKNOWN; //Player Starting state
 
-	Collider* playerCollider = nullptr;
+	//--------MOVEMENT ---------//
+	//Force applied to the player's movement in both axis
+	fPoint fpForce = { 0.0f,0.0f }; 
 
-	//Position variables
-	fPoint fpPlayerPos = { 0.0f,0.0f }; //Determines player position on the map
-	fPoint fpPlayerSpeed = { 0.0f,0.0f }; // Determines player speed in the x and y axis
-	float fPlayerAccel = 0.0f; // Determines player acceleration in the x and y axis
-	fPoint fpForce = { -70.0,-220.0f }; //Force applied to the player's movement in both axis
-	fPoint wallForce = { 200.0f, -350.0f };
-	float fGravity = 50.0f;
+	//Force applied to the player's when killing an enemy
+	fPoint fpForceMiniJump = { 0.0f,0.0f };
 
+	//Force applied to the player when jumping off a wall
+	fPoint wallForce = { 0.0f, 0.0f };
 	
-	//Position Limits
-	float slowGrade = 1.175f;
-	int slowLimit = 200;
+	//Used to have an smooth leave of the wall
+	float wallingLeave = 0.0f;
 
-	fPoint fpPlayerMaxSpeed = { 650.0f, 750.0f }; // Determines player maximum speed
+	//LIMITS---
+	//The amount in which a speed will be divided to per frame.
+	float fSlowGrade = 0.0f;
 
+	//The amount in which a speed will be divided to per frame in hte air
+	float fSlowGradeAir = 0.0f;
 
-	SDL_RendererFlip playerFlip = SDL_RendererFlip::SDL_FLIP_NONE; //Var that controls if the player is flipped or not
+	//The amount in which a speed will be divided to per frame.
+	float fSlowGradeWall = 0.0f;
 
-	SDL_Texture* playerTex = nullptr; //Player's spritesheet pointer
-	pugi::xml_node auxLoader;
+	//The limit in order to perfom an slow in a speed
+	int iSlowLimit = 0; 
 
+	//--------INTERNAL CONTROL---------//
+	// Actual time of the ms elapsed since the last frame
+	float flCurrentTime = 0.0f;
 
-	//Internal control variables
-	float flPreviousTime = 0;
-	float flCurrentTime = 0;
-	bool falling = true;
-	bool walling = true;
-	float wallJumpLimit = 0.3f;
+	// Limits the time elapsed between frames so the movement doesn't break
+	float fInFramesLimit = 0.0f;
+
+	// Fade time to change maps or death
+	float playerFadeTime = 0.0f;
+
+	// To check if the player is near a wall
+	bool walling = false;
+
+	// The thime limit to restrain the player's movement will be restrained after jumping of a wall
+	float wallJumpLimit = 0.0f;
+
+	// Controls the time elapsed since the player jumped of a wall
 	float wallJumpTimer = 0.0f;
-	bool god = false;
+
+	// Controls the time elapsed since the player wants to leave the wall and actually leaves (jump breathing room)
+	float wallJumpLeaveControl = 0.0f;
+
+	//The player's direction when jumping off a wall
 	collisionDirection wallJumpDirection = DIRECTION_NONE;
 
-	// Colliders
-	Collider* colliders[MAXIMUM_COLLIDERS];
+	//Controls godMode
+	bool god = false; 
 
-
-	//Animations
-	Animation* currentAnimation = nullptr;
+	//--------ANIMATIONS---------//
 	Animation animIdle;
 	Animation animJump;
 	Animation animRun;
 	Animation animFall;
 	Animation animWall;
+	Animation animDeath;
 	
-	//Fx
+	//--------MUSIC---------//
 	FX jumpFx;
 	FX deathFx;
 	FX landFx;
 	FX winFx;
 	FX bounceFx;
 
+	
+
+	//Player Starting state
+	player_states current_state = ST_UNKNOWN; 
 };
 
 #endif 

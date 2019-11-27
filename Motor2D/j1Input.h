@@ -29,7 +29,9 @@ class j1Input : public j1Module
 {
 
 public:
+	//--------INTERNAL CONTROL---------//
 
+	//Constructor
 	j1Input();
 
 	// Destructor
@@ -47,6 +49,7 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	//--------KEY CONTROL---------//
 	// Gather relevant win events
 	bool GetWindowEvent(j1EventWindow ev);
 
@@ -64,18 +67,24 @@ public:
 	// Check if a certain window event happened
 	bool GetWindowEvent(int code);
 
+	//Sets all keys to KEY_UP
 	void ReSetKeys();
 
 	// Get mouse / axis position
 	void GetMousePosition(int &x, int &y);
+	//Get mouse motion
 	void GetMouseMotion(int& x, int& y);
+
 	// Get mouse / axis position
 	int			mouse_x;
 	int			mouse_y;
+
 private:
 	bool		windowEvents[WE_COUNT];
 	j1KeyState*	keyboard;
 	j1KeyState	mouse_buttons[NUM_MOUSE_BUTTONS];
+
+	// Get mouse / axis motion  position
 	int			mouse_motion_x;
 	int			mouse_motion_y;
 
