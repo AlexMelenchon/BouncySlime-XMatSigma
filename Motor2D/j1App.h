@@ -104,6 +104,10 @@ public:
 	j1FadeToBlack*		 fade;
 	j1PathFinding*		pathfinding;
 
+	//--------CONFIG---------//
+	//Config File
+	pugi::xml_document	config_file;
+
 	//-----FRAME CONTROL------//
 	bool windowTitleControl = false; //Changes the title of the window
 	bool pause = false;

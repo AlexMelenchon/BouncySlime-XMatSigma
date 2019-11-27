@@ -202,9 +202,7 @@ private:
 	FX landFx;
 	FX winFx;
 	FX bounceFx;
-
 	
-
 	//Player Starting state
 	player_states current_state = ST_UNKNOWN; 
 };

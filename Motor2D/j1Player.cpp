@@ -497,19 +497,22 @@ bool j1Player::Load(pugi::xml_node& load)
 //Called when loading a save
 bool j1Player::Save(pugi::xml_node& save) const
 {
+	pugi::xml_node playernode;
+
+	playernode = save.append_child("player");
 
 	//Save all the player's status variables
-	save.append_child("position").append_attribute("x") = fpPosition.x;
-	save.child("position").append_attribute("y") = fpPosition.y;
-	save.append_child("speed").append_attribute("x") = fpSpeed.x;
-	save.child("speed").append_attribute("y") = fpSpeed.y;
+	playernode.append_child("position").append_attribute("x") = fpPosition.x;
+	playernode.child("position").append_attribute("y") = fpPosition.y;
+	playernode.append_child("speed").append_attribute("x") = fpSpeed.x;
+	playernode.child("speed").append_attribute("y") = fpSpeed.y;
 
-	save.append_child("state").append_attribute("current_state") = current_state;
-	save.append_child("falling").append_attribute("value") = falling;
-	save.append_child("walling").append_attribute("value") = walling;
-	save.append_child("wallTimer").append_attribute("wallJumpTimer") = wallJumpTimer;
+	playernode.append_child("state").append_attribute("current_state") = current_state;
+	playernode.append_child("falling").append_attribute("value") = falling;
+	playernode.append_child("walling").append_attribute("value") = walling;
+	playernode.append_child("wallTimer").append_attribute("wallJumpTimer") = wallJumpTimer;
 
-	save.append_child("flip").append_attribute("value") = Flip;
+	playernode.append_child("flip").append_attribute("value") = Flip;
 
 	return true;
 }

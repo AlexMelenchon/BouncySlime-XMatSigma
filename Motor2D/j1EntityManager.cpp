@@ -23,6 +23,8 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 {
 	bool ret = false;
 
+	entConfig = config;
+
 	p2List_item<j1Entity*>* tmp = EntityList.start;
 	if (tmp == nullptr)
 		ret = true;
@@ -157,38 +159,59 @@ bool j1EntityManager::Save(pugi::xml_node& file) const
 bool j1EntityManager::Load(pugi::xml_node& file)
 {
 	bool ret = true;
-	p2List_item<j1Entity*>* tmp = EntityList.start;
-	while (tmp != nullptr)
+
+	CleanMapEnt();
+
+	p2SString playerStr("player");
+	p2SString enemyL("enemyL");
+	p2SString enemyF("enemyF");
+
+	for (pugi::xml_node propIterator = file.child("enemyL"); propIterator; propIterator = propIterator.next_sibling())
 	{
-		tmp->data->Load(file);
-		tmp = tmp->next;
+		if (enemyL == propIterator.name())
+			AddEntity(entityType::LAND_ENEMY, { 0,0 })->Load(propIterator);
+
+		if (enemyF == propIterator.name())
+			AddEntity(entityType::FLYING_ENEMY, { 0,0 })->Load(propIterator);
+
 	}
+
+	for (pugi::xml_node propIterator = file.child("enemyF"); propIterator; propIterator = propIterator.next_sibling())
+	{
+		if (enemyL == propIterator.name())
+			AddEntity(entityType::LAND_ENEMY, { 0,0 })->Load(propIterator);
+
+		if (enemyF == propIterator.name())
+			AddEntity(entityType::FLYING_ENEMY, { 0,0 })->Load(propIterator);
+
+	}
+
+	player->Load(file.child("player"));
+
+
 	return ret;
 }
 
 j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position)
 {
 	j1Entity* tmp = nullptr;
-	pugi::xml_document	config_file;
-	pugi::xml_node		config;
-
-	config = App->LoadConfig(config_file).child("entities");
+	pugi::xml_node config;
 
 	switch (type)
 	{
 	case entityType::PLAYER:
 		if(player == nullptr)
 		tmp = new j1Player();
-		config = config.child("player");
+		config = entConfig.child("player");
 
 		break;
 	case entityType::FLYING_ENEMY:
-		config = config.child("flyEnemy");
+		config = entConfig.child("flyEnemy");
 
 		break;
 	case entityType::LAND_ENEMY:
 		tmp = new j1LandEnemy();
-		config = config.child("landenemy");
+		config = entConfig.child("landenemy");
 
 		break;
 	}
@@ -197,10 +220,7 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position)
 		if (position.x != 0 && position.y != 0)
 			tmp->SetPos(position.x, position.y);
 
-		tmp->Awake(config);
-		tmp->Start();
-
-		EntityList.add(tmp);
+		InitEntity(EntityList.add(tmp)->data, config);
 
 	}
 
@@ -239,4 +259,3 @@ bool j1EntityManager::CleanMapEnt()
 
 	return ret;
 }
-

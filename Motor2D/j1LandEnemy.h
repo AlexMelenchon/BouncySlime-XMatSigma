@@ -9,11 +9,14 @@
 
 #define CHASING_DISTANCE 200
 
- enum class state : int
+enum class state : int
 {
-	 ST_IDLE,
-	 ST_CHASING,
-	 ST_UNKNOWN,
+	ST_UNKNOWN = -1,
+
+	ST_IDLE,
+	ST_CHASING,
+
+	ST_ALL,
 };
 
 
@@ -45,6 +48,14 @@ public:
 
 	// Called before quitting
 	bool CleanUp();
+
+
+	//--------SAVE & LOAD---------//
+	//Called when loading a save
+	bool Load(pugi::xml_node&);
+
+	//Called to save the game
+	bool Save(pugi::xml_node&) const;
 
 	//--------POSITION ---------//
 	void UpdatePos(float dt);

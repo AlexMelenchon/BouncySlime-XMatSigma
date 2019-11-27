@@ -73,7 +73,6 @@ bool j1LandEnemy::PreUpdate()
 
 bool j1LandEnemy::Update(float dt)
 {
-	currentAnimation = App->entities->player->currentAnimation;
 
 	bool ret = true;
 	switch (enemy_state)
@@ -90,18 +89,21 @@ bool j1LandEnemy::Update(float dt)
 		}
 	case state::ST_CHASING:
 		{
+
 		GetPathfinding();
-		
-		iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
+		if (path.Count() > 0)
+		{
+			iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
 
 
-		//The update the player's position & speed according to it's logic
-		if (fpPosition.x < current.x)
-			fpSpeed.x = 30;
-		if (fpPosition.x > current.x)
-			fpSpeed.x = -30;
+			//The update the player's position & speed according to it's logic
+			if (fpPosition.x < current.x)
+				fpSpeed.x = 30;
+			if (fpPosition.x > current.x)
+				fpSpeed.x = -30;
 
-		path.Pop(current);
+			path.Pop(current);
+		}
 		break;
 		}
 		
@@ -130,6 +132,12 @@ bool j1LandEnemy::PostUpdate(bool debug)
 bool j1LandEnemy::CleanUp()
 {
 	App->tex->UnLoad(Text);
+	if (collider != nullptr)
+	{
+		collider->to_delete = true;
+		collider = nullptr;
+	}
+
 	path.Clear();
 	return true;
 }
@@ -252,5 +260,50 @@ bool j1LandEnemy::GetPathfinding()
 
 
 	return true;
+}
 
+//Called when loading a save
+bool j1LandEnemy::Load(pugi::xml_node& load)
+{
+
+	fpPosition.x = load.child("position").attribute("x").as_float();
+	fpPosition.y = load.child("position").attribute("y").as_float();
+	fpSpeed.x = load.child("speed").attribute("x").as_float();
+	fpSpeed.y = load.child("speed").attribute("y").as_float();
+
+	falling = load.child("falling").attribute("value").as_bool();
+
+	//TODO, save pathfinding timer
+	//save.append_child("wallTimer").append_attribute("wallJumpTimer") = wallJumpTimer;
+	//wallJumpTimer = load.child("wallTimer").attribute("wallJumpTimer").as_float();
+
+	if (load.child("flip").attribute("value") == 0)
+		Flip = SDL_FLIP_NONE;
+	else
+		Flip = SDL_FLIP_HORIZONTAL;
+
+	return true;
+}
+
+//Called when loading a save
+bool j1LandEnemy::Save(pugi::xml_node& save) const
+{
+	pugi::xml_node eneNode;
+
+	eneNode = save.append_child("enemyL");
+
+	//Save all the player's status variables
+	eneNode.append_child("position").append_attribute("x") = fpPosition.x;
+	eneNode.child("position").append_attribute("y") = fpPosition.y;
+	eneNode.append_child("speed").append_attribute("x") = fpSpeed.x;
+	eneNode.child("speed").append_attribute("y") = fpSpeed.y;
+
+	eneNode.append_child("falling").append_attribute("value") = falling;
+	
+	//TODO, save pathfinding timer
+	//save.append_child("wallTimer").append_attribute("wallJumpTimer") = wallJumpTimer;
+
+	eneNode.append_child("flip").append_attribute("value") = Flip;
+
+	return true;
 }

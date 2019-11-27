@@ -64,6 +64,9 @@ public:
 	//Since player is used in other modules, we are going to have a pointer only to him
 	j1Player* player = nullptr;
 
+	//Node entity configuration
+	pugi::xml_node		entConfig;
+
 	//--------PATHFINDING---------//
 	SDL_Texture* debug_tex;
 
