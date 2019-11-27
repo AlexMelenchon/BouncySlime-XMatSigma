@@ -73,6 +73,7 @@ bool j1LandEnemy::PreUpdate()
 
 bool j1LandEnemy::Update(float dt)
 {
+	timer += dt;
 	currentAnimation = App->entities->player->currentAnimation;
 
 	bool ret = true;
@@ -85,23 +86,45 @@ bool j1LandEnemy::Update(float dt)
 		}
 	case state::ST_IDLE:
 		{
-
+		path.Clear();
+		fpSpeed.x = 0;
+		fpSpeed.y = 0;
 		break;
 		}
 	case state::ST_CHASING:
 		{
-		GetPathfinding();
+
+		if (timer > 0.25)
+		{
+			GetPathfinding();
+			timer = 0;
+		}
 		
-		iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
+		
+		if (path.Count() > 0)
+		{
+			iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
 
 
-		//The update the player's position & speed according to it's logic
-		if (fpPosition.x < current.x)
-			fpSpeed.x = 30;
-		if (fpPosition.x > current.x)
-			fpSpeed.x = -30;
+			//The update the player's position & speed according to it's logic
+			if (fpPosition.x < current.x && abs(fpPosition.x - App->entities->player->fpPosition.x) > App->entities->player->collider->rect.w / 2)
+				fpSpeed.x = 60;
+			else if (fpPosition.x > current.x && abs(fpPosition.x - App->entities->player->fpPosition.x) > App->entities->player->collider->rect.w / 2)
+				fpSpeed.x = -60;
+			else
+				fpSpeed.x = 0;
 
-		path.Pop(current);
+
+			if (fpPosition.y < current.y && abs(fpPosition.y - App->entities->player->fpPosition.y) > App->entities->player->collider->rect.w / 2)
+				fpSpeed.y = 60;
+			else if (fpPosition.y > current.y && abs(fpPosition.y - App->entities->player->fpPosition.y) > App->entities->player->collider->rect.w / 2)
+				fpSpeed.y = -60;
+			else
+				fpSpeed.y = 0;
+
+
+			path.Pop(current);
+		}
 		break;
 		}
 		
@@ -139,13 +162,6 @@ void j1LandEnemy::UpdatePos(float dt)
 	//If the logic does not demostrate tshe opposite, the player is always falling and not touching the wall
 	falling = true;
 
-	//path.Flip();
-	
-	
-	
-	//fpSpeed.y += fAccel * dt;
-	
-
 	//Limit Speed
 	//LimitSpeed(dt);
 
@@ -155,8 +171,7 @@ void j1LandEnemy::UpdatePos(float dt)
 	
 	
 	//We set the collider in hte player's position
-	CalculateCollider(fpPosition);
-	
+	CalculateCollider(fpPosition);	
 }
 
 
@@ -229,7 +244,7 @@ void j1LandEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 
 void j1LandEnemy::UpdateState()
 {
-	if (abs(abs(App->entities->player->fpPosition.x) - abs(fpPosition.x)) < CHASING_DISTANCE && App->entities->player->getState() != ST_DEAD)
+	if (abs(abs(App->entities->player->fpPosition.x) - abs(fpPosition.x)) < CHASING_DISTANCE && App->entities->player->getState() != ST_DEAD && abs(abs(App->entities->player->fpPosition.y) - abs(fpPosition.y)) < CHASING_DISTANCE)
 	{
 		enemy_state = state::ST_CHASING;
 	}
@@ -241,6 +256,7 @@ void j1LandEnemy::UpdateState()
 bool j1LandEnemy::GetPathfinding()
 {
 	path.Clear();
+
 	App->pathfinding->CreatePath(App->map->WorldToMap(fpPosition.x, fpPosition.y), App->map->WorldToMap(App->entities->player->fpPosition.x, App->entities->player->fpPosition.y));
 
 	uint pathCount = App->pathfinding->GetLastPath()->Count();

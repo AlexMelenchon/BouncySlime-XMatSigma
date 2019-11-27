@@ -128,11 +128,11 @@ bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 
 					if (tileset != NULL)
 					{
-						if(tile_id > 0)
 						map[i] = 0;
-						else
+					}					
+					else
 						map[i] = 1;
-					}
+					
 				}
 			}
 
