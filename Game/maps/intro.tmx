@@ -62201,10 +62201,10 @@
  <objectgroup id="8" name="ENTITIES">
   <object id="21" name="Start" x="60" y="935.5" width="9" height="9.5"/>
   <object id="22" name="Win" x="2189.33" y="0" width="13.3333" height="786.667"/>
-  <object id="27" name="EnemyL" x="451.818" y="949.636" width="9.81818" height="8.90909"/>
-  <object id="32" name="EnemyL" x="802.591" y="904.045" width="9.81818" height="8.90909"/>
-  <object id="33" name="EnemyF" x="357.091" y="643.545" width="9.81818" height="8.90909"/>
-  <object id="34" name="EnemyF" x="1662.09" y="576.545" width="9.81818" height="8.90909"/>
+  <object id="27" name="EnemyL" x="418" y="947.818" width="187.333" height="8.90909"/>
+  <object id="32" name="EnemyL" x="802.591" y="899.545" width="155" height="8.90909"/>
+  <object id="33" name="EnemyF" x="357.091" y="643.545" width="119.152" height="104.909"/>
+  <object id="34" name="EnemyF" x="1610.09" y="569.878" width="207.152" height="74.2424"/>
  </objectgroup>
  <layer id="13" name="NAVIGATION" width="150" height="69">
   <properties>

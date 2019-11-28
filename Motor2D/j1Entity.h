@@ -92,6 +92,12 @@ public:
 	//Update entities's position
 	virtual void UpdatePos(float dt) {};
 
+	//Sets the trace of an enemy
+	void SetTrace(SDL_Rect trace);
+
+	//Determines an entity predefined movement
+	virtual void TraceFollower(float dt) {};
+
 	//--------COLLISION ---------//
 	//Sets the collider to the player's position
 	void CalculateCollider(fPoint);
@@ -109,7 +115,7 @@ public:
 
 	//--------DRAW---------//
 	//Blits the entity into the world
-	void Draw();
+	virtual void Draw();
 
 	//Calculates if the entity is flipped or not
 	void FlipControl();
@@ -141,6 +147,10 @@ public:
 	float fAccelX = 0.0f;
 
 	float fGravity = 0.0f;
+
+	//Determines an entity predefined movement
+	SDL_Rect trace = { 0,0,0,0};
+	
 
 	//LIMITS---
 	// Determines player maximum speed

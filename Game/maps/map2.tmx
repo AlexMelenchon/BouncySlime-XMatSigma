@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="40">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="43">
  <properties>
   <property name="music" value="audio/music/loop2.ogg"/>
  </properties>
@@ -39,7 +39,6 @@
  </tileset>
  <layer id="7" name="SKY" width="150" height="69">
   <properties>
-   <draw name="draw" type="bool" value="true"/>
    <property name="speed" type="float" value="0.1"/>
   </properties>
   <data>
@@ -10397,7 +10396,6 @@
  </layer>
  <layer id="9" name="FAR_TREES" width="150" height="69">
   <properties>
-   <draw name="draw" type="bool" value="true"/>
    <property name="speed" type="float" value="0.2"/>
   </properties>
   <data>
@@ -20755,7 +20753,6 @@
  </layer>
  <layer id="10" name="MEDIUM_TREES" width="150" height="69">
   <properties>
-   <draw name="draw" type="bool" value="true"/>
    <property name="speed" type="float" value="0.3"/>
   </properties>
   <data>
@@ -31113,7 +31110,6 @@
  </layer>
  <layer id="11" name="CLOSE_TREES" width="150" height="69">
   <properties>
-   <draw name="draw" type="bool" value="true"/>
    <property name="speed" type="float" value="0.4"/>
   </properties>
   <data>
@@ -41471,7 +41467,6 @@
  </layer>
  <layer id="2" name="BACKGROUND" width="150" height="69">
   <properties>
-   <draw name="draw" type="bool" value="true"/>
    <property name="speed" type="float" value="1"/>
   </properties>
   <data>
@@ -51829,7 +51824,6 @@
  </layer>
  <layer id="1" name="LEVEL" width="150" height="69">
   <properties>
-   <draw name="draw" type="bool" value="true"/>
    <property name="speed" type="float" value="1"/>
   </properties>
   <data>
@@ -62218,14 +62212,15 @@
   <object id="38" name="Floor" x="2209.98" y="66.0043" width="141.855" height="12.3685"/>
   <object id="39" name="Death" x="1871" y="660" width="48.3333" height="12"/>
  </objectgroup>
- <objectgroup id="13" name="PLAYER_POSITIONS">
+ <objectgroup id="13" name="ENTITIES">
   <object id="35" name="Start" x="82.5895" y="928.746" width="5.2917" height="4.7083"/>
   <object id="36" name="Win" x="1885.53" y="943.212" width="15" height="79.6667"/>
+  <object id="40" name="EnemyF" x="231" y="64" width="68" height="350"/>
+  <object id="41" name="EnemyF" x="762" y="621" width="68" height="350"/>
+  <object id="42" name="EnemyF" x="1550" y="519" width="92" height="350"/>
  </objectgroup>
  <layer id="14" name="NAVIGATION" width="150" height="69">
   <properties>
-   <draw name="draw" type="bool" value="false"/>
-   <navigation name="navigation" type="bool" value="true"/>
    <property name="speed" type="float" value="1"/>
   </properties>
   <data>

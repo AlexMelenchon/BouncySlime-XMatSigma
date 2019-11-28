@@ -60,6 +60,9 @@ public:
 	//--------POSITION ---------//
 	void UpdatePos(float dt);
 
+	//When the enemy is idle, it has a defined movement
+	virtual void TraceFollower(float dt);
+
 	//--------COLLISION ---------//
 
 	//If a collision is detected by the j1Collision, distributes collisions according to it's type
@@ -68,10 +71,17 @@ public:
 	//Calculate the collisions with the enviroment
 	void RecalculatePos(SDL_Rect, SDL_Rect);
 
+	//--------DRAW---------//
+	//Blits the entity into the world
+	virtual void Draw();
+
 
 private:
 	//--------MOVEMENT ---------//
 	bool GetPathfinding();
+	bool landcheck = false;
+	bool flycheck = false;
+	void ReturnToStart(float dt);
 
 	//--------INTERNAL CONTROÑ ---------//
 	float pathTimer;
@@ -86,6 +96,10 @@ private:
 	//--------ANIMATIONS---------//
 	Animation animIdle;
 	SDL_Rect enemyRect = { 0,0,0,0 };
+
+	//------COLLIDER------//
+	//the entity's sprite is too little compared to the player so we will double it's size.
+	int scalesize = 2;
 
 };
 

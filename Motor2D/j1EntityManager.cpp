@@ -191,7 +191,7 @@ bool j1EntityManager::Load(pugi::xml_node& file)
 	return ret;
 }
 
-j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position)
+j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position, iPoint movement)
 {
 	j1Entity* tmp = nullptr;
 	pugi::xml_node config;
@@ -218,7 +218,16 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position)
 	if (tmp)
 	{
 		if (position.x != 0 && position.y != 0)
+		{
 			tmp->SetPos(position.x, position.y);
+
+			if (tmp->type == entityType::LAND_ENEMY || tmp->type == entityType::FLYING_ENEMY)
+			{
+				tmp->SetTrace({ position.x, position.y, movement.x, movement.y });
+			}
+				
+		}
+			
 
 		InitEntity(EntityList.add(tmp)->data, config);
 

@@ -31,8 +31,8 @@ bool j1LandEnemy::Awake(pugi::xml_node& land_node)
 
 	//Create the player's collider
 	SDL_Rect enemyRect = { 0,0,0,0 };
-	enemyRect.w = land_node.child("collision").child("collider").attribute("w").as_float();
-	enemyRect.h = land_node.child("collision").child("collider").attribute("h").as_float();
+	enemyRect.w = land_node.child("collision").child("collider").attribute("w").as_float() * scalesize;
+	enemyRect.h = land_node.child("collision").child("collider").attribute("h").as_float() * scalesize;
 
 	collider = new Collider(enemyRect, COLLIDER_ENEMY, this);
 
@@ -61,6 +61,7 @@ bool j1LandEnemy::Start()
 	//Collision load
 	App->collision->AddCollider(collider);
 
+	
 	return true;
 }
 
@@ -89,8 +90,38 @@ bool j1LandEnemy::Update(float dt)
 		{
 		currentAnimation = &animIdle;
 		path.Clear();
-		fpSpeed.x = 0;
 		fpSpeed.y = 0;
+		
+		if (collider->CheckCollision(trace))
+		{
+			
+			TraceFollower(dt);
+		}
+		else
+		{
+			/*ReturnToStart(dt);
+			if (path.Count() > 0)
+			{
+				iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
+
+
+				//The update the player's position & speed according to it's logic
+				if (fpPosition.x > trace.x)
+				{
+					fpSpeed.x = -60.0f;
+					Flip = SDL_FLIP_HORIZONTAL;
+				}
+
+				else if (fpPosition.x < trace.x)
+				{
+					fpSpeed.x = 60.0f;
+					Flip = SDL_FLIP_HORIZONTAL;
+				}
+			}*/
+		}		
+			
+		TraceFollower(dt);
+
 		break;
 		}
 	case state::ST_CHASING:
@@ -143,6 +174,12 @@ bool j1LandEnemy::Update(float dt)
 	return ret;
 }
 
+
+void j1LandEnemy::Draw()
+{
+	App->render->Blit(Text, (int)round(fpPosition.x), (int)round(fpPosition.y), &currentAnimation->GetCurrentFrame(App->GetDeltaTime()), 1.0f, Flip, 0.0f, (currentAnimation->pivotpos->x), (currentAnimation->GetCurrentFrame(App->GetDeltaTime()).h / 2), scalesize);
+}
+
 bool j1LandEnemy::PostUpdate(bool debug)
 {
 	Draw();
@@ -190,6 +227,39 @@ void j1LandEnemy::UpdatePos(float dt)
 }
 
 
+void j1LandEnemy::TraceFollower(float dt)
+{
+	if (!tracecheck)
+	{
+		fpSpeed.x = 60.0f;
+
+		Flip = SDL_FLIP_HORIZONTAL;
+
+		if (fpPosition.x >= trace.x + trace.w - collider->rect.w)
+		{
+			tracecheck = !tracecheck;
+		}
+	}
+
+	if (tracecheck)
+	{
+		fpSpeed.x = -60.0f;
+
+		Flip = SDL_FLIP_NONE;
+
+		if (fpPosition.x <= trace.x)
+		{
+			tracecheck = !tracecheck;
+		}
+	}
+}
+
+/*void j1LandEnemy::ReturnToStart(float dt)
+{	
+	path.Clear();
+	path = App->pathfinding->CreatePath(App->map->WorldToMap(fpPosition.x, fpPosition.y), App->map->WorldToMap( trace.x, trace.y ));
+
+}*/
 
 void j1LandEnemy::OnCollision(Collider* entityCol, Collider* coll)
 {

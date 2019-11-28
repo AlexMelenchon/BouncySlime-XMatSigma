@@ -64,6 +64,14 @@ void j1Entity::SetPos(int x, int y)
 	fpPosition.y = y;
 }
 
+void j1Entity::SetTrace(SDL_Rect trace_range)
+{
+	trace.x = trace_range.x;
+	trace.y = trace_range.y;
+	trace.w = trace_range.w;
+	trace.h = trace_range.h;
+}
+
 //Sets the collider to the player's position
 void j1Entity::CalculateCollider(fPoint pos)
 {

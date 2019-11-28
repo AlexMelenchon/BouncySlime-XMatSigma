@@ -85,8 +85,8 @@ bool j1FlyingEnemy::Update(float dt)
 	case flying_state::ST_IDLE:
 	{
 		path.Clear();
-		fpSpeed.x = 0;
-		fpSpeed.y = 0;
+		TraceFollower(dt);
+
 		break;
 	}
 	case flying_state::ST_CHASING:
@@ -136,6 +136,60 @@ bool j1FlyingEnemy::Update(float dt)
 	UpdatePos(dt);
 
 	return ret;
+}
+
+void j1FlyingEnemy::TraceFollower(float dt)
+{
+	if (!landcheck && !flycheck)
+	{
+		fpSpeed.y = 0;
+		fpSpeed.x = 60.0f;
+
+		Flip = SDL_FLIP_HORIZONTAL;
+
+		if (fpPosition.x >= trace.x + trace.w - collider->rect.w)
+		{
+			landcheck = !landcheck;			
+		}
+	}
+
+	if (!flycheck && landcheck)
+	{
+		fpSpeed.x = 0;
+		fpSpeed.y = 60;
+		if (fpPosition.y > trace.y + trace.h - collider->rect.h)
+		{
+			flycheck = !flycheck;
+		}
+	}
+
+	if (flycheck && landcheck)
+	{
+		fpSpeed.y = 0;
+		fpSpeed.x = -60.0f;
+
+		Flip = SDL_FLIP_NONE;
+
+		if (fpPosition.x <= trace.x)
+		{
+			landcheck = !landcheck;
+		}
+	}
+
+	if (flycheck && !landcheck)
+	{
+		fpSpeed.x = 0;
+		fpSpeed.y = -60;
+		if (fpPosition.y < trace.y)
+		{
+			flycheck = !flycheck;
+		}
+	}
+}
+
+void j1FlyingEnemy::Draw()
+{
+	App->render->Blit(Text, (int)round(fpPosition.x), (int)round(fpPosition.y), &currentAnimation->GetCurrentFrame(App->GetDeltaTime()), 1.0f, Flip, 0.0f, (currentAnimation->pivotpos->x), (currentAnimation->GetCurrentFrame(App->GetDeltaTime()).h / 2), scalesize);
 }
 
 bool j1FlyingEnemy::PostUpdate(bool debug)

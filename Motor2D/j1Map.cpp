@@ -561,12 +561,12 @@ bool j1Map::loadCollider(pugi::xml_node& node)
 	}
 	else if (name == "EnemyL")
 	{
-		App->entities->AddEntity(entityType::LAND_ENEMY, { colliderRect.x, colliderRect.y });
+		App->entities->AddEntity(entityType::LAND_ENEMY, { colliderRect.x, colliderRect.y }, { colliderRect.w, 0 });
 		return ret;
 	}
 	else if (name == "EnemyF")
 	{
-		App->entities->AddEntity(entityType::FLYING_ENEMY, { colliderRect.x, colliderRect.y });
+		App->entities->AddEntity(entityType::FLYING_ENEMY, { colliderRect.x, colliderRect.y }, { colliderRect.w, colliderRect.h });
 		return ret;
 	}
 	else

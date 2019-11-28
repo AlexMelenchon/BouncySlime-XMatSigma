@@ -53,7 +53,7 @@ public:
 
 	//--------ENTITY MANAGEMENT---------//
 	//Function that adds entities
-	j1Entity* AddEntity(entityType type, iPoint position);
+	j1Entity* AddEntity(entityType type, iPoint position, iPoint movement = { 0,0 });
 
 	//Function that initializes entities
 	bool InitEntity(j1Entity* tmp, pugi::xml_node& config);
