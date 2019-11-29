@@ -113,6 +113,13 @@ bool j1Scene::PreUpdate()
 		}
 	}
 
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
+	{
+		origin_selected = false;
+		debugPath.Clear();
+	}
+
+
 	return true;
 }
 
