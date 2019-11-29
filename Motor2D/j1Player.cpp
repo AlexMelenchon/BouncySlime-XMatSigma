@@ -246,7 +246,7 @@ bool j1Player::Update(float dt)
 	switch (current_state)
 	{
 	case ST_GROUND:
-		LOG("GROUND\n");
+
 		//The axis Y is 0
 		fAccel = 0;
 		fpSpeed.y = 0;
@@ -262,7 +262,7 @@ bool j1Player::Update(float dt)
 		break;
 
 	case ST_AIR:
-		LOG("IN THE AIR ^^^^\n");
+
 		fAccel += fGravity *dt * VEL_TO_WORLD;
 
 		//We check the player's speed and select his animation accordingly
@@ -277,19 +277,19 @@ bool j1Player::Update(float dt)
 		break;
 
 	case ST_FALLING:
-		LOG("FALLING \n");
+
 		fAccel += fGravity*2.0f *dt * VEL_TO_WORLD;
 		currentAnimation = &animFall;
 		break;
 
 	case ST_WALL:
-		LOG("WALLING \n");
+
 		fAccel += fGravity/2.0f;
 		currentAnimation = &animWall;
 		break;
 
 	case ST_WALL_JUMPING:
-		LOG("WALL JUMPING \n");
+
 		fAccel += fGravity   *dt * VEL_TO_WORLD;
 		wallJumpTimer += dt;
  		if (wallJumpTimer > wallJumpLimit) //When the player jumps, there's a limit in his speed to make him not stick to the wall for ever
@@ -302,7 +302,7 @@ bool j1Player::Update(float dt)
 		break;
 
 	case ST_GOD:
-		LOG("GOD \n");
+
 		falling = false;
 		walling = false;
 		currentAnimation = &animIdle;

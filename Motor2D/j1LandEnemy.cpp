@@ -13,7 +13,6 @@
 #include "j1Pathfinding.h"
 #include "j1Scene.h"
 
-
 j1LandEnemy::j1LandEnemy() : j1Entity()
 {	
 	this->type = entityType::LAND_ENEMY;
@@ -22,7 +21,6 @@ j1LandEnemy::j1LandEnemy() : j1Entity()
 
 j1LandEnemy ::~j1LandEnemy()
 {}
-
 
 bool j1LandEnemy::Awake(pugi::xml_node& land_node)
 {
@@ -140,6 +138,19 @@ bool j1LandEnemy::Update(float dt)
 		{
 			iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
 
+			if (path.Count() > 2)
+			{
+				iPoint next = { 0,0 };
+
+				next = { path.At(path.Count() -2)->x, path.At(path.Count() -2)->y };
+
+				if(next.x != 0 && next.y != 0)
+				if (App->pathfinding->IsWalkable(next))
+					LOG("Pep");
+				else
+					LOG("David");
+
+			}
 
 			//The update the player's position & speed according to it's logic
 			if (fpPosition.x < current.x && abs(fpPosition.x - App->entities->player->fpPosition.x) > App->entities->player->collider->rect.w / 2)
@@ -154,15 +165,6 @@ bool j1LandEnemy::Update(float dt)
 			}				
 			else
 				fpSpeed.x = 0;
-
-
-			if (fpPosition.y < current.y && abs(fpPosition.y - App->entities->player->fpPosition.y) > App->entities->player->collider->rect.w / 2)
-				fpSpeed.y = 60;
-			else if (fpPosition.y > current.y && abs(fpPosition.y - App->entities->player->fpPosition.y) > App->entities->player->collider->rect.w / 2)
-				fpSpeed.y = -60;
-			else
-				fpSpeed.y = 0;
-
 
 			path.Pop(current);
 		}
@@ -207,6 +209,7 @@ bool j1LandEnemy::CleanUp()
 	}
 
 	path.Clear();
+
 	return true;
 }
 
@@ -221,8 +224,6 @@ void j1LandEnemy::UpdatePos(float dt)
 	fpPosition.x += fpSpeed.x * dt;
 	fpPosition.y += fpSpeed.y * dt;
 
-	
-	
 	//We set the collider in hte player's position
 	CalculateCollider(fpPosition);	
 }
