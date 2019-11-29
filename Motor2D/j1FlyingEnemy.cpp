@@ -362,7 +362,7 @@ bool j1FlyingEnemy::Save(pugi::xml_node& save) const
 {
 	pugi::xml_node eneNode;
 
-	eneNode = save.append_child("enemyL");
+	eneNode = save.append_child("enemyF");
 
 	//Save all the player's status variables
 	eneNode.append_child("position").append_attribute("x") = fpPosition.x;
