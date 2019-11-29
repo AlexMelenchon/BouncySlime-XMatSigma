@@ -12,6 +12,7 @@
 #include "j1Pathfinding.h"
 #include "j1Scene.h"
 #include "j1FlyingEnemy.h"
+#include "j1Player.h"
 
 //oWAFegezRNTwm7pdgahyexTk
 
@@ -92,7 +93,7 @@ bool j1FlyingEnemy::Update(float dt)
 	case flying_state::ST_CHASING:
 	{
 
-		if (timer > 1.5f)
+		if (timer > 1.5f && App->entities->player->getState() == (ST_GROUND || ST_WALL))
 		{
 			GetPathfinding();
 			timer = 0;

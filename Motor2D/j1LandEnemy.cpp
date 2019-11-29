@@ -165,7 +165,6 @@ bool j1LandEnemy::Update(float dt)
 
 					if (foundIt)
 					{
-						LOG("WE ARE JUMPING BOIZ");
 
 						if (!falling)
 						{
