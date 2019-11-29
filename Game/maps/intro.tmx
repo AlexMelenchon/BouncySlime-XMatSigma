@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="35">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="39">
  <properties>
   <property name="music" value="audio/music/loop3.ogg"/>
  </properties>
@@ -62201,8 +62201,9 @@
  <objectgroup id="8" name="ENTITIES">
   <object id="21" name="Start" x="60" y="935.5" width="9" height="9.5"/>
   <object id="22" name="Win" x="2189.33" y="0" width="13.3333" height="786.667"/>
-  <object id="27" name="EnemyL" x="418" y="947.818" width="187.333" height="8.90909"/>
+  <object id="27" name="EnemyL" x="457.75" y="944.068" width="155.833" height="8.90909"/>
   <object id="34" name="EnemyF" x="1610.09" y="569.878" width="207.152" height="74.2424"/>
+  <object id="35" name="EnemyL" x="812.75" y="891.545" width="155.833" height="8.90909"/>
  </objectgroup>
  <layer id="13" name="NAVIGATION" width="150" height="69">
   <properties>
