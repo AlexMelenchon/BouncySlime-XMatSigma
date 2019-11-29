@@ -127,46 +127,46 @@ bool j1LandEnemy::Update(float dt)
 		{
 		currentAnimation = &animRun;
 
-		if (timer > 0.25)
+		if (timer > 1.5f)
 		{
 			GetPathfinding();
 			timer = 0;
 		}
 		
-		
 		if (path.Count() > 0)
 		{
 			iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
 
-			if (path.Count() > 2)
+			if (path.Count() > 1)
 			{
 				iPoint next = { 0,0 };
 
-				next = { path.At(path.Count() -2)->x, path.At(path.Count() -2)->y };
+				next = { path.At(path.Count() -2)->x, path.At(path.Count() -2)->y +2 };
 
-				if(next.x != 0 && next.y != 0)
-				if (App->pathfinding->IsWalkable(next))
-					LOG("Pep");
+				if (!App->pathfinding->IsWalkable(next))
+					LOG("IS WALKABLE");
 				else
-					LOG("David");
+					LOG("JUMP");
 
 			}
 
 			//The update the player's position & speed according to it's logic
-			if (fpPosition.x < current.x && abs(fpPosition.x - App->entities->player->fpPosition.x) > App->entities->player->collider->rect.w / 2)
+			if (abs(abs(fpPosition.x) - abs(current.x)) > 3)
 			{
-				fpSpeed.x = 60;
-				Flip = SDL_FLIP_HORIZONTAL;
+				if (fpPosition.x < current.x && abs(fpPosition.x - App->entities->player->fpPosition.x) > App->entities->player->collider->rect.w / 2)
+				{
+					fpSpeed.x = 60;
+					Flip = SDL_FLIP_HORIZONTAL;
+				}
+				else if (fpPosition.x > current.x && abs(fpPosition.x - App->entities->player->fpPosition.x) > App->entities->player->collider->rect.w / 2)
+				{
+					fpSpeed.x = -60;
+					Flip = SDL_FLIP_NONE;
+				}
 			}
-			else if (fpPosition.x > current.x && abs(fpPosition.x - App->entities->player->fpPosition.x) > App->entities->player->collider->rect.w / 2)
-			{
-				fpSpeed.x = -60;
-				Flip = SDL_FLIP_NONE;
-			}				
 			else
-				fpSpeed.x = 0;
+				path.Pop(current);
 
-			path.Pop(current);
 		}
 		break;
 		}

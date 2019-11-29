@@ -92,42 +92,40 @@ bool j1FlyingEnemy::Update(float dt)
 	case flying_state::ST_CHASING:
 	{
 
-		if (timer > 0.25)
+		if (timer > 1.5f)
 		{
 			GetPathfinding();
 			timer = 0;
 		}
 
-
 		if (path.Count() > 0)
 		{
 			iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
 
-
 			//The update the player's position & speed according to it's logic
-			if (fpPosition.x < current.x && abs(fpPosition.x - App->entities->player->fpPosition.x) > App->entities->player->collider->rect.w / 2)
-			{
-				fpSpeed.x = 60;
-				Flip = SDL_FLIP_HORIZONTAL;
-			}
-			else if (fpPosition.x > current.x && abs(fpPosition.x - App->entities->player->fpPosition.x) > App->entities->player->collider->rect.w / 2)
-			{
-				fpSpeed.x = -60;				
-				Flip = SDL_FLIP_NONE;
+			if (abs(abs(fpPosition.x) - abs(current.x)) > 3 || abs(abs(fpPosition.y) - abs(current.y)) > 3) {
+
+				if (fpPosition.x < current.x )
+				{
+					fpSpeed.x = 60;
+					Flip = SDL_FLIP_HORIZONTAL;
+				}
+				else if (fpPosition.x > current.x)
+				{
+					fpSpeed.x = -60;
+					Flip = SDL_FLIP_NONE;
+				}
+
+				if (fpPosition.y < current.y)
+					fpSpeed.y = 60;
+
+				else if (fpPosition.y > current.y)
+					fpSpeed.y = -60;
+
 			}
 			else
-				fpSpeed.x = 0;
+				path.Pop(current);
 
-
-			if (fpPosition.y < current.y && abs(fpPosition.y - App->entities->player->fpPosition.y) > App->entities->player->collider->rect.w / 2)
-				fpSpeed.y = 60;
-			else if (fpPosition.y > current.y && abs(fpPosition.y - App->entities->player->fpPosition.y) > App->entities->player->collider->rect.w / 2)
-				fpSpeed.y = -60;
-			else
-				fpSpeed.y = 0;
-
-
-			path.Pop(current);
 		}
 		break;
 	}
