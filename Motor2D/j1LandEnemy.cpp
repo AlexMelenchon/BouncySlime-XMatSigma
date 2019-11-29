@@ -99,12 +99,10 @@ bool j1LandEnemy::Update(float dt)
 		}
 		else
 		{
-			/*ReturnToStart(dt);
+			ReturnToStart(dt);
 			if (path.Count() > 0)
 			{
 				iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
-
-
 				//The update the player's position & speed according to it's logic
 				if (fpPosition.x > trace.x)
 				{
@@ -117,10 +115,11 @@ bool j1LandEnemy::Update(float dt)
 					fpSpeed.x = 60.0f;
 					Flip = SDL_FLIP_HORIZONTAL;
 				}
-			}*/
+			}
+
+			TraceFollower(dt);
 		}		
 			
-		TraceFollower(dt);
 
 		break;
 		}
@@ -254,12 +253,20 @@ void j1LandEnemy::TraceFollower(float dt)
 	}
 }
 
-/*void j1LandEnemy::ReturnToStart(float dt)
+void j1LandEnemy::ReturnToStart(float dt)
 {	
 	path.Clear();
-	path = App->pathfinding->CreatePath(App->map->WorldToMap(fpPosition.x, fpPosition.y), App->map->WorldToMap( trace.x, trace.y ));
 
-}*/
+	App->pathfinding->CreatePath(App->map->WorldToMap(fpPosition.x, fpPosition.y), App->map->WorldToMap(trace.x, trace.y));
+
+	uint pathCount = App->pathfinding->GetLastPath()->Count();
+
+	for (uint i = 0; i < pathCount; i++)
+	{
+		path.PushBack(*App->pathfinding->GetLastPath()->At(i));
+	}
+
+}
 
 void j1LandEnemy::OnCollision(Collider* entityCol, Collider* coll)
 {
@@ -345,7 +352,9 @@ bool j1LandEnemy::GetPathfinding()
 	App->pathfinding->CreatePath(App->map->WorldToMap(fpPosition.x, fpPosition.y), App->map->WorldToMap(App->entities->player->fpPosition.x, App->entities->player->fpPosition.y));
 
 	uint pathCount = App->pathfinding->GetLastPath()->Count();
+
 	if (pathCount <= 0) return false;
+
 	for (uint i = 0; i < pathCount; i++)
 	{
 		path.PushBack(*App->pathfinding->GetLastPath()->At(i));
