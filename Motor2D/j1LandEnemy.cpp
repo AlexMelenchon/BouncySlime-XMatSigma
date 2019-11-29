@@ -77,7 +77,6 @@ bool j1LandEnemy::Update(float dt)
 	
 	timer += dt;
 
-
 	bool ret = true;
 	switch (enemy_state)
 	{
@@ -99,7 +98,13 @@ bool j1LandEnemy::Update(float dt)
 		}
 		else
 		{
-			ReturnToStart(dt);
+
+			if (timer > 0.25)
+			{
+				ReturnToStart(dt);
+				timer = 0;
+			}
+
 			if (path.Count() > 0)
 			{
 				iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
