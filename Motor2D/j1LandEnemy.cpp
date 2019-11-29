@@ -61,7 +61,6 @@ bool j1LandEnemy::Start()
 	//Collision load
 	App->collision->AddCollider(collider);
 
-	
 	return true;
 }
 
@@ -124,8 +123,6 @@ bool j1LandEnemy::Update(float dt)
 
 			TraceFollower(dt);
 		}		
-			
-
 		break;
 		}
 	case state::ST_CHASING:

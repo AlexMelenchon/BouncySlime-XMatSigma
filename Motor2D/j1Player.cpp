@@ -357,10 +357,12 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 				break;
 			case(COLLIDER_DEATH):
 				inputs.add(IN_DEATH);
-				App->fade->FadeToBlack(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);								
+				App->fade->FadeToBlack(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
+				ReSetMovement();
 				break;
 			case(COLLIDER_WIN):
-				App->fade->FadeToBlack(App->map->GetNextMap(),winFx.id,playerFadeTime );				
+				App->fade->FadeToBlack(App->map->GetNextMap(),winFx.id,playerFadeTime );
+				ReSetMovement();
 				break;
 			case(COLLIDER_ENEMY):
 				//PLAYER DIES, because he didn't collide from ABOVE
