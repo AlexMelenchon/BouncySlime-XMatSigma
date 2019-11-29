@@ -20,7 +20,15 @@ j1LandEnemy::j1LandEnemy() : j1Entity()
 }
 
 j1LandEnemy ::~j1LandEnemy()
-{}
+{
+	path.Clear();
+
+	if (collider != nullptr)
+	{
+		collider->to_delete = true;
+		collider = nullptr;
+	}
+}
 
 bool j1LandEnemy::Awake(pugi::xml_node& land_node)
 {
@@ -86,7 +94,6 @@ bool j1LandEnemy::Update(float dt)
 		{
 		currentAnimation = &animIdle;
 		path.Clear();
-		fpSpeed.y = 0;
 		
 		if (collider->CheckCollision(trace))
 		{
@@ -96,7 +103,7 @@ bool j1LandEnemy::Update(float dt)
 		else
 		{
 
-			if (timer > 0.25)
+			if (timer > 1.75f)
 			{
 				ReturnToStart(dt);
 				timer = 0;
@@ -127,7 +134,7 @@ bool j1LandEnemy::Update(float dt)
 		{
 		currentAnimation = &animRun;
 
-		if (timer > 1.5f)
+		if (timer > 0.25f)
 		{
 			GetPathfinding();
 			timer = 0;
@@ -143,24 +150,52 @@ bool j1LandEnemy::Update(float dt)
 
 				next = { path.At(path.Count() -2)->x, path.At(path.Count() -2)->y +2 };
 
-				if (!App->pathfinding->IsWalkable(next))
-					LOG("IS WALKABLE");
-				else
-					LOG("JUMP");
+				if (App->pathfinding->IsWalkable(next))
+				{
+					bool foundIt = false;
+					for (uint i = path.Count() - 2; i > 0; --i)
+					{
+						next = { path.At(i)->x, path.At(i)->y +2};
+						if (!App->pathfinding->IsWalkable(next))
+						{
+							foundIt = true;
+							break;
+						}
+					}
+
+					if (foundIt)
+					{
+						LOG("WE ARE JUMPING BOIZ");
+
+						if (!falling)
+						{
+							fpSpeed.y = -400.0f;
+						}
+
+
+					}
+
+				}
 
 			}
 
 			//The update the player's position & speed according to it's logic
-			if (abs(abs(fpPosition.x) - abs(current.x)) > 3)
+			if (abs(fpPosition.x - current.x) > App->map->data.tile_width)
 			{
-				if (fpPosition.x < current.x && abs(fpPosition.x - App->entities->player->fpPosition.x) > App->entities->player->collider->rect.w / 2)
+				if (fpPosition.x < current.x)
 				{
-					fpSpeed.x = 60;
+					if (fpSpeed.x < 0)
+						fpSpeed.x = 0;
+
+					fpSpeed.x += 30;
 					Flip = SDL_FLIP_HORIZONTAL;
 				}
-				else if (fpPosition.x > current.x && abs(fpPosition.x - App->entities->player->fpPosition.x) > App->entities->player->collider->rect.w / 2)
+				else if (fpPosition.x > current.x)
 				{
-					fpSpeed.x = -60;
+					if (fpSpeed.x > 0)
+						fpSpeed.x = 0;
+
+					fpSpeed.x -= 30;
 					Flip = SDL_FLIP_NONE;
 				}
 			}
@@ -187,6 +222,9 @@ bool j1LandEnemy::PostUpdate(bool debug)
 {
 	Draw();
 
+	if (falling)
+		fpSpeed.y += 30;
+
 	if (debug)
 	{
 		for (uint i = 0; i < path.Count(); ++i)
@@ -202,13 +240,6 @@ bool j1LandEnemy::PostUpdate(bool debug)
 bool j1LandEnemy::CleanUp()
 {
 	App->tex->UnLoad(Text);
-	if (collider != nullptr)
-	{
-		collider->to_delete = true;
-		collider = nullptr;
-	}
-
-	path.Clear();
 
 	return true;
 }
@@ -220,6 +251,8 @@ void j1LandEnemy::UpdatePos(float dt)
 
 	//Limit Speed
 	//LimitSpeed(dt);
+
+	fpSpeed.y += fAccel * dt;
 
 	fpPosition.x += fpSpeed.x * dt;
 	fpPosition.y += fpSpeed.y * dt;
@@ -320,13 +353,11 @@ void j1LandEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 		fpPosition.x = collRect.x + collRect.w;
 		if (fpSpeed.x < 0)
 			fpSpeed.x = 0;
-		falling = false;
 		break;
 	case DIRECTION_RIGHT:
 		fpPosition.x = collRect.x - entityColl.w;
 		if (fpSpeed.x > 0)
 			fpSpeed.x = 0;
-		falling = false;
 		break;
 	case DIRECTION_NONE:
 		break;
@@ -352,17 +383,21 @@ bool j1LandEnemy::GetPathfinding()
 {
 	path.Clear();
 
-	App->pathfinding->CreatePath(App->map->WorldToMap(fpPosition.x, fpPosition.y), App->map->WorldToMap(App->entities->player->fpPosition.x, App->entities->player->fpPosition.y));
+	App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x+1)), int(round(fpPosition.y +16))), App->map->WorldToMap(int(round(App->entities->player->fpPosition.x)), int(round(App->entities->player->fpPosition.y + App->entities->player->collider->rect.w/1.5f))));
 
 	uint pathCount = App->pathfinding->GetLastPath()->Count();
 
-	if (pathCount <= 0) return false;
+
+	if (pathCount <= 0 || pathCount > CHASING_MAX_TILES)
+	{
+		path.Clear();
+		return false;
+	}
 
 	for (uint i = 0; i < pathCount; i++)
 	{
 		path.PushBack(*App->pathfinding->GetLastPath()->At(i));
 	}
-
 
 	return true;
 }
