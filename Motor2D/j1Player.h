@@ -158,7 +158,10 @@ private:
 	float fSlowGradeWall = 0.0f;
 
 	//The limit in order to perfom an slow in a speed
-	int iSlowLimit = 0; 
+	int iSlowLimit = 0;
+
+	//The amount that the speed is reduced entering a wall
+	int inWallSpeedDrop = 0;
 
 	//--------INTERNAL CONTROL---------//
 	// Actual time of the ms elapsed since the last frame
