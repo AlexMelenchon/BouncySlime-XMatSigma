@@ -51,7 +51,7 @@ bool j1ParticleShuriken::Start()
 	//Collision load
 	App->collision->AddCollider(collider);
 
-	fpPosition = { 200,200 };
+	fpPosition = { 400,400 };
 
 	return true;
 }

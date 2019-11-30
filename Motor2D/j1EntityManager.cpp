@@ -219,7 +219,7 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position, iPoint mo
 
 	case entityType::SHURIKEN:
 		tmp = new j1ParticleShuriken();
-		config = entConfig.child("particles");
+		config = entConfig.child("shuriken");
 		break;
 	}
 	
