@@ -81,7 +81,6 @@ bool j1FlyingEnemy::PreUpdate()
 
 bool j1FlyingEnemy::Update(float dt)
 {
-
 	timer += dt;
 
 	bool ret = true;
@@ -110,7 +109,7 @@ bool j1FlyingEnemy::Update(float dt)
 			if (path.Count() > 0)
 			{
 				//The update the enemy's position & speed according to it's logic
-				Move();
+				Move(dt);
 			}
 
 		}
@@ -129,7 +128,7 @@ bool j1FlyingEnemy::Update(float dt)
 		if (path.Count() > 0)
 		{
 			//The update the enemy's position & speed according to it's logic
-			Move();
+			Move(dt);
 		}
 		break;
 	}
@@ -160,7 +159,7 @@ bool j1FlyingEnemy::ReturnToStart()
 }
 
 
-void j1FlyingEnemy::Move()
+void j1FlyingEnemy::Move(float dt)
 {
 	iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
 
@@ -168,14 +167,14 @@ void j1FlyingEnemy::Move()
 	{
 		if (fpPosition.x < current.x)
 		{
-			fpSpeed.x += moveSpeed.x;
+			fpSpeed.x += moveSpeed.x * (dt * VEL_TO_WORLD);
 			Flip = SDL_FLIP_HORIZONTAL;
 			if (fpSpeed.x < 0)
 				fpSpeed.x = 0;
 		}
 		else if (fpPosition.x > current.x)
 		{
-			fpSpeed.x -= moveSpeed.x;
+			fpSpeed.x -= moveSpeed.x * (dt * VEL_TO_WORLD);
 			Flip = SDL_FLIP_NONE;
 			if (fpSpeed.x > 0)
 				fpSpeed.x = 0;
@@ -183,14 +182,14 @@ void j1FlyingEnemy::Move()
 
 		if (fpPosition.y < current.y)
 		{
-			fpSpeed.y += moveSpeed.y;
+			fpSpeed.y += moveSpeed.y * (dt * VEL_TO_WORLD);
 			if (fpSpeed.y < 0)
 				fpSpeed.y = 0;
 		}
 
 		else if (fpPosition.y > current.y)
 		{
-			fpSpeed.y -= moveSpeed.y;
+			fpSpeed.y -= moveSpeed.y * (dt * VEL_TO_WORLD);
 			if (fpSpeed.y > 0)
 				fpSpeed.y = 0;
 		}
@@ -198,9 +197,6 @@ void j1FlyingEnemy::Move()
 	}
 	else
 		path.Pop(current);
-
-
-
 }
 
 void j1FlyingEnemy::TraceFollower(float dt)

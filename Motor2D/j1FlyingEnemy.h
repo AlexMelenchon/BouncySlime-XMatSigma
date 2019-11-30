@@ -64,7 +64,7 @@ public:
 	//When the enemy is idle, it has a defined movement
 	void TraceFollower(float dt);
 
-	void Move();
+	void Move(float dt);
 
 
 
