@@ -74,7 +74,6 @@ bool j1FlyingEnemy::Update(float dt)
 
 	timer += dt;
 
-
 	bool ret = true;
 	switch (enemy_state)
 	{
@@ -85,14 +84,33 @@ bool j1FlyingEnemy::Update(float dt)
 	}
 	case flying_state::ST_IDLE:
 	{
-		path.Clear();
-		TraceFollower(dt);
+		if (collider->CheckCollision(trace))
+		{
+			path.Clear();
+			TraceFollower(dt);
+		}
+		else
+		{
+			if (timer > 1.00f)
+			{
+				ReturnToStart();
+				timer = 0;
+			}
+
+			if (path.Count() > 0)
+			{
+				//The update the enemy's position & speed according to it's logic
+				Move();
+			}
+
+		}
+		break;
 
 		break;
 	}
 	case flying_state::ST_CHASING:
 	{
-		if (timer > 0.25f)
+		if (timer > 0.5f)
 		{
 			GetPathfinding();
 			timer = 0;
@@ -100,44 +118,8 @@ bool j1FlyingEnemy::Update(float dt)
 
 		if (path.Count() > 0)
 		{
-			iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
-
-			//The update the player's position & speed according to it's logic
-			if (abs(abs(fpPosition.x) - abs(current.x)) > 16 || abs(abs(fpPosition.y) - abs(current.y)) > 16) 
-			{
-				if (fpPosition.x < current.x )
-				{
-					fpSpeed.x += 20;
-					Flip = SDL_FLIP_HORIZONTAL;
-					if (fpSpeed.x < 0)
-						fpSpeed.x = 0;
-				}
-				else if (fpPosition.x > current.x)
-				{
-					fpSpeed.x -= 20;
-					Flip = SDL_FLIP_NONE;
-					if (fpSpeed.x > 0)
-						fpSpeed.x = 0;
-				}
-
-				if (fpPosition.y < current.y)
-				{
-					fpSpeed.y += 20;
-					if (fpSpeed.y < 0)
-						fpSpeed.y = 0;
-				}
-
-				else if (fpPosition.y > current.y)
-				{
-					fpSpeed.y -= 20;
-					if (fpSpeed.y > 0)
-						fpSpeed.y = 0;
-				}
-
-			}
-			else
-				path.Pop(current);
-
+			//The update the enemy's position & speed according to it's logic
+			Move();
 		}
 		break;
 	}
@@ -146,6 +128,69 @@ bool j1FlyingEnemy::Update(float dt)
 	UpdatePos(dt);
 
 	return ret;
+}
+
+bool j1FlyingEnemy::ReturnToStart()
+{
+	path.Clear();
+
+	if (!App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + 16))), App->map->WorldToMap(trace.x + 1, trace.y)))
+		return false;
+
+
+	uint pathCount = App->pathfinding->GetLastPath()->Count();
+
+	for (uint i = 0; i < pathCount; i++)
+	{
+		path.PushBack(*App->pathfinding->GetLastPath()->At(i));
+	}
+
+	return true;
+
+}
+
+
+void j1FlyingEnemy::Move()
+{
+	iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
+
+	if (abs(abs(fpPosition.x) - abs(current.x)) > 16 || abs(abs(fpPosition.y) - abs(current.y)) > 16)
+	{
+		if (fpPosition.x < current.x)
+		{
+			fpSpeed.x += 10;
+			Flip = SDL_FLIP_HORIZONTAL;
+			if (fpSpeed.x < 0)
+				fpSpeed.x = 0;
+		}
+		else if (fpPosition.x > current.x)
+		{
+			fpSpeed.x -= 10;
+			Flip = SDL_FLIP_NONE;
+			if (fpSpeed.x > 0)
+				fpSpeed.x = 0;
+		}
+
+		if (fpPosition.y < current.y)
+		{
+			fpSpeed.y += 10;
+			if (fpSpeed.y < 0)
+				fpSpeed.y = 0;
+		}
+
+		else if (fpPosition.y > current.y)
+		{
+			fpSpeed.y -= 10;
+			if (fpSpeed.y > 0)
+				fpSpeed.y = 0;
+		}
+
+	}
+	else
+		path.Pop(current);
+
+
+
 }
 
 void j1FlyingEnemy::TraceFollower(float dt)
@@ -303,15 +348,16 @@ bool j1FlyingEnemy::GetPathfinding()
 {
 	path.Clear();
 
-	App->pathfinding->CreatePath(App->map->WorldToMap(fpPosition.x, fpPosition.y), App->map->WorldToMap(App->entities->player->fpPosition.x, App->entities->player->fpPosition.y));
+	if (!App->pathfinding->CreatePath(App->map->WorldToMap(fpPosition.x, fpPosition.y), App->map->WorldToMap(App->entities->player->fpPosition.x, App->entities->player->fpPosition.y)))
+		return false;
 
 	uint pathCount = App->pathfinding->GetLastPath()->Count();
 	if (pathCount <= 0) return false;
+
 	for (uint i = 0; i < pathCount; i++)
 	{
 		path.PushBack(*App->pathfinding->GetLastPath()->At(i));
 	}
-
 
 	return true;
 }

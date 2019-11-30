@@ -74,7 +74,6 @@ public:
 
 	void Move(bool toPlayer);
 
-
 	//--------COLLISION ---------//
 	
 	//If a collision is detected by the j1Collision, distributes collisions according to it's type
@@ -87,12 +86,16 @@ public:
 	//Blits the entity into the world
 	virtual void Draw();
 
+	//--------PATHFINDING---------//
+
+	bool GetPathfinding();
+
+	bool ReturnToStart();
+
 
 private:
 	//--------MOVEMENT ---------//
-	bool GetPathfinding();
 	bool tracecheck = false;
-	bool ReturnToStart();
 
 	//--------INTERNAL CONTROÑ ---------//
 	float pathTimer = 0.0f;

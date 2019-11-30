@@ -62179,7 +62179,7 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="7" name="COLLIDERS">
+ <objectgroup id="7" name="COLLIDERS" visible="0">
   <object id="1" name="Floor" x="0" y="960.152" width="175.848" height="143.727"/>
   <object id="2" name="Floor" x="400.033" y="959.977" width="223.861" height="143.944"/>
   <object id="3" name="Floor" x="783.888" y="912.07" width="223.981" height="79.9336"/>

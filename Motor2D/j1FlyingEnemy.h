@@ -61,7 +61,11 @@ public:
 	void UpdatePos(float dt);
 
 	//When the enemy is idle, it has a defined movement
-	virtual void TraceFollower(float dt);
+	void TraceFollower(float dt);
+
+	void Move();
+
+
 
 	//--------COLLISION ---------//
 
@@ -75,13 +79,17 @@ public:
 	//Blits the entity into the world
 	virtual void Draw();
 
+	//--------PATHFINDING---------//
+
+	bool GetPathfinding();
+
+	bool ReturnToStart();
+
 
 private:
 	//--------MOVEMENT ---------//
-	bool GetPathfinding();
 	bool landcheck = false;
 	bool flycheck = false;
-	void ReturnToStart(float dt);
 
 	//--------INTERNAL CONTROÑ ---------//
 	float pathTimer;
