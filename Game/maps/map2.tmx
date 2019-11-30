@@ -62221,8 +62221,6 @@
  </objectgroup>
  <layer id="14" name="NAVIGATION" width="150" height="69">
   <properties>
-   <property name="draw" type="bool" value="false"/>
-   <property name="navigation" type="bool" value="true"/>
    <property name="speed" type="float" value="1"/>
   </properties>
   <data>

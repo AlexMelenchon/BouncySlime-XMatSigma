@@ -7,8 +7,7 @@
 #include "p2Point.h"
 #include "p2DynArray.h"
 
-#define CHASING_DISTANCE 450
-#define CHASING_MAX_TILES 32
+#define CHASING_DISTANCE 200
 
 enum class flying_state : int
 {
@@ -62,11 +61,7 @@ public:
 	void UpdatePos(float dt);
 
 	//When the enemy is idle, it has a defined movement
-	void TraceFollower(float dt);
-
-	void Move();
-
-
+	virtual void TraceFollower(float dt);
 
 	//--------COLLISION ---------//
 
@@ -80,17 +75,13 @@ public:
 	//Blits the entity into the world
 	virtual void Draw();
 
-	//--------PATHFINDING---------//
-
-	bool GetPathfinding();
-
-	bool ReturnToStart();
-
 
 private:
 	//--------MOVEMENT ---------//
+	bool GetPathfinding();
 	bool landcheck = false;
 	bool flycheck = false;
+	void ReturnToStart(float dt);
 
 	//--------INTERNAL CONTROÑ ---------//
 	float pathTimer;

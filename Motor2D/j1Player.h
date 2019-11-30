@@ -158,14 +158,14 @@ private:
 	float fSlowGradeWall = 0.0f;
 
 	//The limit in order to perfom an slow in a speed
-	int iSlowLimit = 0;
-
-	//The amount that the speed is reduced entering a wall
-	int inWallSpeedDrop = 0;
+	int iSlowLimit = 0; 
 
 	//--------INTERNAL CONTROL---------//
 	// Actual time of the ms elapsed since the last frame
 	float flCurrentTime = 0.0f;
+
+	// Limits the time elapsed between frames so the movement doesn't break
+	float fInFramesLimit = 0.0f;
 
 	// Fade time to change maps or death
 	float playerFadeTime = 0.0f;

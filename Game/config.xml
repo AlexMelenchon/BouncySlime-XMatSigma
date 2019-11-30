@@ -39,22 +39,17 @@
   </audio>
 
   <entities>
-
-    <manager>
-      <inFramesLimit>0.15f</inFramesLimit>
-    </manager>
-    
     <player>
       <movement>
         <movementForce x="-70.0f" y="-220.0f" />
         <miniMovementForce x="0.0f" y="-100.0f" />
-        <wallForce x="350.0f" y="-275.0f" />
-        <gravity>62.5f</gravity>
-        <slowGrade>0.95f</slowGrade>
-        <slowGradeAir>0.975f</slowGradeAir>
-        <slowGradeWall>5.5f</slowGradeWall>
+        <wallForce x="300.0f" y="-350.0f" />
+        <gravity>50.0f</gravity>
+        <slowGrade>1.175f</slowGrade>
+        <slowGradeAir>1.05f</slowGradeAir>
+        <slowGradeWall>7.5f</slowGradeWall>
         <slowLimit>200</slowLimit>
-        <limitSpeed x="350.0f" y="525.0f" />
+        <limitSpeed x="650.0f" y="750.0f" />
       </movement>
 
     <collision>
@@ -62,11 +57,11 @@
     </collision>
     
     <internal>
+      <inFramesLimit>0.15f</inFramesLimit>
       <playerFadeTime>0.85f</playerFadeTime>
       <wallJumpLimit>0.3f</wallJumpLimit>
       <wallJumpLeave>0.3f</wallJumpLeave>
-      <inwallSpeedDrop>0.15f</inwallSpeedDrop>
-      <flipSpeed>5.0f</flipSpeed>
+      <flipSpeed>10.0f</flipSpeed>
     </internal>
     
     <animations>
@@ -136,13 +131,6 @@
       <movement>
         <gravity>50.0f</gravity>
         <limitSpeed x="650.0f" y="750.0f" />
-        <chasingDistance>400</chasingDistance>
-        <chasingTiles>25</chasingTiles>
-        <idleSpeed>60.0f</idleSpeed>
-        <moveSpeed>25.0f</moveSpeed>
-        <fallingSpeed>30.0f</fallingSpeed>
-        <jumpForce>400.0f</jumpForce>
-        <jumpDistance>300.0f</jumpDistance>
       </movement>
 
       <collision>
@@ -151,7 +139,6 @@
 
       <internal>
         <pathTimer>0.5f</pathTimer>
-        <scalesize>2</scalesize>
       </internal>
 
       <animations>
@@ -177,15 +164,10 @@
       <path>textures/player/landEnemy.png</path>
 
     </landenemy>
-    
     <flyingenemy>
       <movement>
         <gravity>50.0f</gravity>
         <limitSpeed x="650.0f" y="750.0f" />
-        <chasingDistance>400</chasingDistance>
-        <chasingTiles>32</chasingTiles>
-        <moveSpeed x="10.0f" y="10.0f"/>
-        <idleSpeed x="60.0f" y="60.0f"/>
       </movement>
 
       <collision>
@@ -194,7 +176,6 @@
 
       <internal>
         <pathTimer>0.5f</pathTimer>
-        <scalesize>2</scalesize>
       </internal>
 
       <animations>

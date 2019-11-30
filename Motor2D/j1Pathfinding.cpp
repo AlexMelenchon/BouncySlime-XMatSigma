@@ -123,20 +123,27 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 	iPoint cell;
 	uint before = list_to_fill.list.count();
 
+
+
 	//// south - east
 	cell.create(pos.x + 1, pos.y - 1);
 	if (App->pathfinding->IsWalkable(cell))
 		list_to_fill.list.add(PathNode(this->g + 1, this->h, cell, this));
+
 
 	//// south - west
 	cell.create(pos.x - 1, pos.y - 1);
 	if (App->pathfinding->IsWalkable(cell))
 		list_to_fill.list.add(PathNode(this->g + 1, this->h, cell, this));
 
+
+
 	//// north - west
 	cell.create(pos.x - 1, pos.y + 1);
 	if (App->pathfinding->IsWalkable(cell))
 		list_to_fill.list.add(PathNode(this->g + 1, this->h, cell, this));
+
+
 
 	//// north - east
 	cell.create(pos.x + 1, pos.y + 1);
@@ -222,6 +229,7 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 				iterator = (PathNode*)iterator->parent;
 			}
 
+			last_path.Flip();
 
 			return last_path.GetCapacity();
 		}
