@@ -184,7 +184,7 @@
     <flyingenemy>
       <movement>
         <gravity>50.0f</gravity>
-        <limitSpeed x="650.0f" y="750.0f" />
+        <limitSpeed x="250.0f" y="300.0f" />
         <chasingDistance>400</chasingDistance>
         <chasingTiles>32</chasingTiles>
         <moveSpeed x="10.0f" y="10.0f"/>

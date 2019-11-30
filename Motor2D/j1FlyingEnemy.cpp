@@ -36,6 +36,8 @@ bool j1FlyingEnemy::Awake(pugi::xml_node& land_node)
 	moveSpeed.x = land_node.child("movement").child("moveSpeed").attribute("x").as_float();
 	idleSpeed.y = land_node.child("movement").child("idleSpeed").attribute("y").as_float();
 	moveSpeed.y = land_node.child("movement").child("moveSpeed").attribute("y").as_float();
+	fpMaxSpeed.x = land_node.child("movement").child("limitSpeed").attribute("x").as_float();
+	fpMaxSpeed.y = land_node.child("movement").child("limitSpeed").attribute("y").as_float();
 
 	// Internal variables load
 	pathTimer = land_node.child("internal").child("pathTimer").text().as_float();
@@ -295,7 +297,7 @@ void j1FlyingEnemy::UpdatePos(float dt)
 	falling = true;
 
 	//Limit Speed
-	//LimitSpeed(dt);
+	LimitSpeed();
 
 	fpPosition.x += fpSpeed.x * dt;
 	fpPosition.y += fpSpeed.y * dt;
