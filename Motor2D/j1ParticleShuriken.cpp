@@ -64,12 +64,7 @@ bool j1ParticleShuriken::PreUpdate()
 {
 	UpdateState();
 
-	//Slow
-	if (!canPickUp)
-	{
-		fpSpeed.x -= ((fpSpeed.x / 7.5) * (App->GetDeltaTime() * VEL_TO_WORLD));
-		fpSpeed.y -= ((fpSpeed.y / 7.5) * (App->GetDeltaTime() * VEL_TO_WORLD));
-	}
+
 
 	return true;
 }
@@ -91,13 +86,18 @@ bool j1ParticleShuriken::Update(float dt)
 	if (canPickUp)
 	{
 		if(path.Count() >  0)
-		Return();
+		Return(dt);
 
 		if (timer > 0.5f)
 		{
 			ReturnToPlayerPath();
 			timer = 0;
 		}
+	}
+	else
+	{
+		fpSpeed.x -= ((fpSpeed.x / 7.5) * (dt * VEL_TO_WORLD));
+		fpSpeed.y -= ((fpSpeed.y / 7.5) * (dt * VEL_TO_WORLD));
 	}
 
 
@@ -108,7 +108,7 @@ bool j1ParticleShuriken::Update(float dt)
 	return ret;
 }
 
-void j1ParticleShuriken::Return()
+void j1ParticleShuriken::Return(float dt)
 {
 	iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
 
@@ -116,21 +116,21 @@ void j1ParticleShuriken::Return()
 	{
 		if (fpPosition.x < current.x)
 		{
-			fpSpeed.x += 35;
+			fpSpeed.x += 35 * (dt * VEL_TO_WORLD);
 		}
 		else if (fpPosition.x > current.x)
 		{
-			fpSpeed.x -= 35;
+			fpSpeed.x -= 35 * (dt * VEL_TO_WORLD);
 		}
 
 		if (fpPosition.y < current.y)
 		{
-			fpSpeed.y += 35;
+			fpSpeed.y += 35 * (dt * VEL_TO_WORLD);
 		}
 
 		else if (fpPosition.y > current.y)
 		{
-			fpSpeed.y -= 5;
+			fpSpeed.y -= 35 * (dt * VEL_TO_WORLD);
 		}
 
 	}
@@ -215,7 +215,7 @@ bool j1ParticleShuriken::ReturnToPlayerPath()
 {
 	path.Clear();
 
-	if (!App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + App->map->data.tile_height))), App->map->WorldToMap(int(round(App->entities->player->fpPosition.x)), int(round(App->entities->player->fpPosition.y + App->entities->player->collider->rect.w / 1.5f)))))
+	if (!App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + App->map->data.tile_height))), App->map->WorldToMap(int(round(App->entities->player->fpPosition.x)), int(round(App->entities->player->fpPosition.y - App->entities->player->collider->rect.w / 2)))))
 		return false;
 
 	uint pathCount = App->pathfinding->GetLastPath()->Count();
@@ -241,6 +241,10 @@ void j1ParticleShuriken::OnCollision(Collider* entityCol, Collider* coll)
 	switch (coll->type) {
 
 	case(COLLIDER_WALL):
+		RecalculatePos(entityCol->rect, coll->rect);
+		break;
+
+	case(COLLIDER_DEATH):
 		RecalculatePos(entityCol->rect, coll->rect);
 		break;
 

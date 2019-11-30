@@ -53,7 +53,7 @@ public:
 
 	bool ReturnToPlayerPath();
 
-	void Return();
+	void Return(float dt);
 
 	//--------DRAW ---------//
 	void Draw();
