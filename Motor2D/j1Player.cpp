@@ -10,7 +10,6 @@
 #include "j1EntityManager.h"
 
 
-
 //Constructor
 j1Player::j1Player() : j1Entity()
 {
@@ -113,10 +112,6 @@ bool j1Player::Start()
 //Standard Movement
 void j1Player::standardInputs()
 {
-	if (App->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
-	{
-		App->entities->AddEntity(entityType::SHURIKEN, { 300,300 });
-	}
 	//Moving left
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
