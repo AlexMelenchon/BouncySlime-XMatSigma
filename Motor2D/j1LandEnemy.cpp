@@ -70,7 +70,7 @@ bool j1LandEnemy::Awake(pugi::xml_node& land_node)
 bool j1LandEnemy::Start()
 {
 	//The enemy's texture load
-	Text = App->tex->Load(auxLoader.child("path").text().as_string());
+	Text = App->entities->land_tex;
 
 	//Collision load
 	App->collision->AddCollider(collider);

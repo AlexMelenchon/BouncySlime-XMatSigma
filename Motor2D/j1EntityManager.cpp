@@ -28,6 +28,7 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	entConfig = config;
 
 	fInFramesLimit = config.child("manager").child("inFramesLimit").text().as_float();
+	
 
 	p2List_item<j1Entity*>* tmp = EntityList.start;
 	if (tmp == nullptr)
@@ -49,6 +50,8 @@ bool j1EntityManager::Start()
 
 	//Load the texture to do the debug pathfinding
 	debug_tex = App->tex->Load("maps/path2.png");
+	flying_tex = App->tex->Load(entConfig.child("flyingenemy").child("path").text().as_string());
+	land_tex = App->tex->Load(entConfig.child("landenemy").child("path").text().as_string());
 
 	p2List_item<j1Entity*>* tmp = EntityList.start;
 

@@ -126,6 +126,7 @@
       <land path="audio/fx/land.wav"/>
       <win path="audio/fx/win.wav"/>
       <bounce path="audio/fx/bounce.wav"/>
+      <enemydeath path="audio/fx/flyingDeath.wav"/>
     </fx>
     
     <path>textures/player/sprite.png</path>

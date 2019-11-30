@@ -73,6 +73,10 @@ public:
 	//--------INTERNAL CONTROL---------//
 	float fInFramesLimit = 0.0f;
 
+	//Enemies textures
+	SDL_Texture* flying_tex = nullptr;
+	SDL_Texture* land_tex = nullptr;
+
 
 private:
 	p2List<j1Entity*> EntityList;

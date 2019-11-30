@@ -49,13 +49,13 @@ bool j1FlyingEnemy::Awake(pugi::xml_node& land_node)
 
 	collider = new Collider(enemyRect, COLLIDER_ENEMY, this);
 
-	
-
+	//Animation load
 	pugi::xml_node animIterator = land_node.child("animations").child("animation");
 	animIdle.loadAnimation(animIterator, "idle");
-	
-
 	currentAnimation = &animIdle;
+
+	
+	
 
 	auxLoader = land_node;
 	return true;
@@ -64,10 +64,12 @@ bool j1FlyingEnemy::Awake(pugi::xml_node& land_node)
 bool j1FlyingEnemy::Start()
 {
 	//The enemy's texture load
-	Text = App->tex->Load(auxLoader.child("path").text().as_string());
+	Text = App->entities->flying_tex;
 
 	//Collision load
 	App->collision->AddCollider(collider);
+
+	//Fx load
 
 	return true;
 }
@@ -81,7 +83,7 @@ bool j1FlyingEnemy::PreUpdate()
 
 bool j1FlyingEnemy::Update(float dt)
 {
-
+	
 	timer += dt;
 
 	bool ret = true;
@@ -136,6 +138,7 @@ bool j1FlyingEnemy::Update(float dt)
 
 	}
 	UpdatePos(dt);
+	
 
 	return ret;
 }
@@ -270,6 +273,7 @@ bool j1FlyingEnemy::PostUpdate(bool debug)
 		}
 	}
 
+	
 	return true;
 }
 
