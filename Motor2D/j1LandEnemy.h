@@ -71,7 +71,7 @@ public:
 
 	bool JumpLogic();
 
-	void Move(bool toPlayer);
+	void Move(bool toPlayer, float dt);
 
 	//--------COLLISION ---------//
 	
@@ -83,7 +83,7 @@ public:
 
 	//--------DRAW---------//
 	//Blits the entity into the world
-	virtual void Draw();
+	void Draw();
 
 	//--------PATHFINDING---------//
 

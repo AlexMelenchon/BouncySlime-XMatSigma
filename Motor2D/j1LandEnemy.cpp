@@ -127,11 +127,11 @@ bool j1LandEnemy::Update(float dt)
 				//The update the player's position & speed according to it's logic
 				if (!stop)
 				{
-					Move(false);
+					Move(false, dt);
 				}
 				else if (AbleToMove().x != -1 && AbleToMove().y != -1)
 				{
-					Move(false);
+					Move(false, dt);
 				}
 				else
 					fpSpeed.x = 0;
@@ -160,11 +160,11 @@ bool j1LandEnemy::Update(float dt)
 			//The update the player's position & speed according to it's logic
 			if (!JumpLogic())
 			{
-				Move(true);
+				Move(true, dt);
 			}
 			else if (AbleToMove().x != -1)
 			{
-				Move(true);
+				Move(true, dt);
 			}
 			else
 				fpSpeed.x = 0;
@@ -265,7 +265,7 @@ void j1LandEnemy::Draw()
 	App->render->Blit(Text, (int)round(fpPosition.x), (int)round(fpPosition.y), &currentAnimation->GetCurrentFrame(App->GetDeltaTime()), 1.0f, Flip, 0.0f, (currentAnimation->pivotpos->x), (currentAnimation->GetCurrentFrame(App->GetDeltaTime()).h / 2), scalesize);
 }
 
-void j1LandEnemy::Move(bool toPlayer)
+void j1LandEnemy::Move(bool toPlayer, float dt)
 {
 	iPoint next = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
 
@@ -276,7 +276,7 @@ void j1LandEnemy::Move(bool toPlayer)
 			if (fpSpeed.x < 0 || (App->entities->player->fpPosition.x < fpPosition.x && toPlayer))
 				fpSpeed.x = 0;
 
-			fpSpeed.x += moveSpeed.x;
+			fpSpeed.x += moveSpeed.x * (dt * VEL_TO_WORLD);
 			Flip = SDL_FLIP_HORIZONTAL;
 		}
 		else if (fpPosition.x > next.x)
@@ -284,7 +284,7 @@ void j1LandEnemy::Move(bool toPlayer)
 			if (fpSpeed.x > 0 || (App->entities->player->fpPosition.x > fpPosition.x && toPlayer))
 				fpSpeed.x = 0;
 			
-			fpSpeed.x -= moveSpeed.x;
+			fpSpeed.x -= moveSpeed.x * (dt * VEL_TO_WORLD);
 			Flip = SDL_FLIP_NONE;
 		}
 	}
@@ -324,7 +324,7 @@ bool j1LandEnemy::CleanUp()
 void j1LandEnemy::UpdatePos(float dt)
 {
 	if (falling)
-		fpSpeed.y += fallingSpeed;
+		fpSpeed.y += fallingSpeed * (dt * VEL_TO_WORLD);
 
 	//If the logic does not demostrate tshe opposite, the player is always falling and not touching the wall
 	falling = true;

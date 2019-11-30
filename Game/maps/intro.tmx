@@ -62188,15 +62188,15 @@
   <object id="10" name="Floor" x="1567.99" y="767.759" width="80.0215" height="224.169"/>
   <object id="11" name="Floor" x="1392.23" y="703.98" width="80.0215" height="143.919"/>
   <object id="12" name="Floor" x="1887.66" y="832.03" width="80.334" height="144.263"/>
-  <object id="13" name="Death" x="623.5" y="1107.83" width="562" height="73.3333"/>
-  <object id="14" name="Death" x="1406.94" y="1109" width="994" height="136"/>
+  <object id="13" name="Death" x="623.5" y="1113.83" width="562" height="73.3333"/>
+  <object id="14" name="Death" x="1406.94" y="1113" width="994" height="136"/>
   <object id="15" name="Death" x="170" y="1108" width="231.333" height="98.6667"/>
-  <object id="17" name="Floor" x="-1.33317" y="593.667" width="190.166" height="46.4242"/>
+  <object id="17" name="Floor" x="-1.33317" y="623.959" width="193.228" height="16.1325"/>
   <object id="18" name="Death" x="1887.82" y="819.942" width="80.2393" height="12"/>
   <object id="19" name="Floor" x="1183.99" y="960.207" width="223.981" height="144.132"/>
   <object id="23" name="Floor" x="-54" y="639.938" width="69.875" height="319.563"/>
   <object id="25" name="Check" x="1361.33" y="846" width="30.3333" height="113.667"/>
-  <object id="30" name="Death" x="2398" y="-4" width="282" height="1242"/>
+  <object id="30" name="Death" x="2402" y="-4" width="282" height="1242"/>
  </objectgroup>
  <objectgroup id="8" name="ENTITIES">
   <object id="21" name="Start" x="60" y="935.5" width="9" height="9.5"/>
