@@ -40,6 +40,8 @@ bool j1FlyingEnemy::Awake(pugi::xml_node& land_node)
 	// Internal variables load
 	pathTimer = land_node.child("internal").child("pathTimer").text().as_float();
 	scalesize = land_node.child("internal").child("scalesize").text().as_float();
+	idleTimer = land_node.child("internal").child("idleTimer").text().as_float();
+	chasingTimer = land_node.child("internal").child("chasingTimer").text().as_float();
 
 
 	//Create the player's collider
@@ -103,7 +105,7 @@ bool j1FlyingEnemy::Update(float dt)
 		}
 		else
 		{
-			if (timer > 1.00f)
+			if (timer > idleTimer)
 			{
 				ReturnToStart();
 				timer = 0;
@@ -122,7 +124,7 @@ bool j1FlyingEnemy::Update(float dt)
 	}
 	case flying_state::ST_CHASING:
 	{
-		if (timer > 0.5f)
+		if (timer > chasingTimer)
 		{
 			GetPathfinding();
 			timer = 0;
@@ -279,7 +281,7 @@ bool j1FlyingEnemy::PostUpdate(bool debug)
 
 bool j1FlyingEnemy::CleanUp()
 {
-	App->tex->UnLoad(Text);
+	
 	if (collider != nullptr)
 	{
 		collider->to_delete = true;

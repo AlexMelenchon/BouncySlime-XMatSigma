@@ -153,6 +153,8 @@
       <internal>
         <pathTimer>0.5f</pathTimer>
         <scalesize>2</scalesize>
+        <idleTimer>1.00f</idleTimer>
+        <chasingTimer>0.25f</chasingTimer>
       </internal>
 
       <animations>
@@ -196,6 +198,8 @@
       <internal>
         <pathTimer>0.5f</pathTimer>
         <scalesize>2</scalesize>
+        <idleTimer>1.00f</idleTimer>
+        <chasingTimer>0.5f</chasingTimer>
       </internal>
 
       <animations>

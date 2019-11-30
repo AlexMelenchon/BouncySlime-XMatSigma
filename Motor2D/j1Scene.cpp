@@ -43,7 +43,7 @@ bool j1Scene::Start()
 	//Loads the first map
 	Reset(App->map->data.maplist.start->data->name.GetString()); 
 
-	debug_tex = App->tex->Load("maps/path2.png");
+	//debug_tex = App->tex->Load("maps/path2.png");
 
 	return true;
 }

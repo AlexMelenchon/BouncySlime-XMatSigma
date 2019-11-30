@@ -155,6 +155,8 @@ bool j1EntityManager::CleanUp()
 	bool ret = true;
 
 	App->tex->UnLoad(debug_tex);
+	App->tex->UnLoad(flying_tex);
+	App->tex->UnLoad(land_tex);
 
 	p2List_item<j1Entity*>* tmp = EntityList.start;
 	while (tmp != nullptr)
