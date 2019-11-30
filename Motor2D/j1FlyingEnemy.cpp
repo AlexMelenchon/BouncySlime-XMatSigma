@@ -92,8 +92,7 @@ bool j1FlyingEnemy::Update(float dt)
 	}
 	case flying_state::ST_CHASING:
 	{
-
-		if (timer > 1.5f && App->entities->player->getState() == (ST_GROUND || ST_WALL))
+		if (timer > 0.25f)
 		{
 			GetPathfinding();
 			timer = 0;
@@ -104,24 +103,36 @@ bool j1FlyingEnemy::Update(float dt)
 			iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
 
 			//The update the player's position & speed according to it's logic
-			if (abs(abs(fpPosition.x) - abs(current.x)) > 3 || abs(abs(fpPosition.y) - abs(current.y)) > 3) {
-
+			if (abs(abs(fpPosition.x) - abs(current.x)) > 16 || abs(abs(fpPosition.y) - abs(current.y)) > 16) 
+			{
 				if (fpPosition.x < current.x )
 				{
-					fpSpeed.x += 60;
+					fpSpeed.x += 20;
 					Flip = SDL_FLIP_HORIZONTAL;
+					if (fpSpeed.x < 0)
+						fpSpeed.x = 0;
 				}
 				else if (fpPosition.x > current.x)
 				{
-					fpSpeed.x -= 60;
+					fpSpeed.x -= 20;
 					Flip = SDL_FLIP_NONE;
+					if (fpSpeed.x > 0)
+						fpSpeed.x = 0;
 				}
 
 				if (fpPosition.y < current.y)
-					fpSpeed.y += 60;
+				{
+					fpSpeed.y += 20;
+					if (fpSpeed.y < 0)
+						fpSpeed.y = 0;
+				}
 
 				else if (fpPosition.y > current.y)
-					fpSpeed.y -= 60;
+				{
+					fpSpeed.y -= 20;
+					if (fpSpeed.y > 0)
+						fpSpeed.y = 0;
+				}
 
 			}
 			else
@@ -251,50 +262,22 @@ void j1FlyingEnemy::OnCollision(Collider* entityCol, Collider* coll)
 
 void j1FlyingEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 {
-	//Determines the direction of the collision
-	//Calculates distances from the player to the collision
-	int collDiference[DIRECTION_MAX];
-	collDiference[DIRECTION_LEFT] = (collRect.x + collRect.w) - entityColl.x;
-	collDiference[DIRECTION_RIGHT] = (entityColl.x + entityColl.w) - collRect.x;
-	collDiference[DIRECTION_UP] = (collRect.y + collRect.h) - entityColl.y;
-	collDiference[DIRECTION_DOWN] = (entityColl.y + entityColl.h) - collRect.y;
-
-
 	//If a collision from various aixs is detected, it determines what is the closets one to exit from
-	int directionCheck = DIRECTION_NONE;
-
-	for (int i = 0; i < DIRECTION_MAX; ++i)
-	{
-		if (directionCheck == DIRECTION_NONE)
-			directionCheck = i;
-		else if ((collDiference[i] < collDiference[directionCheck]))
-			directionCheck = i;
-	}
+	int directionCheck = CheckCollisionDir(entityColl, collRect);
 
 	//Then we update the player's position & logic according to it's movement & the minimum result that we just calculated
 	switch (directionCheck) {
 	case DIRECTION_UP:
 		fpPosition.y = collRect.y + collRect.h + 2;
-		fpSpeed.y = 0;
 		break;
 	case DIRECTION_DOWN:
 		fpPosition.y = collRect.y - entityColl.h;
-		fpSpeed.y = 0;
-		fAccel = 0;
-		falling = false;
-
 		break;
 	case DIRECTION_LEFT:
 		fpPosition.x = collRect.x + collRect.w;
-		if (fpSpeed.x < 0)
-			fpSpeed.x = 0;
-		falling = false;
 		break;
 	case DIRECTION_RIGHT:
 		fpPosition.x = collRect.x - entityColl.w;
-		if (fpSpeed.x > 0)
-			fpSpeed.x = 0;
-		falling = false;
 		break;
 	case DIRECTION_NONE:
 		break;

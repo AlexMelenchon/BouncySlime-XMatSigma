@@ -93,40 +93,40 @@ bool j1LandEnemy::Update(float dt)
 	case state::ST_IDLE:
 		{
 		currentAnimation = &animIdle;
-		path.Clear();
 		
 		if (collider->CheckCollision(trace))
 		{
-			
+			path.Clear();
 			TraceFollower(dt);
 		}
 		else
 		{
-
-			if (timer > 1.75f)
+			if (timer > 1.00f)
 			{
-				ReturnToStart(dt);
+				ReturnToStart();
 				timer = 0;
 			}
 
 			if (path.Count() > 0)
 			{
-				iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
-				//The update the player's position & speed according to it's logic
-				if (fpPosition.x > trace.x)
-				{
-					fpSpeed.x = -60.0f;
-					Flip = SDL_FLIP_HORIZONTAL;
-				}
+				//The enemy will never stop unless the logic says so
+				stop = false;
 
-				else if (fpPosition.x < trace.x)
+				JumpLogic();
+
+				//The update the player's position & speed according to it's logic
+				if (!stop)
 				{
-					fpSpeed.x = 60.0f;
-					Flip = SDL_FLIP_HORIZONTAL;
+					Move(false);
 				}
+				else if (AbleToMove().x != -1 && AbleToMove().y != -1)
+				{
+					Move(false);
+				}
+				else
+					fpSpeed.x = 0;
 			}
 
-			TraceFollower(dt);
 		}		
 		break;
 		}
@@ -142,66 +142,27 @@ bool j1LandEnemy::Update(float dt)
 		
 		if (path.Count() > 0)
 		{
-			iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
+			//The enemy will never stop unless the logic says so
+			stop = false;
 
-			if (path.Count() > 1)
-			{
-				iPoint next = { 0,0 };
-
-				next = { path.At(path.Count() -2)->x, path.At(path.Count() -2)->y +2 };
-
-				if (App->pathfinding->IsWalkable(next))
-				{
-					bool foundIt = false;
-					for (uint i = path.Count() - 2; i > 0; --i)
-					{
-						next = { path.At(i)->x, path.At(i)->y +2};
-						if (!App->pathfinding->IsWalkable(next))
-						{
-							foundIt = true;
-							break;
-						}
-					}
-
-					if (foundIt)
-					{
-
-						if (!falling)
-						{
-							fpSpeed.y = -400.0f;
-						}
-
-
-					}
-
-				}
-
-			}
+			JumpLogic();
 
 			//The update the player's position & speed according to it's logic
-			if (abs(fpPosition.x - current.x) > App->map->data.tile_width)
+			if (!stop)
 			{
-				if (fpPosition.x < current.x)
-				{
-					if (fpSpeed.x < 0)
-						fpSpeed.x = 0;
-
-					fpSpeed.x += 25;
-					Flip = SDL_FLIP_HORIZONTAL;
-				}
-				else if (fpPosition.x > current.x)
-				{
-					if (fpSpeed.x > 0)
-						fpSpeed.x = 0;
-
-					fpSpeed.x -= 25;
-					Flip = SDL_FLIP_NONE;
-				}
+				Move(true);
+			}
+			else if (AbleToMove().x != -1 && AbleToMove().y != -1)
+			{
+				Move(false);
 			}
 			else
-				path.Pop(current);
+				fpSpeed.x = 0;
 
 		}
+		else
+			fpSpeed.x = 0;
+
 		break;
 		}
 		
@@ -212,17 +173,116 @@ bool j1LandEnemy::Update(float dt)
 	return ret;
 }
 
+iPoint j1LandEnemy::IsTheNextTileWalkable()
+{
+	iPoint ret = { -1, -1 };
+
+	iPoint next = { path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y + 2 };
+	if (App->pathfinding->IsWalkable(next) && !falling)
+	{
+		for (uint i = path.Count() -1; i > 0; --i)
+		{
+			next = { path.At(i)->x, path.At(i)->y + 2 };
+			if (!App->pathfinding->IsWalkable(next))
+			{
+				ret = next;
+				break;
+			}
+		}
+	}
+	return ret;
+}
+
+iPoint j1LandEnemy::AbleToMove()
+{
+	iPoint ret = { -1, -1 };
+
+	iPoint next = { path.At(path.Count() - 1)->x, App->map->WorldToMap(fpPosition.x, (int)round(fpPosition.y)).y +3 };
+	if (!App->pathfinding->IsWalkable(next))
+	{
+		for (uint i = path.Count() - 1; i > 0; --i)
+		{
+			next = { path.At(i)->x, App->map->WorldToMap(fpPosition.x, (int)round(fpPosition.y)).y + 3 };
+			if (!App->pathfinding->IsWalkable(next))
+			{
+				ret = next;
+				break;
+			}
+		}
+	}
+	return ret;
+}
+
+
+int j1LandEnemy::CalculateJump(iPoint destination)
+{
+	iPoint nextToWorld = { destination.x, destination.y + 2 };
+
+	return(abs((nextToWorld.DistanceTo({ (int)round(fpPosition.x), (int)round(fpPosition.y) }))));
+}
+
+bool j1LandEnemy::JumpLogic()
+{
+	if (path.Count() <= 1)
+		return false;
+
+
+	if (App->pathfinding->IsWalkable({ path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y + 2 }) && !falling)
+	{
+		iPoint nextTile = IsTheNextTileWalkable();
+		if (nextTile.x != -1)
+		{
+			if (!falling)
+			{
+				if (CalculateJump(App->map->MapToWorld(nextTile.x, nextTile.y)) < 300)
+					fpSpeed.y = -400.0f;
+				else
+					stop = true;
+			}
+		}
+		else
+			stop = true;
+	}
+
+	return true;
+}
+
 
 void j1LandEnemy::Draw()
 {
 	App->render->Blit(Text, (int)round(fpPosition.x), (int)round(fpPosition.y), &currentAnimation->GetCurrentFrame(App->GetDeltaTime()), 1.0f, Flip, 0.0f, (currentAnimation->pivotpos->x), (currentAnimation->GetCurrentFrame(App->GetDeltaTime()).h / 2), scalesize);
 }
 
+void j1LandEnemy::Move(bool toPlayer)
+{
+	iPoint next = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
+
+	if (abs(fpPosition.x - next.x) > App->map->data.tile_width)
+	{
+		if (fpPosition.x < next.x)
+		{
+			if (fpSpeed.x < 0 || (App->entities->player->fpPosition.x < fpPosition.x && toPlayer))
+				fpSpeed.x = 0;
+
+			fpSpeed.x += 25;
+			Flip = SDL_FLIP_HORIZONTAL;
+		}
+		else if (fpPosition.x > next.x)
+		{
+			if (fpSpeed.x > 0 || (App->entities->player->fpPosition.x > fpPosition.x && toPlayer))
+				fpSpeed.x = 0;
+			
+			fpSpeed.x -= 25;
+			Flip = SDL_FLIP_NONE;
+		}
+	}
+	else
+		path.Pop(next);
+}
+
 bool j1LandEnemy::PostUpdate(bool debug)
 {
 	Draw();
-
-
 
 	if (debug)
 	{
@@ -263,7 +323,6 @@ void j1LandEnemy::UpdatePos(float dt)
 	CalculateCollider(fpPosition);	
 }
 
-
 void j1LandEnemy::TraceFollower(float dt)
 {
 	if (!tracecheck)
@@ -291,11 +350,13 @@ void j1LandEnemy::TraceFollower(float dt)
 	}
 }
 
-void j1LandEnemy::ReturnToStart(float dt)
+bool j1LandEnemy::ReturnToStart()
 {	
 	path.Clear();
 
-	App->pathfinding->CreatePath(App->map->WorldToMap(fpPosition.x, fpPosition.y), App->map->WorldToMap(trace.x, trace.y));
+	if (!App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + 16))), App->map->WorldToMap(trace.x + 1, trace.y)))
+		return false;
+
 
 	uint pathCount = App->pathfinding->GetLastPath()->Count();
 
@@ -303,6 +364,8 @@ void j1LandEnemy::ReturnToStart(float dt)
 	{
 		path.PushBack(*App->pathfinding->GetLastPath()->At(i));
 	}
+
+	return true;
 
 }
 
@@ -318,25 +381,8 @@ void j1LandEnemy::OnCollision(Collider* entityCol, Collider* coll)
 
 void j1LandEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 {
-	//Determines the direction of the collision
-	//Calculates distances from the player to the collision
-	int collDiference[DIRECTION_MAX];
-	collDiference[DIRECTION_LEFT] = (collRect.x + collRect.w) - entityColl.x;
-	collDiference[DIRECTION_RIGHT] = (entityColl.x + entityColl.w) - collRect.x;
-	collDiference[DIRECTION_UP] = (collRect.y + collRect.h) - entityColl.y;
-	collDiference[DIRECTION_DOWN] = (entityColl.y + entityColl.h) - collRect.y;
-
-
 	//If a collision from various aixs is detected, it determines what is the closets one to exit from
-	int directionCheck = DIRECTION_NONE;
-
-	for (int i = 0; i < DIRECTION_MAX; ++i)
-	{
-		if (directionCheck == DIRECTION_NONE)
-			directionCheck = i;
-		else if ((collDiference[i] < collDiference[directionCheck]))
-			directionCheck = i;
-	}
+	int directionCheck = CheckCollisionDir(entityColl, collRect);
 
 	//Then we update the player's position & logic according to it's movement & the minimum result that we just calculated
 	switch (directionCheck) {
@@ -348,6 +394,10 @@ void j1LandEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 		fpPosition.y = collRect.y - entityColl.h;
 		fpSpeed.y = 0;
 		fAccel = 0;
+		if (!falling)
+		{
+			path.Clear();
+		}
 		falling = false;
 	
 		break;
@@ -385,7 +435,8 @@ bool j1LandEnemy::GetPathfinding()
 {
 	path.Clear();
 
-	App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x+1)), int(round(fpPosition.y +16))), App->map->WorldToMap(int(round(App->entities->player->fpPosition.x)), int(round(App->entities->player->fpPosition.y + App->entities->player->collider->rect.w/1.5f))));
+	if(!App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + 16))), App->map->WorldToMap(int(round(App->entities->player->fpPosition.x)), int(round(App->entities->player->fpPosition.y + App->entities->player->collider->rect.w / 1.5f)))))
+	return false;
 
 	uint pathCount = App->pathfinding->GetLastPath()->Count();
 

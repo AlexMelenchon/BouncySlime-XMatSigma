@@ -7,7 +7,7 @@
 #include "p2Point.h"
 #include "p2DynArray.h"
 
-#define CHASING_DISTANCE 450
+#define CHASING_DISTANCE 400
 #define CHASING_MAX_TILES 25
 
 enum class state : int
@@ -64,6 +64,16 @@ public:
 	//When the enemy is idle, it has a defined movement
 	virtual void TraceFollower(float dt);
 
+	iPoint IsTheNextTileWalkable();
+
+	iPoint AbleToMove();
+
+	int CalculateJump(iPoint destination);
+
+	bool JumpLogic();
+
+	void Move(bool toPlayer);
+
 
 	//--------COLLISION ---------//
 	
@@ -82,11 +92,12 @@ private:
 	//--------MOVEMENT ---------//
 	bool GetPathfinding();
 	bool tracecheck = false;
-	void ReturnToStart(float dt);
+	bool ReturnToStart();
 
 	//--------INTERNAL CONTROÑ ---------//
-	float pathTimer;
+	float pathTimer = 0.0f;
 	float timer = 0.f;
+	bool stop = false;
 	
 	//--------STATE ---------//
 	//determines what the enemy is doing

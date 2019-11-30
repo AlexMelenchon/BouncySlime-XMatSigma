@@ -222,6 +222,7 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 				iterator = (PathNode*)iterator->parent;
 			}
 
+
 			return last_path.GetCapacity();
 		}
 
