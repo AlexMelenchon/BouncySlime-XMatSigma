@@ -45,6 +45,8 @@ bool j1LandEnemy::Awake(pugi::xml_node& land_node)
 	//Internal variables load
 	pathTimer = land_node.child("internal").child("pathTimer").text().as_float();
 	scalesize = land_node.child("internal").child("scalesize").text().as_float();
+	idleTimer = land_node.child("internal").child("idleTimer").text().as_float();
+	chasingTimer = land_node.child("internal").child("chasingTimer").text().as_float();
 
 	//Create the player's collider
 	SDL_Rect enemyRect = { 0,0,0,0 };
@@ -70,7 +72,7 @@ bool j1LandEnemy::Awake(pugi::xml_node& land_node)
 bool j1LandEnemy::Start()
 {
 	//The enemy's texture load
-	Text = App->tex->Load(auxLoader.child("path").text().as_string());
+	Text = App->entities->land_tex;
 
 	//Collision load
 	App->collision->AddCollider(collider);
@@ -109,7 +111,7 @@ bool j1LandEnemy::Update(float dt)
 		}
 		else
 		{
-			if (timer > 1.00f)
+			if (timer > idleTimer)
 			{
 				ReturnToStart();
 				timer = 0;
@@ -142,7 +144,7 @@ bool j1LandEnemy::Update(float dt)
 		{
 		currentAnimation = &animRun;
 
-		if (timer > 0.25f && !falling)
+		if (timer > chasingTimer && !falling)
 		{
 			GetPathfinding();
 			timer = 0;
@@ -308,7 +310,13 @@ bool j1LandEnemy::PostUpdate(bool debug)
 
 bool j1LandEnemy::CleanUp()
 {
-	App->tex->UnLoad(Text);
+	if (collider != nullptr)
+	{
+		collider->to_delete = true;
+		collider = nullptr;
+	}
+
+	path.Clear();
 
 	return true;
 }
@@ -369,7 +377,7 @@ bool j1LandEnemy::ReturnToStart()
 
 	uint pathCount = App->pathfinding->GetLastPath()->Count();
 
-	if (pathCount <= 0 || pathCount > chasingTiles*3)
+	if (pathCount <= 0 )
 	{
 		path.Clear();
 		return false;

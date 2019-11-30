@@ -106,6 +106,9 @@ private:
 	Animation animIdle;
 	SDL_Rect enemyRect = { 0,0,0,0 };
 
+	//--------MUSIC---------//
+	
+
 	//------COLLIDER------//
 	//the entity's sprite is too little compared to the player so we will double it's size.
 	int scalesize = 2;

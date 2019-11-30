@@ -126,6 +126,7 @@
       <land path="audio/fx/land.wav"/>
       <win path="audio/fx/win.wav"/>
       <bounce path="audio/fx/bounce.wav"/>
+      <enemydeath path="audio/fx/flyingDeath.wav"/>
     </fx>
     
     <path>textures/player/sprite.png</path>
@@ -152,6 +153,8 @@
       <internal>
         <pathTimer>0.5f</pathTimer>
         <scalesize>2</scalesize>
+        <idleTimer>1.00f</idleTimer>
+        <chasingTimer>0.25f</chasingTimer>
       </internal>
 
       <animations>
@@ -195,6 +198,8 @@
       <internal>
         <pathTimer>0.5f</pathTimer>
         <scalesize>2</scalesize>
+        <idleTimer>1.00f</idleTimer>
+        <chasingTimer>0.5f</chasingTimer>
       </internal>
 
       <animations>

@@ -154,7 +154,11 @@ public:
 	
 	//the enemies range
 	uint chasingDistance = 0u;
+
 	uint chasingTiles = 0u;
+
+	float idleTimer = 0.f;
+	float chasingTimer = 0.f;	
 
 	//defined movement speed the enemy will have
 	fPoint idleSpeed = { 0,0 };

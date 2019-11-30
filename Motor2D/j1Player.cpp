@@ -81,6 +81,7 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	landFx.path = player_node.child("fx").child("land").attribute("path").as_string();
 	winFx.path = player_node.child("fx").child("win").attribute("path").as_string();
 	bounceFx.path = player_node.child("fx").child("bounce").attribute("path").as_string();
+	enemyDeathFx.path = player_node.child("fx").child("enemydeath").attribute("path").as_string();
 
 
 
@@ -106,6 +107,7 @@ bool j1Player::Start()
 	landFx.id=App->audio->LoadFx(landFx.path.GetString());
 	winFx.id=App->audio->LoadFx(winFx.path.GetString());
 	bounceFx.id=App->audio->LoadFx(bounceFx.path.GetString());
+	enemyDeathFx.id = App->audio->LoadFx(enemyDeathFx.path.GetString());
 
 	return true;
 }
@@ -366,9 +368,9 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 				}
 				//ENEMY DIES
 				else
-				{
+				{						
 					coll->to_delete = true;
-					Jump(fpForceMiniJump.y, jumpFx.id);
+					Jump(fpForceMiniJump.y, enemyDeathFx.id);
 				}
 				break;
 			}

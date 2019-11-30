@@ -40,6 +40,8 @@ bool j1FlyingEnemy::Awake(pugi::xml_node& land_node)
 	// Internal variables load
 	pathTimer = land_node.child("internal").child("pathTimer").text().as_float();
 	scalesize = land_node.child("internal").child("scalesize").text().as_float();
+	idleTimer = land_node.child("internal").child("idleTimer").text().as_float();
+	chasingTimer = land_node.child("internal").child("chasingTimer").text().as_float();
 
 
 	//Create the player's collider
@@ -49,13 +51,13 @@ bool j1FlyingEnemy::Awake(pugi::xml_node& land_node)
 
 	collider = new Collider(enemyRect, COLLIDER_ENEMY, this);
 
-	
-
+	//Animation load
 	pugi::xml_node animIterator = land_node.child("animations").child("animation");
 	animIdle.loadAnimation(animIterator, "idle");
-	
-
 	currentAnimation = &animIdle;
+
+	
+	
 
 	auxLoader = land_node;
 	return true;
@@ -64,10 +66,12 @@ bool j1FlyingEnemy::Awake(pugi::xml_node& land_node)
 bool j1FlyingEnemy::Start()
 {
 	//The enemy's texture load
-	Text = App->tex->Load(auxLoader.child("path").text().as_string());
+	Text = App->entities->flying_tex;
 
 	//Collision load
 	App->collision->AddCollider(collider);
+
+	//Fx load
 
 	return true;
 }
@@ -81,6 +85,7 @@ bool j1FlyingEnemy::PreUpdate()
 
 bool j1FlyingEnemy::Update(float dt)
 {
+
 	timer += dt;
 
 	bool ret = true;
@@ -100,7 +105,7 @@ bool j1FlyingEnemy::Update(float dt)
 		}
 		else
 		{
-			if (timer > 1.00f)
+			if (timer > idleTimer)
 			{
 				ReturnToStart();
 				timer = 0;
@@ -119,7 +124,7 @@ bool j1FlyingEnemy::Update(float dt)
 	}
 	case flying_state::ST_CHASING:
 	{
-		if (timer > 0.5f)
+		if (timer > chasingTimer)
 		{
 			GetPathfinding();
 			timer = 0;
@@ -135,6 +140,7 @@ bool j1FlyingEnemy::Update(float dt)
 
 	}
 	UpdatePos(dt);
+	
 
 	return ret;
 }
@@ -266,12 +272,13 @@ bool j1FlyingEnemy::PostUpdate(bool debug)
 		}
 	}
 
+	
 	return true;
 }
 
 bool j1FlyingEnemy::CleanUp()
 {
-	App->tex->UnLoad(Text);
+	
 	if (collider != nullptr)
 	{
 		collider->to_delete = true;

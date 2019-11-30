@@ -202,6 +202,7 @@ private:
 	FX landFx;
 	FX winFx;
 	FX bounceFx;
+	FX enemyDeathFx;
 	
 	//Player Starting state
 	player_states current_state = ST_UNKNOWN; 
