@@ -164,8 +164,8 @@ iPoint j1Map::WorldToMap(int x, int y) const
 {
 	iPoint ret(0, 0);
 
-	ret.x = x / data.tile_width;
-	ret.y = y / data.tile_width;
+	ret.x = round(x / data.tile_width);
+	ret.y = round(y / data.tile_width);
 
 	return ret;
 }

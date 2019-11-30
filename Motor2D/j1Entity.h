@@ -81,7 +81,7 @@ public:
 
 	//--------POSITION ----------//
 	// Limits the entity speed in both axis
-	void LimitSpeed(float dt);
+	void LimitSpeed();
 
 	//Set the entity's position from other modules such as j1Map
 	virtual void SetPos(int x, int y);
@@ -151,6 +151,13 @@ public:
 	//Determines an entity predefined movement
 	SDL_Rect trace = { 0,0,0,0};
 	
+	//the enemies range
+	uint chasingDistance = 0u;
+	uint chasingTiles = 0u;
+
+	//defined movement speed the enemy will have
+	fPoint idleSpeed = { 0,0 };
+	fPoint moveSpeed = { 0,0 };
 
 	//LIMITS---
 	// Determines player maximum speed

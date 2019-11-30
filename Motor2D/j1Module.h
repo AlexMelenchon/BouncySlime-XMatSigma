@@ -41,7 +41,7 @@ enum COLLIDER_TYPE
 	COLLIDER_MAX
 };
 
-#define VEL_TO_WORLD 40
+#define VEL_TO_WORLD 20
 
 
 class j1Module

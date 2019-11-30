@@ -12,6 +12,7 @@
 #include "j1Pathfinding.h"
 #include "j1Scene.h"
 #include "j1FlyingEnemy.h"
+#include "j1Player.h"
 
 //oWAFegezRNTwm7pdgahyexTk
 
@@ -29,16 +30,26 @@ bool j1FlyingEnemy::Awake(pugi::xml_node& land_node)
 {
 	//Movement load
 	fGravity = land_node.child("movement").child("gravity").text().as_float();
+	chasingDistance = land_node.child("movement").child("chasingDistance").text().as_uint();
+	chasingTiles = land_node.child("movement").child("chasingTiles").text().as_uint();
+	idleSpeed.x = land_node.child("movement").child("idleSpeed").attribute("x").as_float();
+	moveSpeed.x = land_node.child("movement").child("moveSpeed").attribute("x").as_float();
+	idleSpeed.y = land_node.child("movement").child("idleSpeed").attribute("y").as_float();
+	moveSpeed.y = land_node.child("movement").child("moveSpeed").attribute("y").as_float();
+
+	// Internal variables load
+	pathTimer = land_node.child("internal").child("pathTimer").text().as_float();
+	scalesize = land_node.child("internal").child("scalesize").text().as_float();
+
 
 	//Create the player's collider
 	SDL_Rect enemyRect = { 0,0,0,0 };
-	enemyRect.w = land_node.child("collision").child("collider").attribute("w").as_float();
-	enemyRect.h = land_node.child("collision").child("collider").attribute("h").as_float();
+	enemyRect.w = land_node.child("collision").child("collider").attribute("w").as_float()*scalesize;
+	enemyRect.h = land_node.child("collision").child("collider").attribute("h").as_int()*scalesize;
 
 	collider = new Collider(enemyRect, COLLIDER_ENEMY, this);
 
-	//Internal variables load
-	pathTimer = land_node.child("internal").child("pathTimer").text().as_float();
+	
 
 	pugi::xml_node animIterator = land_node.child("animations").child("animation");
 	animIdle.loadAnimation(animIterator, "idle");
@@ -73,7 +84,6 @@ bool j1FlyingEnemy::Update(float dt)
 
 	timer += dt;
 
-
 	bool ret = true;
 	switch (enemy_state)
 	{
@@ -84,50 +94,42 @@ bool j1FlyingEnemy::Update(float dt)
 	}
 	case flying_state::ST_IDLE:
 	{
-		path.Clear();
-		TraceFollower(dt);
+		if (collider->CheckCollision(trace))
+		{
+			path.Clear();
+			TraceFollower(dt);
+		}
+		else
+		{
+			if (timer > 1.00f)
+			{
+				ReturnToStart();
+				timer = 0;
+			}
+
+			if (path.Count() > 0)
+			{
+				//The update the enemy's position & speed according to it's logic
+				Move();
+			}
+
+		}
+		break;
 
 		break;
 	}
 	case flying_state::ST_CHASING:
 	{
-
-		if (timer > 0.25)
+		if (timer > 0.5f)
 		{
 			GetPathfinding();
 			timer = 0;
 		}
 
-
 		if (path.Count() > 0)
 		{
-			iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
-
-
-			//The update the player's position & speed according to it's logic
-			if (fpPosition.x < current.x && abs(fpPosition.x - App->entities->player->fpPosition.x) > App->entities->player->collider->rect.w / 2)
-			{
-				fpSpeed.x = 60;
-				Flip = SDL_FLIP_HORIZONTAL;
-			}
-			else if (fpPosition.x > current.x && abs(fpPosition.x - App->entities->player->fpPosition.x) > App->entities->player->collider->rect.w / 2)
-			{
-				fpSpeed.x = -60;				
-				Flip = SDL_FLIP_NONE;
-			}
-			else
-				fpSpeed.x = 0;
-
-
-			if (fpPosition.y < current.y && abs(fpPosition.y - App->entities->player->fpPosition.y) > App->entities->player->collider->rect.w / 2)
-				fpSpeed.y = 60;
-			else if (fpPosition.y > current.y && abs(fpPosition.y - App->entities->player->fpPosition.y) > App->entities->player->collider->rect.w / 2)
-				fpSpeed.y = -60;
-			else
-				fpSpeed.y = 0;
-
-
-			path.Pop(current);
+			//The update the enemy's position & speed according to it's logic
+			Move();
 		}
 		break;
 	}
@@ -138,12 +140,75 @@ bool j1FlyingEnemy::Update(float dt)
 	return ret;
 }
 
+bool j1FlyingEnemy::ReturnToStart()
+{
+	path.Clear();
+
+	if (!App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + App->map->data.tile_height))), App->map->WorldToMap(trace.x + 1, trace.y)))
+		return false;
+
+	uint pathCount = App->pathfinding->GetLastPath()->Count();
+
+	if (pathCount <= 0) return false;
+
+	for (uint i = 0; i < pathCount; i++)
+	{
+		path.PushBack(*App->pathfinding->GetLastPath()->At(i));
+	}
+
+	return true;
+}
+
+
+void j1FlyingEnemy::Move()
+{
+	iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
+
+	if (abs(abs(fpPosition.x) - abs(current.x)) > App->map->data.tile_height || abs(abs(fpPosition.y) - abs(current.y)) > App->map->data.tile_height)
+	{
+		if (fpPosition.x < current.x)
+		{
+			fpSpeed.x += moveSpeed.x;
+			Flip = SDL_FLIP_HORIZONTAL;
+			if (fpSpeed.x < 0)
+				fpSpeed.x = 0;
+		}
+		else if (fpPosition.x > current.x)
+		{
+			fpSpeed.x -= moveSpeed.x;
+			Flip = SDL_FLIP_NONE;
+			if (fpSpeed.x > 0)
+				fpSpeed.x = 0;
+		}
+
+		if (fpPosition.y < current.y)
+		{
+			fpSpeed.y += moveSpeed.y;
+			if (fpSpeed.y < 0)
+				fpSpeed.y = 0;
+		}
+
+		else if (fpPosition.y > current.y)
+		{
+			fpSpeed.y -= moveSpeed.y;
+			if (fpSpeed.y > 0)
+				fpSpeed.y = 0;
+		}
+
+	}
+	else
+		path.Pop(current);
+
+
+
+}
+
 void j1FlyingEnemy::TraceFollower(float dt)
 {
 	if (!landcheck && !flycheck)
 	{
 		fpSpeed.y = 0;
-		fpSpeed.x = 60.0f;
+		fpSpeed.x = idleSpeed.x;
 
 		Flip = SDL_FLIP_HORIZONTAL;
 
@@ -156,7 +221,7 @@ void j1FlyingEnemy::TraceFollower(float dt)
 	if (!flycheck && landcheck)
 	{
 		fpSpeed.x = 0;
-		fpSpeed.y = 60;
+		fpSpeed.y = idleSpeed.y;
 		if (fpPosition.y > trace.y + trace.h - collider->rect.h)
 		{
 			flycheck = !flycheck;
@@ -166,7 +231,7 @@ void j1FlyingEnemy::TraceFollower(float dt)
 	if (flycheck && landcheck)
 	{
 		fpSpeed.y = 0;
-		fpSpeed.x = -60.0f;
+		fpSpeed.x = -idleSpeed.x;
 
 		Flip = SDL_FLIP_NONE;
 
@@ -179,7 +244,7 @@ void j1FlyingEnemy::TraceFollower(float dt)
 	if (flycheck && !landcheck)
 	{
 		fpSpeed.x = 0;
-		fpSpeed.y = -60;
+		fpSpeed.y = -idleSpeed.y;
 		if (fpPosition.y < trace.y)
 		{
 			flycheck = !flycheck;
@@ -252,50 +317,22 @@ void j1FlyingEnemy::OnCollision(Collider* entityCol, Collider* coll)
 
 void j1FlyingEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 {
-	//Determines the direction of the collision
-	//Calculates distances from the player to the collision
-	int collDiference[DIRECTION_MAX];
-	collDiference[DIRECTION_LEFT] = (collRect.x + collRect.w) - entityColl.x;
-	collDiference[DIRECTION_RIGHT] = (entityColl.x + entityColl.w) - collRect.x;
-	collDiference[DIRECTION_UP] = (collRect.y + collRect.h) - entityColl.y;
-	collDiference[DIRECTION_DOWN] = (entityColl.y + entityColl.h) - collRect.y;
-
-
 	//If a collision from various aixs is detected, it determines what is the closets one to exit from
-	int directionCheck = DIRECTION_NONE;
-
-	for (int i = 0; i < DIRECTION_MAX; ++i)
-	{
-		if (directionCheck == DIRECTION_NONE)
-			directionCheck = i;
-		else if ((collDiference[i] < collDiference[directionCheck]))
-			directionCheck = i;
-	}
+	int directionCheck = CheckCollisionDir(entityColl, collRect);
 
 	//Then we update the player's position & logic according to it's movement & the minimum result that we just calculated
 	switch (directionCheck) {
 	case DIRECTION_UP:
 		fpPosition.y = collRect.y + collRect.h + 2;
-		fpSpeed.y = 0;
 		break;
 	case DIRECTION_DOWN:
 		fpPosition.y = collRect.y - entityColl.h;
-		fpSpeed.y = 0;
-		fAccel = 0;
-		falling = false;
-
 		break;
 	case DIRECTION_LEFT:
 		fpPosition.x = collRect.x + collRect.w;
-		if (fpSpeed.x < 0)
-			fpSpeed.x = 0;
-		falling = false;
 		break;
 	case DIRECTION_RIGHT:
 		fpPosition.x = collRect.x - entityColl.w;
-		if (fpSpeed.x > 0)
-			fpSpeed.x = 0;
-		falling = false;
 		break;
 	case DIRECTION_NONE:
 		break;
@@ -308,7 +345,7 @@ void j1FlyingEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 
 void j1FlyingEnemy::UpdateState()
 {
-	if (abs(abs(App->entities->player->fpPosition.x) - abs(fpPosition.x)) < CHASING_DISTANCE && App->entities->player->getState() != ST_DEAD && abs(abs(App->entities->player->fpPosition.y) - abs(fpPosition.y)) < CHASING_DISTANCE)
+	if (abs(abs(App->entities->player->fpPosition.x) - abs(fpPosition.x)) < chasingDistance && App->entities->player->getState() != ST_DEAD && abs(abs(App->entities->player->fpPosition.y) - abs(fpPosition.y)) < chasingDistance)
 	{
 		enemy_state = flying_state::ST_CHASING;
 	}
@@ -321,15 +358,16 @@ bool j1FlyingEnemy::GetPathfinding()
 {
 	path.Clear();
 
-	App->pathfinding->CreatePath(App->map->WorldToMap(fpPosition.x, fpPosition.y), App->map->WorldToMap(App->entities->player->fpPosition.x, App->entities->player->fpPosition.y));
+	if (!App->pathfinding->CreatePath(App->map->WorldToMap(fpPosition.x, fpPosition.y), App->map->WorldToMap(App->entities->player->fpPosition.x, App->entities->player->fpPosition.y)))
+		return false;
 
 	uint pathCount = App->pathfinding->GetLastPath()->Count();
-	if (pathCount <= 0) return false;
+	if (pathCount <= 0 || pathCount > chasingTiles) return false;
+
 	for (uint i = 0; i < pathCount; i++)
 	{
 		path.PushBack(*App->pathfinding->GetLastPath()->At(i));
 	}
-
 
 	return true;
 }

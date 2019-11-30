@@ -62207,9 +62207,8 @@
   <object id="31" name="Floor" x="1696.69" y="208.106" width="46.495" height="15.909"/>
   <object id="33" name="Floor" x="1376.5" y="336.379" width="46.495" height="15.909"/>
   <object id="34" name="Floor" x="1184.09" y="239.379" width="46.495" height="15.909"/>
-  <object id="36" name="Floor" x="769.086" y="432.379" width="46.495" height="143.242"/>
+  <object id="36" name="Floor" x="768.086" y="438.061" width="48.37" height="138.06"/>
   <object id="37" name="Floor" x="478.086" y="432.379" width="385.162" height="33.2423"/>
-  <object id="38" name="Floor" x="478.086" y="432.379" width="385.162" height="33.2423"/>
   <object id="39" name="Floor" x="399.751" y="976.131" width="94.4147" height="12.9043"/>
   <object id="40" name="Floor" x="752.116" y="768.566" width="63.495" height="62.9888"/>
   <object id="41" name="Death" x="1699.38" y="198.587" width="41.62" height="9.534"/>
@@ -62241,8 +62240,10 @@
   <object id="99" name="EnemyL" x="558" y="408" width="90" height="16"/>
   <object id="100" name="EnemyF" x="1097" y="57" width="737" height="464"/>
  </objectgroup>
- <layer id="10" name="NAVIGATION" width="150" height="69">
+ <layer id="10" name="NAVIGATION" width="150" height="69" visible="0">
   <properties>
+   <property name="draw" type="bool" value="false"/>
+   <property name="navigation" type="bool" value="true"/>
    <property name="speed" type="float" value="1"/>
   </properties>
   <data>

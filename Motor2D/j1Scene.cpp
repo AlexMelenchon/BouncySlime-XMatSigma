@@ -113,6 +113,13 @@ bool j1Scene::PreUpdate()
 		}
 	}
 
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
+	{
+		origin_selected = false;
+		debugPath.Clear();
+	}
+
+
 	return true;
 }
 
@@ -164,7 +171,7 @@ bool j1Scene::Update(float dt)
 		App->windowTitleControl = !App->windowTitleControl;
 
 	//Sets Pause in the Game
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
 	{
 		App->pause = !App->pause;
 	}
