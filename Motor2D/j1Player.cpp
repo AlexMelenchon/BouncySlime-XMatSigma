@@ -172,6 +172,12 @@ void j1Player::standardInputs()
 	{
 		fpSpeed.y -= fpForce.y * (App->GetDeltaTime() * VEL_TO_WORLD);
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+	{
+		App->entities->AddEntity(entityType::SHURIKEN, { int(round(fpPosition.x)),int(round(fpPosition.y)) });
+	}
+
 }
 
 //Controls in God Mode movement
