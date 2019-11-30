@@ -99,7 +99,9 @@ bool j1Scene::PreUpdate()
 		{
 			debugPath.Clear();
 			App->pathfinding->CreatePath(origin, p);
+
 			uint pathCount = App->pathfinding->GetLastPath()->Count();
+
 			for (uint i = 0; i < pathCount; i++)
 			{
 				debugPath.PushBack(*App->pathfinding->GetLastPath()->At(i));
@@ -232,19 +234,22 @@ bool j1Scene::Update(float dt)
 	}
 
 	// Debug pathfinding w/ mouse ------------------------------
-	int x, y;
-	App->input->GetMousePosition(x, y);
-	iPoint p = App->render->ScreenToWorld(x, y);
-	p = App->map->WorldToMap(p.x, p.y);
-	p = App->map->MapToWorld(p.x, p.y);
-
-	App->render->Blit(debug_tex, p.x, p.y);
-
-	if(debugPath.Count() > 0)
-	for (uint i = 0; i < debugPath.Count(); ++i)
+	if (App->entities->debug)
 	{
-		iPoint pos = App->map->MapToWorld(debugPath.At(i)->x, debugPath.At(i)->y);
-		App->render->Blit(debug_tex, pos.x, pos.y);
+		int x, y;
+		App->input->GetMousePosition(x, y);
+		iPoint p = App->render->ScreenToWorld(x, y);
+		p = App->map->WorldToMap(p.x, p.y);
+		p = App->map->MapToWorld(p.x, p.y);
+
+		App->render->Blit(debug_tex, p.x, p.y);
+
+		if (debugPath.Count() > 0)
+			for (uint i = 0; i < debugPath.Count(); ++i)
+			{
+				iPoint pos = App->map->MapToWorld(debugPath.At(i)->x, debugPath.At(i)->y);
+				App->render->Blit(debug_tex, pos.x, pos.y);
+			}
 	}
 
 	return true;
