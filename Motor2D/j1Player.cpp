@@ -61,6 +61,7 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	wallJumpLimit = player_node.child("internal").child("wallJumpLimit").text().as_float();
 	wallJumpLeaveControl = player_node.child("internal").child("wallJumpLeave").text().as_float();
 	flipSpeed = player_node.child("internal").child("flipSpeed").text().as_float();
+	inWallSpeedDrop = player_node.child("internal").child("inwallSpeedDrop").text().as_float();
 
 	//Animation vars load
 	pugi::xml_node animIterator = player_node.child("animations").child("animation");
@@ -116,20 +117,23 @@ void j1Player::standardInputs()
 	{
 
 		if (wallJumpDirection == DIRECTION_RIGHT)
-			fpSpeed.x += (fpForce.x / fSlowGradeWall);
+		{
+			fpSpeed.x += ((fpForce.x / fSlowGradeWall) * (App->GetDeltaTime() * VEL_TO_WORLD));
+		}
 		else
 		{
 			if (current_state == ST_WALL)
 			{
 				wallingLeave += flCurrentTime;
-					if (wallingLeave > wallJumpLeaveControl)
-						fpSpeed.x += fpForce.x;
+				if (wallingLeave > wallJumpLeaveControl)
+					fpSpeed.x += fpForce.x * (App->GetDeltaTime() * VEL_TO_WORLD);
 			}
 			else
-				fpSpeed.x += fpForce.x;
+ 				fpSpeed.x += fpForce.x * (App->GetDeltaTime() * VEL_TO_WORLD);
 		}
 
-		fpSpeed.x = deAccel(SLOW_NEGATIVE_LIMIT, fpSpeed.x, fSlowGrade, iSlowLimit);
+		if (fpSpeed.x > 0)
+			fpSpeed.x -= ((fpSpeed.x / fSlowGradeWall) * (App->GetDeltaTime() * VEL_TO_WORLD));
 
 	}
 	//Moving right
@@ -137,31 +141,25 @@ void j1Player::standardInputs()
 	{
 
 		if (wallJumpDirection == DIRECTION_LEFT)
-			fpSpeed.x -= (fpForce.x / fSlowGradeWall);
+			fpSpeed.x -= ((fpForce.x / fSlowGradeWall) * (App->GetDeltaTime() * VEL_TO_WORLD));
 		else
 		{
 			if (current_state == ST_WALL)
 			{
 				wallingLeave += flCurrentTime;
 				if (wallingLeave > wallJumpLeaveControl)
-					fpSpeed.x -= fpForce.x;
+					fpSpeed.x -= fpForce.x * (App->GetDeltaTime() * VEL_TO_WORLD);
 			}
 			else
-				fpSpeed.x -= fpForce.x;
+				fpSpeed.x -= fpForce.x * (App->GetDeltaTime() * VEL_TO_WORLD);
 		}
 
-
-		fpSpeed.x = deAccel(SLOW_POSITIVE_LIMIT, fpSpeed.x, fSlowGrade, iSlowLimit);
-
+		if (fpSpeed.x < 0)
+			fpSpeed.x -= ((fpSpeed.x / fSlowGradeWall) * (App->GetDeltaTime() * VEL_TO_WORLD));
 	}
 	else
 	{
-		//If neither key is pressed, we slow the player in both directions
-		if (current_state == ST_GROUND)
-			fpSpeed.x = deAccel(SLOW_GENERAL, fpSpeed.x, fSlowGrade);
-		else
-			fpSpeed.x = deAccel(SLOW_GENERAL, fpSpeed.x, fSlowGradeAir);
-
+			fpSpeed.x -= ((fpSpeed.x / fSlowGradeWall) * (App->GetDeltaTime() * VEL_TO_WORLD));
 	}
 
 	//Jump
@@ -172,7 +170,7 @@ void j1Player::standardInputs()
 	//Increasing speed to go down
 	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		fpSpeed.y -= fpForce.y;
+		fpSpeed.y -= fpForce.y * (App->GetDeltaTime() * VEL_TO_WORLD);
 	}
 }
 
@@ -259,7 +257,7 @@ bool j1Player::Update(float dt)
 
 	case ST_AIR:
 
-		fAccel += fGravity *dt * VEL_TO_WORLD;
+		fAccel += fGravity *(dt * VEL_TO_WORLD);
 
 		//We check the player's speed and select his animation accordingly
 		if (fpSpeed.y > 0.0f)
@@ -274,19 +272,19 @@ bool j1Player::Update(float dt)
 
 	case ST_FALLING:
 
-		fAccel += fGravity*2.0f *dt * VEL_TO_WORLD;
+		fAccel += fGravity*2.0f * (dt * VEL_TO_WORLD);
 		currentAnimation = &animFall;
 		break;
 
 	case ST_WALL:
 
-		fAccel += fGravity/2.0f;
+		fAccel += fGravity/2.0f * (dt * VEL_TO_WORLD);
 		currentAnimation = &animWall;
 		break;
 
 	case ST_WALL_JUMPING:
 
-		fAccel += fGravity   *dt * VEL_TO_WORLD;
+		fAccel += fGravity * (dt * VEL_TO_WORLD);
 		wallJumpTimer += dt;
  		if (wallJumpTimer > wallJumpLimit) //When the player jumps, there's a limit in his speed to make him not stick to the wall for ever
 		{
@@ -323,17 +321,17 @@ void j1Player::UpdatePos(float dt)
 	falling = true;
 	walling = false;
 
+	//Limit Speed
+	LimitSpeed();
+
+	fpPosition.x += fpSpeed.x * dt;
+	fpPosition.y += fpSpeed.y * dt;
+
 	//The update the player's position & speed according to it's logic
 	if (current_state != ST_GROUND && current_state != ST_GOD)
 	{
 		fpSpeed.y += fAccel * dt;
 	}
-
-	//Limit Speed
-	//LimitSpeed(dt);
-
-	fpPosition.x += fpSpeed.x * dt;
-	fpPosition.y += fpSpeed.y * dt;
 
 
 	//We set the collider in hte player's position
@@ -351,7 +349,7 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 			case(COLLIDER_DEATH):
 				inputs.add(IN_DEATH);
 				App->fade->FadeToBlack(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
-				ReSetMovement();
+				//ReSetMovement();
 				break;
 			case(COLLIDER_WIN):
 				App->fade->FadeToBlack(App->map->GetNextMap(),winFx.id,playerFadeTime );
@@ -518,29 +516,29 @@ float j1Player::deAccel(slow_direction slow, float speedAxis, float grade, float
 	switch (slow) {
 
 	case SLOW_GENERAL:
-		speedAxis /= grade;
+		speedAxis *= (grade * (App->GetDeltaTime() * VEL_TO_WORLD));
 		break;
 
 	case SLOW_AIR:
-		speedAxis /= grade;
+		speedAxis *= (grade * (App->GetDeltaTime() * VEL_TO_WORLD));
 		break;
 
 	case SLOW_LIMITS:
 		if (speedAxis > limit)
-			speedAxis /= grade;
+			speedAxis *= (grade * (App->GetDeltaTime() * VEL_TO_WORLD));
 
 		if (speedAxis < -limit)
-			speedAxis /= grade;
+			speedAxis *= (grade * (App->GetDeltaTime() * VEL_TO_WORLD));
 		break;
 
 	case SLOW_POSITIVE_LIMIT:
 		if(speedAxis > limit)
-			speedAxis /= grade;
+			speedAxis *= (grade * (App->GetDeltaTime() * VEL_TO_WORLD));
 		break;
 
 	case SLOW_NEGATIVE_LIMIT:
 		if(speedAxis < -limit)
-			speedAxis /= grade;
+			speedAxis *= (grade * (App->GetDeltaTime() * VEL_TO_WORLD));
 		break;
 
 
@@ -676,12 +674,12 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 				fAccel = 0;
  				if (Flip == SDL_FLIP_NONE)
 				{
-					fpSpeed.x -= wallForce.x;
+					fpSpeed.x = -wallForce.x;
 					wallJumpDirection = DIRECTION_LEFT;
 				}
 				else
 				{
-					fpSpeed.x += wallForce.x;
+					fpSpeed.x = wallForce.x;
 					wallJumpDirection = DIRECTION_RIGHT;
 				}
 				wallingLeave = 0.0f;
@@ -757,7 +755,7 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 void j1Player::InWall()
 {
 	fAccel = 0;
-	fpSpeed.y = deAccel(SLOW_GENERAL, fpSpeed.y, fSlowGradeWall);
+	fpSpeed.y *= inWallSpeedDrop;
 	wallJumpDirection = DIRECTION_NONE;
 	wallJumpTimer = 0.0f;
 }

@@ -23,30 +23,30 @@ j1Entity::~j1Entity()
 }
 
 // Limits the entity's speed in both axis
-void j1Entity::LimitSpeed(float dt)
+void j1Entity::LimitSpeed()
 {
 	//X+
-	if (fpSpeed.x > fpMaxSpeed.x * dt)
+	if (fpSpeed.x > fpMaxSpeed.x)
 	{
-		fpSpeed.x = fpMaxSpeed.x * dt;
+		fpSpeed.x = fpMaxSpeed.x;
 	}
 
 	//X-
-	if (fpSpeed.x < -fpMaxSpeed.x * dt)
+	else if (fpSpeed.x < -fpMaxSpeed.x)
 	{
-		fpSpeed.x = -fpMaxSpeed.x * dt;
+		fpSpeed.x = -fpMaxSpeed.x;
 	}
 
 	//Y+
-	if (fpSpeed.y > fpMaxSpeed.y * dt)
+	if (fpSpeed.y > fpMaxSpeed.y)
 	{
-		fpSpeed.y = fpMaxSpeed.y * dt;
+		fpSpeed.y = fpMaxSpeed.y;
 	}
 
 	//Y-
-	if (fpSpeed.y < -fpMaxSpeed.y * dt)
+	else if (fpSpeed.y < -fpMaxSpeed.y)
 	{
-		fpSpeed.y = -fpMaxSpeed.y * dt;
+		fpSpeed.y = -fpMaxSpeed.y;
 	}
 }
 

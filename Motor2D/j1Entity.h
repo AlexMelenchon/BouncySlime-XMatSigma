@@ -81,7 +81,7 @@ public:
 
 	//--------POSITION ----------//
 	// Limits the entity speed in both axis
-	void LimitSpeed(float dt);
+	void LimitSpeed();
 
 	//Set the entity's position from other modules such as j1Map
 	virtual void SetPos(int x, int y);
