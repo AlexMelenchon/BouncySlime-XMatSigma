@@ -136,6 +136,13 @@
       <movement>
         <gravity>50.0f</gravity>
         <limitSpeed x="650.0f" y="750.0f" />
+        <chasingDistance>400</chasingDistance>
+        <chasingTiles>25</chasingTiles>
+        <idleSpeed>60.0f</idleSpeed>
+        <moveSpeed>25.0f</moveSpeed>
+        <fallingSpeed>30.0f</fallingSpeed>
+        <jumpForce>400.0f</jumpForce>
+        <jumpDistance>300.0f</jumpDistance>
       </movement>
 
       <collision>
@@ -144,6 +151,7 @@
 
       <internal>
         <pathTimer>0.5f</pathTimer>
+        <scalesize>2</scalesize>
       </internal>
 
       <animations>
@@ -174,6 +182,10 @@
       <movement>
         <gravity>50.0f</gravity>
         <limitSpeed x="650.0f" y="750.0f" />
+        <chasingDistance>400</chasingDistance>
+        <chasingTiles>32</chasingTiles>
+        <moveSpeed x="10.0f" y="10.0f"/>
+        <idleSpeed x="60.0f" y="60.0f"/>
       </movement>
 
       <collision>
@@ -182,6 +194,7 @@
 
       <internal>
         <pathTimer>0.5f</pathTimer>
+        <scalesize>2</scalesize>
       </internal>
 
       <animations>
