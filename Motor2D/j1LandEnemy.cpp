@@ -158,9 +158,9 @@ bool j1LandEnemy::Update(float dt)
 			//The update the player's position & speed according to it's logic
 			if (!stop)
 			{
-				Move(false);
+				Move(true);
 			}
-			else if (AbleToMove().x != -1 && AbleToMove().y != -1)
+			else if (AbleToMove().x != -1)
 			{
 				Move(true);
 			}
@@ -183,22 +183,23 @@ bool j1LandEnemy::Update(float dt)
 
 iPoint j1LandEnemy::IsTheNextTileWalkable()
 {
-	iPoint ret = { -1, -1 };
+		iPoint ret = { -1, -1 };
 
-	iPoint next = { path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y + 2 };
-	if (App->pathfinding->IsWalkable(next) && !falling)
-	{
-		for (uint i = path.Count() -1; i > 0; --i)
+		iPoint next = { path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y + 2 };
+
+		if (App->pathfinding->IsWalkable(next) && !falling)
 		{
-			next = { path.At(i)->x, path.At(i)->y + 2 };
-			if (!App->pathfinding->IsWalkable(next))
+			for (uint i = path.Count() -1; i > 0; --i)
 			{
-				ret = next;
-				break;
+				next = { path.At(i)->x, path.At(i)->y + 2 };
+				if (!App->pathfinding->IsWalkable(next))
+				{
+					ret = next;
+					break;
+				}
 			}
 		}
-	}
-	return ret;
+		return ret;
 }
 
 iPoint j1LandEnemy::AbleToMove()
@@ -234,11 +235,10 @@ bool j1LandEnemy::JumpLogic()
 	if (path.Count() <= 1)
 		return false;
 
-
 	if (App->pathfinding->IsWalkable({ path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y + 2 }) && !falling)
 	{
 		iPoint nextTile = IsTheNextTileWalkable();
-		if (nextTile.x != -1)
+		if (nextTile.x != -1 && nextTile.y != -1)
 		{
 			if (!falling)
 			{

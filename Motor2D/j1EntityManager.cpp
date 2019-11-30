@@ -7,6 +7,7 @@
 #include "j1FlyingEnemy.h"
 #include "j1Map.h"
 #include "j1Collision.h"
+#include "j1ParticleShuriken.h"	
 
 //Constructor
 j1EntityManager::j1EntityManager()
@@ -232,6 +233,10 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position, iPoint mo
 		tmp = new j1LandEnemy();
 		config = entConfig.child("landenemy");
 
+		break;
+	case entityType::SHURIKEN:
+		tmp = new j1ParticleShuriken();
+		config = entConfig.child("shuriken");
 		break;
 	}
 	if (tmp)
