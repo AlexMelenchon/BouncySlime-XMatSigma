@@ -6,6 +6,7 @@
 #include "p2Point.h"
 #include "j1Player.h"
 #include "j1LandEnemy.h"
+#include "j1ParticleShuriken.h"
 #include "p2Defs.h"
 #include "j1Entity.h"
 
@@ -62,7 +63,7 @@ public:
 	bool CleanMapEnt();
 
 	//Since player is used in other modules, we are going to have a pointer only to him
-	j1Player* player = nullptr;
+	j1Player* player = nullptr;	
 
 	//Node entity configuration
 	pugi::xml_node		entConfig;

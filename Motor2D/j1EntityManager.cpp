@@ -5,6 +5,7 @@
 #include "j1Player.h"
 #include "j1LandEnemy.h"
 #include "j1FlyingEnemy.h"
+#include "j1ParticleShuriken.h"
 #include "j1Map.h"
 #include "j1Collision.h"
 
@@ -166,6 +167,7 @@ bool j1EntityManager::Load(pugi::xml_node& file)
 	p2SString playerStr("player");
 	p2SString enemyL("enemyL");
 	p2SString enemyF("enemyF");
+	
 
 	for (pugi::xml_node propIterator = file.child("enemyL"); propIterator; propIterator = propIterator.next_sibling())
 	{
@@ -186,7 +188,7 @@ bool j1EntityManager::Load(pugi::xml_node& file)
 	}
 
 	player->Load(file.child("player"));
-
+	
 
 	return ret;
 }
@@ -214,7 +216,13 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position, iPoint mo
 		config = entConfig.child("landenemy");
 
 		break;
+
+	case entityType::SHURIKEN:
+		tmp = new j1ParticleShuriken();
+		config = entConfig.child("particles");
+		break;
 	}
+	
 	if (tmp)
 	{
 		if (position.x != 0 && position.y != 0)
