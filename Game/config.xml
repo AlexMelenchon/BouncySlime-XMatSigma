@@ -219,5 +219,22 @@
 
     </flyingenemy>
     
+    <shuriken>
+      
+      <animations>
+      <animation name = "shuriken">
+        <sprite x ="1" y ="349" w ="16" h="16" frames ="1"  pivotx ="8" pivoty="8"/>
+      </animation>
+      </animations>
+      
+      <path>textures/player/sprite.png</path>
+
+
+      <collision>
+        <collider w="26" h="20" />
+      </collision>
+      
+    </shuriken>
+    
   </entities>
 </config>
