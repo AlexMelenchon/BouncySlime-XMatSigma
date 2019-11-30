@@ -137,8 +137,9 @@ bool j1FlyingEnemy::ReturnToStart()
 	if (!App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + 16))), App->map->WorldToMap(trace.x + 1, trace.y)))
 		return false;
 
-
 	uint pathCount = App->pathfinding->GetLastPath()->Count();
+
+	if (pathCount <= 0 || pathCount > CHASING_MAX_TILES) return false;
 
 	for (uint i = 0; i < pathCount; i++)
 	{
@@ -146,7 +147,6 @@ bool j1FlyingEnemy::ReturnToStart()
 	}
 
 	return true;
-
 }
 
 
@@ -352,7 +352,7 @@ bool j1FlyingEnemy::GetPathfinding()
 		return false;
 
 	uint pathCount = App->pathfinding->GetLastPath()->Count();
-	if (pathCount <= 0) return false;
+	if (pathCount <= 0 || pathCount > CHASING_MAX_TILES) return false;
 
 	for (uint i = 0; i < pathCount; i++)
 	{

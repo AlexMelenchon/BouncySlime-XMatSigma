@@ -8,6 +8,7 @@
 #include "p2DynArray.h"
 
 #define CHASING_DISTANCE 450
+#define CHASING_MAX_TILES 32
 
 enum class flying_state : int
 {
