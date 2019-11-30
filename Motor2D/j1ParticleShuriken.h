@@ -37,8 +37,6 @@ public:
 	bool CleanUp();
 
 
-
-
 	//--------POSITION ---------//
 	void UpdatePos(float dt);
 
@@ -53,11 +51,23 @@ public:
 	//Calculate the collisions with the enviroment
 	void RecalculatePos(SDL_Rect, SDL_Rect);
 
+	bool ReturnToPlayerPath();
+
+	void Return();
+
+	//--------DRAW ---------//
+	void Draw();
+
 private:	
 	Animation anim;
 
+	p2DynArray<iPoint> path;
 
-	bool fx_played = false;
+
+	bool canPickUp = false;
+
+	float timer = 0.0f;
+
 };
 
 

@@ -18,6 +18,9 @@
 j1ParticleShuriken::j1ParticleShuriken() : j1Entity()
 {
 	this->type = entityType::SHURIKEN;
+
+	if (App->entities->shuriken == nullptr)
+		App->entities->shuriken = this;
 }
 
 j1ParticleShuriken ::~j1ParticleShuriken()
@@ -29,8 +32,10 @@ bool j1ParticleShuriken::Awake(pugi::xml_node& shuriken_node)
 	
 	//Create the player's collider
 	SDL_Rect particleRect = { 0,0,0,0 };
-	particleRect.w = shuriken_node.child("collision").child("collider").attribute("w").as_float();
-	particleRect.h = shuriken_node.child("collision").child("collider").attribute("h").as_float();
+	particleRect.w = shuriken_node.child("collision").child("collider").attribute("w").as_float()*2;
+	particleRect.h = shuriken_node.child("collision").child("collider").attribute("h").as_float()*2;
+
+	CheckDir();
 
 	collider = new Collider(particleRect, COLLIDER_SHURIKEN, this);	
 
@@ -51,7 +56,6 @@ bool j1ParticleShuriken::Start()
 	//Collision load
 	App->collision->AddCollider(collider);
 
-	CheckDir();
 
 	return true;
 }
@@ -60,24 +64,97 @@ bool j1ParticleShuriken::PreUpdate()
 {
 	UpdateState();
 
+	//Slow
+	if (!canPickUp)
+	{
+		fpSpeed.x -= ((fpSpeed.x / 7.5) * (App->GetDeltaTime() * VEL_TO_WORLD));
+		fpSpeed.y -= ((fpSpeed.y / 7.5) * (App->GetDeltaTime() * VEL_TO_WORLD));
+	}
+
 	return true;
 }
 
 bool j1ParticleShuriken::Update(float dt)
 {
+	timer += dt;
+
+	if (abs(fpSpeed.x) < 60 && abs(fpSpeed.y) < 60)
+	{
+		if (path.Count() == NULL)
+		{
+			ReturnToPlayerPath();
+			canPickUp = true;
+			timer = 0;
+		}
+	}
+
+	if (canPickUp)
+	{
+		if(path.Count() >  0)
+		Return();
+
+		if (timer > 0.5f)
+		{
+			ReturnToPlayerPath();
+			timer = 0;
+		}
+	}
+
+
+
 	bool ret = true;
 	UpdatePos(dt);
 
 	return ret;
 }
 
+void j1ParticleShuriken::Return()
+{
+	iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
 
+	if (abs(abs(fpPosition.x) - abs(current.x)) > App->map->data.tile_height || abs(abs(fpPosition.y) - abs(current.y)) > App->map->data.tile_height)
+	{
+		if (fpPosition.x < current.x)
+		{
+			fpSpeed.x += 35;
+		}
+		else if (fpPosition.x > current.x)
+		{
+			fpSpeed.x -= 35;
+		}
+
+		if (fpPosition.y < current.y)
+		{
+			fpSpeed.y += 35;
+		}
+
+		else if (fpPosition.y > current.y)
+		{
+			fpSpeed.y -= 5;
+		}
+
+	}
+	else
+		path.Pop(current);
+}
 
 bool j1ParticleShuriken::PostUpdate(bool debug)
 {
 	Draw();	
 
+	for (uint i = 0; i < path.Count(); ++i)
+	{
+		iPoint pos = App->map->MapToWorld(path.At(i)->x, path.At(i)->y);
+		App->render->Blit(App->entities->debug_tex, pos.x, pos.y);
+	}
+
 	return true;
+}
+
+void j1ParticleShuriken::Draw()
+{
+	App->render->Blit(Text, (int)round(fpPosition.x), (int)round(fpPosition.y), &currentAnimation->GetCurrentFrame(App->GetDeltaTime()), 1.0f, Flip, 1.0f, (currentAnimation->pivotpos->x), (currentAnimation->GetCurrentFrame(App->GetDeltaTime()).h / 2),2);
+
 }
 
 bool j1ParticleShuriken::CleanUp()
@@ -87,6 +164,8 @@ bool j1ParticleShuriken::CleanUp()
 		collider->to_delete = true;
 		collider = nullptr;
 	}
+
+	App->entities->shuriken = nullptr;
 	
 	return true;
 }
@@ -96,13 +175,8 @@ void j1ParticleShuriken::UpdatePos(float dt)
 	//If the logic does not demostrate tshe opposite, the player is always falling and not touching the wall
 	falling = true;
 
-	//Limit Speed
-	//LimitSpeed(dt);
-
 	fpPosition.x += fpSpeed.x * dt;
 	fpPosition.y += fpSpeed.y * dt;
-
-
 
 	//We set the collider in hte player's position
 	CalculateCollider(fpPosition);
@@ -121,6 +195,7 @@ void j1ParticleShuriken::CheckDir()
 		fpSpeed.x = 1000;
 	}
 
+
 	//Y+
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
@@ -131,6 +206,33 @@ void j1ParticleShuriken::CheckDir()
 	{
 		fpSpeed.y = 1000;
 	}
+
+	if (fpSpeed.Mod() == 0)
+		fpSpeed.x = 1000;
+}
+
+bool j1ParticleShuriken::ReturnToPlayerPath()
+{
+	path.Clear();
+
+	if (!App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + App->map->data.tile_height))), App->map->WorldToMap(int(round(App->entities->player->fpPosition.x)), int(round(App->entities->player->fpPosition.y + App->entities->player->collider->rect.w / 1.5f)))))
+		return false;
+
+	uint pathCount = App->pathfinding->GetLastPath()->Count();
+
+	if (pathCount <= 0)
+	{
+		path.Clear();
+		return false;
+	}
+
+	for (uint i = 0; i < pathCount; i++)
+	{
+		path.PushBack(*App->pathfinding->GetLastPath()->At(i));
+	}
+
+	return true;
+
 }
 
 
@@ -145,61 +247,44 @@ void j1ParticleShuriken::OnCollision(Collider* entityCol, Collider* coll)
 	case(COLLIDER_ENEMY):
 		coll->to_delete = true;
 		break;
+
+	case(COLLIDER_PLAYER):
+		if(canPickUp)
+		entityCol->to_delete = true;
+		break;
 	}
 }
 
 void j1ParticleShuriken::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 {
-	//Determines the direction of the collision
-	//Calculates distances from the player to the collision
-	int collDiference[DIRECTION_MAX];
-	collDiference[DIRECTION_LEFT] = (collRect.x + collRect.w) - entityColl.x;
-	collDiference[DIRECTION_RIGHT] = (entityColl.x + entityColl.w) - collRect.x;
-	collDiference[DIRECTION_UP] = (collRect.y + collRect.h) - entityColl.y;
-	collDiference[DIRECTION_DOWN] = (entityColl.y + entityColl.h) - collRect.y;
-
-
 	//If a collision from various aixs is detected, it determines what is the closets one to exit from
-	int directionCheck = DIRECTION_NONE;
-
-	for (int i = 0; i < DIRECTION_MAX; ++i)
-	{
-		if (directionCheck == DIRECTION_NONE)
-			directionCheck = i;
-		else if ((collDiference[i] < collDiference[directionCheck]))
-			directionCheck = i;
-	}
+	int directionCheck = CheckCollisionDir(entityColl, collRect);
 
 	//Then we update the player's position & logic according to it's movement & the minimum result that we just calculated
 	switch (directionCheck) {
 	case DIRECTION_UP:
 		fpPosition.y = collRect.y + collRect.h + 2;
-		fpSpeed.y = 0;
+		fpSpeed.y *= -0.75f;
+
 		break;
 	case DIRECTION_DOWN:
 		fpPosition.y = collRect.y - entityColl.h;
-		fpSpeed.y = 0;
-		fAccel = 0;
-		falling = false;
-
+		fpSpeed.y *= -0.75f;
 		break;
 	case DIRECTION_LEFT:
 		fpPosition.x = collRect.x + collRect.w;
-		if (fpSpeed.x < 0)
-			fpSpeed.x = 0;
-		falling = false;
+		fpSpeed.x *= -0.75f;
+
 		break;
 	case DIRECTION_RIGHT:
 		fpPosition.x = collRect.x - entityColl.w;
-		if (fpSpeed.x > 0)
-			fpSpeed.x = 0;
-		falling = false;
+		fpSpeed.x *= -0.75f;
 		break;
 	case DIRECTION_NONE:
 		break;
 	}
-	//We Recalculate the entity's collider with the new position
 
+	//We Recalculate the entity's collider with the new position
 	CalculateCollider(fpPosition);
 
 }

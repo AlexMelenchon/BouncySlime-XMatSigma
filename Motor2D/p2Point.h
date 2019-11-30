@@ -126,6 +126,11 @@ public:
 	{
 		return abs(v.x - x) + abs(v.y - y);
 	}
+
+	TYPE Mod() const
+	{
+		return sqrtf((x * x) + (y * y));
+	}
 };
 
 typedef p2Point<int> iPoint;

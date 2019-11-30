@@ -153,10 +153,10 @@ bool j1LandEnemy::Update(float dt)
 			//The enemy will never stop unless the logic says so
 			stop = false;
 
-			JumpLogic();
+			
 
 			//The update the player's position & speed according to it's logic
-			if (!stop)
+			if (!JumpLogic())
 			{
 				Move(true);
 			}
@@ -245,17 +245,16 @@ bool j1LandEnemy::JumpLogic()
 				if (CalculateJump(App->map->MapToWorld(nextTile.x, nextTile.y)) < jumpDistance)
 				{
 					fpSpeed.y = -jumpForce;
-					return true;
 				}
 				else
-					stop = true;
+					return true;
 			}
 		}
 		else
-			stop = true;
+			return true;
 	}
 
-	return true;
+	return false;
 }
 
 

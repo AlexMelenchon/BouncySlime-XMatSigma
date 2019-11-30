@@ -167,14 +167,10 @@ void j1Player::standardInputs()
 	{
 		Jump(fpForce.y, jumpFx.id);
 	}
-	//Increasing speed to go down
-	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-	{
-		fpSpeed.y -= fpForce.y * (App->GetDeltaTime() * VEL_TO_WORLD);
-	}
 
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 	{
+		if(App->entities->shuriken == nullptr)
 		App->entities->AddEntity(entityType::SHURIKEN, { int(round(fpPosition.x)),int(round(fpPosition.y)) });
 	}
 

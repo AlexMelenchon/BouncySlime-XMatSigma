@@ -223,7 +223,9 @@
 
       <animations>
         <animation name = "shuriken">
-          <sprite x ="1" y ="349" w ="16" h="16" frames ="1"  pivotx ="8" pivoty="8"/>
+          <sprite x ="18" y ="349" w ="16" h="16" frames ="5"  pivotx ="8" pivoty="8"/>
+          <sprite x ="35" y ="349" w ="16" h="16" frames ="5"  pivotx ="8" pivoty="8"/>
+          <sprite x ="51" y ="349" w ="16" h="16" frames ="5"  pivotx ="8" pivoty="8"/>
         </animation>
       </animations>
 

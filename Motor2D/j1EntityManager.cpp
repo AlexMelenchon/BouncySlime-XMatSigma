@@ -189,9 +189,6 @@ bool j1EntityManager::Load(pugi::xml_node& file)
 		if (enemyL == propIterator.name())
 			AddEntity(entityType::LAND_ENEMY, { 0,0 })->Load(propIterator);
 
-		if (enemyF == propIterator.name())
-			AddEntity(entityType::FLYING_ENEMY, { 0,0 })->Load(propIterator);
-
 	}
 
 	for (pugi::xml_node propIterator = file.child("enemyF"); propIterator; propIterator = propIterator.next_sibling())
