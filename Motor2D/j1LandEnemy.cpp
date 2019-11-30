@@ -134,7 +134,7 @@ bool j1LandEnemy::Update(float dt)
 		{
 		currentAnimation = &animRun;
 
-		if (timer > 0.25f)
+		if (timer > 0.25f && !falling)
 		{
 			GetPathfinding();
 			timer = 0;
@@ -150,11 +150,11 @@ bool j1LandEnemy::Update(float dt)
 			//The update the player's position & speed according to it's logic
 			if (!stop)
 			{
-				Move(true);
+				Move(false);
 			}
 			else if (AbleToMove().x != -1 && AbleToMove().y != -1)
 			{
-				Move(false);
+				Move(true);
 			}
 			else
 				fpSpeed.x = 0;
@@ -235,7 +235,10 @@ bool j1LandEnemy::JumpLogic()
 			if (!falling)
 			{
 				if (CalculateJump(App->map->MapToWorld(nextTile.x, nextTile.y)) < 300)
+				{
 					fpSpeed.y = -400.0f;
+					return true;
+				}
 				else
 					stop = true;
 			}
@@ -354,11 +357,16 @@ bool j1LandEnemy::ReturnToStart()
 {	
 	path.Clear();
 
-	if (!App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + 16))), App->map->WorldToMap(trace.x + 1, trace.y)))
+	if (App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + 16))), App->map->WorldToMap(trace.x + 1, trace.y)) == -1)
 		return false;
 
-
 	uint pathCount = App->pathfinding->GetLastPath()->Count();
+
+	if (pathCount <= 0 || pathCount > CHASING_MAX_TILES*3)
+	{
+		path.Clear();
+		return false;
+	}
 
 	for (uint i = 0; i < pathCount; i++)
 	{
