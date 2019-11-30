@@ -7,8 +7,7 @@
 #include "p2Point.h"
 #include "p2DynArray.h"
 
-#define CHASING_DISTANCE 400
-#define CHASING_MAX_TILES 25
+
 
 enum class state : int
 {
@@ -96,6 +95,9 @@ public:
 private:
 	//--------MOVEMENT ---------//
 	bool tracecheck = false;
+	float jumpForce = 0.f;
+	float jumpDistance = 0.f;
+	float fallingSpeed = 0.f;
 
 	//--------INTERNAL CONTROÑ ---------//
 	float pathTimer = 0.0f;
@@ -120,7 +122,7 @@ private:
 
 	//------COLLIDER------//
 	//the entity's sprite is too little compared to the player so we will double it's size.
-	int scalesize = 2;
+	int scalesize = 0;
 	
 };
 
