@@ -164,9 +164,6 @@ private:
 	// Actual time of the ms elapsed since the last frame
 	float flCurrentTime = 0.0f;
 
-	// Limits the time elapsed between frames so the movement doesn't break
-	float fInFramesLimit = 0.0f;
-
 	// Fade time to change maps or death
 	float playerFadeTime = 0.0f;
 

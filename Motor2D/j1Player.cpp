@@ -57,7 +57,6 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	collider = new Collider(playerRect, COLLIDER_PLAYER, this);
 
 	//Internal variables load
-	fInFramesLimit = player_node.child("internal").child("inFramesLimit").text().as_float();
 	playerFadeTime = player_node.child("internal").child("playerFadeTime").text().as_float();
 	wallJumpLimit = player_node.child("internal").child("wallJumpLimit").text().as_float();
 	wallJumpLeaveControl = player_node.child("internal").child("wallJumpLeave").text().as_float();
@@ -238,9 +237,6 @@ void j1Player::UpdateState()
 bool j1Player::Update(float dt)
 {
 	BROFILER_CATEGORY("Player Update", Profiler::Color::Magenta)
-	if (dt == 0.0f)
-		return true;
-
 
 	//Logic for every playe state
 	switch (current_state)
@@ -312,10 +308,7 @@ bool j1Player::Update(float dt)
 		currentAnimation = &animDeath;
 	}
 
-	//Get the time elapsed since the last frame; used for timers
-	if (dt > fInFramesLimit)
-		dt = 0.15;
-
+	//We save the value of dt, to use it in various timer across the entity
 	flCurrentTime = dt;
 
 	//Update position

@@ -23,8 +23,11 @@ j1EntityManager::~j1EntityManager()
 bool j1EntityManager::Awake(pugi::xml_node& config)
 {
 	bool ret = false;
-
+	
+	//We save the node to later use in the code
 	entConfig = config;
+
+	fInFramesLimit = config.child("manager").child("inFramesLimit").text().as_float();
 
 	p2List_item<j1Entity*>* tmp = EntityList.start;
 	if (tmp == nullptr)
@@ -75,7 +78,7 @@ bool j1EntityManager::PreUpdate()
 	{
 		if (tmp->data->collider->to_delete == true)
 		{
-			tmp->data->CleanUp(); //TODO: entities cleanUp + Collider
+			tmp->data->CleanUp();
 			RELEASE(tmp->data);
 			EntityList.del(tmp);
 			tmp = tmp->prev;
@@ -84,8 +87,11 @@ bool j1EntityManager::PreUpdate()
 		tmp = tmp->next;
 	}
 
+
+	//Pre-update (inputs & logic) of all entities
 	tmp = EntityList.start;
 
+	//If no entity is loaded, we do not do nothing
 	if (tmp == nullptr)
 		ret = true;
 	else
@@ -97,11 +103,21 @@ bool j1EntityManager::PreUpdate()
 	return ret;
 }
 
+// Called each loop iteration
 bool j1EntityManager::Update(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
 	bool ret = false;
 	p2List_item<j1Entity*>* tmp = EntityList.start;
+
+	//If the game is paused, we do not calculate the logic
+	if (dt == 0.0f) return true;
+
+	//A cap to prevent the game logic from going crazy in specific & critical conditions (ex. big time load)
+	if (dt > fInFramesLimit)
+		dt = fInFramesLimit;
+
+	//We update all the entities
 	while (tmp != nullptr)
 	{
 		ret = tmp->data->Update(dt);

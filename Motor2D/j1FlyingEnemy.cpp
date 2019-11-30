@@ -108,20 +108,20 @@ bool j1FlyingEnemy::Update(float dt)
 
 				if (fpPosition.x < current.x )
 				{
-					fpSpeed.x = 60;
+					fpSpeed.x += 60;
 					Flip = SDL_FLIP_HORIZONTAL;
 				}
 				else if (fpPosition.x > current.x)
 				{
-					fpSpeed.x = -60;
+					fpSpeed.x -= 60;
 					Flip = SDL_FLIP_NONE;
 				}
 
 				if (fpPosition.y < current.y)
-					fpSpeed.y = 60;
+					fpSpeed.y += 60;
 
 				else if (fpPosition.y > current.y)
-					fpSpeed.y = -60;
+					fpSpeed.y -= 60;
 
 			}
 			else

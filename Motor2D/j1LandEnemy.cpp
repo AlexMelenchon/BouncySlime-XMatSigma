@@ -186,7 +186,7 @@ bool j1LandEnemy::Update(float dt)
 					if (fpSpeed.x < 0)
 						fpSpeed.x = 0;
 
-					fpSpeed.x += 30;
+					fpSpeed.x += 25;
 					Flip = SDL_FLIP_HORIZONTAL;
 				}
 				else if (fpPosition.x > current.x)
@@ -194,7 +194,7 @@ bool j1LandEnemy::Update(float dt)
 					if (fpSpeed.x > 0)
 						fpSpeed.x = 0;
 
-					fpSpeed.x -= 30;
+					fpSpeed.x -= 25;
 					Flip = SDL_FLIP_NONE;
 				}
 			}
@@ -207,6 +207,7 @@ bool j1LandEnemy::Update(float dt)
 		
 	}
 	UpdatePos(dt);
+
 	
 	return ret;
 }
@@ -221,8 +222,7 @@ bool j1LandEnemy::PostUpdate(bool debug)
 {
 	Draw();
 
-	if (falling)
-		fpSpeed.y += 30;
+
 
 	if (debug)
 	{
@@ -245,6 +245,9 @@ bool j1LandEnemy::CleanUp()
 
 void j1LandEnemy::UpdatePos(float dt)
 {
+	if (falling)
+		fpSpeed.y += 30;
+
 	//If the logic does not demostrate tshe opposite, the player is always falling and not touching the wall
 	falling = true;
 
