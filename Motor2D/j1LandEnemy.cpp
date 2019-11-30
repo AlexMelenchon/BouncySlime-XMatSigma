@@ -34,17 +34,6 @@ bool j1LandEnemy::Awake(pugi::xml_node& land_node)
 {
 	//Movement load
 	fGravity = land_node.child("movement").child("gravity").text().as_float();
-	chasingDistance = land_node.child("movement").child("chasingDistance").text().as_uint();
-	chasingTiles = land_node.child("movement").child("chasingTiles").text().as_uint();
-	jumpForce = land_node.child("movement").child("jumpForce").text().as_uint();
-	jumpDistance = land_node.child("movement").child("jumpDistance").text().as_uint();
-	idleSpeed.x = land_node.child("movement").child("idleSpeed").text().as_uint();
-	moveSpeed.x = land_node.child("movement").child("moveSpeed").text().as_uint();
-	fallingSpeed = land_node.child("movement").child("fallingSpeed").text().as_uint();
-
-	//Internal variables load
-	pathTimer = land_node.child("internal").child("pathTimer").text().as_float();
-	scalesize = land_node.child("internal").child("scalesize").text().as_float();
 
 	//Create the player's collider
 	SDL_Rect enemyRect = { 0,0,0,0 };
@@ -52,6 +41,9 @@ bool j1LandEnemy::Awake(pugi::xml_node& land_node)
 	enemyRect.h = land_node.child("collision").child("collider").attribute("h").as_float() * scalesize;
 
 	collider = new Collider(enemyRect, COLLIDER_ENEMY, this);
+
+	//Internal variables load
+	pathTimer = land_node.child("internal").child("pathTimer").text().as_float();
 
 	pugi::xml_node animIterator = land_node.child("animations").child("animation");
 	animIdle.loadAnimation(animIterator, "idle");
@@ -242,9 +234,9 @@ bool j1LandEnemy::JumpLogic()
 		{
 			if (!falling)
 			{
-				if (CalculateJump(App->map->MapToWorld(nextTile.x, nextTile.y)) < jumpDistance)
+				if (CalculateJump(App->map->MapToWorld(nextTile.x, nextTile.y)) < 300)
 				{
-					fpSpeed.y = -jumpForce;
+					fpSpeed.y = -400.0f;
 					return true;
 				}
 				else
@@ -275,7 +267,7 @@ void j1LandEnemy::Move(bool toPlayer)
 			if (fpSpeed.x < 0 || (App->entities->player->fpPosition.x < fpPosition.x && toPlayer))
 				fpSpeed.x = 0;
 
-			fpSpeed.x += moveSpeed.x;
+			fpSpeed.x += 25;
 			Flip = SDL_FLIP_HORIZONTAL;
 		}
 		else if (fpPosition.x > next.x)
@@ -283,7 +275,7 @@ void j1LandEnemy::Move(bool toPlayer)
 			if (fpSpeed.x > 0 || (App->entities->player->fpPosition.x > fpPosition.x && toPlayer))
 				fpSpeed.x = 0;
 			
-			fpSpeed.x -= moveSpeed.x;
+			fpSpeed.x -= 25;
 			Flip = SDL_FLIP_NONE;
 		}
 	}
@@ -317,7 +309,7 @@ bool j1LandEnemy::CleanUp()
 void j1LandEnemy::UpdatePos(float dt)
 {
 	if (falling)
-		fpSpeed.y += fallingSpeed;
+		fpSpeed.y += 30;
 
 	//If the logic does not demostrate tshe opposite, the player is always falling and not touching the wall
 	falling = true;
@@ -338,7 +330,7 @@ void j1LandEnemy::TraceFollower(float dt)
 {
 	if (!tracecheck)
 	{
-		fpSpeed.x = idleSpeed.x;
+		fpSpeed.x = 60.0f;
 
 		Flip = SDL_FLIP_HORIZONTAL;
 
@@ -350,7 +342,7 @@ void j1LandEnemy::TraceFollower(float dt)
 
 	if (tracecheck)
 	{
-		fpSpeed.x = -idleSpeed.x;
+		fpSpeed.x = -60.0f;
 
 		Flip = SDL_FLIP_NONE;
 
@@ -365,12 +357,12 @@ bool j1LandEnemy::ReturnToStart()
 {	
 	path.Clear();
 
-	if (App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + App->map->data.tile_height))), App->map->WorldToMap(trace.x + 1, trace.y)) == -1)
+	if (App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + 16))), App->map->WorldToMap(trace.x + 1, trace.y)) == -1)
 		return false;
 
 	uint pathCount = App->pathfinding->GetLastPath()->Count();
 
-	if (pathCount <= 0 || pathCount > chasingTiles*3)
+	if (pathCount <= 0 || pathCount > CHASING_MAX_TILES*3)
 	{
 		path.Clear();
 		return false;
@@ -438,7 +430,7 @@ void j1LandEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 
 void j1LandEnemy::UpdateState()
 {
-	if (abs(abs(App->entities->player->fpPosition.x) - abs(fpPosition.x)) < chasingDistance && App->entities->player->getState() != ST_DEAD && abs(abs(App->entities->player->fpPosition.y) - abs(fpPosition.y)) < chasingDistance)
+	if (abs(abs(App->entities->player->fpPosition.x) - abs(fpPosition.x)) < CHASING_DISTANCE && App->entities->player->getState() != ST_DEAD && abs(abs(App->entities->player->fpPosition.y) - abs(fpPosition.y)) < CHASING_DISTANCE)
 	{
 		enemy_state = state::ST_CHASING;
 	}
@@ -451,13 +443,13 @@ bool j1LandEnemy::GetPathfinding()
 {
 	path.Clear();
 
-	if(!App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + App->map->data.tile_height))), App->map->WorldToMap(int(round(App->entities->player->fpPosition.x)), int(round(App->entities->player->fpPosition.y + App->entities->player->collider->rect.w / 1.5f)))))
+	if(!App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + 16))), App->map->WorldToMap(int(round(App->entities->player->fpPosition.x)), int(round(App->entities->player->fpPosition.y + App->entities->player->collider->rect.w / 1.5f)))))
 	return false;
 
 	uint pathCount = App->pathfinding->GetLastPath()->Count();
 
 
-	if (pathCount <= 0 || pathCount > chasingTiles)
+	if (pathCount <= 0 || pathCount > CHASING_MAX_TILES)
 	{
 		path.Clear();
 		return false;
