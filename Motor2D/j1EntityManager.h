@@ -71,6 +71,10 @@ public:
 	//--------PATHFINDING---------//
 	SDL_Texture* debug_tex;
 
+	//--------INTERNAL CONTROL---------//
+	float fInFramesLimit = 0.0f;
+
+
 private:
 	p2List<j1Entity*> EntityList;
 };

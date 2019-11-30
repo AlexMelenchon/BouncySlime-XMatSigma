@@ -7,7 +7,7 @@
 #include "p2Point.h"
 #include "p2DynArray.h"
 
-#define CHASING_DISTANCE 200
+
 
 enum class state : int
 {
@@ -63,6 +63,15 @@ public:
 	//When the enemy is idle, it has a defined movement
 	virtual void TraceFollower(float dt);
 
+	iPoint IsTheNextTileWalkable();
+
+	iPoint AbleToMove();
+
+	int CalculateJump(iPoint destination);
+
+	bool JumpLogic();
+
+	void Move(bool toPlayer);
 
 	//--------COLLISION ---------//
 	
@@ -76,16 +85,24 @@ public:
 	//Blits the entity into the world
 	virtual void Draw();
 
+	//--------PATHFINDING---------//
+
+	bool GetPathfinding();
+
+	bool ReturnToStart();
+
 
 private:
 	//--------MOVEMENT ---------//
-	bool GetPathfinding();
 	bool tracecheck = false;
-	void ReturnToStart(float dt);
+	float jumpForce = 0.f;
+	float jumpDistance = 0.f;
+	float fallingSpeed = 0.f;
 
 	//--------INTERNAL CONTROÑ ---------//
-	float pathTimer;
+	float pathTimer = 0.0f;
 	float timer = 0.f;
+	bool stop = false;
 	
 	//--------STATE ---------//
 	//determines what the enemy is doing
@@ -105,7 +122,7 @@ private:
 
 	//------COLLIDER------//
 	//the entity's sprite is too little compared to the player so we will double it's size.
-	int scalesize = 2;
+	int scalesize = 0;
 	
 };
 
