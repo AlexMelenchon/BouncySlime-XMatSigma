@@ -306,14 +306,16 @@ void j1FlyingEnemy::UpdatePos(float dt)
 	CalculateCollider(fpPosition);
 }
 
-
-
 void j1FlyingEnemy::OnCollision(Collider* entityCol, Collider* coll)
 {
 	switch (coll->type) {
 
 	case(COLLIDER_WALL):
 		RecalculatePos(entityCol->rect, coll->rect);
+		break;
+
+	case(COLLIDER_DEATH):
+		entityCol->to_delete = true;
 		break;
 	}
 }

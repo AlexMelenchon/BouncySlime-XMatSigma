@@ -399,6 +399,10 @@ void j1LandEnemy::OnCollision(Collider* entityCol, Collider* coll)
 	case(COLLIDER_WALL):
 		RecalculatePos(entityCol->rect, coll->rect);
 		break;
+
+	case(COLLIDER_DEATH):
+		entityCol->to_delete = true;
+		break;
 	}
 }
 
