@@ -137,7 +137,7 @@ bool j1ParticleShuriken::Update(float dt)
    }
    //Play the fx meanwhile in the air
 	
-	App->audio->PlayFx(in_air.id,0,0);
+	//App->audio->PlayFx(in_air.id,0,0);
 	//Update shuriken position
 	UpdatePos(dt);
 
