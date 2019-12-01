@@ -9,58 +9,64 @@
 	<map />
 	<entities>
 		<player>
-			<position x="862.874939" y="687.532898" />
+			<position x="82" y="928" />
 			<speed x="0" y="0" />
-			<state current_state="6" />
-			<falling value="true" />
+			<state current_state="1" />
+			<falling value="false" />
 			<walling value="false" />
 			<wallTimer wallJumpTimer="0" />
 			<flip value="0" />
 		</player>
+		<enemyF>
+			<position x="1299.0188" y="537.960022" />
+			<speed x="-60" y="0" />
+			<falling value="true" />
+			<flip value="1" />
+		</enemyF>
+		<enemyF>
+			<position x="891.659424" y="242.039993" />
+			<speed x="-60" y="0" />
+			<falling value="true" />
+			<flip value="1" />
+		</enemyF>
+		<enemyF>
+			<position x="235.139984" y="352.880402" />
+			<speed x="-60" y="0" />
+			<falling value="true" />
+			<flip value="1" />
+		</enemyF>
+		<enemyF>
+			<position x="757.980042" y="635.039917" />
+			<speed x="0" y="-60" />
+			<falling value="true" />
+			<flip value="1" />
+		</enemyF>
+		<enemyF>
+			<position x="1569.97998" y="515.760132" />
+			<speed x="60" y="0" />
+			<falling value="true" />
+			<flip value="0" />
+		</enemyF>
 		<enemyL>
-			<position x="17.7993431" y="920" />
+			<position x="2291.37964" y="280" />
 			<speed x="-60" y="0" />
 			<falling value="false" />
-			<flip value="0" />
-		</enemyL>
-		<enemyL>
-			<position x="340.761353" y="851.84021" />
-			<speed x="-60" y="0" />
-			<falling value="true" />
-			<flip value="0" />
+			<flip value="1" />
 		</enemyL>
 		<enemyF>
-			<position x="16" y="643" />
-			<speed x="0" y="0" />
-			<falling value="false" />
-			<flip value="0" />
-		</enemyF>
-		<enemyF>
-			<position x="1107.43738" y="569" />
-			<speed x="-60" y="0" />
+			<position x="176" y="943.939331" />
+			<speed x="-150" y="-20.4000015" />
 			<falling value="true" />
-			<flip value="0" />
-		</enemyF>
-		<enemyF>
-			<position x="16" y="643" />
-			<speed x="0" y="0" />
-			<falling value="false" />
-			<flip value="0" />
-		</enemyF>
-		<enemyF>
-			<position x="1107.43738" y="569" />
-			<speed x="-60" y="0" />
-			<falling value="true" />
-			<flip value="0" />
+			<flip value="1" />
 		</enemyF>
 	</entities>
 	<pathfinding />
 	<scene>
-		<current_map name="intro.tmx" />
+		<current_map name="map2.tmx" />
 	</scene>
 	<collision />
 	<fade />
 	<renderer>
-		<camera x="-488" y="-303" />
+		<camera x="0" y="-336" />
 	</renderer>
 </game_state>

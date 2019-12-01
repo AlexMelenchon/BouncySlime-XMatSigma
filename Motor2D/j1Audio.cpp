@@ -184,7 +184,6 @@ bool j1Audio::PlayFx(unsigned int id, int repeat, int channel)
 	if(!active)
 		return false;
 
-	Mix_VolumeChunk(fx[id - 1], MIX_MAX_VOLUME);
 	if(id > 0 && id <= fx.count())
 	{
 		Mix_PlayChannel(channel, fx[id - 1], repeat);

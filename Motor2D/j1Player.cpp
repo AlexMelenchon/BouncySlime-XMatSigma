@@ -75,6 +75,8 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	animFall.loadAnimation(animIterator, "fall");
 	animDeath.loadAnimation(animIterator, "death");
 
+	
+
 	currentAnimation = &animIdle;
 
 
@@ -91,6 +93,8 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	//We need this in order to load things later in start whose modules are not awoken yet
 	auxLoader = player_node;
 
+
+
 	return true;
 }
 // Called before the first frame
@@ -99,6 +103,7 @@ bool j1Player::Start()
 {
 	//Load the player's textures
 	Text = App->tex->Load(auxLoader.child("path").text().as_string());
+	shuriken_tex = App->tex->Load(auxLoader.child("shuriken").text().as_string());
 
 	//Collision load
 	App->collision->AddCollider(collider);
@@ -215,8 +220,10 @@ void j1Player::godInputs()
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 	{
 		if (App->entities->shuriken == nullptr)
+		{
 			App->entities->AddEntity(entityType::SHURIKEN, { int(round(fpPosition.x)),int(round(fpPosition.y)) });
-		App->audio->PlayFx(throw_shuriken.id);
+			App->audio->PlayFx(throw_shuriken.id);
+		}
 	}
 }
 
@@ -449,7 +456,9 @@ bool j1Player::PostUpdate()
 	//We set the flip accoording to the player's spped in x
 	FlipControl();
 
-	//And finally we blit
+	//And finally we blit, we blit the shuriken if its not thrown that is when the pointer to it is nullptr
+	if (App->entities->shuriken == nullptr)
+		App->render->Blit(shuriken_tex, fpPosition.x + 2, fpPosition.y - 6);
 	Draw();
 
 	return true;

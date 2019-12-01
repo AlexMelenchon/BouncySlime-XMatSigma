@@ -249,10 +249,6 @@ void j1Scene::showWindowTitle() const
 
 		App->win->SetTitle(title.GetString());
 	}
-
-
-
-
 }
 
 //Sets the debug pathfinding w/ the mouse

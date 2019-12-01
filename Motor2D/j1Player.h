@@ -190,6 +190,8 @@ private:
 	Animation animFall;
 	Animation animWall;
 	Animation animDeath;
+
+	SDL_Texture* shuriken_tex = nullptr;
 	
 	//--------MUSIC---------//
 	FX jumpFx;
