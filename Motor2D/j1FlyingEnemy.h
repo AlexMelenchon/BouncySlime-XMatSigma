@@ -37,6 +37,7 @@ public:
 
 	//--------POSITION ---------//
 
+	//Update entity's position
 	void UpdatePos(float dt);
 
 	//When the enemy is idle, it has a defined movement
@@ -60,9 +61,6 @@ private:
 	//--------ANIMATIONS---------//
 	Animation animIdle;
 	SDL_Rect enemyRect = { 0,0,0,0 };
-
-	//--------MUSIC---------//
-	
 
 };
 

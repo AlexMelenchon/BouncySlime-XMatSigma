@@ -62,11 +62,10 @@ public:
 	//Update enemy's position
 	virtual void UpdatePos(float dt) {};
 
-	//When the enemy is idle, it has a defined movement (a.k.a patrol)
-	virtual void TraceFollower() {};
 
 	//Moves the enemy according to pathfinding
 	virtual void Move(float dt) {};
+
 
 	//--------COLLISION ---------//
 
@@ -96,9 +95,6 @@ protected:
 	//Timers for pathfinding
 	float idleTimer = 0.f;
 	float chasingTimer = 0.f;
-
-	//Determines an entity predefined movement
-	SDL_Rect trace = { 0,0,0,0 };
 
 	//defined movement speed the enemy will have
 	fPoint idleSpeed = { 0,0 };

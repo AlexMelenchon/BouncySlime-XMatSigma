@@ -13,12 +13,14 @@
 #include "j1Pathfinding.h"
 #include "j1Scene.h"
 
+//Constructor
 j1LandEnemy::j1LandEnemy() : j1Enemy()
 {	
 	this->type = entityType::LAND_ENEMY;
 	
 }
 
+//Destructor
 j1LandEnemy ::~j1LandEnemy()
 {
 	path.Clear();
@@ -71,6 +73,7 @@ bool j1LandEnemy::Awake(pugi::xml_node& land_node)
 	return true;
 }
 
+// Called before the first frame
 bool j1LandEnemy::Start()
 {
 	//The enemy's texture load
@@ -82,19 +85,14 @@ bool j1LandEnemy::Start()
 	return true;
 }
 
+// Called each loop iteration
 bool j1LandEnemy::Update(float dt)
 {
-	
 	timer += dt;
 
 	bool ret = true;
 	switch (state)
 	{
-	case enemy_state::ST_UNKNOWN:
-		{
-		ret = false;
-		break;
-		}
 	case enemy_state::ST_IDLE:
 		{
 		currentAnimation = &animIdle;
@@ -171,6 +169,11 @@ bool j1LandEnemy::Update(float dt)
 		break;
 		}
 		
+	case enemy_state::ST_UNKNOWN:
+	{
+		ret = false;
+		break;
+	}
 	}
 	UpdatePos(dt);
 
@@ -178,7 +181,8 @@ bool j1LandEnemy::Update(float dt)
 	return ret;
 }
 
-iPoint j1LandEnemy::IsTheNextTileWalkable()
+//Gets if the next tile, in the enemy's foot is walkable
+iPoint j1LandEnemy::NextWalkableTile()
 {
 		iPoint ret = { -1, -1 };
 
@@ -234,7 +238,7 @@ bool j1LandEnemy::JumpLogic()
 
 	if (App->pathfinding->IsWalkable({ path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y + 2 }) && !falling)
 	{
-		iPoint nextTile = IsTheNextTileWalkable();
+		iPoint nextTile = NextWalkableTile();
 		if (nextTile.x != -1 && nextTile.y != -1)
 		{
 			if (!falling)
@@ -289,8 +293,6 @@ void j1LandEnemy::UpdatePos(float dt)
 
 	//Limit Speed
 	LimitSpeed();
-
-	fpSpeed.y += fAccel * dt;
 
 	fpPosition.x += fpSpeed.x * dt;
 	fpPosition.y += fpSpeed.y * dt;
@@ -357,7 +359,6 @@ void j1LandEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 	case DIRECTION_DOWN:
 		fpPosition.y = collRect.y - entityColl.h;
 		fpSpeed.y = 0;
-		fAccel = 0;
 		if (!falling)
 		{
 			path.Clear();

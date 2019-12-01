@@ -146,15 +146,16 @@ bool j1FlyingEnemy::Update(float dt)
 	}
 	UpdatePos(dt);
 	
-
 	return ret;
 }
 
 //Moves the enemy according to pathfinding
 void j1FlyingEnemy::Move(float dt)
 {
+	//Get the next tile to move
 	iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
 
+	//If the tile is a tile of distance of the enemy, it moves
 	if (abs(abs(fpPosition.x) - abs(current.x)) > App->map->data.tile_height || abs(abs(fpPosition.y) - abs(current.y)) > App->map->data.tile_height)
 	{
 		if (fpPosition.x < current.x)
@@ -189,6 +190,7 @@ void j1FlyingEnemy::Move(float dt)
 		path.Pop(current);
 }
 
+//When the enemy is idle, it has a defined movement
 void j1FlyingEnemy::TraceFollower()
 {
 
@@ -247,6 +249,7 @@ void j1FlyingEnemy::TraceFollower()
 	}
 }
 
+//Update entity's position
 void j1FlyingEnemy::UpdatePos(float dt)
 {
 	//If the logic does not demostrate tshe opposite, the player is always falling and not touching the wall
@@ -262,6 +265,7 @@ void j1FlyingEnemy::UpdatePos(float dt)
 	CalculateCollider(fpPosition);
 }
 
+//If a collision is detected by the j1Collision, distributes collisions according to it's type
 void j1FlyingEnemy::OnCollision(Collider* entityCol, Collider* coll)
 {
 	switch (coll->type) {
@@ -276,6 +280,7 @@ void j1FlyingEnemy::OnCollision(Collider* entityCol, Collider* coll)
 	}
 }
 
+//Calculate the collisions with the enviroment
 void j1FlyingEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 {
 	//If a collision from various aixs is detected, it determines what is the closets one to exit from

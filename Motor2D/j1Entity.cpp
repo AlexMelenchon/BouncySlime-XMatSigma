@@ -54,7 +54,6 @@ void j1Entity::LimitSpeed()
 void j1Entity::ReSetMovement()
 {
 	fpSpeed = { 0,0 };
-	fAccel = 0;
 }
 
 //Changes the player's position

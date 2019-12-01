@@ -143,6 +143,9 @@ public:
 	// Determines player speed in the x and y axis
 	fPoint fpSpeed = { 0.0f,0.0f };
 
+	//Determines an entity predefined movement
+	SDL_Rect trace = { 0,0,0,0 };
+
 	//LIMITS---
 	// Determines player maximum speed
 	iPoint fpMaxSpeed = { 0.0f, 0.0f };

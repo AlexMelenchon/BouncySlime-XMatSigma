@@ -41,7 +41,8 @@ public:
 	//When the enemy is idle, it has a defined movement
 	void TraceFollower();
 
-	iPoint IsTheNextTileWalkable();
+	//Gets if the next tile, in the enemy's foot is walkable
+	iPoint NextWalkableTile();
 
 	iPoint AbleToMove();
 
