@@ -60,6 +60,7 @@
 
     <collision>
       <collider w="32" h="32" />
+      <scalesize>1</scalesize>
     </collision>
     
     <internal>
@@ -144,7 +145,7 @@
         <idleSpeed>60.0f</idleSpeed>
         <moveSpeed>25.0f</moveSpeed>
         <fallingSpeed>30.0f</fallingSpeed>
-        <jumpForce>400.0f</jumpForce>
+        <jumpForce>300.0f</jumpForce>
         <jumpDistance>300.0f</jumpDistance>
       </movement>
 
@@ -157,6 +158,7 @@
         <scalesize>2</scalesize>
         <idleTimer>1.00f</idleTimer>
         <chasingTimer>0.25f</chasingTimer>
+        <flipSpeed>7.5f</flipSpeed>
       </internal>
 
       <animations>
@@ -202,6 +204,7 @@
         <scalesize>2</scalesize>
         <idleTimer>1.00f</idleTimer>
         <chasingTimer>0.5f</chasingTimer>
+        <flipSpeed>2.5f</flipSpeed>
       </internal>
 
       <animations>

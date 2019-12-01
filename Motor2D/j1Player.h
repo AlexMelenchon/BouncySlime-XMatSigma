@@ -29,16 +29,6 @@ enum player_inputs
 	IN_DEATH_FINISH
 };
 
-enum slow_direction
-{
-	SLOW_UNKNOWN,
-	SLOW_GENERAL,
-	SLOW_AIR,
-	SLOW_POSITIVE_LIMIT,
-	SLOW_NEGATIVE_LIMIT,
-	SLOW_LIMITS
-};
-
 class j1Player : public j1Entity
 {
 public:
@@ -79,9 +69,6 @@ public:
 	//--------POSITION ----------//
 	//Update player's position
 	void UpdatePos(float dt); 
-
-	//Smoothly slows an speed axis
-	float deAccel(slow_direction slow, float speedAxis, float grade = 0.0f, float limit = 0.0f);  
 
 	//Resets the player's movement completly
 	void ReSetMovement();
@@ -206,8 +193,13 @@ private:
 	FX bounceFx;
 	FX enemyDeathFx;
 	
-	//Player Starting state
+	//--------STATE MACHiNE---------//
 	player_states current_state = ST_UNKNOWN; 
+
+
+	//--------AUXILIAR---------//
+	//Auxiliar node in order to be able to load the texture & rect
+	pugi::xml_node auxLoader;
 };
 
 #endif 

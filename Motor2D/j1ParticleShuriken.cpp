@@ -44,7 +44,6 @@ bool j1ParticleShuriken::Awake(pugi::xml_node& shuriken_node)
 	
 	currentAnimation = &anim;
 
-	auxLoader = shuriken_node;
 	return true;
 }
 

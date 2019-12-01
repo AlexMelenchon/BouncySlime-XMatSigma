@@ -56,6 +56,8 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	playerRect.h = player_node.child("collision").child("collider").attribute("h").as_float();
 	collider = new Collider(playerRect, COLLIDER_PLAYER, this);
 
+	scalesize = player_node.child("collision").child("scalesize").text().as_uint();
+
 	//Internal variables load
 	playerFadeTime = player_node.child("internal").child("playerFadeTime").text().as_float();
 	wallJumpLimit = player_node.child("internal").child("wallJumpLimit").text().as_float();
@@ -136,7 +138,7 @@ void j1Player::standardInputs()
 		}
 
 		if (fpSpeed.x > 0)
-			fpSpeed.x -= ((fpSpeed.x / fSlowGradeWall) * (App->GetDeltaTime() * VEL_TO_WORLD));
+			fpSpeed.x -= DeAccel(SLOW_POSITIVE_X, fpSpeed.x, fSlowGradeWall);//We deAccel the positive X if we're going left & there's a remaining speed
 
 	}
 	//Moving right
@@ -158,11 +160,12 @@ void j1Player::standardInputs()
 		}
 
 		if (fpSpeed.x < 0)
-			fpSpeed.x -= ((fpSpeed.x / fSlowGradeWall) * (App->GetDeltaTime() * VEL_TO_WORLD));
+			fpSpeed.x -= DeAccel(SLOW_NEGATIVE_X, fpSpeed.x, fSlowGradeWall); //We deAccel the negative X if we're going right & there's a remaining speed
 	}
 	else
 	{
-			fpSpeed.x -= ((fpSpeed.x / fSlowGradeWall) * (App->GetDeltaTime() * VEL_TO_WORLD));
+			//Slow X
+			fpSpeed.x -= DeAccel(SLOW_X, fpSpeed.x, fSlowGradeWall);
 	}
 
 	//Jump
@@ -523,44 +526,6 @@ bool j1Player::Save(pugi::xml_node& save) const
 
 	return true;
 }
-
-//Smoothly slows an speed axis
-float j1Player::deAccel(slow_direction slow, float speedAxis, float grade, float limit)
-{
-	switch (slow) {
-
-	case SLOW_GENERAL:
-		speedAxis *= (grade * (App->GetDeltaTime() * VEL_TO_WORLD));
-		break;
-
-	case SLOW_AIR:
-		speedAxis *= (grade * (App->GetDeltaTime() * VEL_TO_WORLD));
-		break;
-
-	case SLOW_LIMITS:
-		if (speedAxis > limit)
-			speedAxis *= (grade * (App->GetDeltaTime() * VEL_TO_WORLD));
-
-		if (speedAxis < -limit)
-			speedAxis *= (grade * (App->GetDeltaTime() * VEL_TO_WORLD));
-		break;
-
-	case SLOW_POSITIVE_LIMIT:
-		if(speedAxis > limit)
-			speedAxis *= (grade * (App->GetDeltaTime() * VEL_TO_WORLD));
-		break;
-
-	case SLOW_NEGATIVE_LIMIT:
-		if(speedAxis < -limit)
-			speedAxis *= (grade * (App->GetDeltaTime() * VEL_TO_WORLD));
-		break;
-
-
-	}
-	return speedAxis;
-
-}
-
 
 //Changes the player's position
 void j1Player::SetPos(int x, int y)

@@ -35,6 +35,17 @@ enum  class entityType
 	SHURIKEN
 };
 
+enum slow_direction
+{
+	SLOW_UNKNOWN = -1,
+
+	SLOW_X,
+	SLOW_POSITIVE_X,
+	SLOW_NEGATIVE_X,
+	SLOW_POSITIVE_Y,
+	SLOW_NEGATIVE_Y,
+};
+
 
 class j1Entity
 {
@@ -93,15 +104,19 @@ public:
 	//Update entities's position
 	virtual void UpdatePos(float dt) {};
 
+	//Smoothly slows an speed axis
+	float DeAccel(slow_direction slow, float speedAxis, float grade = 0.0f);
+
 	//Sets the trace of an enemy
 	void SetTrace(SDL_Rect trace);
-
-	//Determines an entity predefined movement
-	virtual void TraceFollower(float dt) {};
 
 	//--------COLLISION ---------//
 	//Sets the collider to the player's position
 	void CalculateCollider(fPoint);
+
+	//the entity's sprite is too little compared to the player so we will double it's size.
+	uint scalesize = 0;
+
 
 	//If a collision is detected by the j1Collision, distributes collisions according to it's type
 	virtual void OnCollision(Collider*, Collider*) {};
@@ -194,11 +209,6 @@ public:
 
 	//--------ANIMATIONS---------//
 	Animation* currentAnimation = nullptr;
-
-	//--------AUXILIAR---------//
-	//Auxiliar node in order to be able to load the texture & rect
-	pugi::xml_node auxLoader;
-
 };
 
 #endif
