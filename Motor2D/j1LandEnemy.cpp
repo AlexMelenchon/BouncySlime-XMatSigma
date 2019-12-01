@@ -88,6 +88,7 @@ bool j1LandEnemy::Start()
 // Called each loop iteration
 bool j1LandEnemy::Update(float dt)
 {
+	BROFILER_CATEGORY("Enemy Update", Profiler::Color::Lavender)
 	timer += dt;
 
 	bool ret = true;

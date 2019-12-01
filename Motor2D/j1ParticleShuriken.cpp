@@ -80,6 +80,7 @@ bool j1ParticleShuriken::Start()
 // Called each loop iteration
 bool j1ParticleShuriken::PreUpdate()
 {
+	BROFILER_CATEGORY("Particle Shuriken Ppre-Update", Profiler::Color::OldLace)
 	UpdateState();
 	return true;
 }
@@ -87,6 +88,7 @@ bool j1ParticleShuriken::PreUpdate()
 // Called each loop iteration
 bool j1ParticleShuriken::Update(float dt)
 {
+	BROFILER_CATEGORY("Particle Shuriken Update", Profiler::Color::OldLace)
 	bool ret = true;
 
 	//Update the timer
@@ -181,6 +183,7 @@ void j1ParticleShuriken::MoveToPlayer(float dt)
 // Called each loop iteration
 bool j1ParticleShuriken::PostUpdate(bool debug)
 {
+	BROFILER_CATEGORY("Particle Shuriken Post-Update", Profiler::Color::OldLace)
 	Draw();	
 
 	if (debug)

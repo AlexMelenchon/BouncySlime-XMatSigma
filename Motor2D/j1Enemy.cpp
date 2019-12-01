@@ -25,6 +25,7 @@ j1Enemy::~j1Enemy()
 // Called each loop iteration
 bool j1Enemy::PreUpdate()
 {
+	BROFILER_CATEGORY("Enemy Pre-Update", Profiler::Color::RoyalBlue)
 	UpdateState();
 
 	return true;
@@ -58,7 +59,7 @@ void j1Enemy::UpdateState()
 // Called each loop iteration
 bool j1Enemy::PostUpdate(bool debug)
 {
-	
+	BROFILER_CATEGORY("Enemy Post-Update", Profiler::Color::RoyalBlue)
 	FlipControl();
 
 	Draw();

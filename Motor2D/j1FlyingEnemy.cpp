@@ -89,6 +89,7 @@ bool j1FlyingEnemy::Start()
 // Called each loop iteration
 bool j1FlyingEnemy::Update(float dt)
 {
+	BROFILER_CATEGORY("Flying enemy Update", Profiler::Color::AliceBlue)
 	timer += dt;
 
 	bool ret = true;
