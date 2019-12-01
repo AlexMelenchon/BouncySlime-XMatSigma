@@ -14,22 +14,30 @@
 #include "j1FlyingEnemy.h"
 #include "j1Player.h"
 
-//oWAFegezRNTwm7pdgahyexTk
-
-j1FlyingEnemy::j1FlyingEnemy() : j1Entity()
+//Constructor
+j1FlyingEnemy::j1FlyingEnemy() : j1Enemy()
 {
 	this->type = entityType::FLYING_ENEMY;
 
 }
 
+//Destructor
 j1FlyingEnemy ::~j1FlyingEnemy()
-{}
+{
+	path.Clear();
+
+	if (collider != nullptr)
+	{
+		collider->to_delete = true;
+		collider = nullptr;
+	}
+}
 
 
+// Called before render is available
 bool j1FlyingEnemy::Awake(pugi::xml_node& land_node)
 {
 	//Movement load
-	fGravity = land_node.child("movement").child("gravity").text().as_float();
 	chasingDistance = land_node.child("movement").child("chasingDistance").text().as_uint();
 	chasingTiles = land_node.child("movement").child("chasingTiles").text().as_uint();
 	idleSpeed.x = land_node.child("movement").child("idleSpeed").attribute("x").as_float();
@@ -39,11 +47,13 @@ bool j1FlyingEnemy::Awake(pugi::xml_node& land_node)
 	fpMaxSpeed.x = land_node.child("movement").child("limitSpeed").attribute("x").as_float();
 	fpMaxSpeed.y = land_node.child("movement").child("limitSpeed").attribute("y").as_float();
 
+
 	// Internal variables load
 	pathTimer = land_node.child("internal").child("pathTimer").text().as_float();
 	scalesize = land_node.child("internal").child("scalesize").text().as_float();
 	idleTimer = land_node.child("internal").child("idleTimer").text().as_float();
 	chasingTimer = land_node.child("internal").child("chasingTimer").text().as_float();
+	flipSpeed = land_node.child("internal").child("flipSpeed").text().as_float();
 
 
 	//Create the player's collider
@@ -58,13 +68,10 @@ bool j1FlyingEnemy::Awake(pugi::xml_node& land_node)
 	animIdle.loadAnimation(animIterator, "idle");
 	currentAnimation = &animIdle;
 
-	
-	
-
-	auxLoader = land_node;
 	return true;
 }
 
+// Called before the first frame
 bool j1FlyingEnemy::Start()
 {
 	//The enemy's texture load
@@ -73,49 +80,38 @@ bool j1FlyingEnemy::Start()
 	//Collision load
 	App->collision->AddCollider(collider);
 
-	//Fx load
-
 	return true;
 }
 
-bool j1FlyingEnemy::PreUpdate()
-{
-	UpdateState();
-
-	return true;
-}
-
+// Called each loop iteration
 bool j1FlyingEnemy::Update(float dt)
 {
-
 	timer += dt;
 
 	bool ret = true;
-	switch (enemy_state)
+	switch (state)
 	{
-	case flying_state::ST_UNKNOWN:
+	case enemy_state::ST_IDLE:
 	{
-		ret = false;
-		break;
-	}
-	case flying_state::ST_IDLE:
-	{
+		//Check if it's inside his patrol route
 		if (collider->CheckCollision(trace))
 		{
+			//Affirmative: clears path & starts doing it's route
 			path.Clear();
-			TraceFollower(dt);
+			TraceFollower();
 		}
-		else
+		else //Negative: searchs a path to it's route & moves towards it
 		{
+			//Search path timer
 			if (timer > idleTimer)
 			{
-				ReturnToStart();
+				GetPathfinding({float(trace.x +1), float(trace.y)}, false);
 				timer = 0;
 			}
 
+			//Move if there's a path
 			if (path.Count() > 0)
 			{
-				//The update the enemy's position & speed according to it's logic
 				Move(dt);
 			}
 
@@ -124,14 +120,16 @@ bool j1FlyingEnemy::Update(float dt)
 
 		break;
 	}
-	case flying_state::ST_CHASING:
+	case enemy_state::ST_CHASING:
 	{
+		//Search path timer
 		if (timer > chasingTimer)
 		{
-			GetPathfinding();
+			GetPathfinding({ App->entities->player->fpPosition.x, App->entities->player->fpPosition.y + App->entities->player->collider->rect.w / 1.5f }, true);
 			timer = 0;
 		}
 
+		//Move if there's a path
 		if (path.Count() > 0)
 		{
 			//The update the enemy's position & speed according to it's logic
@@ -140,6 +138,11 @@ bool j1FlyingEnemy::Update(float dt)
 		break;
 	}
 
+	case enemy_state::ST_UNKNOWN:
+	{
+		ret = false;
+		break;
+	}
 	}
 	UpdatePos(dt);
 	
@@ -147,26 +150,7 @@ bool j1FlyingEnemy::Update(float dt)
 	return ret;
 }
 
-bool j1FlyingEnemy::ReturnToStart()
-{
-	path.Clear();
-
-	if (!App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + App->map->data.tile_height))), App->map->WorldToMap(trace.x + 1, trace.y)))
-		return false;
-
-	uint pathCount = App->pathfinding->GetLastPath()->Count();
-
-	if (pathCount <= 0) return false;
-
-	for (uint i = 0; i < pathCount; i++)
-	{
-		path.PushBack(*App->pathfinding->GetLastPath()->At(i));
-	}
-
-	return true;
-}
-
-
+//Moves the enemy according to pathfinding
 void j1FlyingEnemy::Move(float dt)
 {
 	iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
@@ -176,14 +160,12 @@ void j1FlyingEnemy::Move(float dt)
 		if (fpPosition.x < current.x)
 		{
 			fpSpeed.x += moveSpeed.x * (dt * VEL_TO_WORLD);
-			Flip = SDL_FLIP_HORIZONTAL;
 			if (fpSpeed.x < 0)
 				fpSpeed.x = 0;
 		}
 		else if (fpPosition.x > current.x)
 		{
 			fpSpeed.x -= moveSpeed.x * (dt * VEL_TO_WORLD);
-			Flip = SDL_FLIP_NONE;
 			if (fpSpeed.x > 0)
 				fpSpeed.x = 0;
 		}
@@ -207,88 +189,62 @@ void j1FlyingEnemy::Move(float dt)
 		path.Pop(current);
 }
 
-void j1FlyingEnemy::TraceFollower(float dt)
+void j1FlyingEnemy::TraceFollower()
 {
-	if (!landcheck && !flycheck)
+
+	switch (traceDir)
 	{
+	case (DIRECTION_RIGHT):
+
 		fpSpeed.y = 0;
 		fpSpeed.x = idleSpeed.x;
 
-		Flip = SDL_FLIP_HORIZONTAL;
-
 		if (fpPosition.x >= trace.x + trace.w - collider->rect.w)
 		{
-			landcheck = !landcheck;			
+			traceDir = DIRECTION_DOWN;
 		}
-	}
 
-	if (!flycheck && landcheck)
-	{
+		break;
+
+	case (DIRECTION_DOWN):
+
 		fpSpeed.x = 0;
 		fpSpeed.y = idleSpeed.y;
 		if (fpPosition.y > trace.y + trace.h - collider->rect.h)
 		{
-			flycheck = !flycheck;
-		}
-	}
+			traceDir = DIRECTION_LEFT;
 
-	if (flycheck && landcheck)
-	{
+		}
+
+		break;
+
+	case (DIRECTION_LEFT):
+
 		fpSpeed.y = 0;
 		fpSpeed.x = -idleSpeed.x;
 
-		Flip = SDL_FLIP_NONE;
-
 		if (fpPosition.x <= trace.x)
 		{
-			landcheck = !landcheck;
-		}
-	}
+			traceDir = DIRECTION_UP;
 
-	if (flycheck && !landcheck)
-	{
+		}
+
+		break;
+
+	case (DIRECTION_UP):
+
 		fpSpeed.x = 0;
 		fpSpeed.y = -idleSpeed.y;
 		if (fpPosition.y < trace.y)
 		{
-			flycheck = !flycheck;
+			traceDir = DIRECTION_RIGHT;
+
 		}
+
+		break;
+
+
 	}
-}
-
-void j1FlyingEnemy::Draw()
-{
-	App->render->Blit(Text, (int)round(fpPosition.x), (int)round(fpPosition.y), &currentAnimation->GetCurrentFrame(App->GetDeltaTime()), 1.0f, Flip, 0.0f, (currentAnimation->pivotpos->x), (currentAnimation->GetCurrentFrame(App->GetDeltaTime()).h / 2), scalesize);
-}
-
-bool j1FlyingEnemy::PostUpdate(bool debug)
-{
-	Draw();
-
-	if (debug)
-	{
-		for (uint i = 0; i < path.Count(); ++i)
-		{
-			iPoint pos = App->map->MapToWorld(path.At(i)->x, path.At(i)->y);
-			App->render->Blit(App->entities->debug_tex, pos.x, pos.y);
-		}
-	}
-
-	
-	return true;
-}
-
-bool j1FlyingEnemy::CleanUp()
-{
-	
-	if (collider != nullptr)
-	{
-		collider->to_delete = true;
-		collider = nullptr;
-	}
-
-	path.Clear();
-	return true;
 }
 
 void j1FlyingEnemy::UpdatePos(float dt)
@@ -301,8 +257,6 @@ void j1FlyingEnemy::UpdatePos(float dt)
 
 	fpPosition.x += fpSpeed.x * dt;
 	fpPosition.y += fpSpeed.y * dt;
-
-
 
 	//We set the collider in hte player's position
 	CalculateCollider(fpPosition);
@@ -348,35 +302,6 @@ void j1FlyingEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 
 	CalculateCollider(fpPosition);
 
-}
-
-void j1FlyingEnemy::UpdateState()
-{
-	if (abs(abs(App->entities->player->fpPosition.x) - abs(fpPosition.x)) < chasingDistance && App->entities->player->getState() != ST_DEAD && abs(abs(App->entities->player->fpPosition.y) - abs(fpPosition.y)) < chasingDistance)
-	{
-		enemy_state = flying_state::ST_CHASING;
-	}
-	else
-		enemy_state = flying_state::ST_IDLE;
-}
-
-
-bool j1FlyingEnemy::GetPathfinding()
-{
-	path.Clear();
-
-	if (!App->pathfinding->CreatePath(App->map->WorldToMap(fpPosition.x, fpPosition.y), App->map->WorldToMap(App->entities->player->fpPosition.x, App->entities->player->fpPosition.y)))
-		return false;
-
-	uint pathCount = App->pathfinding->GetLastPath()->Count();
-	if (pathCount <= 0 || pathCount > chasingTiles) return false;
-
-	for (uint i = 0; i < pathCount; i++)
-	{
-		path.PushBack(*App->pathfinding->GetLastPath()->At(i));
-	}
-
-	return true;
 }
 
 //Called when loading a save

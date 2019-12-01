@@ -29,16 +29,6 @@ enum player_inputs
 	IN_DEATH_FINISH
 };
 
-enum slow_direction
-{
-	SLOW_UNKNOWN,
-	SLOW_GENERAL,
-	SLOW_AIR,
-	SLOW_POSITIVE_LIMIT,
-	SLOW_NEGATIVE_LIMIT,
-	SLOW_LIMITS
-};
-
 class j1Player : public j1Entity
 {
 public:
@@ -79,9 +69,6 @@ public:
 	//--------POSITION ----------//
 	//Update player's position
 	void UpdatePos(float dt); 
-
-	//Smoothly slows an speed axis
-	float deAccel(slow_direction slow, float speedAxis, float grade = 0.0f, float limit = 0.0f);  
 
 	//Resets the player's movement completly
 	void ReSetMovement();
@@ -138,6 +125,9 @@ private:
 	//Force applied to the player's movement in both axis
 	fPoint fpForce = { 0.0f,0.0f }; 
 
+	// Determines player acceleration in the x and y axis. Since the player movement has to fell great, it's the only entiy that has accel
+	float fAccel = 0.0f;
+
 	//Force applied to the player's when killing an enemy
 	fPoint fpForceMiniJump = { 0.0f,0.0f };
 
@@ -146,6 +136,9 @@ private:
 	
 	//Used to have an smooth leave of the wall
 	float wallingLeave = 0.0f;
+
+	float fGravity = 0.0f;
+
 
 	//LIMITS---
 	//The amount in which a speed will be divided to per frame.
@@ -207,8 +200,13 @@ private:
 	FX enemyDeathFx;
 	FX throw_shuriken;
 	
-	//Player Starting state
+	//--------STATE MACHiNE---------//
 	player_states current_state = ST_UNKNOWN; 
+
+
+	//--------AUXILIAR---------//
+	//Auxiliar node in order to be able to load the texture & rect
+	pugi::xml_node auxLoader;
 };
 
 #endif 

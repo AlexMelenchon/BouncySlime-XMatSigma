@@ -67,6 +67,9 @@
     <ClCompile Include="j1ParticleShuriken.cpp">
       <Filter>Desenvolupament  ========\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="j1Enemy.cpp">
+      <Filter>Desenvolupament  ========\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -154,6 +157,9 @@
       <Filter>Desenvolupament  ========\Entities</Filter>
     </ClInclude>
     <ClInclude Include="j1ParticleShuriken.h">
+      <Filter>Desenvolupament  ========\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Enemy.h">
       <Filter>Desenvolupament  ========\Entities</Filter>
     </ClInclude>
   </ItemGroup>

@@ -81,7 +81,7 @@ void j1Entity::CalculateCollider(fPoint pos)
 //Blits the entity into the world
 void j1Entity::Draw()
 {
-	App->render->Blit(Text, (int)round(fpPosition.x), (int)round(fpPosition.y), &currentAnimation->GetCurrentFrame(App->GetDeltaTime()), 1.0f, Flip, 0.0f, (currentAnimation->pivotpos->x), (currentAnimation->GetCurrentFrame(App->GetDeltaTime()).h / 2));
+	App->render->Blit(Text, (int)round(fpPosition.x), (int)round(fpPosition.y), &currentAnimation->GetCurrentFrame(App->GetDeltaTime()), 1.0f, Flip, 0.0f, (currentAnimation->pivotpos->x), (currentAnimation->GetCurrentFrame(App->GetDeltaTime()).h / 2),scalesize);
 }
 
 //Calculates if the entity is flipped or not
@@ -118,4 +118,12 @@ int j1Entity::CheckCollisionDir(SDL_Rect entityRect, SDL_Rect collRect)
 	}
 
 	return directionCheck;
+}
+
+//Smoothly slows an speed axis
+float j1Entity::DeAccel(float speedAxis, float grade)
+{
+		speedAxis = ((speedAxis / grade) * (App->GetDeltaTime() * VEL_TO_WORLD));
+
+	return speedAxis;
 }

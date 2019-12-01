@@ -6,22 +6,9 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "p2DynArray.h"
+#include "j1Enemy.h"
 
-#define CHASING_DISTANCE 450
-#define CHASING_MAX_TILES 32
-
-enum class flying_state : int
-{
-	ST_UNKNOWN = -1,
-
-	ST_IDLE,
-	ST_CHASING,
-
-	ST_ALL,
-};
-
-
-class j1FlyingEnemy : public j1Entity
+class j1FlyingEnemy : public j1Enemy
 {
 public:
 
@@ -39,17 +26,7 @@ public:
 	bool Start();
 
 	// Called each loop iteration
-	bool PreUpdate();
-
-	// Called each loop iteration
 	bool Update(float dt);
-
-	// Called each loop iteration
-	bool PostUpdate(bool debug);
-
-	// Called before quitting
-	bool CleanUp();
-
 
 	//--------SAVE & LOAD---------//
 	//Called when loading a save
@@ -59,48 +36,26 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 	//--------POSITION ---------//
+
 	void UpdatePos(float dt);
 
 	//When the enemy is idle, it has a defined movement
-	void TraceFollower(float dt);
+	void TraceFollower();
 
+	//Moves the enemy according to pathfinding
 	void Move(float dt);
 
-
-
 	//--------COLLISION ---------//
-
 	//If a collision is detected by the j1Collision, distributes collisions according to it's type
 	void OnCollision(Collider* playerCol, Collider* coll);
 
 	//Calculate the collisions with the enviroment
 	void RecalculatePos(SDL_Rect, SDL_Rect);
 
-	//--------DRAW---------//
-	//Blits the entity into the world
-	virtual void Draw();
-
-	//--------PATHFINDING---------//
-
-	bool GetPathfinding();
-
-	bool ReturnToStart();
-
-
 private:
-	//--------MOVEMENT ---------//
-	bool landcheck = false;
-	bool flycheck = false;
-
 	//--------INTERNAL CONTROÑ ---------//
-	float pathTimer;
+	float pathTimer = 0.0f;
 	float timer = 0.f;
-
-	//--------STATE ---------//
-	//determines what the enemy is doing
-	void UpdateState();
-	flying_state enemy_state;
-	p2DynArray<iPoint> path;
 
 	//--------ANIMATIONS---------//
 	Animation animIdle;
@@ -108,10 +63,6 @@ private:
 
 	//--------MUSIC---------//
 	
-
-	//------COLLIDER------//
-	//the entity's sprite is too little compared to the player so we will double it's size.
-	int scalesize = 2;
 
 };
 

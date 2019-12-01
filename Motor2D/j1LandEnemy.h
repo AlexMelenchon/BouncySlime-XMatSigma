@@ -6,21 +6,9 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "p2DynArray.h"
+#include "j1Enemy.h"
 
-
-
-enum class state : int
-{
-	ST_UNKNOWN = -1,
-
-	ST_IDLE,
-	ST_CHASING,
-
-	ST_ALL,
-};
-
-
-class j1LandEnemy : public j1Entity
+class j1LandEnemy : public j1Enemy
 {
 public: 	
 	
@@ -38,17 +26,7 @@ public:
 	bool Start();
 
 	// Called each loop iteration
-	bool PreUpdate();
-
-	// Called each loop iteration
 	bool Update(float dt);
-
-	// Called each loop iteration
-	bool PostUpdate(bool debug);
-
-	// Called before quitting
-	bool CleanUp();
-
 
 	//--------SAVE & LOAD---------//
 	//Called when loading a save
@@ -61,7 +39,7 @@ public:
 	void UpdatePos(float dt);
 
 	//When the enemy is idle, it has a defined movement
-	virtual void TraceFollower(float dt);
+	void TraceFollower();
 
 	iPoint IsTheNextTileWalkable();
 
@@ -81,20 +59,8 @@ public:
 	//Calculate the collisions with the enviroment
 	void RecalculatePos(SDL_Rect, SDL_Rect);
 
-	//--------DRAW---------//
-	//Blits the entity into the world
-	void Draw();
-
-	//--------PATHFINDING---------//
-
-	bool GetPathfinding();
-
-	bool ReturnToStart();
-
-
 private:
 	//--------MOVEMENT ---------//
-	bool tracecheck = false;
 	float jumpForce = 0.f;
 	float jumpDistance = 0.f;
 	float fallingSpeed = 0.f;
@@ -104,13 +70,6 @@ private:
 	float timer = 0.f;
 	bool stop = false;
 	
-	//--------STATE ---------//
-	//determines what the enemy is doing
-	void UpdateState(); 
-	state enemy_state;
-	p2DynArray<iPoint> path;
-
-
 	//--------ANIMATIONS---------//
 	Animation animIdle;
 	Animation animJump;
@@ -119,10 +78,6 @@ private:
 	Animation animWall;
 	Animation animDeath;
 	SDL_Rect enemyRect = { 0,0,0,0 };
-
-	//------COLLIDER------//
-	//the entity's sprite is too little compared to the player so we will double it's size.
-	int scalesize = 0;
 	
 };
 

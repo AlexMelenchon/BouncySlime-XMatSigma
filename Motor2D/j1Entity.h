@@ -93,11 +93,11 @@ public:
 	//Update entities's position
 	virtual void UpdatePos(float dt) {};
 
+	//Smoothly slows an speed axis
+	float DeAccel(float speedAxis, float grade = 0.0f);
+
 	//Sets the trace of an enemy
 	void SetTrace(SDL_Rect trace);
-
-	//Determines an entity predefined movement
-	virtual void TraceFollower(float dt) {};
 
 	//--------COLLISION ---------//
 	//Sets the collider to the player's position
@@ -108,6 +108,10 @@ public:
 
 	//Calculate the collisions with the enviroment
 	virtual void RecalculatePos(SDL_Rect, SDL_Rect) {};
+
+	//Checks the direction of the collision
+	int CheckCollisionDir(SDL_Rect playerRect, SDL_Rect collRect);
+
 
 
 	//--------STATE MACHiNE---------//
@@ -128,8 +132,6 @@ public:
 		return fpPosition;
 	}
 
-
-
 public:
 	//--------ENTITY ---------//
 	entityType type;
@@ -141,29 +143,6 @@ public:
 	// Determines player speed in the x and y axis
 	fPoint fpSpeed = { 0.0f,0.0f };
 
-	// Determines player acceleration in the x and y axis
-	float fAccel = 0.0f;
-
-	// Determines player acceleration in the x and y axis
-	float fAccelX = 0.0f;
-
-	float fGravity = 0.0f;
-
-	//Determines an entity predefined movement
-	SDL_Rect trace = { 0,0,0,0};
-	
-	//the enemies range
-	uint chasingDistance = 0u;
-
-	uint chasingTiles = 0u;
-
-	float idleTimer = 0.f;
-	float chasingTimer = 0.f;	
-
-	//defined movement speed the enemy will have
-	fPoint idleSpeed = { 0,0 };
-	fPoint moveSpeed = { 0,0 };
-
 	//LIMITS---
 	// Determines player maximum speed
 	iPoint fpMaxSpeed = { 0.0f, 0.0f };
@@ -172,8 +151,8 @@ public:
 	//The entity's collider
 	Collider* collider = nullptr;
 
-	//Checks the direction of the collision
-	int CheckCollisionDir(SDL_Rect playerRect, SDL_Rect collRect);
+	//the entity's sprite is too little compared to the player so we will double it's size.
+	uint scalesize = 0;
 
 	//--------RENDER---------//
 	//Controls if the player is flipped or not
@@ -194,11 +173,6 @@ public:
 
 	//--------ANIMATIONS---------//
 	Animation* currentAnimation = nullptr;
-
-	//--------AUXILIAR---------//
-	//Auxiliar node in order to be able to load the texture & rect
-	pugi::xml_node auxLoader;
-
 };
 
 #endif

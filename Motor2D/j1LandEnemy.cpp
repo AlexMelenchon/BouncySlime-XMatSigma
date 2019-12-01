@@ -13,7 +13,7 @@
 #include "j1Pathfinding.h"
 #include "j1Scene.h"
 
-j1LandEnemy::j1LandEnemy() : j1Entity()
+j1LandEnemy::j1LandEnemy() : j1Enemy()
 {	
 	this->type = entityType::LAND_ENEMY;
 	
@@ -33,7 +33,6 @@ j1LandEnemy ::~j1LandEnemy()
 bool j1LandEnemy::Awake(pugi::xml_node& land_node)
 {
 	//Movement load
-	fGravity = land_node.child("movement").child("gravity").text().as_float();
 	chasingDistance = land_node.child("movement").child("chasingDistance").text().as_uint();
 	chasingTiles = land_node.child("movement").child("chasingTiles").text().as_uint();
 	jumpForce = land_node.child("movement").child("jumpForce").text().as_uint();
@@ -44,11 +43,13 @@ bool j1LandEnemy::Awake(pugi::xml_node& land_node)
 	fpMaxSpeed.x = land_node.child("movement").child("limitSpeed").attribute("x").as_float();
 	fpMaxSpeed.y = land_node.child("movement").child("limitSpeed").attribute("y").as_float();
 
+
 	//Internal variables load
 	pathTimer = land_node.child("internal").child("pathTimer").text().as_float();
 	scalesize = land_node.child("internal").child("scalesize").text().as_float();
 	idleTimer = land_node.child("internal").child("idleTimer").text().as_float();
 	chasingTimer = land_node.child("internal").child("chasingTimer").text().as_float();
+	flipSpeed = land_node.child("internal").child("flipSpeed").text().as_float();
 
 	//Create the player's collider
 	SDL_Rect enemyRect = { 0,0,0,0 };
@@ -67,7 +68,6 @@ bool j1LandEnemy::Awake(pugi::xml_node& land_node)
 
 	currentAnimation = &animIdle;
 
-	auxLoader = land_node;
 	return true;
 }
 
@@ -82,40 +82,33 @@ bool j1LandEnemy::Start()
 	return true;
 }
 
-bool j1LandEnemy::PreUpdate()
-{
-	UpdateState();
-
-	return true;
-}
-
 bool j1LandEnemy::Update(float dt)
 {
 	
 	timer += dt;
 
 	bool ret = true;
-	switch (enemy_state)
+	switch (state)
 	{
-	case state::ST_UNKNOWN:
+	case enemy_state::ST_UNKNOWN:
 		{
 		ret = false;
 		break;
 		}
-	case state::ST_IDLE:
+	case enemy_state::ST_IDLE:
 		{
 		currentAnimation = &animIdle;
 		
 		if (collider->CheckCollision(trace))
 		{
 			path.Clear();
-			TraceFollower(dt);
+			TraceFollower();
 		}
 		else
 		{
 			if (timer > idleTimer)
 			{
-				ReturnToStart();
+				GetPathfinding({float(trace.x+1), float(trace.y)}, false);
 				timer = 0;
 			}
 
@@ -142,13 +135,13 @@ bool j1LandEnemy::Update(float dt)
 		}		
 		break;
 		}
-	case state::ST_CHASING:
+	case enemy_state::ST_CHASING:
 		{
 		currentAnimation = &animRun;
 
 		if (timer > chasingTimer && !falling)
 		{
-			GetPathfinding();
+			GetPathfinding({ App->entities->player->fpPosition.x, App->entities->player->fpPosition.y + App->entities->player->collider->rect.w / 1.5f }, true);
 			timer = 0;
 		}
 		
@@ -261,12 +254,6 @@ bool j1LandEnemy::JumpLogic()
 	return false;
 }
 
-
-void j1LandEnemy::Draw()
-{
-	App->render->Blit(Text, (int)round(fpPosition.x), (int)round(fpPosition.y), &currentAnimation->GetCurrentFrame(App->GetDeltaTime()), 1.0f, Flip, 0.0f, (currentAnimation->pivotpos->x), (currentAnimation->GetCurrentFrame(App->GetDeltaTime()).h / 2), scalesize);
-}
-
 void j1LandEnemy::Move(bool toPlayer, float dt)
 {
 	iPoint next = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
@@ -279,7 +266,6 @@ void j1LandEnemy::Move(bool toPlayer, float dt)
 				fpSpeed.x = 0;
 
 			fpSpeed.x += moveSpeed.x * (dt * VEL_TO_WORLD);
-			Flip = SDL_FLIP_HORIZONTAL;
 		}
 		else if (fpPosition.x > next.x)
 		{
@@ -287,40 +273,10 @@ void j1LandEnemy::Move(bool toPlayer, float dt)
 				fpSpeed.x = 0;
 			
 			fpSpeed.x -= moveSpeed.x * (dt * VEL_TO_WORLD);
-			Flip = SDL_FLIP_NONE;
 		}
 	}
 	else
 		path.Pop(next);
-}
-
-bool j1LandEnemy::PostUpdate(bool debug)
-{
-	Draw();
-
-	if (debug)
-	{
-		for (uint i = 0; i < path.Count(); ++i)
-		{
-			iPoint pos = App->map->MapToWorld(path.At(i)->x, path.At(i)->y);
-			App->render->Blit(App->entities->debug_tex, pos.x, pos.y);
-		}
-	}
-
-	return true;
-}
-
-bool j1LandEnemy::CleanUp()
-{
-	if (collider != nullptr)
-	{
-		collider->to_delete = true;
-		collider = nullptr;
-	}
-
-	path.Clear();
-
-	return true;
 }
 
 void j1LandEnemy::UpdatePos(float dt)
@@ -343,55 +299,33 @@ void j1LandEnemy::UpdatePos(float dt)
 	CalculateCollider(fpPosition);	
 }
 
-void j1LandEnemy::TraceFollower(float dt)
+void j1LandEnemy::TraceFollower()
 {
-	if (!tracecheck)
-	{
-		fpSpeed.x = idleSpeed.x;
 
-		Flip = SDL_FLIP_HORIZONTAL;
+	switch (traceDir)
+	{
+	case (DIRECTION_RIGHT):
+
+		fpSpeed.x = idleSpeed.x;
 
 		if (fpPosition.x >= trace.x + trace.w - collider->rect.w)
 		{
-			tracecheck = !tracecheck;
+			traceDir = DIRECTION_LEFT;
 		}
-	}
+		break;
 
-	if (tracecheck)
-	{
+	case (DIRECTION_LEFT):
+
 		fpSpeed.x = -idleSpeed.x;
-
-		Flip = SDL_FLIP_NONE;
 
 		if (fpPosition.x <= trace.x)
 		{
-			tracecheck = !tracecheck;
+			traceDir = DIRECTION_RIGHT;
 		}
+
+		break;
+
 	}
-}
-
-bool j1LandEnemy::ReturnToStart()
-{	
-	path.Clear();
-
-	if (App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + App->map->data.tile_height))), App->map->WorldToMap(trace.x + 1, trace.y)) == -1)
-		return false;
-
-	uint pathCount = App->pathfinding->GetLastPath()->Count();
-
-	if (pathCount <= 0 )
-	{
-		path.Clear();
-		return false;
-	}
-
-	for (uint i = 0; i < pathCount; i++)
-	{
-		path.PushBack(*App->pathfinding->GetLastPath()->At(i));
-	}
-
-	return true;
-
 }
 
 void j1LandEnemy::OnCollision(Collider* entityCol, Collider* coll)
@@ -407,6 +341,7 @@ void j1LandEnemy::OnCollision(Collider* entityCol, Collider* coll)
 		break;
 	}
 }
+
 
 void j1LandEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 {
@@ -428,7 +363,6 @@ void j1LandEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 			path.Clear();
 		}
 		falling = false;
-	
 		break;
 	case DIRECTION_LEFT:
 		fpPosition.x = collRect.x + collRect.w;
@@ -449,45 +383,9 @@ void j1LandEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 	
 }
 
-void j1LandEnemy::UpdateState()
-{
-	if (abs(abs(App->entities->player->fpPosition.x) - abs(fpPosition.x)) < chasingDistance && App->entities->player->getState() != ST_DEAD && abs(abs(App->entities->player->fpPosition.y) - abs(fpPosition.y)) < chasingDistance)
-	{
-		enemy_state = state::ST_CHASING;
-	}
-	else
-		enemy_state = state::ST_IDLE;
-}
-
-
-bool j1LandEnemy::GetPathfinding()
-{
-	path.Clear();
-
-	if(!App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + App->map->data.tile_height))), App->map->WorldToMap(int(round(App->entities->player->fpPosition.x)), int(round(App->entities->player->fpPosition.y + App->entities->player->collider->rect.w / 1.5f)))))
-	return false;
-
-	uint pathCount = App->pathfinding->GetLastPath()->Count();
-
-
-	if (pathCount <= 0 || pathCount > chasingTiles)
-	{
-		path.Clear();
-		return false;
-	}
-
-	for (uint i = 0; i < pathCount; i++)
-	{
-		path.PushBack(*App->pathfinding->GetLastPath()->At(i));
-	}
-
-	return true;
-}
-
 //Called when loading a save
 bool j1LandEnemy::Load(pugi::xml_node& load)
 {
-
 	fpPosition.x = load.child("position").attribute("x").as_float();
 	fpPosition.y = load.child("position").attribute("y").as_float();
 	fpSpeed.x = load.child("speed").attribute("x").as_float();
