@@ -33,7 +33,11 @@ bool j1Render::Awake(pugi::xml_node& config)
 	{
 		flags |= SDL_RENDERER_PRESENTVSYNC;
 		LOG("Using vsync");
+
+		vsync.create("ON");
 	}
+	else
+		vsync.create("OFF");
 
 	renderer = SDL_CreateRenderer(App->win->window, -1, flags);
 

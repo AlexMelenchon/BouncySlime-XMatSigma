@@ -164,6 +164,9 @@ bool j1Scene::Update(float dt)
 	//Draws the current map
 	App->map->Draw();
 
+	//Sets the window title for the map info
+	showWindowTitle();
+
 
 	// Debug pathfinding w/ mouse ------------------------------
 	//Blits the debug pathfinding, if exists
@@ -241,10 +244,11 @@ void j1Scene::showWindowTitle() const
 			cap.create("OFF");
 
 
-		p2SString title("%s - %s || FPS: %i Av.FPS: %.2f || FrameCap: %s FrameLimit: %i || Last Frame Ms: %u ",
+		p2SString title("%s - %s || FPS: %i Av.FPS: %.2f || FrameCap: %s FrameLimit: %i VSYNC %s || Last Frame Ms: %u ",
 			App->GetTitle(), App->GetOrganization(),
 			App->frames_on_last_update, App->avg_fps,
 			cap.GetString(), App->capTime,
+			App->render->vsync.GetString(),
 			App->last_frame_ms);
 
 		App->win->SetTitle(title.GetString());
