@@ -57,6 +57,7 @@ public:
 
 					this->PushBack(frame, framesIterator.attribute("frames").as_int(), framesIterator.attribute("pivotx").as_int(), framesIterator.attribute("pivoty").as_int() );
 				}
+				speed = animationIterator.attribute("speed").as_float(1.0f);
 				break;
 			}
 		}

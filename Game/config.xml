@@ -129,6 +129,7 @@
       <win path="audio/fx/win.wav"/>
       <bounce path="audio/fx/bounce.wav"/>
       <enemydeath path="audio/fx/flyingDeath.wav"/>
+      <throw path="audio/fx/throw.wav"/>
     </fx>
     
     <path>textures/player/sprite.png</path>
@@ -177,6 +178,7 @@
       </animations>
 
       <fx>
+       
       </fx>
 
       <path>textures/player/landEnemy.png</path>
@@ -220,6 +222,7 @@
       </animations>
 
       <fx>
+        
       </fx>
 
       <path>textures/player/flyingEnemy.png</path>
@@ -227,18 +230,24 @@
     </flyingenemy>
 
     <shuriken>
-
+      
       <animations>
-        <animation name = "shuriken">
-          <sprite x ="18" y ="349" w ="16" h="16" frames ="5"  pivotx ="8" pivoty="8"/>
-          <sprite x ="35" y ="349" w ="16" h="16" frames ="5"  pivotx ="8" pivoty="8"/>
-          <sprite x ="51" y ="349" w ="16" h="16" frames ="5"  pivotx ="8" pivoty="8"/>
+        <animation name = "shuriken" speed="2">
+          <sprite x ="18" y ="348" w ="17" h="17" frames ="2"  pivotx ="8" pivoty="8"/>
+          <sprite x ="20" y ="346" w ="19" h="19" frames ="2"  pivotx ="8" pivoty="8"/>
+          <sprite x ="40" y ="348" w ="17" h="17" frames ="2"  pivotx ="8" pivoty="8"/>
+          <sprite x ="58" y ="346" w ="19" h="19" frames ="2"  pivotx ="8" pivoty="8"/>
+          <sprite x ="78" y ="348" w ="17" h="17" frames ="2"  pivotx ="8" pivoty="8"/>
+          <sprite x ="97" y ="346" w ="19" h="19" frames ="2"  pivotx ="8" pivoty="8"/>
         </animation>
       </animations>
 
       <path>textures/player/sprite.png</path>
 
-
+      <fx>
+         <hit path="audio/fx/shuriken_hit.wav"/>
+         <swing path="audio/fx/swing.wav"/>
+      </fx>
       <collision>
         <collider w="26" h="20" />
       </collision>

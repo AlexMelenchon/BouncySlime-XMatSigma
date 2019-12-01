@@ -83,8 +83,7 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	winFx.path = player_node.child("fx").child("win").attribute("path").as_string();
 	bounceFx.path = player_node.child("fx").child("bounce").attribute("path").as_string();
 	enemyDeathFx.path = player_node.child("fx").child("enemydeath").attribute("path").as_string();
-
-
+	throw_shuriken.path = player_node.child("fx").child("throw").attribute("path").as_string();
 
 	//Assign the value to the auxiliar node
 	//We need this in order to load things later in start whose modules are not awoken yet
@@ -109,6 +108,7 @@ bool j1Player::Start()
 	winFx.id=App->audio->LoadFx(winFx.path.GetString());
 	bounceFx.id=App->audio->LoadFx(bounceFx.path.GetString());
 	enemyDeathFx.id = App->audio->LoadFx(enemyDeathFx.path.GetString());
+	throw_shuriken.id = App->audio->LoadFx(throw_shuriken.path.GetString());
 
 	return true;
 }
@@ -175,6 +175,7 @@ void j1Player::standardInputs()
 	{
 		if(App->entities->shuriken == nullptr)
 		App->entities->AddEntity(entityType::SHURIKEN, { int(round(fpPosition.x)),int(round(fpPosition.y)) });
+		App->audio->PlayFx(throw_shuriken.id);
 	}
 
 }
@@ -207,6 +208,13 @@ void j1Player::godInputs()
 	}
 	else
 		fpSpeed.y = 0;
+
+	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+	{
+		if (App->entities->shuriken == nullptr)
+			App->entities->AddEntity(entityType::SHURIKEN, { int(round(fpPosition.x)),int(round(fpPosition.y)) });
+		App->audio->PlayFx(throw_shuriken.id);
+	}
 }
 
 // Called each loop iteration

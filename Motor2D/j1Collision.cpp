@@ -73,7 +73,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_GOD][COLLIDER_WIN] = true;
 	matrix[COLLIDER_GOD][COLLIDER_GOD] = false;
 	matrix[COLLIDER_GOD][COLLIDER_ENEMY] = false;
-	matrix[COLLIDER_GOD][COLLIDER_SHURIKEN] = false;
+	matrix[COLLIDER_GOD][COLLIDER_SHURIKEN] = true;
 	matrix[COLLIDER_GOD][COLLIDER_NONE] = false;
 
 
@@ -93,7 +93,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_SHURIKEN][COLLIDER_START] = false;
 	matrix[COLLIDER_SHURIKEN][COLLIDER_DEATH] = true;
 	matrix[COLLIDER_SHURIKEN][COLLIDER_WIN] = false;
-	matrix[COLLIDER_SHURIKEN][COLLIDER_GOD] = false;
+	matrix[COLLIDER_SHURIKEN][COLLIDER_GOD] = true;
 	matrix[COLLIDER_SHURIKEN][COLLIDER_ENEMY] = true;
 	matrix[COLLIDER_SHURIKEN][COLLIDER_SHURIKEN] = false;
 	matrix[COLLIDER_SHURIKEN][COLLIDER_NONE] = false;

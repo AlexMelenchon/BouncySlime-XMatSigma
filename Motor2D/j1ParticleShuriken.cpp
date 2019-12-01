@@ -37,11 +37,17 @@ bool j1ParticleShuriken::Awake(pugi::xml_node& shuriken_node)
 
 	CheckDir();
 
+	//collider load
 	collider = new Collider(particleRect, COLLIDER_SHURIKEN, this);	
 
+	//animation load
 	pugi::xml_node animIterator = shuriken_node.child("animations").child("animation");
 	anim.loadAnimation(animIterator, "shuriken");	
-	
+
+	//sfx load
+	shuriken_hit.path = shuriken_node.child("fx").child("hit").attribute("path").as_string();
+	in_air.path = shuriken_node.child("fx").child("swing").attribute("path").as_string();
+
 	currentAnimation = &anim;
 
 	auxLoader = shuriken_node;
@@ -56,6 +62,10 @@ bool j1ParticleShuriken::Start()
 	//Collision load
 	App->collision->AddCollider(collider);
 
+	shuriken_hit.id = App->audio->LoadFx(shuriken_hit.path.GetString());
+	in_air.id = App->audio->LoadFx(in_air.path.GetString());
+	
+	
 
 	return true;
 }
@@ -101,7 +111,7 @@ bool j1ParticleShuriken::Update(float dt)
 	}
 
 
-
+	App->audio->PlayFx(in_air.id);
 	bool ret = true;
 	UpdatePos(dt);
 
@@ -136,6 +146,7 @@ void j1ParticleShuriken::Return(float dt)
 	}
 	else
 		path.Pop(current);
+	
 }
 
 bool j1ParticleShuriken::PostUpdate(bool debug)
@@ -250,11 +261,16 @@ void j1ParticleShuriken::OnCollision(Collider* entityCol, Collider* coll)
 
 	case(COLLIDER_ENEMY):
 		coll->to_delete = true;
+		App->audio->PlayFx(shuriken_hit.id);
 		break;
 
 	case(COLLIDER_PLAYER):
 		if(canPickUp)
 		entityCol->to_delete = true;
+		break;
+	case(COLLIDER_GOD):
+		if (canPickUp)
+			entityCol->to_delete = true;
 		break;
 	}
 }

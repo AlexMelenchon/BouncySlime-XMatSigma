@@ -205,6 +205,7 @@ private:
 	FX winFx;
 	FX bounceFx;
 	FX enemyDeathFx;
+	FX throw_shuriken;
 	
 	//Player Starting state
 	player_states current_state = ST_UNKNOWN; 
