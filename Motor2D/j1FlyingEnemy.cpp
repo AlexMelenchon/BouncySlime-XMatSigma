@@ -320,9 +320,10 @@ bool j1FlyingEnemy::Load(pugi::xml_node& load)
 
 	falling = load.child("falling").attribute("value").as_bool();
 
-	//TODO, save pathfinding timer
-	//save.append_child("wallTimer").append_attribute("wallJumpTimer") = wallJumpTimer;
-	//wallJumpTimer = load.child("wallTimer").attribute("wallJumpTimer").as_float();
+	trace.x = load.child("trace").attribute("x").as_uint();
+	trace.y = load.child("trace").attribute("y").as_uint();
+	trace.w = load.child("trace").attribute("w").as_uint();
+	trace.h = load.child("trace").attribute("h").as_uint();
 
 	if (load.child("flip").attribute("value") == 0)
 		Flip = SDL_FLIP_NONE;
@@ -345,10 +346,10 @@ bool j1FlyingEnemy::Save(pugi::xml_node& save) const
 	eneNode.append_child("speed").append_attribute("x") = fpSpeed.x;
 	eneNode.child("speed").append_attribute("y") = fpSpeed.y;
 
-	eneNode.append_child("falling").append_attribute("value") = falling;
-
-	//TODO, save pathfinding timer
-	//save.append_child("wallTimer").append_attribute("wallJumpTimer") = wallJumpTimer;
+	eneNode.append_child("trace").append_attribute("x") = trace.x;
+	eneNode.child("trace").append_attribute("y") = trace.y;
+	eneNode.child("trace").append_attribute("w") = trace.w;
+	eneNode.child("trace").append_attribute("h") = trace.h;
 
 	eneNode.append_child("flip").append_attribute("value") = Flip;
 

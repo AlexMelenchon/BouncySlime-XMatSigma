@@ -52,6 +52,10 @@ public:
 	SDL_Rect		camera = {0,0,0,0};
 	SDL_Rect		viewport = { 0,0,0,0 };
 	SDL_Color		background = { 0,0,0,0 };;
+
+	//--------CONFIG-------//
+	p2SString vsync;
+
 };
 
 #endif // __j1RENDER_H__

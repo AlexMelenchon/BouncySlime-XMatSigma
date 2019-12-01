@@ -132,8 +132,12 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 		App->entities->player->GodMode();
 
-	//Changes the Window Title Display
+	//Un-caps the framerate
 	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+		App->frameCap = !App->frameCap;
+
+	//Changes the Window Title Display
+	if (App->input->GetKey(SDL_SCANCODE_F12) == KEY_DOWN)
 		App->windowTitleControl = !App->windowTitleControl;
 
 	//Sets Pause in the Game
@@ -142,9 +146,6 @@ bool j1Scene::Update(float dt)
 		App->pause = !App->pause;
 	}
 
-	//Un-caps the framerate
-	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
-		App->frameCap = !App->frameCap;
 
 	//Turns volume up
 	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN && (App->audio->musicVolume < 100 && App->audio->fxVolume < 100))
@@ -163,6 +164,9 @@ bool j1Scene::Update(float dt)
 
 	//Draws the current map
 	App->map->Draw();
+
+	//Sets the window title for the map info
+	showWindowTitle();
 
 
 	// Debug pathfinding w/ mouse ------------------------------
@@ -241,10 +245,11 @@ void j1Scene::showWindowTitle() const
 			cap.create("OFF");
 
 
-		p2SString title("%s - %s || FPS: %i Av.FPS: %.2f || FrameCap: %s FrameLimit: %i || Last Frame Ms: %u ",
+		p2SString title("%s - %s || FPS: %i Av.FPS: %.2f || FrameCap: %s FrameLimit: %i VSYNC %s || Last Frame Ms: %u ",
 			App->GetTitle(), App->GetOrganization(),
 			App->frames_on_last_update, App->avg_fps,
 			cap.GetString(), App->capTime,
+			App->render->vsync.GetString(),
 			App->last_frame_ms);
 
 		App->win->SetTitle(title.GetString());
