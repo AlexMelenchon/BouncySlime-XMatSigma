@@ -31,6 +31,9 @@ j1FlyingEnemy ::~j1FlyingEnemy()
 		collider->to_delete = true;
 		collider = nullptr;
 	}
+
+	path.~p2DynArray();
+
 }
 
 

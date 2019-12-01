@@ -25,6 +25,8 @@ j1LandEnemy ::~j1LandEnemy()
 {
 	path.Clear();
 
+	path.~p2DynArray();
+
 	if (collider != nullptr)
 	{
 		collider->to_delete = true;

@@ -25,7 +25,10 @@ j1ParticleShuriken::j1ParticleShuriken() : j1Entity()
 
 //Destructor
 j1ParticleShuriken ::~j1ParticleShuriken()
-{}
+{
+	path.~p2DynArray();
+
+}
 
 
 // Called before render is available
