@@ -125,6 +125,9 @@ private:
 	//Force applied to the player's movement in both axis
 	fPoint fpForce = { 0.0f,0.0f }; 
 
+	// Determines player acceleration in the x and y axis. Since the player movement has to fell great, it's the only entiy that has accel
+	float fAccel = 0.0f;
+
 	//Force applied to the player's when killing an enemy
 	fPoint fpForceMiniJump = { 0.0f,0.0f };
 
@@ -133,6 +136,9 @@ private:
 	
 	//Used to have an smooth leave of the wall
 	float wallingLeave = 0.0f;
+
+	float fGravity = 0.0f;
+
 
 	//LIMITS---
 	//The amount in which a speed will be divided to per frame.

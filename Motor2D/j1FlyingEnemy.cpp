@@ -14,12 +14,14 @@
 #include "j1FlyingEnemy.h"
 #include "j1Player.h"
 
+//Constructor
 j1FlyingEnemy::j1FlyingEnemy() : j1Enemy()
 {
 	this->type = entityType::FLYING_ENEMY;
 
 }
 
+//Destructor
 j1FlyingEnemy ::~j1FlyingEnemy()
 {
 	path.Clear();
@@ -32,11 +34,10 @@ j1FlyingEnemy ::~j1FlyingEnemy()
 }
 
 
-
+// Called before render is available
 bool j1FlyingEnemy::Awake(pugi::xml_node& land_node)
 {
 	//Movement load
-	fGravity = land_node.child("movement").child("gravity").text().as_float();
 	chasingDistance = land_node.child("movement").child("chasingDistance").text().as_uint();
 	chasingTiles = land_node.child("movement").child("chasingTiles").text().as_uint();
 	idleSpeed.x = land_node.child("movement").child("idleSpeed").attribute("x").as_float();
@@ -70,6 +71,7 @@ bool j1FlyingEnemy::Awake(pugi::xml_node& land_node)
 	return true;
 }
 
+// Called before the first frame
 bool j1FlyingEnemy::Start()
 {
 	//The enemy's texture load
@@ -78,11 +80,10 @@ bool j1FlyingEnemy::Start()
 	//Collision load
 	App->collision->AddCollider(collider);
 
-	//Fx load
-
 	return true;
 }
 
+// Called each loop iteration
 bool j1FlyingEnemy::Update(float dt)
 {
 	timer += dt;
@@ -90,29 +91,27 @@ bool j1FlyingEnemy::Update(float dt)
 	bool ret = true;
 	switch (state)
 	{
-	case enemy_state::ST_UNKNOWN:
-	{
-		ret = false;
-		break;
-	}
 	case enemy_state::ST_IDLE:
 	{
+		//Check if it's inside his patrol route
 		if (collider->CheckCollision(trace))
 		{
+			//Affirmative: clears path & starts doing it's route
 			path.Clear();
 			TraceFollower();
 		}
-		else
+		else //Negative: searchs a path to it's route & moves towards it
 		{
+			//Search path timer
 			if (timer > idleTimer)
 			{
 				GetPathfinding({float(trace.x +1), float(trace.y)}, false);
 				timer = 0;
 			}
 
+			//Move if there's a path
 			if (path.Count() > 0)
 			{
-				//The update the enemy's position & speed according to it's logic
 				Move(dt);
 			}
 
@@ -123,12 +122,14 @@ bool j1FlyingEnemy::Update(float dt)
 	}
 	case enemy_state::ST_CHASING:
 	{
+		//Search path timer
 		if (timer > chasingTimer)
 		{
 			GetPathfinding({ App->entities->player->fpPosition.x, App->entities->player->fpPosition.y + App->entities->player->collider->rect.w / 1.5f }, true);
 			timer = 0;
 		}
 
+		//Move if there's a path
 		if (path.Count() > 0)
 		{
 			//The update the enemy's position & speed according to it's logic
@@ -137,6 +138,11 @@ bool j1FlyingEnemy::Update(float dt)
 		break;
 	}
 
+	case enemy_state::ST_UNKNOWN:
+	{
+		ret = false;
+		break;
+	}
 	}
 	UpdatePos(dt);
 	
@@ -144,6 +150,7 @@ bool j1FlyingEnemy::Update(float dt)
 	return ret;
 }
 
+//Moves the enemy according to pathfinding
 void j1FlyingEnemy::Move(float dt)
 {
 	iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);

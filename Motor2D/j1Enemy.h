@@ -51,7 +51,6 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-
 	//--------SAVE & LOAD---------//
 	//Called when loading a save
 	virtual bool Load(pugi::xml_node&) { return true; };
@@ -60,11 +59,13 @@ public:
 	virtual bool Save(pugi::xml_node&) const {return true; }
 
 	//--------POSITION ---------//
+	//Update enemy's position
 	virtual void UpdatePos(float dt) {};
 
-	//When the enemy is idle, it has a defined movement
+	//When the enemy is idle, it has a defined movement (a.k.a patrol)
 	virtual void TraceFollower() {};
 
+	//Moves the enemy according to pathfinding
 	virtual void Move(float dt) {};
 
 	//--------COLLISION ---------//
@@ -76,17 +77,42 @@ public:
 	virtual void RecalculatePos(SDL_Rect, SDL_Rect) {};
 
 	//--------PATHFINDING---------//
+	//Return the pathfinding to a map destination, also can be cap or not
 	bool GetPathfinding(fPoint destination, bool tilelimit = true);
 
 
-public:
+protected:
 	//--------MOVEMENT ---------//
+
+	//Determines enemy patrol direction
 	collisionDirection traceDir = DIRECTION_RIGHT;
 
+	//The enemies' sight range
+	uint chasingDistance = 0u;
+
+	//The enemies' chase max distance in tiles
+	uint chasingTiles = 0u;
+
+	//Timers for pathfinding
+	float idleTimer = 0.f;
+	float chasingTimer = 0.f;
+
+	//Determines an entity predefined movement
+	SDL_Rect trace = { 0,0,0,0 };
+
+	//defined movement speed the enemy will have
+	fPoint idleSpeed = { 0,0 };
+	fPoint moveSpeed = { 0,0 };
+
 	//--------STATE ---------//
-	//determines what the enemy is doing
+
+	//Enemy current state
 	enemy_state state;
+
+	//Changes the state of the enemy (it's not a state machine like the player, since the enemy states are minimum & simple)
 	void UpdateState();
+
+	//Array that stores enemy pathfinding
 	p2DynArray<iPoint> path;
 
 

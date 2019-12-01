@@ -35,17 +35,6 @@ enum  class entityType
 	SHURIKEN
 };
 
-enum slow_direction
-{
-	SLOW_UNKNOWN = -1,
-
-	SLOW_X,
-	SLOW_POSITIVE_X,
-	SLOW_NEGATIVE_X,
-	SLOW_POSITIVE_Y,
-	SLOW_NEGATIVE_Y,
-};
-
 
 class j1Entity
 {
@@ -105,7 +94,7 @@ public:
 	virtual void UpdatePos(float dt) {};
 
 	//Smoothly slows an speed axis
-	float DeAccel(slow_direction slow, float speedAxis, float grade = 0.0f);
+	float DeAccel(float speedAxis, float grade = 0.0f);
 
 	//Sets the trace of an enemy
 	void SetTrace(SDL_Rect trace);
@@ -114,15 +103,15 @@ public:
 	//Sets the collider to the player's position
 	void CalculateCollider(fPoint);
 
-	//the entity's sprite is too little compared to the player so we will double it's size.
-	uint scalesize = 0;
-
-
 	//If a collision is detected by the j1Collision, distributes collisions according to it's type
 	virtual void OnCollision(Collider*, Collider*) {};
 
 	//Calculate the collisions with the enviroment
 	virtual void RecalculatePos(SDL_Rect, SDL_Rect) {};
+
+	//Checks the direction of the collision
+	int CheckCollisionDir(SDL_Rect playerRect, SDL_Rect collRect);
+
 
 
 	//--------STATE MACHiNE---------//
@@ -143,8 +132,6 @@ public:
 		return fpPosition;
 	}
 
-
-
 public:
 	//--------ENTITY ---------//
 	entityType type;
@@ -156,29 +143,6 @@ public:
 	// Determines player speed in the x and y axis
 	fPoint fpSpeed = { 0.0f,0.0f };
 
-	// Determines player acceleration in the x and y axis
-	float fAccel = 0.0f;
-
-	// Determines player acceleration in the x and y axis
-	float fAccelX = 0.0f;
-
-	float fGravity = 0.0f;
-
-	//Determines an entity predefined movement
-	SDL_Rect trace = { 0,0,0,0};
-	
-	//the enemies range
-	uint chasingDistance = 0u;
-
-	uint chasingTiles = 0u;
-
-	float idleTimer = 0.f;
-	float chasingTimer = 0.f;	
-
-	//defined movement speed the enemy will have
-	fPoint idleSpeed = { 0,0 };
-	fPoint moveSpeed = { 0,0 };
-
 	//LIMITS---
 	// Determines player maximum speed
 	iPoint fpMaxSpeed = { 0.0f, 0.0f };
@@ -187,8 +151,8 @@ public:
 	//The entity's collider
 	Collider* collider = nullptr;
 
-	//Checks the direction of the collision
-	int CheckCollisionDir(SDL_Rect playerRect, SDL_Rect collRect);
+	//the entity's sprite is too little compared to the player so we will double it's size.
+	uint scalesize = 0;
 
 	//--------RENDER---------//
 	//Controls if the player is flipped or not

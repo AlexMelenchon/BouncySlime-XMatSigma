@@ -8,9 +8,6 @@
 #include "p2DynArray.h"
 #include "j1Enemy.h"
 
-#define CHASING_DISTANCE 450
-#define CHASING_MAX_TILES 32
-
 class j1FlyingEnemy : public j1Enemy
 {
 public:
@@ -39,11 +36,13 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 	//--------POSITION ---------//
+
 	void UpdatePos(float dt);
 
 	//When the enemy is idle, it has a defined movement
 	void TraceFollower();
 
+	//Moves the enemy according to pathfinding
 	void Move(float dt);
 
 	//--------COLLISION ---------//

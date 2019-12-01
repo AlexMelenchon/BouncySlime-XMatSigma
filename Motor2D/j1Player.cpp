@@ -138,7 +138,7 @@ void j1Player::standardInputs()
 		}
 
 		if (fpSpeed.x > 0)
-			fpSpeed.x -= DeAccel(SLOW_POSITIVE_X, fpSpeed.x, fSlowGradeWall);//We deAccel the positive X if we're going left & there's a remaining speed
+			fpSpeed.x -= DeAccel(fpSpeed.x, fSlowGradeWall);//We deAccel the positive X if we're going left & there's a remaining speed
 
 	}
 	//Moving right
@@ -160,12 +160,12 @@ void j1Player::standardInputs()
 		}
 
 		if (fpSpeed.x < 0)
-			fpSpeed.x -= DeAccel(SLOW_NEGATIVE_X, fpSpeed.x, fSlowGradeWall); //We deAccel the negative X if we're going right & there's a remaining speed
+			fpSpeed.x -= DeAccel(fpSpeed.x, fSlowGradeWall); //We deAccel the negative X if we're going right & there's a remaining speed
 	}
 	else
 	{
 			//Slow X
-			fpSpeed.x -= DeAccel(SLOW_X, fpSpeed.x, fSlowGradeWall);
+			fpSpeed.x -= DeAccel(fpSpeed.x, fSlowGradeWall);
 	}
 
 	//Jump
