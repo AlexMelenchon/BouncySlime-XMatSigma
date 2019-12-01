@@ -303,12 +303,13 @@ bool j1Map::Load(const char* file_name)
 		if (ret == true)
 			data.layerList.add(layerInfo);
 	}
-	// Load colliders info ----------------------------------------------
+	// Load objectlayer info ----------------------------------------------
 	for (pugi::xml_node nodeColliderGroup = map_file.child("map").child("objectgroup"); nodeColliderGroup; nodeColliderGroup = nodeColliderGroup.next_sibling("objectgroup"))
 	{
 		for (pugi::xml_node nodeCollider = nodeColliderGroup.child("object"); nodeCollider; nodeCollider = nodeCollider.next_sibling("object"))
 		{
-			loadCollider(nodeCollider);
+			loadObjects(nodeCollider);
+
 		}
 
 	}
@@ -528,7 +529,7 @@ bool j1Map::loadLayer(pugi::xml_node& node, LayerInfo* layerInfo)
 }
 
 //Loads colliders and sorts each type
-bool j1Map::loadCollider(pugi::xml_node& node)
+bool j1Map::loadObjects(pugi::xml_node& node)
 {
 	bool ret = true;
 
@@ -542,7 +543,7 @@ bool j1Map::loadCollider(pugi::xml_node& node)
 	p2SString name = node.attribute("name").as_string();
 
 
-	//Then we asign a type for each collider
+	//Then we asign a type for each object
 	COLLIDER_TYPE type;
 
 	if (name == "Floor")
@@ -552,6 +553,7 @@ bool j1Map::loadCollider(pugi::xml_node& node)
 		type = COLLIDER_DEATH;
 	else if (name == "Win")
 		type = COLLIDER_WIN;
+	//If the object is a entity, we added it and we exit
 	else if (name == "Start")
 	{
 		type = COLLIDER_START;
@@ -572,7 +574,7 @@ bool j1Map::loadCollider(pugi::xml_node& node)
 	else
 		type = COLLIDER_NONE;
 		
-	//If there is no error, we add the collider to the list
+	//If there is no error & the object was a coollider, we added it to the list
 	if (type == COLLIDER_NONE)
 	{
 		LOG("Error loading collider. Type not especified");

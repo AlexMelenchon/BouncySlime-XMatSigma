@@ -116,7 +116,7 @@ public:
 	//Updates the current state
 	void UpdateState();
 
-	//When the player's state turns wall
+	//When the player's state turns wall: reset everything & limit it's entrance speed
 	void InWall();
 
 	//Iterates the states taking in account the inputs
@@ -181,6 +181,8 @@ private:
 
 	// Controls the time elapsed since the player wants to leave the wall and actually leaves (jump breathing room)
 	float wallJumpLeaveControl = 0.0f;
+
+	float godSpeedMultiplier = 0.0f;
 
 	//The player's direction when jumping off a wall
 	collisionDirection wallJumpDirection = DIRECTION_NONE;

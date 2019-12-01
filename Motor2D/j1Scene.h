@@ -46,6 +46,17 @@ public:
 	//Checks camera limits
 	void CheckCameraLimits();
 
+	//--------WINDOW---------//
+	//Sets the window title for the map info
+	void showWindowTitle() const;
+
+	//--------PATHFINDING---------//
+	//Sets the debug pathfinding w/ the mouse
+	void setDebugPathfinding();
+	
+	//Blits the debug pathfinding, if exists
+	void blitDebugPath() const;
+
 private:
 	//--------CAMERA---------//
 	//The calculated camera
@@ -58,8 +69,11 @@ private:
 	//Fade time to change maps
 	float mapFadeTime = 0.0f;
 
+	//--------PATHFNIDING DEBUG---------//
+	//The texture to blit the pathfinding on screen
 	SDL_Texture* debug_tex;
 
+	//Array to store the debug path made w/ the mouse
 	p2DynArray<iPoint> debugPath;
 };
 

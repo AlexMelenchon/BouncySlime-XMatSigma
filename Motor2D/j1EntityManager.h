@@ -42,6 +42,7 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	//Determines if we are in debug mode
 	bool debug = false;
 
 
@@ -59,13 +60,15 @@ public:
 	//Function that initializes entities
 	bool InitEntity(j1Entity* tmp, pugi::xml_node& config);
 
-	//Function that initializes entities
+	//Cleans all the map entities
 	bool CleanMapEnt();
 
 	//Since player is used in other modules, we are going to have a pointer only to him
+	//Also the player is an unique entity case in the code, since is never destroyed,
+	//we will only change it's position & reset it's movement & state
 	j1Player* player = nullptr;
 
-	//Since player is used in other modules, we are going to have a pointer only to him
+	//Since the shuriken is used by the player and we can only have one of each, we track the one we create with a pointer
 	j1ParticleShuriken* shuriken = nullptr;
 
 	//Node entity configuration
@@ -75,14 +78,18 @@ public:
 	SDL_Texture* debug_tex;
 
 	//--------INTERNAL CONTROL---------//
+	//A cap to prevent the game logic from going crazy in specific & critical conditions (ex. big time load)
 	float fInFramesLimit = 0.0f;
 
-	//Enemies textures
+	//--------TEXTURES---------//
+	//We load the enemy textures here, so there are not multiple loads
 	SDL_Texture* flying_tex = nullptr;
 	SDL_Texture* land_tex = nullptr;
 
 
 private:
+	//--------ENTITIES---------//
+	//The list where we will store all the entities
 	p2List<j1Entity*> EntityList;
 };
 #endif

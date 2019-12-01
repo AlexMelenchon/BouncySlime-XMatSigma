@@ -62,6 +62,7 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	wallJumpLeaveControl = player_node.child("internal").child("wallJumpLeave").text().as_float();
 	flipSpeed = player_node.child("internal").child("flipSpeed").text().as_float();
 	inWallSpeedDrop = player_node.child("internal").child("inwallSpeedDrop").text().as_float();
+	godSpeedMultiplier = player_node.child("internal").child("godSpeedMult").text().as_float();
 
 	//Animation vars load
 	pugi::xml_node animIterator = player_node.child("animations").child("animation");
@@ -183,12 +184,12 @@ void j1Player::godInputs()
 {
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		fpSpeed.x = -fpMaxSpeed.x;
+		fpSpeed.x = -fpMaxSpeed.x*godSpeedMultiplier;
 
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		fpSpeed.x = fpMaxSpeed.x;
+		fpSpeed.x = fpMaxSpeed.x* godSpeedMultiplier;
 
 	}
 	else
@@ -196,12 +197,12 @@ void j1Player::godInputs()
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
-		fpSpeed.y = -fpMaxSpeed.y;
+		fpSpeed.y = -fpMaxSpeed.y* godSpeedMultiplier;
 
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		fpSpeed.y = +fpMaxSpeed.y;
+		fpSpeed.y = +fpMaxSpeed.y* godSpeedMultiplier;
 
 	}
 	else
@@ -300,13 +301,12 @@ bool j1Player::Update(float dt)
 		break;
 
 	case ST_GOD:
-
 		falling = false;
 		walling = false;
 		currentAnimation = &animIdle;
 		break;
 	case ST_DEAD:
-		LOG("Git Gud \n");
+		LOG("Git Gud :P \n");
 		currentAnimation = &animDeath;
 	}
 
@@ -319,13 +319,15 @@ bool j1Player::Update(float dt)
 	return true;
 }
 
+//Update player's position
 void j1Player::UpdatePos(float dt)
 {
 	//If the logic does not demostrate the opposite, the player is always falling and not touching the wall
 	falling = true;
 	walling = false;
 
-	//Limit Speed
+	//Limit Speed, only if you are not in GodMode
+	if(!god)
 	LimitSpeed();
 
 	fpPosition.x += fpSpeed.x * dt;
@@ -345,7 +347,8 @@ void j1Player::UpdatePos(float dt)
 //Distributes collisions according to it's type
 void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 {
-			switch (coll->type) {
+			switch (coll->type) 
+			{
 
 			case(COLLIDER_WALL):
 				RecalculatePos(playerCol->rect, coll->rect);
@@ -360,19 +363,22 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 				ReSetMovement();
 				break;
 			case(COLLIDER_ENEMY):
+			
 				//PLAYER DIES, because he didn't collide from ABOVE
 				if (CheckCollisionDir(playerCol->rect, coll->rect) != DIRECTION_DOWN)
 				{
 					inputs.add(IN_DEATH);
 					App->fade->FadeToBlack(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
 				}
+
 				//ENEMY DIES
 				else
-				{						
+				{
 					coll->to_delete = true;
 					Jump(fpForceMiniJump.y, enemyDeathFx.id);
 				}
 				break;
+			
 			}
 }
 
@@ -448,16 +454,20 @@ bool j1Player::CleanUp()
 //Called when loading a save
 bool j1Player::Load(pugi::xml_node& load)
 {
-
+	//Movement
 	fpPosition.x = load.child("position").attribute("x").as_float() - fSlowGrade;
 	fpPosition.y = load.child("position").attribute("y").as_float();
 	fpSpeed.x = load.child("speed").attribute("x").as_float();
 	fpSpeed.y = load.child("speed").attribute("y").as_float();
 	
+	//State
 	falling = load.child("falling").attribute("value").as_bool();
 	walling = load.child("walling").attribute("value").as_bool();
+
+	//Internal
 	wallJumpTimer = load.child("wallTimer").attribute("wallJumpTimer").as_float();
 
+	//State
 	switch (load.child("state").attribute("current_state").as_uint())
 	{
 	case 0:
@@ -755,11 +765,11 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 	return state;
 }
 
-//When the player's state turns wall
+//When the player's state turns wall: reset everything & limit it's entrance speed
 void j1Player::InWall()
 {
 	fAccel = 0;
-	fpSpeed.y *= inWallSpeedDrop;
+	fpSpeed.y *= inWallSpeedDrop; //We reduce the player speed on entrance
 	wallJumpDirection = DIRECTION_NONE;
 	wallJumpTimer = 0.0f;
 }
@@ -770,7 +780,7 @@ void j1Player::Jump(float forcey, int fxId)
 	fAccel = 0; //Reset the accel
 	fpSpeed.y = forcey; //Add the jump force to the speed
 
-	App->audio->PlayFx(fxId);
+	App->audio->PlayFx(fxId); //Play the SFX
 
-	inputs.add(IN_JUMP);
+	inputs.add(IN_JUMP); //Update the state
 }

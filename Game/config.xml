@@ -42,6 +42,7 @@
 
     <manager>
       <inFramesLimit>0.15f</inFramesLimit>
+      <debugTextPath>maps/path2.png</debugTextPath>
     </manager>
     
     <player>
@@ -67,6 +68,7 @@
       <wallJumpLeave>0.3f</wallJumpLeave>
       <inwallSpeedDrop>0.15f</inwallSpeedDrop>
       <flipSpeed>5.0f</flipSpeed>
+      <godSpeedMult>2.0f</godSpeedMult>
     </internal>
     
     <animations>

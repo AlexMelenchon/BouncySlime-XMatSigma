@@ -9,10 +9,6 @@
 #define INVALID_WALK_CODE 255
 
 // --------------------------------------------------
-// Recommended reading:
-// Intro: http://www.raywenderlich.com/4946/introduction-to-a-pathfinding
-// Details: http://theory.stanford.edu/~amitp/GameProgramming/
-// --------------------------------------------------
 
 class j1PathFinding : public j1Module
 {

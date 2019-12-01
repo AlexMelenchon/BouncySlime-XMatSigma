@@ -43,7 +43,7 @@ bool j1Scene::Start()
 	//Loads the first map
 	Reset(App->map->data.maplist.start->data->name.GetString()); 
 
-	//debug_tex = App->tex->Load("maps/path2.png");
+	debug_tex = App->entities->debug_tex;
 
 	return true;
 }
@@ -85,43 +85,7 @@ bool j1Scene::PreUpdate()
 	Camera();
 
 	// debug pathfing ------------------
-	static iPoint origin;
-	static bool origin_selected = false;
-
-	int x, y;
-	App->input->GetMousePosition(x, y);
-	iPoint p = App->render->ScreenToWorld(x, y);
-	p = App->map->WorldToMap(p.x, p.y);
-
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && App->entities->debug)
-	{
-		if (origin_selected == true)
-		{
-			debugPath.Clear();
-			App->pathfinding->CreatePath(origin, p);
-
-			uint pathCount = App->pathfinding->GetLastPath()->Count();
-
-			for (uint i = 0; i < pathCount; i++)
-			{
-				debugPath.PushBack(*App->pathfinding->GetLastPath()->At(i));
-			}
-			origin_selected = false;
-		}
-		else
-		{
-			origin = p;
-			origin_selected = true;
-		}
-	}
-
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
-	{
-		origin_selected = false;
-		debugPath.Clear();
-	}
-
-
+	setDebugPathfinding();
 	return true;
 }
 
@@ -200,57 +164,12 @@ bool j1Scene::Update(float dt)
 	//Draws the current map
 	App->map->Draw();
 
-	//Sets the window title for the map info
-	if (App->windowTitleControl)
-	{
-		p2SString title("%s - %s || Map:%dx%d Tiles:%dx%d Tilesets:%d Mouse Position X:%d Y:%d Mouse Tilset:%d,%d Current Map:%s",
-			App->GetTitle(), App->GetOrganization(),
-			App->map->data.width, App->map->data.height,
-			App->map->data.tile_width, App->map->data.tile_height,
-			App->map->data.tilesets.count(), App->input->mouse_x - App->render->camera.x,
-			App->input->mouse_y - App->render->camera.y,
-			(App->input->mouse_x - App->render->camera.x) / App->map->data.tile_width,
-			(App->input->mouse_y - App->render->camera.y) / App->map->data.tile_height,
-			App->map->data.currentmap.GetString());
-
-		App->win->SetTitle(title.GetString());
-	}
-	else
-	{
-		p2SString cap;
-		if (App->frameCap)
-			cap.create("ON");
-		else
-			cap.create("OFF");
-
-
-		p2SString title("%s - %s || FPS: %i Av.FPS: %.2f || FrameCap: %s FrameLimit: %i || Last Frame Ms: %u ",
-			App->GetTitle(), App->GetOrganization(),
-			App->frames_on_last_update, App->avg_fps,
-			cap.GetString(), App->capTime,
-			App->last_frame_ms);
-
-		App->win->SetTitle(title.GetString());
-	}
 
 	// Debug pathfinding w/ mouse ------------------------------
-	if (App->entities->debug)
-	{
-		int x, y;
-		App->input->GetMousePosition(x, y);
-		iPoint p = App->render->ScreenToWorld(x, y);
-		p = App->map->WorldToMap(p.x, p.y);
-		p = App->map->MapToWorld(p.x, p.y);
-
-		App->render->Blit(debug_tex, p.x, p.y);
-
-		if (debugPath.Count() > 0)
-			for (uint i = 0; i < debugPath.Count(); ++i)
-			{
-				iPoint pos = App->map->MapToWorld(debugPath.At(i)->x, debugPath.At(i)->y);
-				App->render->Blit(debug_tex, pos.x, pos.y);
-			}
-	}
+	//Blits the debug pathfinding, if exists
+	blitDebugPath();
+	
+	
 
 	return true;
 }
@@ -274,8 +193,6 @@ bool j1Scene::CleanUp()
 {
 	LOG("Freeing scene");
 
-	App->tex->UnLoad(debug_tex);
-
 	return true;
 }
 
@@ -296,6 +213,112 @@ bool j1Scene::Save(pugi::xml_node& save) const
 {
 	save.append_child("current_map").append_attribute("name") = App->map->data.currentmap.GetString(); //Saves the current map info
 	return true;
+}
+
+//Sets the window title for the map info
+void j1Scene::showWindowTitle() const
+{
+	if (App->windowTitleControl) //Map related info
+	{
+		p2SString title("%s - %s || Map:%dx%d Tiles:%dx%d Tilesets:%d Mouse Position X:%d Y:%d Mouse Tilset:%d,%d Current Map:%s",
+			App->GetTitle(), App->GetOrganization(),
+			App->map->data.width, App->map->data.height,
+			App->map->data.tile_width, App->map->data.tile_height,
+			App->map->data.tilesets.count(), App->input->mouse_x - App->render->camera.x,
+			App->input->mouse_y - App->render->camera.y,
+			(App->input->mouse_x - App->render->camera.x) / App->map->data.tile_width,
+			(App->input->mouse_y - App->render->camera.y) / App->map->data.tile_height,
+			App->map->data.currentmap.GetString());
+
+		App->win->SetTitle(title.GetString());
+	}
+	else //Frame control info
+	{
+		p2SString cap;
+		if (App->frameCap)
+			cap.create("ON");
+		else
+			cap.create("OFF");
+
+
+		p2SString title("%s - %s || FPS: %i Av.FPS: %.2f || FrameCap: %s FrameLimit: %i || Last Frame Ms: %u ",
+			App->GetTitle(), App->GetOrganization(),
+			App->frames_on_last_update, App->avg_fps,
+			cap.GetString(), App->capTime,
+			App->last_frame_ms);
+
+		App->win->SetTitle(title.GetString());
+	}
+
+
+
+
+}
+
+//Sets the debug pathfinding w/ the mouse
+void j1Scene::setDebugPathfinding()
+{
+	//We init the vars we will need
+	static iPoint origin;
+	static bool origin_selected = false;
+
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	iPoint p = App->render->ScreenToWorld(x, y);
+	p = App->map->WorldToMap(p.x, p.y);
+
+	//We create the path only if we are in debug mode
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && App->entities->debug)
+	{
+		if (origin_selected == true)
+		{
+			debugPath.Clear();
+			App->pathfinding->CreatePath(origin, p);
+
+			uint pathCount = App->pathfinding->GetLastPath()->Count();
+
+			for (uint i = 0; i < pathCount; i++)
+			{
+				debugPath.PushBack(*App->pathfinding->GetLastPath()->At(i));
+			}
+			origin_selected = false;
+		}
+		else
+		{
+			origin = p;
+			origin_selected = true;
+		}
+	}
+
+	//Deletes the path if right click is pressed
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
+	{
+		origin_selected = false;
+		debugPath.Clear();
+	}
+
+}
+
+//Blits the debug pathfinding, if exists
+void j1Scene::blitDebugPath() const
+{
+	if (App->entities->debug)
+	{
+		int x, y;
+		App->input->GetMousePosition(x, y);
+		iPoint p = App->render->ScreenToWorld(x, y);
+		p = App->map->WorldToMap(p.x, p.y);
+		p = App->map->MapToWorld(p.x, p.y);
+
+		App->render->Blit(debug_tex, p.x, p.y);
+
+		if (debugPath.Count() > 0)
+			for (uint i = 0; i < debugPath.Count(); ++i)
+			{
+				iPoint pos = App->map->MapToWorld(debugPath.At(i)->x, debugPath.At(i)->y);
+				App->render->Blit(debug_tex, pos.x, pos.y);
+			}
+	}
 }
 
 //Camera Logic
