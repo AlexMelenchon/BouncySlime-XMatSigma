@@ -256,8 +256,6 @@ void j1Scene::showWindowTitle() const
 	}
 
 
-
-
 }
 
 //Sets the debug pathfinding w/ the mouse

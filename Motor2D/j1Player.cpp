@@ -752,6 +752,7 @@ void j1Player::Jump(float forcey, int fxId)
 {
 	fAccel = 0; //Reset the accel
 	fpSpeed.y = forcey; //Add the jump force to the speed
+	fpPosition.y -= fSlowGrade; //Thi is to prevent, in crazy high FPS (+300), that the player is stuck in the ground
 
 	App->audio->PlayFx(fxId); //Play the SFX
 
