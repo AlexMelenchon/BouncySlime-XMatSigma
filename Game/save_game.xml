@@ -18,45 +18,46 @@
 			<flip value="0" />
 		</player>
 		<enemyF>
-			<position x="1299.0188" y="537.960022" />
-			<speed x="-60" y="0" />
-			<falling value="true" />
-			<flip value="1" />
-		</enemyF>
-		<enemyF>
-			<position x="891.659424" y="242.039993" />
-			<speed x="-60" y="0" />
-			<falling value="true" />
-			<flip value="1" />
-		</enemyF>
-		<enemyF>
-			<position x="235.139984" y="352.880402" />
-			<speed x="-60" y="0" />
-			<falling value="true" />
-			<flip value="1" />
-		</enemyF>
-		<enemyF>
-			<position x="757.980042" y="635.039917" />
-			<speed x="0" y="-60" />
-			<falling value="true" />
-			<flip value="1" />
-		</enemyF>
-		<enemyF>
-			<position x="1569.97998" y="515.760132" />
+			<position x="1308.91992" y="537.900024" />
 			<speed x="60" y="0" />
-			<falling value="true" />
+			<trace x="1229" y="540" w="149" h="32" />
+			<flip value="0" />
+		</enemyF>
+		<enemyF>
+			<position x="1071.65796" y="240" />
+			<speed x="60" y="0" />
+			<trace x="804" y="240" w="438" h="45" />
+			<flip value="0" />
+		</enemyF>
+		<enemyF>
+			<position x="235.019989" y="226.880081" />
+			<speed x="60" y="0" />
+			<trace x="231" y="230" w="68" h="183" />
+			<flip value="0" />
+		</enemyF>
+		<enemyF>
+			<position x="759.960022" y="688.859314" />
+			<speed x="0" y="-60" />
+			<trace x="762" y="621" w="68" h="222" />
+			<flip value="1" />
+		</enemyF>
+		<enemyF>
+			<position x="1580.12012" y="756.537537" />
+			<speed x="0" y="60" />
+			<trace x="1550" y="519" w="92" h="350" />
 			<flip value="0" />
 		</enemyF>
 		<enemyL>
-			<position x="2291.37964" y="280" />
-			<speed x="-60" y="0" />
+			<position x="2287.54053" y="280" />
+			<speed x="60" y="0" />
 			<falling value="false" />
-			<flip value="1" />
+			<trace x="2257" y="284" w="85" h="0" />
+			<flip value="0" />
 		</enemyL>
 		<enemyF>
-			<position x="176" y="943.939331" />
-			<speed x="-150" y="-20.4000015" />
-			<falling value="true" />
+			<position x="176" y="943.549744" />
+			<speed x="-150" y="0" />
+			<trace x="204" y="954" w="130" h="67" />
 			<flip value="1" />
 		</enemyF>
 	</entities>

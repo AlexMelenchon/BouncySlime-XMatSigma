@@ -221,9 +221,11 @@ void j1Player::godInputs()
 	{
 		if (App->entities->shuriken == nullptr)
 		{
-			App->entities->AddEntity(entityType::SHURIKEN, { int(round(fpPosition.x)),int(round(fpPosition.y)) });
 			App->audio->PlayFx(throw_shuriken.id);
+			App->entities->AddEntity(entityType::SHURIKEN, { int(round(fpPosition.x)),int(round(fpPosition.y)) });			
 		}
+		
+			
 	}
 }
 

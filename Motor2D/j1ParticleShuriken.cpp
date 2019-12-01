@@ -80,6 +80,7 @@ bool j1ParticleShuriken::Start()
 	in_air.id = App->audio->LoadFx(in_air.path.GetString());
 
 	GetInitalSpeed();
+	Mix_Volume(0, 128);
 	
 	return true;
 }
@@ -135,6 +136,7 @@ bool j1ParticleShuriken::Update(float dt)
    }
    }
    //Play the fx meanwhile in the air
+	
 	App->audio->PlayFx(in_air.id,0,0);
 	//Update shuriken position
 	UpdatePos(dt);
@@ -189,10 +191,13 @@ bool j1ParticleShuriken::PostUpdate(bool debug)
 {
 	Draw();	
 
-	for (uint i = 0; i < path.Count(); ++i)
+	if (debug)
 	{
-		iPoint pos = App->map->MapToWorld(path.At(i)->x, path.At(i)->y);
-		App->render->Blit(App->entities->debug_tex, pos.x, pos.y);
+		for (uint i = 0; i < path.Count(); ++i)
+		{
+			iPoint pos = App->map->MapToWorld(path.At(i)->x, path.At(i)->y);
+			App->render->Blit(App->entities->debug_tex, pos.x, pos.y);
+		}
 	}
 
 	return true;
