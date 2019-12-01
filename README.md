@@ -78,12 +78,25 @@ David Carrasquet Iniesta:
  Player by: Bayat Games
  https://bayat.itch.io/
 
+ Enemies by: Pixel Frog
+ https://pixel-frog.itch.io/
+
+ Shuriken by: SorceressGameLab
+ https://sorceressgamelab.itch.io/
+
 ### Music:
  Loop musics by: Pascal Belisle
  https://soundcloud.com/pascalbelisle
  
  Sound effects by: Nintendo, ripped by Sound-Resource
  https://www.sounds-resource.com/wii/ssbb/
+ 
+ Enemy death fx:
+ https://freesound.org/people/thecheeseman/sounds/44430/
+ 
+ Shuriken fx:
+ https://freesound.org/people/marchon11/sounds/493224/
+ https://freesound.org/people/DWOBoyle/sounds/144266/
 
 ## License:
 GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
