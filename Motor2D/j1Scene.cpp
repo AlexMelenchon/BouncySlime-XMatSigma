@@ -132,8 +132,12 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 		App->entities->player->GodMode();
 
-	//Changes the Window Title Display
+	//Un-caps the framerate
 	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+		App->frameCap = !App->frameCap;
+
+	//Changes the Window Title Display
+	if (App->input->GetKey(SDL_SCANCODE_F12) == KEY_DOWN)
 		App->windowTitleControl = !App->windowTitleControl;
 
 	//Sets Pause in the Game
@@ -142,9 +146,6 @@ bool j1Scene::Update(float dt)
 		App->pause = !App->pause;
 	}
 
-	//Un-caps the framerate
-	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN && App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
-		App->frameCap = !App->frameCap;
 
 	//Turns volume up
 	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN && (App->audio->musicVolume < 100 && App->audio->fxVolume < 100))
