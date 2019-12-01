@@ -63,6 +63,8 @@ private:
 
 	p2DynArray<iPoint> path;
 
+	FX shuriken_hit;
+	FX in_air;
 
 	bool canPickUp = false;
 

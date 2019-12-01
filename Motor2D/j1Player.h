@@ -198,6 +198,7 @@ private:
 	FX winFx;
 	FX bounceFx;
 	FX enemyDeathFx;
+	FX throw_shuriken;
 	
 	//--------STATE MACHiNE---------//
 	player_states current_state = ST_UNKNOWN; 
