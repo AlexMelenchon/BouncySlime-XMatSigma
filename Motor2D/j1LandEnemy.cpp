@@ -25,6 +25,8 @@ j1LandEnemy ::~j1LandEnemy()
 {
 	path.Clear();
 
+	path.~p2DynArray();
+
 	if (collider != nullptr)
 	{
 		collider->to_delete = true;
@@ -96,40 +98,32 @@ bool j1LandEnemy::Update(float dt)
 	{
 	case enemy_state::ST_IDLE:
 		{
+		//Check if it's inside his patrol route
 		currentAnimation = &animIdle;
 		
 		if (collider->CheckCollision(trace))
 		{
+			//Affirmative: clears path & starts doing it's route
 			path.Clear();
 			TraceFollower();
 		}
-		else
+		else //Negative: searchs a path to it's route & moves towards it
 		{
+			//Search path timer
 			if (timer > idleTimer)
 			{
 				GetPathfinding({float(trace.x+1), float(trace.y)}, false);
 				timer = 0;
 			}
-
+			
+			//Path is created
 			if (path.Count() > 0)
 			{
-				//The enemy will never stop unless the logic says so
-				stop = false;
-
-				JumpLogic();
-
-				//The update the player's position & speed according to it's logic
-				if (!stop)
-				{
-					Move(false, dt);
-				}
-				else if (AbleToMove().x != -1 && AbleToMove().y != -1)
-				{
-					Move(false, dt);
-				}
-				else
-					fpSpeed.x = 0;
+				MovementLogic(dt);
 			}
+			//If there is no path we stop
+			else
+				fpSpeed.x = 0;
 
 		}		
 		break;
@@ -138,32 +132,19 @@ bool j1LandEnemy::Update(float dt)
 		{
 		currentAnimation = &animRun;
 
+		//Search path timer
 		if (timer > chasingTimer && !falling)
 		{
 			GetPathfinding({ App->entities->player->fpPosition.x, App->entities->player->fpPosition.y + App->entities->player->collider->rect.w / 1.5f }, true);
 			timer = 0;
 		}
 		
+		//Path is created
 		if (path.Count() > 0)
 		{
-			//The enemy will never stop unless the logic says so
-			stop = false;
-
-			
-
-			//The update the player's position & speed according to it's logic
-			if (!JumpLogic())
-			{
-				Move(true, dt);
-			}
-			else if (AbleToMove().x != -1)
-			{
-				Move(true, dt);
-			}
-			else
-				fpSpeed.x = 0;
-
+			MovementLogic(dt);
 		}
+		//If there is no path we stop
 		else
 			fpSpeed.x = 0;
 
@@ -172,7 +153,7 @@ bool j1LandEnemy::Update(float dt)
 		
 	case enemy_state::ST_UNKNOWN:
 	{
-		ret = false;
+		ret = false; 
 		break;
 	}
 	}
@@ -182,18 +163,40 @@ bool j1LandEnemy::Update(float dt)
 	return ret;
 }
 
+//Updates the enemy movement logic
+void j1LandEnemy::MovementLogic(float dt)
+{
+	//We check if the enemy has to jump to get to the player
+	//If the logic says we have to jump we jump & move
+	if (!JumpLogic())
+	{
+		Move(true, dt);
+	}
+	//If the logic says we have to stop, we check if we can move some tiles before stopping
+	// (This is not an or in the previous if for visability purposes)
+	else if (AbleToMove().x != -1)
+	{
+		Move(true, dt);
+	}
+	//If  the logic says we have to stop, we stop
+	else
+		fpSpeed.x = 0;
+
+}
+
 //Gets if the next tile, in the enemy's foot is walkable
 iPoint j1LandEnemy::NextWalkableTile()
 {
 		iPoint ret = { -1, -1 };
 
+		//We check all the tiles
 		iPoint next = { path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y + 2 };
-
 		if (App->pathfinding->IsWalkable(next) && !falling)
 		{
 			for (uint i = path.Count() -1; i > 0; --i)
 			{
 				next = { path.At(i)->x, path.At(i)->y + 2 };
+				//If one tile is not walkable, which means is air, we return it
 				if (!App->pathfinding->IsWalkable(next))
 				{
 					ret = next;
@@ -204,10 +207,12 @@ iPoint j1LandEnemy::NextWalkableTile()
 		return ret;
 }
 
+//Checks if he cant move to the next tile without falling
 iPoint j1LandEnemy::AbleToMove()
 {
 	iPoint ret = { -1, -1 };
 
+	//We check all the tiles
 	iPoint next = { path.At(path.Count() - 1)->x, App->map->WorldToMap(fpPosition.x, (int)round(fpPosition.y)).y +3 };
 	if (!App->pathfinding->IsWalkable(next))
 	{
@@ -224,7 +229,7 @@ iPoint j1LandEnemy::AbleToMove()
 	return ret;
 }
 
-
+//Calculates the jump if it is on the distance limit
 int j1LandEnemy::CalculateJump(iPoint destination)
 {
 	iPoint nextToWorld = { destination.x, destination.y + 2 };
@@ -232,6 +237,7 @@ int j1LandEnemy::CalculateJump(iPoint destination)
 	return(abs((nextToWorld.DistanceTo({ (int)round(fpPosition.x), (int)round(fpPosition.y) }))));
 }
 
+//Makes the enemy jump if he is not jumping & there's a tile avaliable to jump
 bool j1LandEnemy::JumpLogic()
 {
 	if (path.Count() <= 1)
@@ -259,10 +265,13 @@ bool j1LandEnemy::JumpLogic()
 	return false;
 }
 
+//Moves the entity
 void j1LandEnemy::Move(bool toPlayer, float dt)
 {
+	//Get the next tile to move
 	iPoint next = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
 
+	//If the tile is a tile of distance of the enemy, it moves
 	if (abs(fpPosition.x - next.x) > App->map->data.tile_width)
 	{
 		if (fpPosition.x < next.x)
@@ -284,6 +293,7 @@ void j1LandEnemy::Move(bool toPlayer, float dt)
 		path.Pop(next);
 }
 
+//Update the enemy position
 void j1LandEnemy::UpdatePos(float dt)
 {
 	if (falling)
@@ -302,6 +312,7 @@ void j1LandEnemy::UpdatePos(float dt)
 	CalculateCollider(fpPosition);	
 }
 
+//When the enemy is idle, it has a defined movement
 void j1LandEnemy::TraceFollower()
 {
 
@@ -331,6 +342,7 @@ void j1LandEnemy::TraceFollower()
 	}
 }
 
+//If a collision is detected by the j1Collision, distributes collisions according to it's type
 void j1LandEnemy::OnCollision(Collider* entityCol, Collider* coll)
 {
 	switch (coll->type) {
@@ -345,7 +357,7 @@ void j1LandEnemy::OnCollision(Collider* entityCol, Collider* coll)
 	}
 }
 
-
+//Calculate the collisions with the enviroment
 void j1LandEnemy::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 {
 	//If a collision from various aixs is detected, it determines what is the closets one to exit from

@@ -29,7 +29,6 @@ struct LayerInfo
 		RELEASE(tileArray);
 	}
 
-
 	//Gets the layer id from the position
 	inline uint Get(int x, int y) const {
 

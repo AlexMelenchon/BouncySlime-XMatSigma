@@ -36,21 +36,29 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 	//--------POSITION ---------//
+	//Update the enemy position
 	void UpdatePos(float dt);
 
 	//When the enemy is idle, it has a defined movement
 	void TraceFollower();
 
-	//Gets if the next tile, in the enemy's foot is walkable
+	//Gets if the next tile, in the enemy's foot is  NOT walkable
 	iPoint NextWalkableTile();
 
+	//Checks if he cant move to the next tile without falling
 	iPoint AbleToMove();
 
+	//Calculates the jump if it is on the distance limit
 	int CalculateJump(iPoint destination);
 
+	//Makes the enemy jump if he is not jumping & there's a tile avaliable to jump
 	bool JumpLogic();
 
+	//Moves the entity
 	void Move(bool toPlayer, float dt);
+
+	//Updates the enemy movement logic
+	void MovementLogic(float dt);
 
 	//--------COLLISION ---------//
 	
@@ -69,7 +77,6 @@ private:
 	//--------INTERNAL CONTROÑ ---------//
 	float pathTimer = 0.0f;
 	float timer = 0.f;
-	bool stop = false;
 	
 	//--------ANIMATIONS---------//
 	Animation animIdle;
