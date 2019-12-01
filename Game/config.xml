@@ -131,6 +131,7 @@
       <bounce path="audio/fx/bounce.wav"/>
       <enemydeath path="audio/fx/flyingDeath.wav"/>
       <throw path="audio/fx/throw.wav"/>
+      <hit path="audio/fx/shuriken_hit.wav"/>
     </fx>
     
     <path>textures/player/sprite.png</path>
@@ -258,8 +259,6 @@
       <path>textures/player/sprite.png</path>
 
       <fx>
-         <hit path="audio/fx/shuriken_hit.wav"/>
-         <swing path="audio/fx/swing.wav"/>
       </fx>
       <collision>
         <collider w="18" h="18" />

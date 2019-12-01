@@ -91,10 +91,6 @@ private:
 	fPoint returnSpeed = { 0.f,0.f };
 	float defaultSpeed = 0.f;
 
-	//--------FX ---------//
-	FX shuriken_hit;
-	FX in_air;
-
 	//--------INTERNAL ---------//
 	bool canPickUp = false;
 

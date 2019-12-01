@@ -58,10 +58,6 @@ bool j1ParticleShuriken::Awake(pugi::xml_node& shuriken_node)
 	pugi::xml_node animIterator = shuriken_node.child("animations").child("animation");
 	anim.loadAnimation(animIterator, "shuriken");	
 
-	//sfx load
-	shuriken_hit.path = shuriken_node.child("fx").child("hit").attribute("path").as_string();
-	in_air.path = shuriken_node.child("fx").child("swing").attribute("path").as_string();
-
 	currentAnimation = &anim;
 
 	return true;
@@ -76,11 +72,7 @@ bool j1ParticleShuriken::Start()
 	//Collision load
 	App->collision->AddCollider(collider);
 
-	shuriken_hit.id = App->audio->LoadFx(shuriken_hit.path.GetString());
-	in_air.id = App->audio->LoadFx(in_air.path.GetString());
-
 	GetInitalSpeed();
-	Mix_Volume(0, 128);
 	
 	return true;
 }
@@ -156,7 +148,7 @@ void j1ParticleShuriken::UpdateState()
 //Moves the shuriken to the player
 void j1ParticleShuriken::MoveToPlayer(float dt)
 {
-	iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
+	iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y -0.5);
 
 	if (abs(abs(fpPosition.x) - abs(current.x)) > App->map->data.tile_height || abs(abs(fpPosition.y) - abs(current.y)) > App->map->data.tile_height)
 	{
@@ -214,7 +206,9 @@ bool j1ParticleShuriken::CleanUp()
 	}
 
 	App->entities->shuriken = nullptr;
-	
+
+	path.Clear();
+
 	return true;
 }
 
@@ -301,7 +295,7 @@ void j1ParticleShuriken::OnCollision(Collider* entityCol, Collider* coll)
 
 	case(COLLIDER_ENEMY):
 		coll->to_delete = true;
-		App->audio->PlayFx(shuriken_hit.id);
+		App->audio->PlayFx(App->entities->player->shuriken_hit.id);
 		break;
 
 	case(COLLIDER_PLAYER):

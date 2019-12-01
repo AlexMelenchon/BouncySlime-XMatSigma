@@ -119,6 +119,17 @@ public:
 	//--------STATE MACHiNE---------//
 	//List that stores the players inputs
 	p2List<player_inputs> inputs;
+
+	//--------MUSIC---------//
+	FX jumpFx;
+	FX deathFx;
+	FX landFx;
+	FX winFx;
+	FX bounceFx;
+	FX enemyDeathFx;
+	FX throw_shuriken;
+	FX shuriken_hit;
+
 private:
 
 	//--------MOVEMENT ---------//
@@ -191,16 +202,9 @@ private:
 	Animation animWall;
 	Animation animDeath;
 
+	//--------YEXTURES---------//
+	//Back shuriken texture
 	SDL_Texture* shuriken_tex = nullptr;
-	
-	//--------MUSIC---------//
-	FX jumpFx;
-	FX deathFx;
-	FX landFx;
-	FX winFx;
-	FX bounceFx;
-	FX enemyDeathFx;
-	FX throw_shuriken;
 	
 	//--------STATE MACHiNE---------//
 	player_states current_state = ST_UNKNOWN; 

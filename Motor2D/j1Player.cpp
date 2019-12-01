@@ -88,6 +88,7 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	bounceFx.path = player_node.child("fx").child("bounce").attribute("path").as_string();
 	enemyDeathFx.path = player_node.child("fx").child("enemydeath").attribute("path").as_string();
 	throw_shuriken.path = player_node.child("fx").child("throw").attribute("path").as_string();
+	shuriken_hit.path = player_node.child("fx").child("hit").attribute("path").as_string();
 
 	//Assign the value to the auxiliar node
 	//We need this in order to load things later in start whose modules are not awoken yet
@@ -116,6 +117,8 @@ bool j1Player::Start()
 	bounceFx.id=App->audio->LoadFx(bounceFx.path.GetString());
 	enemyDeathFx.id = App->audio->LoadFx(enemyDeathFx.path.GetString());
 	throw_shuriken.id = App->audio->LoadFx(throw_shuriken.path.GetString());
+	shuriken_hit.id = App->audio->LoadFx(shuriken_hit.path.GetString());
+
 
 	return true;
 }
