@@ -7,6 +7,16 @@
 #include "p2Point.h"
 #include "p2DynArray.h"
 
+enum class shuri_state  : int
+{
+	ST_UNKNOWN = -1,
+
+	ST_LAUNCH,
+	ST_RETURNING,
+
+	ST_ALL,
+};
+
 class j1ParticleShuriken : public j1Entity
 {
 public:
@@ -38,9 +48,11 @@ public:
 
 
 	//--------POSITION ---------//
+	//Updates Shuriken Position
 	void UpdatePos(float dt);
 
-	void CheckDir();
+	//Determines Shuriken initial Spped
+	void GetInitalSpeed();
 
 
 	//--------COLLISION ---------//
@@ -51,25 +63,39 @@ public:
 	//Calculate the collisions with the enviroment
 	void RecalculatePos(SDL_Rect, SDL_Rect);
 
+	//--------PATHFINDING ---------//
+
+	//Gets the path to return to the player
 	bool ReturnToPlayerPath();
 
-	void Return(float dt);
+	//Moves the shuriken to the player
+	void MoveToPlayer(float dt);
 
-	//--------DRAW ---------//
-	void Draw();
+	//--------STATE ---------//
+	//Updates the shuriken state
+	void UpdateState();
+
 
 private:	
+	//--------ANIMATION ---------//
 	Animation anim;
 
+	//--------PATHFINDING ---------//
+	//Enemy path
 	p2DynArray<iPoint> path;
 
+	//--------FX ---------//
 	FX shuriken_hit;
 	FX in_air;
 
+	//--------INTERNAL ---------//
 	bool canPickUp = false;
 
+	//--------MOVEMENT ---------//
 	float timer = 0.0f;
 
+	//--------STATE ---------//
+	shuri_state state = shuri_state::ST_LAUNCH;
 };
 
 

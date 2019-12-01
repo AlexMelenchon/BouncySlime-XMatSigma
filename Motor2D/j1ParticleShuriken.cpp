@@ -14,7 +14,7 @@
 #include "j1Scene.h"
 #include "j1ParticleShuriken.h"
 
-
+//Constructor
 j1ParticleShuriken::j1ParticleShuriken() : j1Entity()
 {
 	this->type = entityType::SHURIKEN;
@@ -23,19 +23,21 @@ j1ParticleShuriken::j1ParticleShuriken() : j1Entity()
 		App->entities->shuriken = this;
 }
 
+//Destructor
 j1ParticleShuriken ::~j1ParticleShuriken()
 {}
 
 
+// Called before render is available
 bool j1ParticleShuriken::Awake(pugi::xml_node& shuriken_node)
 {
 	
 	//Create the player's collider
-	SDL_Rect particleRect = { 0,0,0,0 };
-	particleRect.w = shuriken_node.child("collision").child("collider").attribute("w").as_float()*2;
-	particleRect.h = shuriken_node.child("collision").child("collider").attribute("h").as_float()*2;
+	scalesize = shuriken_node.child("collision").child("scalesize").text().as_uint();
 
-	CheckDir();
+	SDL_Rect particleRect = { 0,0,0,0 };
+	particleRect.w = shuriken_node.child("collision").child("collider").attribute("w").as_float()*scalesize;
+	particleRect.h = shuriken_node.child("collision").child("collider").attribute("h").as_float()* scalesize;
 
 	//collider load
 	collider = new Collider(particleRect, COLLIDER_SHURIKEN, this);	
@@ -53,6 +55,7 @@ bool j1ParticleShuriken::Awake(pugi::xml_node& shuriken_node)
 	return true;
 }
 
+// Called before the first frame
 bool j1ParticleShuriken::Start()
 {
 	//The enemy's texture load
@@ -63,61 +66,85 @@ bool j1ParticleShuriken::Start()
 
 	shuriken_hit.id = App->audio->LoadFx(shuriken_hit.path.GetString());
 	in_air.id = App->audio->LoadFx(in_air.path.GetString());
-	
-	
 
+	GetInitalSpeed();
+	
 	return true;
 }
 
+// Called each loop iteration
 bool j1ParticleShuriken::PreUpdate()
 {
 	UpdateState();
-
-
-
 	return true;
 }
 
+// Called each loop iteration
 bool j1ParticleShuriken::Update(float dt)
 {
+	bool ret = true;
+
+	//Update the timer
 	timer += dt;
 
-	if (abs(fpSpeed.x) < 60 && abs(fpSpeed.y) < 60)
+	
+	switch (state)
 	{
-		if (path.Count() == NULL)
+	case shuri_state::ST_LAUNCH:
+	{
+		if (abs(fpSpeed.x) < 60 && abs(fpSpeed.y) < 60)
 		{
-			ReturnToPlayerPath();
-			canPickUp = true;
-			timer = 0;
+			if (path.Count() == NULL)
+			{
+				ReturnToPlayerPath();
+				canPickUp = true;
+				timer = 0;
+			}
 		}
+
+		fpSpeed.x -= DeAccel(fpSpeed.x, 7.5);
+		fpSpeed.y -= DeAccel(fpSpeed.y, 7.5);
+
+		break;
 	}
 
-	if (canPickUp)
+	case shuri_state::ST_RETURNING:
 	{
-		if(path.Count() >  0)
-		Return(dt);
+		if (path.Count() > 0)
+			MoveToPlayer(dt);
 
 		if (timer > 0.5f)
 		{
 			ReturnToPlayerPath();
 			timer = 0;
 		}
-	}
-	else
-	{
-		fpSpeed.x -= ((fpSpeed.x / 7.5) * (dt * VEL_TO_WORLD));
-		fpSpeed.y -= ((fpSpeed.y / 7.5) * (dt * VEL_TO_WORLD));
+
+		break;
 	}
 
 
+	}
+
+	//Play the fx meanwhile in the air
 	App->audio->PlayFx(in_air.id);
-	bool ret = true;
+
+	//Update shuriken position
 	UpdatePos(dt);
 
 	return ret;
 }
 
-void j1ParticleShuriken::Return(float dt)
+//Updates the shuriken state
+void j1ParticleShuriken::UpdateState()
+{
+	if (!canPickUp)
+		state = shuri_state::ST_LAUNCH;
+	else
+		state = shuri_state::ST_RETURNING;
+}
+
+//Moves the shuriken to the player
+void j1ParticleShuriken::MoveToPlayer(float dt)
 {
 	iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y);
 
@@ -139,7 +166,7 @@ void j1ParticleShuriken::Return(float dt)
 
 		else if (fpPosition.y > current.y)
 		{
-			fpSpeed.y -= 35 * (dt * VEL_TO_WORLD);
+			fpSpeed.y -= 50 * (dt * VEL_TO_WORLD);
 		}
 
 	}
@@ -148,6 +175,7 @@ void j1ParticleShuriken::Return(float dt)
 	
 }
 
+// Called each loop iteration
 bool j1ParticleShuriken::PostUpdate(bool debug)
 {
 	Draw();	
@@ -161,12 +189,8 @@ bool j1ParticleShuriken::PostUpdate(bool debug)
 	return true;
 }
 
-void j1ParticleShuriken::Draw()
-{
-	App->render->Blit(Text, (int)round(fpPosition.x), (int)round(fpPosition.y), &currentAnimation->GetCurrentFrame(App->GetDeltaTime()), 1.0f, Flip, 1.0f, (currentAnimation->pivotpos->x), (currentAnimation->GetCurrentFrame(App->GetDeltaTime()).h / 2),2);
 
-}
-
+// Called before quitting
 bool j1ParticleShuriken::CleanUp()
 {
 	if (collider != nullptr)
@@ -180,6 +204,7 @@ bool j1ParticleShuriken::CleanUp()
 	return true;
 }
 
+//Updates Shuriken Position
 void j1ParticleShuriken::UpdatePos(float dt)
 {
 	//If the logic does not demostrate tshe opposite, the player is always falling and not touching the wall
@@ -192,7 +217,8 @@ void j1ParticleShuriken::UpdatePos(float dt)
 	CalculateCollider(fpPosition);
 }
 
-void j1ParticleShuriken::CheckDir()
+//Determines Shuriken initial Spped
+void j1ParticleShuriken::GetInitalSpeed()
 {
 	//X-
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
@@ -221,6 +247,7 @@ void j1ParticleShuriken::CheckDir()
 		fpSpeed.x = 1000;
 }
 
+//Gets the path to return to the player
 bool j1ParticleShuriken::ReturnToPlayerPath()
 {
 	path.Clear();
@@ -245,7 +272,7 @@ bool j1ParticleShuriken::ReturnToPlayerPath()
 
 }
 
-
+//If a collision is detected by the j1Collision, distributes collisions according to it's type
 void j1ParticleShuriken::OnCollision(Collider* entityCol, Collider* coll)
 {
 	switch (coll->type) {
@@ -274,6 +301,7 @@ void j1ParticleShuriken::OnCollision(Collider* entityCol, Collider* coll)
 	}
 }
 
+//Calculate the collisions with the enviroment
 void j1ParticleShuriken::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 {
 	//If a collision from various aixs is detected, it determines what is the closets one to exit from
@@ -307,5 +335,3 @@ void j1ParticleShuriken::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 	CalculateCollider(fpPosition);
 
 }
-
-

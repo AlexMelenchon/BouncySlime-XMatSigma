@@ -234,7 +234,6 @@ void j1FlyingEnemy::TraceFollower()
 		break;
 
 	case (DIRECTION_UP):
-
 		fpSpeed.x = 0;
 		fpSpeed.y = -idleSpeed.y;
 		if (fpPosition.y < trace.y)
@@ -242,9 +241,7 @@ void j1FlyingEnemy::TraceFollower()
 			traceDir = DIRECTION_RIGHT;
 
 		}
-
 		break;
-
 
 	}
 }

@@ -252,7 +252,8 @@
          <swing path="audio/fx/swing.wav"/>
       </fx>
       <collision>
-        <collider w="26" h="20" />
+        <collider w="18" h="18" />
+        <scalesize>2</scalesize>
       </collision>
 
     </shuriken>
