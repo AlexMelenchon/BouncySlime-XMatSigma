@@ -7,6 +7,7 @@
 #include "p2SString.h"
 
 #define MAX_FRAMES 50
+#define ANIMATION_TO_WORLD 5
 
 class Animation
 {
@@ -65,7 +66,7 @@ public:
 	{
 		//returns the rectangle displaying the current animation
 		//TODO animation acording to speed
-		current_frame += speed * dt * 3;
+		current_frame += speed * dt * ANIMATION_TO_WORLD;
 		//!!have to do it for the actual game speed
 		if (current_frame >= last_frame) {
 			current_frame = (loop) ? firstLoopFrame : -1;

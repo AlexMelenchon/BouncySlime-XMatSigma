@@ -55,6 +55,7 @@ public:
 	const char* GetTitle() const;
 	const char* GetOrganization() const;
 
+	//--------SAVE & LOAD ---------//
 	void LoadGame();
 	void SaveGame() const;
 	void GetSaveGames(p2List<p2SString>& list_to_fill) const;
@@ -111,24 +112,37 @@ public:
 
 	//-----FRAME CONTROL------//
 	bool windowTitleControl = false; //Changes the title of the window
-	bool pause = false;
+	bool pause = false; //Bool that controls the pause of the game
 
+	//Timers of the game
 	j1Timer* gameTimer = nullptr;
 	j1PerfTimer* gamePerfTimer = nullptr;
+
+	//Calculates the amount of frames rendered in the last second
 	j1Timer* lastSecFrames = nullptr;
+
+	//The amount of time spended in the calculation of the last frame
 	j1Timer lastFrameTimer;
 
+	//The amount of frames rendered since the game started
 	uint64 frame_count = 0u;
+
+	//The amount of frames rendered last second
 	uint last_second_frame_count = 0u;
 
+	//The amount of time spended calculating the last frame
 	uint32 last_frame_ms = 0u;
+
+	//The amount of frames calculated in the last second
 	uint32 frames_on_last_update = 0u;
 
 	float avg_fps = 0.0f;
 
+	//The frame cap of the game
 	uint capTime = 0u;
+
+	//Controls if the frame cap is activated or not
 	bool frameCap = false;
-	float aux = 0.0f;
 
 
 private:

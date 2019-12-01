@@ -218,7 +218,7 @@ void j1App::FinishUpdate()
 		lastSecFrames->Start();
 	}
 
-	//Waits a certain amount of time if
+	//Waits a certain amount of time if necessary
 	if (frameCap)
 		if (last_frame_ms < 1000 / capTime)
 		{
