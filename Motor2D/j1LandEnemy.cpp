@@ -66,10 +66,7 @@ bool j1LandEnemy::Awake(pugi::xml_node& land_node)
 	pugi::xml_node animIterator = land_node.child("animations").child("animation");
 	animIdle.loadAnimation(animIterator, "idle");
 	animRun.loadAnimation(animIterator, "run");
-	animWall.loadAnimation(animIterator, "wall");
-	animJump.loadAnimation(animIterator, "jump");
-	animFall.loadAnimation(animIterator, "fall");
-	animDeath.loadAnimation(animIterator, "death");
+	
 
 	currentAnimation = &animIdle;
 

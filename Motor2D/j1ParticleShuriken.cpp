@@ -115,8 +115,8 @@ bool j1ParticleShuriken::Update(float dt)
 			}
 		}
 
-		fpSpeed.x -= DeAccel(fpSpeed.x, 7.5);
-		fpSpeed.y -= DeAccel(fpSpeed.y, 7.5);
+		fpSpeed.x -= DeAccel(fpSpeed.x, friction);
+		fpSpeed.y -= DeAccel(fpSpeed.y, friction);
 
 		break;
 	}
@@ -135,7 +135,7 @@ bool j1ParticleShuriken::Update(float dt)
    }
    }
    //Play the fx meanwhile in the air
-	App->audio->PlayFx(in_air.id);
+	App->audio->PlayFx(in_air.id,0,0);
 	//Update shuriken position
 	UpdatePos(dt);
 

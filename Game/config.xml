@@ -238,7 +238,7 @@
         <returnSpeed x="35.0f" y="35.0f"/>
         <returnTimer>0.5f</returnTimer>
         <minimumSpeed>60.0f</minimumSpeed>
-        <friction>0.133f</friction>
+        <friction>7.5f</friction>
         <defaultSpeed>1000.0f</defaultSpeed>
         
         

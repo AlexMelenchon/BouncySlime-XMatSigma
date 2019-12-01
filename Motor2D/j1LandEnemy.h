@@ -79,12 +79,9 @@ private:
 	float timer = 0.f;
 	
 	//--------ANIMATIONS---------//
-	Animation animIdle;
-	Animation animJump;
+	Animation animIdle;	
 	Animation animRun;
-	Animation animFall;
-	Animation animWall;
-	Animation animDeath;
+	
 	SDL_Rect enemyRect = { 0,0,0,0 };
 	
 };
