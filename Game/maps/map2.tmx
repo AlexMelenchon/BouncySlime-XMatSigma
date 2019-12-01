@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="43">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="48">
  <properties>
   <property name="music" value="audio/music/loop2.ogg"/>
  </properties>
@@ -62211,13 +62211,17 @@
   <object id="37" name="Floor" x="2352.42" y="47.6857" width="30.9391" height="271.962"/>
   <object id="38" name="Floor" x="2209.98" y="66.0043" width="141.855" height="12.3685"/>
   <object id="39" name="Death" x="1871" y="660" width="48.3333" height="12"/>
+  <object id="45" name="EnemyF" x="1229.33" y="540" width="149.333" height="32"/>
+  <object id="46" name="EnemyF" x="804" y="240" width="438.667" height="45.3333"/>
  </objectgroup>
  <objectgroup id="13" name="ENTITIES">
   <object id="35" name="Start" x="82.5895" y="928.746" width="5.2917" height="4.7083"/>
   <object id="36" name="Win" x="1885.53" y="943.212" width="15" height="79.6667"/>
-  <object id="40" name="EnemyF" x="231" y="64" width="68" height="350"/>
-  <object id="41" name="EnemyF" x="762" y="621" width="68" height="350"/>
+  <object id="40" name="EnemyF" x="231" y="230.667" width="68" height="183.333"/>
+  <object id="41" name="EnemyF" x="762" y="621" width="68" height="222"/>
   <object id="42" name="EnemyF" x="1550" y="519" width="92" height="350"/>
+  <object id="43" name="EnemyL" x="2257" y="284.083" width="85.3333" height="32"/>
+  <object id="47" name="EnemyF" x="204" y="954.333" width="130" height="67.6663"/>
  </objectgroup>
  <layer id="14" name="NAVIGATION" width="150" height="69">
   <properties>

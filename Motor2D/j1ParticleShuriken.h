@@ -61,13 +61,23 @@ public:
 private:	
 	Animation anim;
 
+	//movement
 	p2DynArray<iPoint> path;
+	float speedReduction = 0.f;
+	float returnTimer = 0.f;
+	float minimumSpeed = 0.f;
+	float friction = 0,f;
+	fPoint returnSpeed = { 0.f,0.f };
+	float defaultSpeed = 0.f;
 
+
+	//fx
 	FX shuriken_hit;
 	FX in_air;
 
-	bool canPickUp = false;
 
+	//internal
+	bool canPickUp = false;
 	float timer = 0.0f;
 
 };

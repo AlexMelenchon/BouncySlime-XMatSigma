@@ -190,10 +190,10 @@
     <flyingenemy>
       <movement>
         <gravity>50.0f</gravity>
-        <limitSpeed x="250.0f" y="300.0f" />
+        <limitSpeed x="150.0f" y="100.0f" />
         <chasingDistance>400</chasingDistance>
         <chasingTiles>32</chasingTiles>
-        <moveSpeed x="10.0f" y="10.0f"/>
+        <moveSpeed x="20.0f" y="30.0f"/>
         <idleSpeed x="60.0f" y="60.0f"/>
       </movement>
 
@@ -212,14 +212,14 @@
       <animations>
         <animation name ="idle">
           <sprite x ="1" y ="2" w ="30" h="23" frames ="5" pivotx ="18" pivoty="20"/>
-          <sprite x ="33" y ="2" w ="31" h="23" frames ="5"  pivotx ="19" pivoty="20"/>
+          <sprite x ="32" y ="2" w ="32" h="23" frames ="5"  pivotx ="19" pivoty="20"/>
           <sprite x ="65" y ="3" w ="32" h="20" frames ="5"  pivotx ="18" pivoty="20"/>
-          <sprite x ="98" y ="3" w ="32" h="20" frames ="5" pivotx ="18" pivoty="20"/>
-          <sprite x ="134" y ="1" w ="26" h="28" frames ="5"  pivotx ="18" pivoty="20"/>
-          <sprite x ="165" y ="1" w ="27" h="26" frames ="5" pivotx ="18" pivoty="20"/>
-          <sprite x ="197" y ="1" w ="27" h="26" frames ="5"  pivotx ="18" pivoty="20"/>
-          <sprite x ="229" y ="1" w ="27" h="26" frames ="5"  pivotx ="18" pivoty="20"/>
-          <sprite x ="261" y ="1" w ="27" h="26" frames ="5"  pivotx ="18" pivoty="20"/>          
+          <sprite x ="102" y ="3" w ="32" h="20" frames ="5" pivotx ="18" pivoty="20"/>
+          <sprite x ="139" y ="1" w ="26" h="28" frames ="5"  pivotx ="18" pivoty="20"/>
+          <sprite x ="169" y ="1" w ="27" h="26" frames ="5" pivotx ="18" pivoty="20"/>
+          <sprite x ="201" y ="1" w ="27" h="26" frames ="5"  pivotx ="18" pivoty="20"/>
+          <sprite x ="232" y ="1" w ="27" h="26" frames ="5"  pivotx ="18" pivoty="20"/>
+          <sprite x ="263" y ="1" w ="27" h="26" frames ="5"  pivotx ="18" pivoty="20"/>          
         </animation> 
         
       </animations>
@@ -233,7 +233,16 @@
     </flyingenemy>
 
     <shuriken>
-      
+      <movement>
+        <speedReduction>0.75f</speedReduction>
+        <returnSpeed x="35.0f" y="35.0f"/>
+        <returnTimer>0.5f</returnTimer>
+        <minimumSpeed>60.0f</minimumSpeed>
+        <friction>0.133f</friction>
+        <defaultSpeed>1000.0f</defaultSpeed>
+        
+        
+      </movement>
       <animations>
         <animation name = "shuriken" speed="2">
           <sprite x ="18" y ="348" w ="17" h="17" frames ="2"  pivotx ="8" pivoty="8"/>

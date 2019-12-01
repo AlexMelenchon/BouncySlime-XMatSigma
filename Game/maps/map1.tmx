@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="101">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="105">
  <properties>
   <property name="music" value="audio/music/loop.ogg"/>
   <property name="speed" type="float" value="1"/>
@@ -62207,7 +62207,7 @@
   <object id="31" name="Floor" x="1696.69" y="208.106" width="46.495" height="15.909"/>
   <object id="33" name="Floor" x="1376.5" y="336.379" width="46.495" height="15.909"/>
   <object id="34" name="Floor" x="1184.09" y="239.379" width="46.495" height="15.909"/>
-  <object id="36" name="Floor" x="768.086" y="438.061" width="48.37" height="138.06"/>
+  <object id="36" name="Floor" x="768.086" y="448.561" width="48.37" height="127.56"/>
   <object id="37" name="Floor" x="478.086" y="432.379" width="385.162" height="33.2423"/>
   <object id="39" name="Floor" x="399.751" y="976.131" width="94.4147" height="12.9043"/>
   <object id="40" name="Floor" x="752.116" y="768.566" width="63.495" height="62.9888"/>
@@ -62234,11 +62234,15 @@
   <object id="95" name="Floor" x="2112.02" y="18.5115" width="174.522" height="12.3685"/>
   <object id="96" name="Death" x="2412.64" y="-167.767" width="197.38" height="1347.53"/>
   <object id="97" name="Death" x="1969.43" y="422.203" width="44.2564" height="9.534"/>
+  <object id="101" name="EnemyL" x="400.667" y="936.667" width="136.667" height="19.3333"/>
  </objectgroup>
  <objectgroup id="8" name="ENTITIES">
   <object id="98" name="EnemyL" x="626" y="935" width="302" height="16"/>
   <object id="99" name="EnemyL" x="558" y="408" width="90" height="16"/>
   <object id="100" name="EnemyF" x="1097" y="57" width="737" height="464"/>
+  <object id="102" name="EnemyL" x="2208" y="246" width="75.5" height="15"/>
+  <object id="103" x="2454" y="272.5"/>
+  <object id="104" name="EnemyF" x="559.591" y="270.576" width="129" height="33"/>
  </objectgroup>
  <layer id="10" name="NAVIGATION" width="150" height="69" visible="0">
   <properties>

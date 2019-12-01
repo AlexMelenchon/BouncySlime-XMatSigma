@@ -29,7 +29,16 @@ j1ParticleShuriken ::~j1ParticleShuriken()
 
 bool j1ParticleShuriken::Awake(pugi::xml_node& shuriken_node)
 {
-	
+	//movement
+	pugi::xml_node movement = shuriken_node.child("movement");
+	returnTimer = movement.child("returnTimer").text().as_float();
+	speedReduction = movement.child("speedReduction").text().as_float();
+	minimumSpeed = movement.child("minimumSpeed").text().as_float();
+	friction = movement.child("friction").text().as_float();
+	returnSpeed.x = movement.child("returnSpeed").attribute("x").as_float();
+	returnSpeed.y = movement.child("returnSpeed").attribute("y").as_float();
+	defaultSpeed = movement.child("defaultSpeed").text().as_float();
+
 	//Create the player's collider
 	SDL_Rect particleRect = { 0,0,0,0 };
 	particleRect.w = shuriken_node.child("collision").child("collider").attribute("w").as_float()*2;
@@ -82,7 +91,7 @@ bool j1ParticleShuriken::Update(float dt)
 {
 	timer += dt;
 
-	if (abs(fpSpeed.x) < 60 && abs(fpSpeed.y) < 60)
+	if (abs(fpSpeed.x) < minimumSpeed && abs(fpSpeed.y) < minimumSpeed)
 	{
 		if (path.Count() == NULL)
 		{
@@ -97,7 +106,7 @@ bool j1ParticleShuriken::Update(float dt)
 		if(path.Count() >  0)
 		Return(dt);
 
-		if (timer > 0.5f)
+		if (timer > returnTimer)
 		{
 			ReturnToPlayerPath();
 			timer = 0;
@@ -105,11 +114,11 @@ bool j1ParticleShuriken::Update(float dt)
 	}
 	else
 	{
-		fpSpeed.x -= ((fpSpeed.x / 7.5) * (dt * VEL_TO_WORLD));
-		fpSpeed.y -= ((fpSpeed.y / 7.5) * (dt * VEL_TO_WORLD));
+		fpSpeed.x -= ((fpSpeed.x *friction) * (dt * VEL_TO_WORLD));
+		fpSpeed.y -= ((fpSpeed.y *friction) * (dt * VEL_TO_WORLD));
 	}
 
-
+	//Mix_Volume(1, MIX_MAX_VOLUME);
 	App->audio->PlayFx(in_air.id);
 	bool ret = true;
 	UpdatePos(dt);
@@ -125,21 +134,21 @@ void j1ParticleShuriken::Return(float dt)
 	{
 		if (fpPosition.x < current.x)
 		{
-			fpSpeed.x += 35 * (dt * VEL_TO_WORLD);
+			fpSpeed.x += returnSpeed.x * (dt * VEL_TO_WORLD);
 		}
 		else if (fpPosition.x > current.x)
 		{
-			fpSpeed.x -= 35 * (dt * VEL_TO_WORLD);
+			fpSpeed.x -= returnSpeed.x * (dt * VEL_TO_WORLD);
 		}
 
 		if (fpPosition.y < current.y)
 		{
-			fpSpeed.y += 35 * (dt * VEL_TO_WORLD);
+			fpSpeed.y += returnSpeed.y * (dt * VEL_TO_WORLD);
 		}
 
 		else if (fpPosition.y > current.y)
 		{
-			fpSpeed.y -= 35 * (dt * VEL_TO_WORLD);
+			fpSpeed.y -= returnSpeed.y * (dt * VEL_TO_WORLD);
 		}
 
 	}
@@ -197,28 +206,28 @@ void j1ParticleShuriken::CheckDir()
 	//X-
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		fpSpeed.x = -1000;
+		fpSpeed.x = -defaultSpeed;
 	}
 	//X+
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		fpSpeed.x = 1000;
+		fpSpeed.x = defaultSpeed;
 	}
 
 
 	//Y+
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
-		fpSpeed.y = -1000;
+		fpSpeed.y = -defaultSpeed;
 	}
 	//Y-
 	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		fpSpeed.y = 1000;
+		fpSpeed.y = defaultSpeed;
 	}
 
 	if (fpSpeed.Mod() == 0)
-		fpSpeed.x = 1000;
+		fpSpeed.x = defaultSpeed;
 }
 
 bool j1ParticleShuriken::ReturnToPlayerPath()
@@ -283,21 +292,21 @@ void j1ParticleShuriken::RecalculatePos(SDL_Rect entityColl, SDL_Rect collRect)
 	switch (directionCheck) {
 	case DIRECTION_UP:
 		fpPosition.y = collRect.y + collRect.h + 2;
-		fpSpeed.y *= -0.75f;
+		fpSpeed.y *= -speedReduction;
 
 		break;
 	case DIRECTION_DOWN:
 		fpPosition.y = collRect.y - entityColl.h;
-		fpSpeed.y *= -0.75f;
+		fpSpeed.y *= -speedReduction;
 		break;
 	case DIRECTION_LEFT:
 		fpPosition.x = collRect.x + collRect.w;
-		fpSpeed.x *= -0.75f;
+		fpSpeed.x *= -speedReduction;
 
 		break;
 	case DIRECTION_RIGHT:
 		fpPosition.x = collRect.x - entityColl.w;
-		fpSpeed.x *= -0.75f;
+		fpSpeed.x *= -speedReduction;
 		break;
 	case DIRECTION_NONE:
 		break;

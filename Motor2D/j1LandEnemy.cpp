@@ -44,6 +44,7 @@ bool j1LandEnemy::Awake(pugi::xml_node& land_node)
 	fallingSpeed = land_node.child("movement").child("fallingSpeed").text().as_uint();
 	fpMaxSpeed.x = land_node.child("movement").child("limitSpeed").attribute("x").as_float();
 	fpMaxSpeed.y = land_node.child("movement").child("limitSpeed").attribute("y").as_float();
+	
 
 
 	//Internal variables load
