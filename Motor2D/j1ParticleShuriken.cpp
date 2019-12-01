@@ -43,6 +43,7 @@ bool j1ParticleShuriken::Awake(pugi::xml_node& shuriken_node)
 	returnSpeed.x = movement.child("returnSpeed").attribute("x").as_float();
 	returnSpeed.y = movement.child("returnSpeed").attribute("y").as_float();
 	defaultSpeed = movement.child("defaultSpeed").text().as_float();
+	deAccelGrade = movement.child("deAccelGrade").text().as_float();
 
 	//Create the player's collider
 	scalesize = shuriken_node.child("collision").child("scalesize").text().as_uint();
@@ -150,16 +151,22 @@ void j1ParticleShuriken::UpdateState()
 //Moves the shuriken to the player
 void j1ParticleShuriken::MoveToPlayer(float dt)
 {
-	iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y -0.5);
+	iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y -0.75);
 
 	if (abs(abs(fpPosition.x) - abs(current.x)) > App->map->data.tile_height || abs(abs(fpPosition.y) - abs(current.y)) > App->map->data.tile_height)
 	{
 		if (fpPosition.x < current.x)
 		{
+			if (fpSpeed.x < 0)
+				fpSpeed.x -= DeAccel(fpSpeed.x, deAccelGrade);
+
 			fpSpeed.x += returnSpeed.x * (dt * VEL_TO_WORLD);
 		}
 		else if (fpPosition.x > current.x)
 		{
+			if (fpSpeed.x > 0)
+				fpSpeed.x -= DeAccel(fpSpeed.x, deAccelGrade);
+
 			fpSpeed.x -= returnSpeed.x * (dt * VEL_TO_WORLD);
 		}
 

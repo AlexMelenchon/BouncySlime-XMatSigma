@@ -97,6 +97,8 @@ private:
 	//--------MOVEMENT ---------//
 	float timer = 0.0f;
 
+	float deAccelGrade = 0.0f;
+
 	//--------STATE ---------//
 	shuri_state state = shuri_state::ST_LAUNCH;
 };

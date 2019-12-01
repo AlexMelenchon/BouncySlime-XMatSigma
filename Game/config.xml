@@ -242,6 +242,7 @@
         <minimumSpeed>60.0f</minimumSpeed>
         <friction>7.5f</friction>
         <defaultSpeed>1000.0f</defaultSpeed>
+        <deAccelGrade>5.0f</deAccelGrade>
         
         
       </movement>
