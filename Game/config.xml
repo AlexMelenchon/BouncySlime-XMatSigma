@@ -237,12 +237,12 @@
     <shuriken>
       <movement>
         <speedReduction>0.75f</speedReduction>
-        <returnSpeed x="35.0f" y="35.0f"/>
+        <returnSpeed x="45.0f" y="45.0f"/>
         <returnTimer>0.5f</returnTimer>
         <minimumSpeed>60.0f</minimumSpeed>
         <friction>7.5f</friction>
         <defaultSpeed>1000.0f</defaultSpeed>
-        <deAccelGrade>5.0f</deAccelGrade>
+        <deAccelGrade>1.5f</deAccelGrade>
         
         
       </movement>

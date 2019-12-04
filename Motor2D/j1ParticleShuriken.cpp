@@ -157,7 +157,7 @@ void j1ParticleShuriken::MoveToPlayer(float dt)
 	{
 		if (fpPosition.x < current.x)
 		{
-			if (fpSpeed.x < 0)
+			if (fpSpeed.x <0)
 				fpSpeed.x -= DeAccel(fpSpeed.x, deAccelGrade);
 
 			fpSpeed.x += returnSpeed.x * (dt * VEL_TO_WORLD);
@@ -172,11 +172,17 @@ void j1ParticleShuriken::MoveToPlayer(float dt)
 
 		if (fpPosition.y < current.y)
 		{
+			if (fpSpeed.y < 0)
+				fpSpeed.y -= DeAccel(fpSpeed.y, deAccelGrade);
+
 			fpSpeed.y += returnSpeed.y * (dt * VEL_TO_WORLD);
 		}
 
 		else if (fpPosition.y > current.y)
 		{
+			if (fpSpeed.y > 0)
+				fpSpeed.y -= DeAccel(fpSpeed.y, deAccelGrade);
+
 			fpSpeed.y -= returnSpeed.y * (dt * VEL_TO_WORLD);
 
 		}
@@ -270,7 +276,7 @@ bool j1ParticleShuriken::ReturnToPlayerPath()
 {
 	path.Clear();
 
-	if (!App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + App->map->data.tile_height))), App->map->WorldToMap(int(round(App->entities->player->fpPosition.x)), int(round(App->entities->player->fpPosition.y - App->entities->player->collider->rect.w / 2)))))
+	if (!App->pathfinding->CreatePath(App->map->WorldToMap(int(round(fpPosition.x + 1)), int(round(fpPosition.y + App->map->data.tile_height))), App->map->WorldToMap(int(round(App->entities->player->fpPosition.x)), int(round(App->entities->player->fpPosition.y + App->entities->player->collider->rect.w / 2)))))
 		return false;
 
 	uint pathCount = App->pathfinding->GetLastPath()->Count();
@@ -296,10 +302,12 @@ void j1ParticleShuriken::OnCollision(Collider* entityCol, Collider* coll)
 	switch (coll->type) {
 
 	case(COLLIDER_WALL):
+		if(!canPickUp)
 		RecalculatePos(entityCol->rect, coll->rect);
 		break;
 
 	case(COLLIDER_DEATH):
+		if (!canPickUp)
 		RecalculatePos(entityCol->rect, coll->rect);
 		break;
 
