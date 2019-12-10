@@ -11,6 +11,10 @@
 #include "j1Collision.h"
 #include "j1EntityManager.h"
 
+j1UIelement::j1UIelement()
+{
+}
+
 j1UIelement::~j1UIelement()
 {
 }
@@ -25,7 +29,7 @@ void j1UIelement::Draw(bool debug)
 {
 	if (hovering)
 	{
-		SDL_SetTextureColorMod(text, 100, 200, 200);
+		SDL_SetTextureColorMod(text, 200, 200, 200);
 		SDL_SetTextureAlphaMod(text, 255);
 	}
 	else

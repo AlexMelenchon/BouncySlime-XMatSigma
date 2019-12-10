@@ -19,36 +19,38 @@ public:
 	~j1UIManager();
 
 
-// Called before render is available
-bool Awake(pugi::xml_node&);
+	// Called before render is available
+	bool Awake(pugi::xml_node&);
 
-// Called before the first frame
-bool Start();
+	// Called before the first frame
+	bool Start();
 
-// Called each loop iteration
-bool PreUpdate();
+	// Called each loop iteration
+	bool PreUpdate();
 
-// Called each loop iteration
-bool Update(float dt);
+	// Called each loop iteration
+	bool Update(float dt);
 
-// Called each loop iteration
-bool PostUpdate();
+	// Called each loop iteration
+	bool PostUpdate();
 
-// Called before quitting
-bool CleanUp();
-
-
-//--------SAVE & LOAD---------//
+	// Called before quitting
+	bool CleanUp();
 
 
-j1UIelement* AddElement(ui_type type, j1UIelement* parent = nullptr, iPoint gloalPos = { 0,0 }, iPoint localPos = { 0,0 }, bool interact = false, bool drag = false, bool enabled = false, SDL_Rect section = {0,0,0,0});
-void DeleteElement(j1UIelement* element);
+	//--------SAVE & LOAD---------//
+
+
+	j1UIelement* AddElement(ui_type type, j1UIelement* parent = nullptr, iPoint gloalPos = { 0,0 }, iPoint localPos = { 0,0 }, bool interact = false, bool drag = false, bool enabled = false, SDL_Rect section = {0,0,0,0});
+	void InitElement(j1UIelement* element, pugi::xml_node);
+
+	void DeleteElement(j1UIelement* element);
 
 
 
-SDL_Texture* GetAtlas() const;
+	SDL_Texture* GetAtlas() const;
 
-bool debug = false;
+	bool debug = false;
 
 
 private:

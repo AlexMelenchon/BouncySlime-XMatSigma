@@ -8,6 +8,9 @@ j1UIButton::j1UIButton()
 	this->type = ui_type::UI_BUTTON;
 }
 
+j1UIButton::~j1UIButton()
+{}
+
 bool j1UIButton::Awake(pugi::xml_node&)
 {
 

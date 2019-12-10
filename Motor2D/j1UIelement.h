@@ -21,8 +21,7 @@ class j1UIelement
 {
 public:
 
-	j1UIelement() {};
-	j1UIelement(ui_type type);
+	j1UIelement();
 
 	~j1UIelement();
 

@@ -6,7 +6,6 @@
 #include "j1Input.h"
 #include "j1UIButton.h"
 
-
 j1UIManager::j1UIManager() : j1Module()
 {
 	name.create("gui");
@@ -102,6 +101,8 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint g
 {
 	j1UIelement* tmp = nullptr;
 
+	pugi::xml_node config;
+
 	switch (type)
 	{
 	case ui_type::UI_BUTTON:
@@ -119,11 +120,17 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint g
 		tmp->enabled = enabled;
 		tmp->rect = section;
 
-		UIList.add(tmp)->data->Start();
+		InitElement(UIList.add(tmp)->data, config);
 
 
 	}
 
 
 	return tmp;
+}
+
+void j1UIManager::InitElement(j1UIelement* element, pugi::xml_node config) 
+{
+	element->Awake(config);
+	element->Start();
 }
