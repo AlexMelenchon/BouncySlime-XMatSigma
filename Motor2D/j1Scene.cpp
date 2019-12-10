@@ -13,6 +13,7 @@
 #include "j1FadeToBlack.h"
 #include "j1Collision.h"
 #include "j1EntityManager.h"
+#include "j1UIManager.h"
 
 
 //Constructor
@@ -44,6 +45,9 @@ bool j1Scene::Start()
 	Reset(App->map->data.maplist.start->data->name.GetString()); 
 
 	debug_tex = App->entities->debug_tex;
+
+	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 0,0 }, { 100,500 }, true, false, true, { 73,406,64,64});
+
 
 	return true;
 }
@@ -137,7 +141,7 @@ bool j1Scene::Update(float dt)
 		App->frameCap = !App->frameCap;
 
 	//Changes the Window Title Display
-	if (App->input->GetKey(SDL_SCANCODE_F12) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
 		App->windowTitleControl = !App->windowTitleControl;
 
 	//Sets Pause in the Game

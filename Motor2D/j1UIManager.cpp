@@ -38,18 +38,49 @@ bool j1UIManager::Start()
 // Update all guis
 bool j1UIManager::PreUpdate()
 {
-	return true;
+	bool ret = false;
+
+	p2List_item<j1UIelement*>* tmp = UIList.start;
+
+		while (tmp != nullptr)
+		{
+			ret = tmp->data->PreUpdate();
+			tmp = tmp->next;
+		}
+
+	return ret;
 }
 
 bool j1UIManager::Update(float dt)
 {
-	return false;
+	bool ret = false;
+
+	p2List_item<j1UIelement*>* tmp = UIList.start;
+
+	while (tmp != nullptr)
+	{
+		ret = tmp->data->Update(dt);
+		tmp = tmp->next;
+	}
+
+	return ret;
+
 }
 
 // Called after all Updates
 bool j1UIManager::PostUpdate()
 {
-	return true;
+	bool ret = false;
+
+	p2List_item<j1UIelement*>* tmp = UIList.start;
+
+	while (tmp != nullptr)
+	{
+		ret = tmp->data->PostUpdate();
+		tmp = tmp->next;
+	}
+
+	return ret;
 }
 
 // Called before quitting
@@ -67,19 +98,32 @@ SDL_Texture* j1UIManager::GetAtlas() const
 }
 
 
-j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint gloalPos, iPoint localPos, bool interact, bool drag, bool enabled)
+j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint gloalPos, iPoint localPos, bool interact, bool drag, bool enabled, SDL_Rect section)
 {
-	j1UIelement* tmp;
+	j1UIelement* tmp = nullptr;
 
 	switch (type)
 	{
 	case ui_type::UI_BUTTON:
 		tmp = new j1UIButton();
 		break;
+	}
+
+	if (tmp)
+	{
+		tmp->parent = parent;
+		tmp->globalPos = gloalPos;
+		tmp->localPos = localPos;
+		tmp->interact = interact;
+		tmp->drag = drag;
+		tmp->enabled = enabled;
+		tmp->rect = section;
+
+		UIList.add(tmp)->data->Start();
 
 
 	}
 
 
-	return nullptr;
+	return tmp;
 }

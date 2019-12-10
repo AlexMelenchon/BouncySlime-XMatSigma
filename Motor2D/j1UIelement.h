@@ -6,6 +6,7 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "p2DynArray.h"
+#include "SDL/include/SDL_mouse.h"
 
 
 enum class ui_type
@@ -72,6 +73,8 @@ public:
 
 	j1UIelement* parent = nullptr;;
 	ui_type type = ui_type::UI_NONE;
+
+	bool hovering = false;
 };
 
 #endif // !__J1UIELEMENT__

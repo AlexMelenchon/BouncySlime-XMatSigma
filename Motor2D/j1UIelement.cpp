@@ -9,6 +9,7 @@
 #include "j1Scene.h"
 #include "j1UIManager.h"
 #include "j1Collision.h"
+#include "j1EntityManager.h"
 
 j1UIelement::~j1UIelement()
 {
@@ -22,7 +23,25 @@ bool j1UIelement::Start()
 
 void j1UIelement::Draw()
 {
-	App->render->Blit(text, globalPos.x + localPos.x, globalPos.y + localPos.y, NULL);
+	if (hovering)
+	{
+		SDL_SetTextureColorMod(text, 100, 200, 200);
+		SDL_SetTextureAlphaMod(text, 255);
+	}
+	else
+	{
+		SDL_SetTextureColorMod(text, 255, 255, 255);
+		SDL_SetTextureAlphaMod(text, 255);
+	}
+
+	App->render->Blit(text, globalPos.x + localPos.x, globalPos.y + localPos.y, &rect, 0.0f);
+
+	if (App->entities->debug)
+	{
+		App->render->DrawQuad({localPos.x, localPos.y, rect.w, rect.h }, 0, 255, 255, 255, false, false);
+	}
+
+
 }
 
 bool j1UIelement::OnHover()
@@ -31,11 +50,11 @@ bool j1UIelement::OnHover()
 	bool ret = false;
 	SDL_Point mouse;
 	App->input->GetMousePosition(mouse.x, mouse.y);
+	SDL_Rect intersect = {globalPos.x + localPos.x, globalPos.y + localPos.y, rect.w, rect.h};
 
-	if (SDL_PointInRect(&mouse, &this->rect) && this->enabled && this->interact)
+	if (SDL_PointInRect(&mouse, &intersect) && this->enabled && this->interact)
 		ret = true;
 	
-
 	return ret;	
 }
 
