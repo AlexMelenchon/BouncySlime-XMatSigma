@@ -33,10 +33,10 @@ bool j1UIButton::Update(float dt)
 	return true;
 }
 
-bool j1UIButton::PostUpdate()
+bool j1UIButton::PostUpdate(bool debug)
 {
 
-	Draw();
+	Draw(debug);
 
 	return true;
 }

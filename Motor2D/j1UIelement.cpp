@@ -21,7 +21,7 @@ bool j1UIelement::Start()
 	return true;
 }
 
-void j1UIelement::Draw()
+void j1UIelement::Draw(bool debug)
 {
 	if (hovering)
 	{
@@ -36,7 +36,7 @@ void j1UIelement::Draw()
 
 	App->render->Blit(text, globalPos.x + localPos.x, globalPos.y + localPos.y, &rect, 0.0f);
 
-	if (App->entities->debug)
+	if (debug)
 	{
 		App->render->DrawQuad({localPos.x, localPos.y, rect.w, rect.h }, 0, 255, 255, 255, false, false);
 	}

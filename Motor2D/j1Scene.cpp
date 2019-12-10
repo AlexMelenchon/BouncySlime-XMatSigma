@@ -124,6 +124,10 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		App->LoadGame();
 
+	//Loads the game
+	if (App->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
+		App->ui->debug = !App->ui->debug;
+
 	//Activates collider debug draw mode
 	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 	{

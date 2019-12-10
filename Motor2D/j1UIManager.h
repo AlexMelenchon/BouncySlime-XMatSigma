@@ -48,6 +48,9 @@ void DeleteElement(j1UIelement* element);
 
 SDL_Texture* GetAtlas() const;
 
+bool debug = false;
+
+
 private:
 	//--------ELEMENTS---------//
 	//The list where we will store all the entities
@@ -57,6 +60,7 @@ private:
 
 	SDL_Texture* atlas;
 	p2SString atlas_file_name;
+
 };
 
 

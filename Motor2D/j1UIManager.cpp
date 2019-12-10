@@ -76,7 +76,7 @@ bool j1UIManager::PostUpdate()
 
 	while (tmp != nullptr)
 	{
-		ret = tmp->data->PostUpdate();
+		ret = tmp->data->PostUpdate(debug);
 		tmp = tmp->next;
 	}
 
