@@ -27,6 +27,10 @@
     <mapFadeTime>0.7f</mapFadeTime>
   </scene>
 
+  <gui>
+    <atlas file="textures/atlas.png"/>
+  </gui>
+
   <map>
     <folder>maps/</folder>
     <level name="intro.tmx"/>

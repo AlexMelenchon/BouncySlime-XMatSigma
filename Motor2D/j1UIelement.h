@@ -10,6 +10,7 @@
 
 enum class ui_type
 {
+	UI_NONE,
 	UI_BUTTON,
 	UI_IMAGE,
 	UI_TEXT
@@ -17,16 +18,17 @@ enum class ui_type
 
 class j1UIelement
 {
+public:
 
 	j1UIelement() {};
 	j1UIelement(ui_type type);
 
-	~j1UIelement() {}
+	~j1UIelement();
 
 	virtual bool Awake(pugi::xml_node&) { return true; };;
 
 	// Called before the first frame
-	virtual bool Start() { return true; };
+	virtual bool Start();
 
 	// Called each loop iteration
 	virtual bool PreUpdate() { return true; };
@@ -41,7 +43,7 @@ class j1UIelement
 
 
 	//--------DRAW--------//
-	virtual bool Draw();
+	void Draw();
 
 	//--------SAVE & LOAD---------//
 	//Called when loading a save
@@ -51,8 +53,10 @@ class j1UIelement
 	virtual bool Save(pugi::xml_node&) const  const { return true; };
 
 	//-----EXTERNAL-----//
-
-
+	bool OnHover();
+	virtual void OnClick();
+	virtual void OnRelease();
+	
 
 public:
 
@@ -60,8 +64,14 @@ public:
 	bool drag = false;
 	bool enabled = false;
 
-	SDL_Rect rect;
+	SDL_Rect rect = { 0,0,0,0 };
+	SDL_Texture* text = nullptr;
 
+	iPoint globalPos = { 0,0 };
+	iPoint localPos = { 0,0 };
+
+	j1UIelement* parent = nullptr;;
+	ui_type type = ui_type::UI_NONE;
 };
 
 #endif // !__J1UIELEMENT__

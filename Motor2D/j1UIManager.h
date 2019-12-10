@@ -11,11 +11,12 @@
 class j1UIelement;
 
 
-class j1UIManager : public j1UIelement
+class j1UIManager : public j1Module
 {
+public:
 
 	j1UIManager();
-	~j1UIManager() {}
+	~j1UIManager();
 
 
 // Called before render is available
@@ -40,19 +41,23 @@ bool CleanUp();
 //--------SAVE & LOAD---------//
 
 
-j1UIelement* AddElement(ui_type type, j1UIelement* parent, iPoint gloalPos = { 0,0 }, iPoint localPos = { 0,0 }, bool interact = false, bool drag = false, bool enabled = false);
+j1UIelement* AddElement(ui_type type, j1UIelement* parent = nullptr, iPoint gloalPos = { 0,0 }, iPoint localPos = { 0,0 }, bool interact = false, bool drag = false, bool enabled = false);
 void DeleteElement(j1UIelement* element);
 
-j1UIelement* IsOnElement(int x, int y);
 
+
+SDL_Texture* GetAtlas() const;
 
 private:
-	//--------ENTITIES---------//
+	//--------ELEMENTS---------//
 	//The list where we will store all the entities
 	p2List<j1UIelement*> UIList;
 
-};
+private:
 
+	SDL_Texture* atlas;
+	p2SString atlas_file_name;
+};
 
 
 #endif // !__UIMANAGER__

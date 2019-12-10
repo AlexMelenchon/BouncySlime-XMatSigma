@@ -23,6 +23,7 @@ class j1EntityManager;
 class j1PathFinding;
 class j1LandEnemy;
 class j1FlyingEnemy;
+class j1UIManager;
 
 class j1App
 {
@@ -103,8 +104,9 @@ public:
 	j1Map*				map;
 	j1EntityManager*	entities;
 	j1Collision*		collision;
-	j1FadeToBlack*		 fade;
+	j1FadeToBlack*		fade;
 	j1PathFinding*		pathfinding;
+	j1UIManager*		ui;
 
 	//--------CONFIG---------//
 	//Config File

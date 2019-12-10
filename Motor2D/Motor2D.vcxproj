@@ -52,7 +52,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ShowIncludes>false</ShowIncludes>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Motor2D\Brofiler\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -84,6 +83,7 @@
     <ClCompile Include="j1EntityManager.cpp" />
     <ClCompile Include="j1FadeToBlack.cpp" />
     <ClCompile Include="j1FlyingEnemy.cpp" />
+    <ClCompile Include="j1Fonts.cpp" />
     <ClCompile Include="j1LandEnemy.cpp" />
     <ClCompile Include="j1Main.cpp" />
     <ClCompile Include="j1App.cpp" />
@@ -96,6 +96,7 @@
     <ClCompile Include="j1Player.cpp" />
     <ClCompile Include="j1Scene.cpp" />
     <ClCompile Include="j1Timer.cpp" />
+    <ClCompile Include="j1UIButton.cpp" />
     <ClCompile Include="j1UIelement.cpp" />
     <ClCompile Include="j1UIManager.cpp" />
     <ClCompile Include="p2Log.cpp" />
@@ -109,11 +110,13 @@
     <ClInclude Include="j1Entity.h" />
     <ClInclude Include="j1EntityManager.h" />
     <ClInclude Include="j1FlyingEnemy.h" />
+    <ClInclude Include="j1Fonts.h" />
     <ClInclude Include="j1LandEnemy.h" />
     <ClInclude Include="j1ParticleShuriken.h" />
     <ClInclude Include="j1Pathfinding.h" />
     <ClInclude Include="j1PerfTimer.h" />
     <ClInclude Include="j1Timer.h" />
+    <ClInclude Include="j1UIButton.h" />
     <ClInclude Include="j1UIelement.h" />
     <ClInclude Include="j1UIManager.h" />
     <ClInclude Include="p2animation.h" />
