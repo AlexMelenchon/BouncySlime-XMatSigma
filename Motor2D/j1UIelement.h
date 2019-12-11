@@ -56,7 +56,7 @@ public:
 	bool OnHover();
 	virtual void OnClick();
 	virtual void OnRelease();
-	virtual void Move(float dt, iPoint MoveIncr);
+	virtual void Move(float dt);
 	
 
 public:

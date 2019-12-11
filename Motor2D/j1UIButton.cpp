@@ -57,10 +57,9 @@ bool j1UIButton::Update(float dt)
 		}
 		else
 		{
-			iPoint MoveIncr = { 0,0 };
-			App->input->GetMousePosition(MoveIncr.x, MoveIncr.y);
 
-			Move(dt, MoveIncr);
+
+			Move(dt);
 		}
 
 
@@ -70,8 +69,7 @@ bool j1UIButton::Update(float dt)
 
 	if (parent)
 	{
-		Move(dt, { 0,0 });
-
+		Move(dt);
 	}
 
 

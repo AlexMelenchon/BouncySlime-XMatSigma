@@ -73,7 +73,7 @@ void j1UIelement::OnRelease()
 
 }
 
-void j1UIelement::Move(float dt, iPoint MousePos)
+void j1UIelement::Move(float dt)
 {
 	if (parent != nullptr)
 	{
@@ -82,10 +82,11 @@ void j1UIelement::Move(float dt, iPoint MousePos)
 	}
 	else
 	{
+		iPoint MousePos = { 0,0 };
+		App->input->GetMousePosition(MousePos.x, MousePos.y);
+
 		Position.x += ((MousePos.x - Position.x) - MovePoint.x);
 		Position.y += ((MousePos.y - Position.y) - MovePoint.y);
-
-
 	}
 
 }
