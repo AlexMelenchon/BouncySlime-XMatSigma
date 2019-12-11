@@ -41,7 +41,7 @@ public:
 	//--------SAVE & LOAD---------//
 
 
-	j1UIelement* AddElement(ui_type type, j1UIelement* parent = nullptr, iPoint gloalPos = { 0,0 }, iPoint localPos = { 0,0 }, bool interact = false, bool drag = false, bool enabled = false, SDL_Rect section = {0,0,0,0});
+	j1UIelement* AddElement(ui_type type, j1UIelement* parent = nullptr, iPoint Position = { 0,0 }, bool interact = false, bool drag = false, bool enabled = false, SDL_Rect section = {0,0,0,0});
 	void InitElement(j1UIelement* element, pugi::xml_node);
 
 	void DeleteElement(j1UIelement* element);

@@ -46,7 +46,10 @@ bool j1Scene::Start()
 
 	debug_tex = App->entities->debug_tex;
 
-	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 0,0 }, { 100,500 }, true, false, true, { 73,406,64,64});
+
+
+	App->ui->AddElement(ui_type::UI_BUTTON, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, false, true, { 73,406,64,64 })
+	,{ 100,500 }, true, false, true, { 73,406,64,64});
 
 
 	return true;

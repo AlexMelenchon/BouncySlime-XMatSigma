@@ -97,7 +97,7 @@ SDL_Texture* j1UIManager::GetAtlas() const
 }
 
 
-j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint gloalPos, iPoint localPos, bool interact, bool drag, bool enabled, SDL_Rect section)
+j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint Position, bool interact, bool drag, bool enabled, SDL_Rect section)
 {
 	j1UIelement* tmp = nullptr;
 
@@ -113,8 +113,10 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint g
 	if (tmp)
 	{
 		tmp->parent = parent;
-		tmp->globalPos = gloalPos;
-		tmp->localPos = localPos;
+		if(parent == nullptr)
+		tmp->Position = Position;
+		else
+		tmp->PostoParent = Position;
 		tmp->interact = interact;
 		tmp->drag = drag;
 		tmp->enabled = enabled;

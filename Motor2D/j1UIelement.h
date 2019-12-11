@@ -56,6 +56,7 @@ public:
 	bool OnHover();
 	virtual void OnClick();
 	virtual void OnRelease();
+	virtual void Move(float dt, iPoint MoveIncr);
 	
 
 public:
@@ -67,13 +68,15 @@ public:
 	SDL_Rect rect = { 0,0,0,0 };
 	SDL_Texture* text = nullptr;
 
-	iPoint globalPos = { 0,0 };
-	iPoint localPos = { 0,0 };
+	iPoint PostoParent = { 0,0 };
+	iPoint Position = { 0,0 };
+	iPoint MovePoint = { 0,0 };
 
-	j1UIelement* parent = nullptr;;
+	j1UIelement* parent = nullptr;
 	ui_type type = ui_type::UI_NONE;
 
 	bool hovering = false;
+	bool dragging = false;
 };
 
 #endif // !__J1UIELEMENT__

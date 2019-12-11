@@ -38,11 +38,11 @@ void j1UIelement::Draw(bool debug)
 		SDL_SetTextureAlphaMod(text, 255);
 	}
 
-	App->render->Blit(text, globalPos.x + localPos.x, globalPos.y + localPos.y, &rect, 0.0f);
+	App->render->Blit(text, Position.x, Position.y, &rect, 0.0f);
 
 	if (debug)
 	{
-		App->render->DrawQuad({localPos.x, localPos.y, rect.w, rect.h }, 0, 255, 255, 255, false, false);
+		App->render->DrawQuad({ Position.x, Position.y, rect.w, rect.h }, 0, 255, 255, 255, false, false);
 	}
 
 
@@ -54,7 +54,7 @@ bool j1UIelement::OnHover()
 	bool ret = false;
 	SDL_Point mouse;
 	App->input->GetMousePosition(mouse.x, mouse.y);
-	SDL_Rect intersect = {globalPos.x + localPos.x, globalPos.y + localPos.y, rect.w, rect.h};
+	SDL_Rect intersect = { Position.x, Position.y, rect.w, rect.h};
 
 	if (SDL_PointInRect(&mouse, &intersect) && this->enabled && this->interact)
 		ret = true;
@@ -70,6 +70,23 @@ void j1UIelement::OnClick()
 
 void j1UIelement::OnRelease()
 {
+
+}
+
+void j1UIelement::Move(float dt, iPoint MousePos)
+{
+	if (parent != nullptr)
+	{
+		Position.x = parent->Position.x - PostoParent.x;
+		Position.y = parent->Position.y - PostoParent.x;
+	}
+	else
+	{
+		Position.x += ((MousePos.x - Position.x) - MovePoint.x);
+		Position.y += ((MousePos.y - Position.y) - MovePoint.y);
+
+
+	}
 
 }
 

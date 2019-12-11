@@ -24,8 +24,7 @@ bool j1UIButton::PreUpdate()
 	//make logic when mouse click is on key_up
 	hovering = OnHover();
 
-	if (hovering && (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN))
-		OnClick();
+
 
 
 	return true;
@@ -33,6 +32,49 @@ bool j1UIButton::PreUpdate()
 
 bool j1UIButton::Update(float dt)
 {
+
+	if (hovering)
+	{
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+		OnClick();
+
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && !dragging)
+		{
+			dragging = true;
+
+			iPoint ClickedPoint = { 0,0 };
+			App->input->GetMousePosition(ClickedPoint.x, ClickedPoint.y);
+			MovePoint = { ClickedPoint.x - Position.x, ClickedPoint.y - Position.y };
+
+		}
+	}
+
+	if (dragging)
+	{
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE || App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+		{
+			dragging = false;
+		}
+		else
+		{
+			iPoint MoveIncr = { 0,0 };
+			App->input->GetMousePosition(MoveIncr.x, MoveIncr.y);
+
+			Move(dt, MoveIncr);
+		}
+
+
+	}
+
+
+
+	if (parent)
+	{
+		Move(dt, { 0,0 });
+
+	}
+
+
 	return true;
 }
 
