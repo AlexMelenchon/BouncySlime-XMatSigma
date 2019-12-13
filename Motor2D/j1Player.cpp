@@ -243,6 +243,7 @@ bool j1Player::PreUpdate()
 		else
 			godInputs();
 	}
+
 	//Check the player state and update to the next one
 	UpdateState();
 
@@ -549,11 +550,14 @@ bool j1Player::Save(pugi::xml_node& save) const
 	return true;
 }
 
-//Changes the player's position
+//Changes the player's position, called when player is set on the map
 void j1Player::SetPos(int x, int y)
 {
 	fpPosition.x = x;
 	fpPosition.y = y;
+
+	CalculateCollider(fpPosition);
+	currentAnimation = &animIdle;
 
 	inputs.add(IN_DEATH_FINISH);
 }

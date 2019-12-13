@@ -57,6 +57,11 @@ public:
 	//Blits the debug pathfinding, if exists
 	void blitDebugPath() const;
 
+	//--------UI---------//
+	//Manages the UI inputs of this module
+	void OnGui(UIEventType type);
+
+
 private:
 	//--------CAMERA---------//
 	//The calculated camera

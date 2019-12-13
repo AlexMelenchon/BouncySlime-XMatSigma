@@ -42,6 +42,15 @@ enum COLLIDER_TYPE
 	COLLIDER_MAX
 };
 
+enum class UIEventType
+{
+	EVENT_UNKOWNN = -1,
+
+	EVENT_ONCLICK,
+	EVENT_ONRELEASE,
+	EVENT_DRAG
+};
+
 #define VEL_TO_WORLD 20
 
 
@@ -106,6 +115,9 @@ public:
 	{
 		return true;
 	}
+
+	// Manages the UI inputs for each module
+	virtual void OnGui(UIEventType type) {};
 
 	//Distributes collisions
 	virtual void OnCollision(Collider*, Collider*) {}

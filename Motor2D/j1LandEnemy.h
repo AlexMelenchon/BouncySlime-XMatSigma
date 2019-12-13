@@ -10,7 +10,7 @@
 
 class j1LandEnemy : public j1Enemy
 {
-public: 	
+public:
 	
 	//--------INTERNAL CONTROL---------//
 	//Constructor

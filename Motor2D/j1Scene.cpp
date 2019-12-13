@@ -48,8 +48,8 @@ bool j1Scene::Start()
 
 
 
-	App->ui->AddElement(ui_type::UI_BUTTON, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, false, true, { 73,406,64,64 })
-	,{ 100,500 }, true, false, true, { 73,406,64,64});
+	App->ui->AddElement(ui_type::UI_BUTTON, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, false, true, { 73,406,64,64 }, this)
+	,{ 100,500 }, true, false, true, { 73,406,64,64}, this);
 
 
 	return true;
@@ -380,4 +380,22 @@ void j1Scene::CheckCameraLimits()
 
 }
 
+//Manages the UI inputs of this module
+void j1Scene::OnGui(UIEventType type)
+{
+	switch (type)
+	{
+	case UIEventType::EVENT_ONCLICK:
+	{
+		App->pause = !App->pause;
 
+		break;
+	}
+
+
+
+	}
+
+
+
+}

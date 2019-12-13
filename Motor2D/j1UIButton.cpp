@@ -24,9 +24,6 @@ bool j1UIButton::PreUpdate()
 	//make logic when mouse click is on key_up
 	hovering = OnHover();
 
-
-
-
 	return true;
 }
 
@@ -89,10 +86,6 @@ bool j1UIButton::CleanUp()
 	return true;
 }
 
-void j1UIButton::OnClick()
-{
-	App->pause = !App->pause;
-}
 
 void j1UIButton::OnRelease()
 {

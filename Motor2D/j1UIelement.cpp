@@ -50,7 +50,6 @@ void j1UIelement::Draw(bool debug)
 
 bool j1UIelement::OnHover()
 {	
-	
 	bool ret = false;
 	SDL_Point mouse;
 	App->input->GetMousePosition(mouse.x, mouse.y);
@@ -64,13 +63,19 @@ bool j1UIelement::OnHover()
 
 void j1UIelement::OnClick()
 {
-
+	if (listener != nullptr)
+	{
+		this->listener->OnGui(UIEventType::EVENT_ONCLICK);
+	}
 	
 }
 
 void j1UIelement::OnRelease()
 {
-
+	if (listener != nullptr)
+	{
+		this->listener->OnGui(UIEventType::EVENT_UPCLICK);
+	}
 }
 
 void j1UIelement::Move(float dt)
