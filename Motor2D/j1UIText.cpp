@@ -35,7 +35,7 @@ bool j1UIText::PreUpdate()
 	return true;
 }
 
-bool j1UIText::Update(float dt)
+bool j1UIText::Update()
 {
 	return true;
 }

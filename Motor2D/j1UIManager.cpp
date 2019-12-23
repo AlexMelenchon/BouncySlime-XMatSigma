@@ -7,6 +7,7 @@
 #include "j1UIButton.h"
 #include "j1UIText.h"
 #include "j1UIImage.h"
+#include "j1UIInputBox.h"
 
 j1UIManager::j1UIManager() : j1Module()
 {
@@ -125,8 +126,12 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 	case ui_type::UI_IMAGE:
 
 		tmp = new j1UIImage();
+		break;
 
+	case ui_type::UI_INPUTBOX:
 
+			tmp = new j1UIInputBox(text);
+		break;
 	}
 
 	if (tmp)
@@ -157,6 +162,7 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 
 	return tmp;
 }
+
 
 void j1UIManager::InitElement(j1UIelement* element, pugi::xml_node config)
 {

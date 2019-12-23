@@ -48,9 +48,12 @@ bool j1Scene::Start()
 	debug_tex = App->entities->debug_tex;
 
 
-	App->ui->AddElement(ui_type::UI_BUTTON, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, false, true, { 73,406,64,64 }, this)
-		, { 100,500 }, true, false, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);	
-		
+	/*App->ui->AddElement(ui_type::UI_BUTTON, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, false, true, { 73,406,64,64 }, this)
+		, { 100,500 }, true, false, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);	*/
+
+	App->ui->AddElement(ui_type::UI_INPUTBOX, nullptr, { 100,600 }, true, true, true, { 0,0,100,100 }, this, UIFunction::FNC_UNKOWNN, "macarró");
+	
+	
 	App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 300,300 }, false, false, true, { 0,0,0,0}, this, UIFunction::FNC_UNKOWNN, "Alex Mariqueta");
 
 	return true;

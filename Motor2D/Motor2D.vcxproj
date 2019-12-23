@@ -98,6 +98,7 @@
     <ClCompile Include="j1Timer.cpp" />
     <ClCompile Include="j1UIButton.cpp" />
     <ClCompile Include="j1UIelement.cpp" />
+    <ClCompile Include="j1UIInputBox.cpp" />
     <ClCompile Include="j1UIManager.cpp" />
     <ClCompile Include="j1UIText.cpp" />
     <ClCompile Include="p2Log.cpp" />
@@ -120,6 +121,7 @@
     <ClInclude Include="j1Timer.h" />
     <ClInclude Include="j1UIButton.h" />
     <ClInclude Include="j1UIelement.h" />
+    <ClInclude Include="j1UIInputBox.h" />
     <ClInclude Include="j1UIManager.h" />
     <ClInclude Include="j1UIText.h" />
     <ClInclude Include="p2animation.h" />
