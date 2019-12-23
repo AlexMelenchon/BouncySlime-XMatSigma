@@ -10,6 +10,22 @@
 
 class j1UIelement;
 
+enum class focusState
+{
+	ST_UNKNOWN  = -1,
+
+	ST_LOCKED,
+	ST_FREE
+
+
+};
+
+struct focus
+{
+	p2List_item<j1UIelement*>* lookAt = nullptr;
+	focusState state = focusState::ST_FREE;
+
+};
 
 class j1UIManager : public j1Module
 {
@@ -62,7 +78,7 @@ public:
 	SDL_Texture* GetAtlas() const;
 
 	bool debug = false;
-	p2List_item<j1UIelement*>* focused = nullptr;
+	focus focused;
 
 
 private:

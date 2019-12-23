@@ -25,7 +25,7 @@ bool j1UIelement::Start()
 
 void j1UIelement::Draw(bool debug)
 {
-	if (hovering || (App->ui->focused && App->ui->focused->data == this))
+	if (App->ui->focused.lookAt && App->ui->focused.lookAt->data == this)
 	{
 		SDL_SetTextureColorMod(text, 200, 200, 200);
 		SDL_SetTextureAlphaMod(text, 255);
@@ -36,8 +36,8 @@ void j1UIelement::Draw(bool debug)
 		SDL_SetTextureAlphaMod(text, 255);
 	}
 
-	if(enabled)
-	App->render->Blit(text, Position.x, Position.y, &rect, 0.0f);
+	if (enabled)
+		App->render->Blit(text, Position.x, Position.y, &rect, 0.0f);
 
 	if (debug)
 	{
@@ -46,11 +46,11 @@ void j1UIelement::Draw(bool debug)
 }
 
 bool j1UIelement::OnHover()
-{	
+{
 	bool ret = false;
 	SDL_Point mouse;
 	App->input->GetMousePosition(mouse.x, mouse.y);
-	SDL_Rect intersect = { Position.x, Position.y, rect.w, rect.h};
+	SDL_Rect intersect = { Position.x, Position.y, rect.w, rect.h };
 
 	if (SDL_PointInRect(&mouse, &intersect) && this->enabled && this->interact)
 		ret = true;
@@ -73,11 +73,62 @@ bool j1UIelement::OnHover()
 
 		}
 
+	}
+	else if (App->ui->focused.state == focusState::ST_FREE)
+		App->ui->focused.lookAt = nullptr;
 
-		App->ui->focused = nullptr;
+	return ret;
+}
+
+bool j1UIelement::Update(float dt)
+{
+
+	if (hovering)
+	{
+		if (!App->ui->focused.lookAt || (App->ui->focused.lookAt && App->ui->focused.lookAt->data != this))
+			App->ui->focused.lookAt = App->ui->GetElementFromList(this);
+
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+			OnClick();
+
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+			OnRelease();
+
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && !dragging && drag)
+		{
+			if (drag)
+				dragging = true;
+
+			iPoint ClickedPoint = { 0,0 };
+			App->input->GetMousePosition(ClickedPoint.x, ClickedPoint.y);
+			MovePoint = { ClickedPoint.x - Position.x, ClickedPoint.y - Position.y };
+
+		}
 	}
 
-	return ret;	
+	if (dragging)
+	{
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE || App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+		{
+			dragging = false;
+		}
+		else
+		{
+			if (!App->ui->focused.lookAt || (App->ui->focused.lookAt && App->ui->focused.lookAt->data != this))
+				App->ui->focused.lookAt = App->ui->GetElementFromList(this);
+
+			OnDrag();
+			Move(dt);
+		}
+	}
+
+	if (parent)
+	{
+		KeepDistanceToParent(dt);
+	}
+
+	return true;
+
 }
 
 void j1UIelement::OnClick()
@@ -86,7 +137,7 @@ void j1UIelement::OnClick()
 	{
 		this->listener->OnGui(UIEventType::EVENT_ONCLICK, this->function);
 	}
-	
+
 }
 
 void j1UIelement::OnRelease()

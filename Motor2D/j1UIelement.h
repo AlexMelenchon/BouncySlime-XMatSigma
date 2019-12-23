@@ -34,7 +34,7 @@ public:
 	virtual bool PreUpdate() { return true; };
 
 	// Called each loop iteration
-	virtual bool Update(float dt) { return true; };
+	virtual bool Update(float dt);
 
 	virtual bool PostUpdate(bool debug) { return true; };
 

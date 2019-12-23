@@ -50,6 +50,7 @@ bool j1UIManager::PreUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)
 		ChangeFocus();
 
+
 	return ret;
 }
 
@@ -166,10 +167,16 @@ p2List_item<j1UIelement*>* j1UIManager::GetElementFromList(j1UIelement* toSearch
 
 void j1UIManager::ChangeFocus()
 {
-	if (focused && focused->next)
-		focused = focused->next;
-	else if (!focused)
-		focused = UIList.start;
+	if (focused.lookAt && focused.lookAt->next)
+		focused.lookAt = focused.lookAt->next;
+	else if (!focused.lookAt)
+	{
+		focused.lookAt = UIList.start;
+		focused.state = focusState::ST_LOCKED;
+	}
 	else
-		focused = nullptr;
+	{
+		focused.lookAt = nullptr;
+		focused.state = focusState::ST_FREE;
+	}
 }

@@ -27,55 +27,6 @@ bool j1UIButton::PreUpdate()
 	return true;
 }
 
-bool j1UIButton::Update(float dt)
-{
-	bool ret = true;
-
-
-	if (hovering)
-	{
-		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
-			OnClick();
-
-		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
-			OnRelease();
-
-		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && !dragging && drag)
-		{
-			if(drag)
-			dragging = true;
-
-			iPoint ClickedPoint = { 0,0 };
-			App->input->GetMousePosition(ClickedPoint.x, ClickedPoint.y);
-			MovePoint = { ClickedPoint.x - Position.x, ClickedPoint.y - Position.y };
-
-		}
-	}
-
-
-	if (dragging)
-	{
-		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE || App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
-		{
-			dragging = false;
-		}
-		else
-		{
-			OnDrag();
-			Move(dt);
-		}
-	}
-
-
-	if (parent)
-	{
-		KeepDistanceToParent(dt);
-	}
-
-
-	return ret;
-}
-
 bool j1UIButton::PostUpdate(bool debug)
 {
 
