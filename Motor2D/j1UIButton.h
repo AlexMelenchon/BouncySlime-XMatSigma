@@ -13,10 +13,10 @@ public:
 	bool Awake(pugi::xml_node&);
 
 	// Called each loop iteration
-	bool PreUpdate();
+	//bool PreUpdate();
 
 	// Called each loop iteration
-	//bool Update(float dt);
+	bool InheritUpdate(float dt);
 
 	bool PostUpdate(bool debug);
 

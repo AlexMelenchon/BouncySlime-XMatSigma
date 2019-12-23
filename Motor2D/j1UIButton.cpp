@@ -17,6 +17,10 @@ bool j1UIButton::Awake(pugi::xml_node&)
 	return true;
 }
 
+bool j1UIButton::InheritUpdate(float dt)
+{
+	return true;
+}
 
 bool j1UIButton::PostUpdate(bool debug)
 {

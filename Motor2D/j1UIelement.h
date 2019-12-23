@@ -25,16 +25,19 @@ public:
 
 	~j1UIelement();
 
-	virtual bool Awake(pugi::xml_node&) { return true; };;
+	virtual bool Awake(pugi::xml_node&) { return true; };
 
 	// Called before the first frame
 	virtual bool Start();
 
 	// Called each loop iteration
 	bool PreUpdate();
+	virtual bool InheritPreUpdate() { return true; }
 
 	// Called each loop iteration
-	virtual bool Update(float dt);
+	bool Update(float dt);
+	virtual bool InheritUpdate(float dt) { return true; }
+
 
 	virtual bool PostUpdate(bool debug) { return true; };
 

@@ -145,6 +145,9 @@ bool j1UIelement::Update(float dt)
 		KeepDistanceToParent(dt);
 	}
 
+	InheritUpdate(dt);
+
+
 	return true;
 
 }
