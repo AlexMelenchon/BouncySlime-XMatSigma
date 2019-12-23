@@ -48,7 +48,6 @@ enum class UIEventType
 
 	EVENT_ONCLICK,
 	EVENT_UPCLICK,
-	EVENT_ONRELEASE,
 	EVENT_DRAG
 };
 

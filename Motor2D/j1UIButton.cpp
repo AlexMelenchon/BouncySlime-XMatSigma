@@ -29,14 +29,20 @@ bool j1UIButton::PreUpdate()
 
 bool j1UIButton::Update(float dt)
 {
+	bool ret = true;
+
 
 	if (hovering)
 	{
-		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
-		OnClick();
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+			OnClick();
 
-		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && !dragging)
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+			OnRelease();
+
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && !dragging && drag)
 		{
+			if(drag)
 			dragging = true;
 
 			iPoint ClickedPoint = { 0,0 };
@@ -46,6 +52,7 @@ bool j1UIButton::Update(float dt)
 		}
 	}
 
+
 	if (dragging)
 	{
 		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE || App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
@@ -54,23 +61,19 @@ bool j1UIButton::Update(float dt)
 		}
 		else
 		{
-
-
+			OnDrag();
 			Move(dt);
 		}
-
-
 	}
-
 
 
 	if (parent)
 	{
-		Move(dt);
+		KeepDistanceToParent(dt);
 	}
 
 
-	return true;
+	return ret;
 }
 
 bool j1UIButton::PostUpdate(bool debug)
@@ -86,8 +89,3 @@ bool j1UIButton::CleanUp()
 	return true;
 }
 
-
-void j1UIButton::OnRelease()
-{
-
-}

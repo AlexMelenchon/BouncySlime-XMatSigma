@@ -56,17 +56,20 @@ public:
 
 	void DeleteElement(j1UIelement* element);
 
-
+	p2List_item<j1UIelement*>* GetElementFromList(j1UIelement* toSearch);
+	void ChangeFocus();
 
 	SDL_Texture* GetAtlas() const;
 
 	bool debug = false;
+	p2List_item<j1UIelement*>* focused = nullptr;
 
 
 private:
 	//--------ELEMENTS---------//
 	//The list where we will store all the entities
 	p2List<j1UIelement*> UIList;
+
 
 private:
 
