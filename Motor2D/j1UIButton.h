@@ -16,7 +16,7 @@ public:
 	bool PreUpdate();
 
 	// Called each loop iteration
-	bool Update(float dt);
+	//bool Update(float dt);
 
 	bool PostUpdate(bool debug);
 
@@ -31,7 +31,6 @@ public:
 	//Called to save the game
 	bool Save(pugi::xml_node&) const  const { return true; };
 
-	void OnRelease();
 
 };
 

@@ -47,15 +47,15 @@ bool j1Scene::Start()
 
 	debug_tex = App->entities->debug_tex;
 
-	int w = 0, h = 0;
 
 	App->ui->AddElement(ui_type::UI_BUTTON, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, false, true, { 73,406,64,64 }, this)
 		, { 100,500 }, true, false, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
-	
-	
-	App->ui->AddElement(ui_type::UI_IMAGE, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, false, true, { 73,406,64,64 }, this), { 500,500 }, false, false, true, {0,0,w,h }, this, UIFunction::FNC_UNKOWNN, "pepe");
-
-	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 300,300 }, false, false, true, { 0,0,w,h }, this, UIFunction::FNC_UNKOWNN, "Alex Mariqueta");
+		
+	App->ui->AddElement(ui_type::UI_BUTTON, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, false, true, { 73,406,64,64 }, this)
+		, { 100,300 }, true, true, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
+		
+		App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 300,300 }, false, false, true, { 0,0,w,h }, this, UIFunction::FNC_UNKOWNN, "Alex Mariqueta");
+		
 
 
 	
@@ -109,11 +109,11 @@ bool j1Scene::Update(float dt)
 {
 	BROFILER_CATEGORY("Scene Update", Profiler::Color::Orange)
 
-		//--------DEBUG---------//
+	//--------DEBUG---------//
 
-		//Loads the 1st map
-		if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-			App->fade->FadeToBlack(App->map->data.maplist.start->data->name.GetString(), NULL, mapFadeTime);
+	//Loads the 1st map
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+		App->fade->FadeToBlack(App->map->data.maplist.start->data->name.GetString(), NULL, mapFadeTime);
 
 	//Loads the 2nd map
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
@@ -393,7 +393,7 @@ void j1Scene::OnGui(UIEventType type, UIFunction func)
 {
 	switch (type)
 	{
-	case UIEventType::EVENT_ONCLICK:
+	case UIEventType::EVENT_UPCLICK:
 	{
 
 		switch (func)
@@ -403,15 +403,7 @@ void j1Scene::OnGui(UIEventType type, UIFunction func)
 			App->pause = !App->pause;
 			break;
 		}
-
-
-
 		}
-
-
-
-
-
 
 
 		break;

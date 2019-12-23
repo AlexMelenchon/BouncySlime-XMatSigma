@@ -42,11 +42,15 @@ bool j1UIManager::PreUpdate()
 
 	p2List_item<j1UIelement*>* tmp = UIList.start;
 
-		while (tmp != nullptr)
-		{
-			ret = tmp->data->PreUpdate();
-			tmp = tmp->next;
-		}
+	while (tmp != nullptr)
+	{
+		ret = tmp->data->PreUpdate();
+		tmp = tmp->next;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)
+		ChangeFocus();
+
 
 	return ret;
 }
@@ -123,10 +127,19 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 	if (tmp)
 	{
 		tmp->parent = parent;
-		if(parent == nullptr)
-		tmp->Position = Position;
+
+
+		if (parent == nullptr)
+			tmp->Position = Position;
 		else
-		tmp->PostoParent = Position;
+		{
+			tmp->PostoParent = Position;
+			tmp->Position.x = parent->Position.x + Position.x;
+			tmp->Position.y = parent->Position.y + Position.y;
+
+		}
+
+
 		tmp->interact = interact;
 		tmp->drag = drag;
 		tmp->enabled = enabled;
@@ -140,8 +153,37 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 	return tmp;
 }
 
-void j1UIManager::InitElement(j1UIelement* element, pugi::xml_node config) 
+void j1UIManager::InitElement(j1UIelement* element, pugi::xml_node config)
 {
 	element->Awake(config);
 	element->Start();
+}
+
+
+p2List_item<j1UIelement*>* j1UIManager::GetElementFromList(j1UIelement* toSearch)
+{
+	for (p2List_item<j1UIelement*>* iterator = UIList.start; iterator; iterator = iterator->next)
+	{
+		if (iterator->data == toSearch)
+			return iterator;
+	}
+
+
+	return nullptr;
+}
+
+void j1UIManager::ChangeFocus()
+{
+	if (focused.lookAt && focused.lookAt->next)
+		focused.lookAt = focused.lookAt->next;
+	else if (!focused.lookAt)
+	{
+		focused.lookAt = UIList.start;
+		focused.state = focusState::ST_LOCKED;
+	}
+	else
+	{
+		focused.lookAt = nullptr;
+		focused.state = focusState::ST_FREE;
+	}
 }

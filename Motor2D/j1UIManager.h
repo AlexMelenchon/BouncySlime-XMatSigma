@@ -10,6 +10,22 @@
 
 class j1UIelement;
 
+enum class focusState
+{
+	ST_UNKNOWN  = -1,
+
+	ST_LOCKED,
+	ST_FREE
+
+
+};
+
+struct focus
+{
+	p2List_item<j1UIelement*>* lookAt = nullptr;
+	focusState state = focusState::ST_FREE;
+
+};
 
 class j1UIManager : public j1Module
 {
@@ -56,17 +72,20 @@ public:
 
 	void DeleteElement(j1UIelement* element);
 
-
+	p2List_item<j1UIelement*>* GetElementFromList(j1UIelement* toSearch);
+	void ChangeFocus();
 
 	SDL_Texture* GetAtlas() const;
 
 	bool debug = false;
+	focus focused;
 
 
 private:
 	//--------ELEMENTS---------//
 	//The list where we will store all the entities
 	p2List<j1UIelement*> UIList;
+
 
 private:
 
