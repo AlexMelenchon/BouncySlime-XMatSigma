@@ -98,7 +98,7 @@ bool j1UIelement::Update(float dt)
 			App->ui->focused.lookAt = nullptr;
 			App->ui->focused.state = focusState::ST_FREE;
 		}
-		else if (App->ui->focused.lookAt && App->ui->focused.lookAt->data != this)
+		else if (App->ui->focused.lookAt && App->ui->focused.lookAt->data != this && App->ui->focused.state == focusState::ST_FREE)
 			App->ui->focused.lookAt = nullptr;
 
 		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
