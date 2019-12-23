@@ -14,6 +14,8 @@ j1UIText::j1UIText(const char* txt)
 	this->type = ui_type::UI_TEXT;
 	this->texture =	App->fonts->Print(txt);
 	App->fonts->CalcSize(txt, w, h);
+
+
 }
 
 j1UIText::~j1UIText()
@@ -26,19 +28,11 @@ bool j1UIText::Awake(pugi::xml_node&)
 
 bool j1UIText::Start()
 {
-
+	rect.w = w;
+	rect.h = h;
 	return true;
 }
 
-bool j1UIText::PreUpdate()
-{
-	return true;
-}
-
-bool j1UIText::Update()
-{
-	return true;
-}
 
 bool j1UIText::PostUpdate(bool debug)
 {
@@ -53,8 +47,7 @@ bool j1UIText::CleanUp()
 
 void j1UIText::Draw(bool debug)
 {
-	rect.w = w;
-	rect.h = h;
+
 
 	App->render->Blit(texture, Position.x, Position.y, &rect, 0.0f);
 

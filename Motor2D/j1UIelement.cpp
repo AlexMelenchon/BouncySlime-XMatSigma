@@ -27,18 +27,20 @@ void j1UIelement::Draw(bool debug)
 {
 	if (App->ui->focused.lookAt && App->ui->focused.lookAt->data == this)
 	{
+		SDL_SetTextureColorMod(texture, 150, 150, 150);
+	}
+	else if (hovering)
+	{
 		SDL_SetTextureColorMod(texture, 200, 200, 200);
-		SDL_SetTextureAlphaMod(texture, 255);
 	}
 	else
 	{
 		SDL_SetTextureColorMod(texture, 255, 255, 255);
-		SDL_SetTextureAlphaMod(texture, 255);
 	}
 
 
 	App->render->Blit(texture, Position.x, Position.y, &rect, 0.0f);
-	
+
 	if (debug)
 	{
 		App->render->DrawQuad({ Position.x, Position.y, rect.w, rect.h }, 0, 255, 255, 255, false, false);
@@ -74,53 +76,69 @@ bool j1UIelement::OnHover()
 		}
 
 	}
-	else if (App->ui->focused.state == focusState::ST_FREE)
-		App->ui->focused.lookAt = nullptr;
+
 
 	return ret;
 }
 
+bool j1UIelement::PreUpdate()
+{
+	hovering = OnHover();
+
+	return true;
+}
+
+
 bool j1UIelement::Update(float dt)
 {
-
 	if (hovering)
 	{
-		if (!App->ui->focused.lookAt || (App->ui->focused.lookAt && App->ui->focused.lookAt->data != this))
-			App->ui->focused.lookAt = App->ui->GetElementFromList(this);
+		if (App->ui->focused.lookAt && (App->ui->focused.state == focusState::ST_LOCKED && App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) != KEY_REPEAT))
+		{
+			App->ui->focused.lookAt = nullptr;
+			App->ui->focused.state = focusState::ST_FREE;
+		}
+		else if (App->ui->focused.lookAt && App->ui->focused.lookAt->data != this && App->ui->focused.state == focusState::ST_FREE)
+			App->ui->focused.lookAt = nullptr;
 
 		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+		{
 			OnClick();
 
-		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
-			OnRelease();
-
-		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && !dragging && drag)
-		{
-			if (drag)
+			if (drag && !dragging)
+			{
 				dragging = true;
 
-			iPoint ClickedPoint = { 0,0 };
-			App->input->GetMousePosition(ClickedPoint.x, ClickedPoint.y);
-			MovePoint = { ClickedPoint.x - Position.x, ClickedPoint.y - Position.y };
+				iPoint ClickedPoint = { 0,0 };
+				App->input->GetMousePosition(ClickedPoint.x, ClickedPoint.y);
+				MovePoint = { ClickedPoint.x - Position.x, ClickedPoint.y - Position.y };
+			}
 
+			if (!App->ui->focused.lookAt || (App->ui->focused.lookAt && App->ui->focused.lookAt->data != this))
+			{
+				App->ui->focused.lookAt = App->ui->GetElementFromList(this);
+			}
 		}
+
 	}
 
-	if (dragging)
+	if (App->ui->focused.lookAt && App->ui->focused.lookAt->data == this && App->ui->focused.state == focusState::ST_FREE)
 	{
-		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE || App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+		if (dragging)
 		{
-			dragging = false;
-		}
-		else
-		{
-			if (!App->ui->focused.lookAt || (App->ui->focused.lookAt && App->ui->focused.lookAt->data != this))
-				App->ui->focused.lookAt = App->ui->GetElementFromList(this);
-
 			OnDrag();
 			Move(dt);
 		}
+
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE || App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+		{
+			App->ui->focused.lookAt->data->OnRelease();
+			App->ui->focused.lookAt->data->dragging = false;
+			App->ui->focused.lookAt = nullptr;
+		}
+
 	}
+
 
 	if (parent)
 	{
@@ -168,11 +186,12 @@ void j1UIelement::Move(float dt)
 
 	if (parent != nullptr)
 	{
-		//TODO: Check boundaries if a bool is true
+		//TODO: Check boundaries on the slider after this func!
 
 		PostoParent.x += currentPos.x - Position.x;
 		PostoParent.y += currentPos.y - Position.y;
 	}
+
 }
 
 void j1UIelement::KeepDistanceToParent(float dt)

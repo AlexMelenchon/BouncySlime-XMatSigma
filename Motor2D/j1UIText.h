@@ -15,10 +15,6 @@ public:
 
 	bool Start();
 
-	bool PreUpdate();
-
-	bool Update();
-
 	bool PostUpdate(bool debug);
 
 	// Called before quitting

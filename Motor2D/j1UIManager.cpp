@@ -129,7 +129,7 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 		break;
 
 	case ui_type::UI_INPUTBOX:
-
+		
 			tmp = new j1UIInputBox(text);
 		break;
 	}

@@ -17,15 +17,6 @@ bool j1UIButton::Awake(pugi::xml_node&)
 	return true;
 }
 
-bool j1UIButton::PreUpdate()
-{
-	//detect if mouse is on the element
-	//detect if the element ios clicked
-	//make logic when mouse click is on key_up
-	hovering = OnHover();
-
-	return true;
-}
 
 bool j1UIButton::PostUpdate(bool debug)
 {
