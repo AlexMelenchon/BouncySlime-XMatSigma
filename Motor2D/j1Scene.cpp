@@ -49,16 +49,9 @@ bool j1Scene::Start()
 
 
 	App->ui->AddElement(ui_type::UI_BUTTON, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, false, true, { 73,406,64,64 }, this)
-		, { 100,500 }, true, false, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
+		, { 100,500 }, true, false, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);	
 		
-	App->ui->AddElement(ui_type::UI_BUTTON, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, false, true, { 73,406,64,64 }, this)
-		, { 100,300 }, true, true, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
-		
-		App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 300,300 }, false, false, true, { 0,0,0,0}, this, UIFunction::FNC_UNKOWNN, "Alex Mariqueta");
-		
-
-
-	
+	App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 300,300 }, false, false, true, { 0,0,0,0}, this, UIFunction::FNC_UNKOWNN, "Alex Mariqueta");
 
 	return true;
 }
