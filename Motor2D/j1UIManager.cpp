@@ -6,6 +6,7 @@
 #include "j1Input.h"
 #include "j1UIButton.h"
 #include "j1UIText.h"
+#include "j1UIImage.h"
 
 j1UIManager::j1UIManager() : j1Module()
 {
@@ -115,13 +116,17 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 		tmp = new j1UIButton();
 		break;
 
-	case ui_type::UI_IMAGE:
+	case ui_type::UI_TEXT:
 
 		if (strlen(text) > 1)
 			tmp = new j1UIText(text);
-		else
-			tmp = new j1UIText();
 		break;
+
+	case ui_type::UI_IMAGE:
+
+		tmp = new j1UIImage();
+
+
 	}
 
 	if (tmp)

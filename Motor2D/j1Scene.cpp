@@ -53,6 +53,7 @@ bool j1Scene::Start()
 	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 300,300 }, true, true, true, { 0,0,0,0 }, this, UIFunction::FNC_UNKOWNN, "Alex Mariqueta");
 
 
+
 	return true;
 }
 
