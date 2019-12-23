@@ -125,7 +125,7 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 	case ui_type::UI_IMAGE:
 
 		tmp = new j1UIImage();
-
+		break;
 
 	}
 

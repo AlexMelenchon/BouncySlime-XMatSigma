@@ -27,13 +27,15 @@ void j1UIelement::Draw(bool debug)
 {
 	if (App->ui->focused.lookAt && App->ui->focused.lookAt->data == this)
 	{
+		SDL_SetTextureColorMod(texture, 150, 150, 150);
+	}
+	else if (hovering)
+	{
 		SDL_SetTextureColorMod(texture, 200, 200, 200);
-		SDL_SetTextureAlphaMod(texture, 255);
 	}
 	else
 	{
 		SDL_SetTextureColorMod(texture, 255, 255, 255);
-		SDL_SetTextureAlphaMod(texture, 255);
 	}
 
 
@@ -74,8 +76,7 @@ bool j1UIelement::OnHover()
 		}
 
 	}
-	else if (App->ui->focused.state == focusState::ST_FREE)
-		App->ui->focused.lookAt = nullptr;
+
 
 	return ret;
 }
@@ -90,44 +91,54 @@ bool j1UIelement::PreUpdate()
 
 bool j1UIelement::Update(float dt)
 {
-
 	if (hovering)
 	{
-		if (!App->ui->focused.lookAt || (App->ui->focused.lookAt && App->ui->focused.lookAt->data != this))
-			App->ui->focused.lookAt = App->ui->GetElementFromList(this);
+		if (App->ui->focused.lookAt && (App->ui->focused.state == focusState::ST_LOCKED && App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) != KEY_REPEAT))
+		{
+			App->ui->focused.lookAt = nullptr;
+			App->ui->focused.state = focusState::ST_FREE;
+		}
+		else if (App->ui->focused.lookAt && App->ui->focused.lookAt->data != this)
+			App->ui->focused.lookAt = nullptr;
 
 		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+		{
 			OnClick();
 
-		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
-			OnRelease();
+			if (drag && !dragging)
+			{
+				dragging = true;
 
-		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && !dragging && drag)
-		{
-			dragging = true;
+				iPoint ClickedPoint = { 0,0 };
+				App->input->GetMousePosition(ClickedPoint.x, ClickedPoint.y);
+				MovePoint = { ClickedPoint.x - Position.x, ClickedPoint.y - Position.y };
+			}
 
-			iPoint ClickedPoint = { 0,0 };
-			App->input->GetMousePosition(ClickedPoint.x, ClickedPoint.y);
-			MovePoint = { ClickedPoint.x - Position.x, ClickedPoint.y - Position.y };
-
+			if (!App->ui->focused.lookAt || (App->ui->focused.lookAt && App->ui->focused.lookAt->data != this))
+			{
+				App->ui->focused.lookAt = App->ui->GetElementFromList(this);
+			}
 		}
+
 	}
 
-	if (dragging)
+	if (App->ui->focused.lookAt && App->ui->focused.lookAt->data == this && App->ui->focused.state == focusState::ST_FREE)
 	{
-		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE || App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+		if (dragging)
 		{
-			dragging = false;
-		}
-		else
-		{
-			if (!App->ui->focused.lookAt || (App->ui->focused.lookAt && App->ui->focused.lookAt->data != this))
-				App->ui->focused.lookAt = App->ui->GetElementFromList(this);
-
 			OnDrag();
 			Move(dt);
 		}
+
+		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE || App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+		{
+			App->ui->focused.lookAt->data->OnRelease();
+			App->ui->focused.lookAt->data->dragging = false;
+			App->ui->focused.lookAt = nullptr;
+		}
+
 	}
+
 
 	if (parent)
 	{

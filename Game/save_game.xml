@@ -6,6 +6,7 @@
 	<audio>
 		<volume music="15" fx="25" />
 	</audio>
+	<fonts />
 	<map />
 	<entities>
 		<player>
@@ -18,17 +19,17 @@
 			<flip value="0" />
 		</player>
 		<enemyL>
-			<position x="870.99939" y="872" />
+			<position x="862.179382" y="872" />
 			<speed x="60" y="0" />
 			<falling value="false" />
 			<trace x="802" y="899" w="155" h="0" />
 			<flip value="0" />
 		</enemyL>
 		<enemyF>
-			<position x="1741.09998" y="581.179871" />
-			<speed x="-60" y="0" />
+			<position x="1670.18018" y="569" />
+			<speed x="60" y="0" />
 			<trace x="1610" y="569" w="207" h="74" />
-			<flip value="1" />
+			<flip value="0" />
 		</enemyF>
 	</entities>
 	<pathfinding />
