@@ -16,10 +16,10 @@ public:
 	bool Start();
 
 	// Called each loop iteration
-	bool PreUpdate();
+	//bool PreUpdate();
 
 	// Called each loop iteration
-	bool Update(float dt);
+	//bool Update(float dt);
 
 	bool PostUpdate(bool debug);
 

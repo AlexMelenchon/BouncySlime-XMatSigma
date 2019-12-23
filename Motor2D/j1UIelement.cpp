@@ -38,7 +38,7 @@ void j1UIelement::Draw(bool debug)
 
 
 	App->render->Blit(texture, Position.x, Position.y, &rect, 0.0f);
-	
+
 	if (debug)
 	{
 		App->render->DrawQuad({ Position.x, Position.y, rect.w, rect.h }, 0, 255, 255, 255, false, false);
@@ -80,6 +80,14 @@ bool j1UIelement::OnHover()
 	return ret;
 }
 
+bool j1UIelement::PreUpdate()
+{
+	hovering = OnHover();
+
+	return true;
+}
+
+
 bool j1UIelement::Update(float dt)
 {
 
@@ -96,8 +104,7 @@ bool j1UIelement::Update(float dt)
 
 		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && !dragging && drag)
 		{
-			if (drag)
-				dragging = true;
+			dragging = true;
 
 			iPoint ClickedPoint = { 0,0 };
 			App->input->GetMousePosition(ClickedPoint.x, ClickedPoint.y);
@@ -168,11 +175,12 @@ void j1UIelement::Move(float dt)
 
 	if (parent != nullptr)
 	{
-		//TODO: Check boundaries if a bool is true
+		//TODO: Check boundaries on the slider after this func!
 
 		PostoParent.x += currentPos.x - Position.x;
 		PostoParent.y += currentPos.y - Position.y;
 	}
+
 }
 
 void j1UIelement::KeepDistanceToParent(float dt)
