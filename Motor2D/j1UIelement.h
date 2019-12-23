@@ -74,11 +74,15 @@ public:
 
 	j1UIelement* parent = nullptr;
 	ui_type type = ui_type::UI_NONE;
+	
 
 	j1Module* listener = nullptr;
+	UIFunction function = UIFunction::FNC_UNKOWNN;
 
 	bool hovering = false;
 	bool dragging = false;
+
+
 };
 
 #endif // !__J1UIELEMENT__

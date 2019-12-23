@@ -47,8 +47,17 @@ enum class UIEventType
 	EVENT_UNKOWNN = -1,
 
 	EVENT_ONCLICK,
+	EVENT_UPCLICK,
 	EVENT_ONRELEASE,
 	EVENT_DRAG
+};
+
+enum class UIFunction
+{
+	FNC_UNKOWNN = -1,
+
+	FNC_PAUSE
+
 };
 
 #define VEL_TO_WORLD 20
@@ -117,7 +126,7 @@ public:
 	}
 
 	// Manages the UI inputs for each module
-	virtual void OnGui(UIEventType type) {};
+	virtual void OnGui(UIEventType type, UIFunction func) {};
 
 	//Distributes collisions
 	virtual void OnCollision(Collider*, Collider*) {}

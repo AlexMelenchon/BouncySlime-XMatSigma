@@ -59,7 +59,7 @@ public:
 
 	//--------UI---------//
 	//Manages the UI inputs of this module
-	void OnGui(UIEventType type);
+	void OnGui(UIEventType type, UIFunction func);
 
 
 private:

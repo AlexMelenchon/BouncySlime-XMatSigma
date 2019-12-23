@@ -97,7 +97,7 @@ SDL_Texture* j1UIManager::GetAtlas() const
 }
 
 
-j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint Position, bool interact, bool drag, bool enabled, SDL_Rect section, j1Module* listener)
+j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint Position, bool interact, bool drag, bool enabled, SDL_Rect section, j1Module* listener, UIFunction func)
 {
 	j1UIelement* tmp = nullptr;
 
@@ -122,6 +122,7 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 		tmp->enabled = enabled;
 		tmp->rect = section;
 		tmp->listener = listener;
+		tmp->function = func;
 
 		InitElement(UIList.add(tmp)->data, config);
 

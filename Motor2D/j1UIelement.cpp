@@ -65,7 +65,7 @@ void j1UIelement::OnClick()
 {
 	if (listener != nullptr)
 	{
-		this->listener->OnGui(UIEventType::EVENT_ONCLICK);
+		this->listener->OnGui(UIEventType::EVENT_ONCLICK, this->function);
 	}
 	
 }
@@ -74,7 +74,7 @@ void j1UIelement::OnRelease()
 {
 	if (listener != nullptr)
 	{
-		this->listener->OnGui(UIEventType::EVENT_UPCLICK);
+		this->listener->OnGui(UIEventType::EVENT_UPCLICK, this->function);
 	}
 }
 
@@ -93,7 +93,6 @@ void j1UIelement::Move(float dt)
 		Position.x += ((MousePos.x - Position.x) - MovePoint.x);
 		Position.y += ((MousePos.y - Position.y) - MovePoint.y);
 	}
-
 }
 
 

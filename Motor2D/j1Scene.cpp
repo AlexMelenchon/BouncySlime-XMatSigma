@@ -34,7 +34,7 @@ bool j1Scene::Awake(pugi::xml_node& scene_config)
 
 	mapFadeTime = scene_config.child("mapFadeTime").text().as_float();
 
-	
+
 	return ret;
 }
 
@@ -42,14 +42,14 @@ bool j1Scene::Awake(pugi::xml_node& scene_config)
 bool j1Scene::Start()
 {
 	//Loads the first map
-	Reset(App->map->data.maplist.start->data->name.GetString()); 
+	Reset(App->map->data.maplist.start->data->name.GetString());
 
 	debug_tex = App->entities->debug_tex;
 
 
 
 	App->ui->AddElement(ui_type::UI_BUTTON, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, false, true, { 73,406,64,64 }, this)
-	,{ 100,500 }, true, false, true, { 73,406,64,64}, this);
+		, { 100,500 }, true, false, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
 
 
 	return true;
@@ -72,13 +72,13 @@ bool j1Scene::Reset(const char* map)
 		}
 
 	}
-	
+
 	// Limit for the end of the map
-	Hlimit.x = App->map->data.tile_width * App->map->data.width; 
+	Hlimit.x = App->map->data.tile_width * App->map->data.width;
 	Hlimit.y = App->map->data.tile_height * App->map->data.height;
 
 	//Start the music
-	App->audio->PlayMusic(App->map->data.music.GetString(),0.0f);
+	App->audio->PlayMusic(App->map->data.music.GetString(), 0.0f);
 
 	return true;
 }
@@ -88,8 +88,8 @@ bool j1Scene::PreUpdate()
 {
 	BROFILER_CATEGORY("Scene Pre-Update", Profiler::Color::Orange)
 
-	//Camera logic
-	Camera();
+		//Camera logic
+		Camera();
 
 	// debug pathfing ------------------
 	setDebugPathfinding();
@@ -101,23 +101,23 @@ bool j1Scene::Update(float dt)
 {
 	BROFILER_CATEGORY("Scene Update", Profiler::Color::Orange)
 
-	//--------DEBUG---------//
+		//--------DEBUG---------//
 
-	//Loads the 1st map
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-		App->fade->FadeToBlack(App->map->data.maplist.start->data->name.GetString(),NULL , mapFadeTime);
-	
+		//Loads the 1st map
+		if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+			App->fade->FadeToBlack(App->map->data.maplist.start->data->name.GetString(), NULL, mapFadeTime);
+
 	//Loads the 2nd map
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-		App->fade->FadeToBlack(App->map->data.maplist.At(1)->data->name.GetString(), NULL ,mapFadeTime);
+		App->fade->FadeToBlack(App->map->data.maplist.At(1)->data->name.GetString(), NULL, mapFadeTime);
 
 	//Loads the 3rd map
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
-		App->fade->FadeToBlack(App->map->data.maplist.At(2)->data->name.GetString(), NULL ,  mapFadeTime);
+		App->fade->FadeToBlack(App->map->data.maplist.At(2)->data->name.GetString(), NULL, mapFadeTime);
 
 	//Reloads current map (a.k.a player's death)
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
-		App->fade->FadeToBlack(App->map->data.currentmap.GetString(), NULL , mapFadeTime);
+		App->fade->FadeToBlack(App->map->data.currentmap.GetString(), NULL, mapFadeTime);
 
 	//Saves the game
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
@@ -183,8 +183,8 @@ bool j1Scene::Update(float dt)
 	// Debug pathfinding w/ mouse ------------------------------
 	//Blits the debug pathfinding, if exists
 	blitDebugPath();
-	
-	
+
+
 
 	return true;
 }
@@ -195,9 +195,9 @@ bool j1Scene::PostUpdate()
 
 	BROFILER_CATEGORY("Scene Post-Update", Profiler::Color::Orange)
 
-	bool ret = true;
+		bool ret = true;
 
-	if(App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 
 	return ret;
@@ -345,9 +345,9 @@ void j1Scene::Camera()
 
 	//Recalculate it taking account the previous camera
 	cameraPos.x += (cameraPos.x * App->win->GetScale() - App->render->camera.w) / 10;
-	cameraPos.y += ((cameraPos.y * App->win->GetScale() - App->render->camera.y )/10);
+	cameraPos.y += ((cameraPos.y * App->win->GetScale() - App->render->camera.y) / 10);
 
-	
+
 	//We lock the camera if we get to the edges
 	CheckCameraLimits();
 
@@ -381,13 +381,30 @@ void j1Scene::CheckCameraLimits()
 }
 
 //Manages the UI inputs of this module
-void j1Scene::OnGui(UIEventType type)
+void j1Scene::OnGui(UIEventType type, UIFunction func)
 {
 	switch (type)
 	{
 	case UIEventType::EVENT_ONCLICK:
 	{
-		App->pause = !App->pause;
+
+		switch (func)
+		{
+		case UIFunction::FNC_PAUSE:
+		{
+			App->pause = !App->pause;
+			break;
+		}
+
+
+
+		}
+
+
+
+
+
+
 
 		break;
 	}
