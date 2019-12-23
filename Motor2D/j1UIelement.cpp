@@ -21,7 +21,7 @@ j1UIelement::~j1UIelement()
 
 bool j1UIelement::Start()
 {
-	text = App->ui->GetAtlas();
+	texture = App->ui->GetAtlas();
 	return true;
 }
 
@@ -29,16 +29,16 @@ void j1UIelement::Draw(bool debug)
 {
 	if (hovering)
 	{
-		SDL_SetTextureColorMod(text, 200, 200, 200);
-		SDL_SetTextureAlphaMod(text, 255);
+		SDL_SetTextureColorMod(texture, 200, 200, 200);
+		SDL_SetTextureAlphaMod(texture, 255);
 	}
 	else
 	{
-		SDL_SetTextureColorMod(text, 255, 255, 255);
-		SDL_SetTextureAlphaMod(text, 255);
+		SDL_SetTextureColorMod(texture, 255, 255, 255);
+		SDL_SetTextureAlphaMod(texture, 255);
 	}
 
-	App->render->Blit(text, Position.x, Position.y, &rect, 0.0f);
+	App->render->Blit(texture, Position.x, Position.y, &rect, 0.0f);
 
 	if (debug)
 	{

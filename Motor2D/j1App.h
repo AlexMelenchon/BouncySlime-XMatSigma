@@ -14,6 +14,7 @@ class j1Input;
 class j1Render;
 class j1Textures;
 class j1Audio;
+class j1Fonts;
 class j1Scene;
 class j1Map;
 class j1Player;
@@ -107,6 +108,7 @@ public:
 	j1FadeToBlack*		fade;
 	j1PathFinding*		pathfinding;
 	j1UIManager*		ui;
+	j1Fonts*			fonts;
 
 	//--------CONFIG---------//
 	//Config File

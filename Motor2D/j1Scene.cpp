@@ -5,6 +5,7 @@
 #include "j1Textures.h"
 #include "j1Audio.h"
 #include "j1Render.h"
+#include "j1Fonts.h"
 #include "j1Window.h"
 #include "j1Map.h"
 #include "j1PathFinding.h"
@@ -46,11 +47,18 @@ bool j1Scene::Start()
 
 	debug_tex = App->entities->debug_tex;
 
-
+	int w = 0, h = 0;
 
 	App->ui->AddElement(ui_type::UI_BUTTON, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, false, true, { 73,406,64,64 }, this)
 		, { 100,500 }, true, false, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
+	
+	
+	App->ui->AddElement(ui_type::UI_IMAGE, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, false, true, { 73,406,64,64 }, this), { 500,500 }, false, false, true, {0,0,w,h }, this, UIFunction::FNC_UNKOWNN, "pepe");
 
+	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 300,300 }, false, false, true, { 0,0,w,h }, this, UIFunction::FNC_UNKOWNN, "Alex Mariqueta");
+
+
+	
 
 	return true;
 }

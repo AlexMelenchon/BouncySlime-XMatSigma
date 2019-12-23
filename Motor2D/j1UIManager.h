@@ -47,10 +47,10 @@ public:
 		bool interact = false,
 		bool drag = false,
 		bool enabled = false,
-		SDL_Rect section = {0,0,0,0},
+		SDL_Rect section = { 0,0,0,0 },
 		j1Module* listener = nullptr,
-		UIFunction func = UIFunction::FNC_UNKOWNN
-	
+		UIFunction func = UIFunction::FNC_UNKOWNN,
+		const char* text = ""
 	);
 	void InitElement(j1UIelement* element, pugi::xml_node);
 

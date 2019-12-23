@@ -5,6 +5,7 @@
 #include "j1Fonts.h"
 #include "j1Input.h"
 #include "j1UIButton.h"
+#include "j1UIText.h"
 
 j1UIManager::j1UIManager() : j1Module()
 {
@@ -97,7 +98,7 @@ SDL_Texture* j1UIManager::GetAtlas() const
 }
 
 
-j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint Position, bool interact, bool drag, bool enabled, SDL_Rect section, j1Module* listener, UIFunction func)
+j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint Position, bool interact, bool drag, bool enabled, SDL_Rect section, j1Module* listener, UIFunction func, const char* text)
 {
 	j1UIelement* tmp = nullptr;
 
@@ -106,7 +107,16 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 	switch (type)
 	{
 	case ui_type::UI_BUTTON:
+
 		tmp = new j1UIButton();
+		break;
+
+	case ui_type::UI_IMAGE:
+
+		if (strlen(text) > 1)
+			tmp = new j1UIText(text);
+		else
+			tmp = new j1UIText();
 		break;
 	}
 
@@ -125,10 +135,7 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 		tmp->function = func;
 
 		InitElement(UIList.add(tmp)->data, config);
-
-
 	}
-
 
 	return tmp;
 }

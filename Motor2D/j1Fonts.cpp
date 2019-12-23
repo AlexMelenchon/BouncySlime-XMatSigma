@@ -13,6 +13,9 @@ j1Fonts::j1Fonts() : j1Module()
 	name.create("fonts");
 }
 
+//if (TTF_SizeText(default_font, "pepe", &w, &h))
+
+
 // Destructor
 j1Fonts::~j1Fonts()
 {}
@@ -32,7 +35,7 @@ bool j1Fonts::Awake(pugi::xml_node& conf)
 	{
 		const char* path = conf.child("default_font").attribute("file").as_string(DEFAULT_FONT);
 		int size = conf.child("default_font").attribute("size").as_int(DEFAULT_FONT_SIZE);
-		default = Load(path, size);
+		default_font = Load(path, size);
 	}
 
 	return ret;
@@ -73,10 +76,13 @@ TTF_Font* const j1Fonts::Load(const char* path, int size)
 }
 
 // Print text using font
-SDL_Texture* j1Fonts::Print(const char* text, SDL_Color color, TTF_Font* font)
+SDL_Texture* j1Fonts::Print(const char* text, SDL_Color color, _TTF_Font* font)
 {
+	if (font == nullptr)
+		font = default_font;
+
 	SDL_Texture* ret = NULL;
-	SDL_Surface* surface = TTF_RenderText_Blended((font) ? font : default, text, color);
+	SDL_Surface* surface = TTF_RenderText_Blended((font) ? font : font, text, color);
 
 	if (surface == NULL)
 	{
@@ -87,16 +93,23 @@ SDL_Texture* j1Fonts::Print(const char* text, SDL_Color color, TTF_Font* font)
 		ret = App->tex->LoadSurface(surface);
 		SDL_FreeSurface(surface);
 	}
+	int w, h;
+	int i = TTF_SizeText(default_font, text, &w, &h);
 
 	return ret;
 }
 
+
+
 // calculate size of a text
 bool j1Fonts::CalcSize(const char* text, int& width, int& height, _TTF_Font* font) const
 {
+	if (font == NULL)
+		font = default_font;
+	
 	bool ret = false;
 
-	if (TTF_SizeText((font) ? font : default, text, & width, & height) != 0)
+	if (TTF_SizeText((font) ? font : default_font, text, & width, & height) != 0)
 		LOG("Unable to calc size of text surface! SDL_ttf Error: %s\n", TTF_GetError());
 	else
 		ret = true;

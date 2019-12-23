@@ -41,7 +41,10 @@
   <audio>
     <volume general="25" music="15"/>
   </audio>
-
+  
+  <fonts>
+    <default_font file ="textures/fonts/open_sans/OpenSans-Regular.ttf" size="12"/>
+  </fonts>
   <entities>
 
     <manager>

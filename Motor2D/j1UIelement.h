@@ -43,7 +43,7 @@ public:
 
 
 	//--------DRAW--------//
-	void Draw(bool debug);
+	virtual void Draw(bool debug);
 
 	//--------SAVE & LOAD---------//
 	//Called when loading a save
@@ -66,7 +66,7 @@ public:
 	bool enabled = false;
 
 	SDL_Rect rect = { 0,0,0,0 };
-	SDL_Texture* text = nullptr;
+	SDL_Texture* texture = nullptr;
 
 	iPoint PostoParent = { 0,0 };
 	iPoint Position = { 0,0 };
