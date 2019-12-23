@@ -14,7 +14,8 @@ enum class ui_type
 	UI_NONE,
 	UI_BUTTON,
 	UI_IMAGE,
-	UI_TEXT
+	UI_TEXT,
+	UI_INPUTBOX
 };
 
 class j1UIelement

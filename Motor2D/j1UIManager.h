@@ -68,6 +68,7 @@ public:
 		UIFunction func = UIFunction::FNC_UNKOWNN,
 		const char* text = ""
 	);
+
 	void InitElement(j1UIelement* element, pugi::xml_node);
 
 	void DeleteElement(j1UIelement* element);

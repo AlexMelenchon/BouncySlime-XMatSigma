@@ -32,7 +32,6 @@ bool j1UIText::Start()
 }
 
 
-
 bool j1UIText::PostUpdate(bool debug)
 {
 	Draw(debug);
