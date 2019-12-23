@@ -58,7 +58,7 @@ public:
 	void Move(bool toPlayer, float dt);
 
 	//Updates the enemy movement logic
-	void MovementLogic(float dt);
+	void MovementLogic(float dt, bool toPlayer = true);
 
 	//--------COLLISION ---------//
 	

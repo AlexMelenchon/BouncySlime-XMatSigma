@@ -117,7 +117,7 @@ bool j1LandEnemy::Update(float dt)
 			//Path is created
 			if (path.Count() > 0)
 			{
-				MovementLogic(dt);
+				MovementLogic(dt, false);
 			}
 			//If there is no path we stop
 			else
@@ -162,19 +162,19 @@ bool j1LandEnemy::Update(float dt)
 }
 
 //Updates the enemy movement logic
-void j1LandEnemy::MovementLogic(float dt)
+void j1LandEnemy::MovementLogic(float dt, bool toPlayer)
 {
 	//We check if the enemy has to jump to get to the player
 	//If the logic says we have to jump we jump & move
 	if (!JumpLogic())
 	{
-		Move(true, dt);
+		Move(toPlayer, dt);
 	}
 	//If the logic says we have to stop, we check if we can move some tiles before stopping
 	// (This is not an or in the previous if for visability purposes)
 	else if (AbleToMove().x != -1)
 	{
-		Move(true, dt);
+		Move(toPlayer, dt);
 	}
 	//If  the logic says we have to stop, we stop
 	else
