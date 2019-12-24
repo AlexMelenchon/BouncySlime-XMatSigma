@@ -43,7 +43,7 @@
   </audio>
   
   <fonts>
-    <default_font file ="textures/fonts/open_sans/OpenSans-Regular.ttf" size="12"/>
+    <default_font file ="textures/fonts/open_sans/OpenSans-Regular.ttf" size="60"/>
   </fonts>
   <entities>
 

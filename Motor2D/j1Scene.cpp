@@ -50,7 +50,7 @@ bool j1Scene::Start()
 	App->ui->AddElement(ui_type::UI_BUTTON, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, true, true, { 73,406,64,64 }, this)
 		, { 100,300 }, true, true, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
 
-	App->ui->AddElement(ui_type::UI_INPUTBOX, nullptr, { 100,600 }, true, true, true, { 0,0,100,100 }, this, UIFunction::FNC_UNKOWNN, "macarró");
+	App->ui->AddElement(ui_type::UI_INPUTBOX, nullptr, { 100,600 }, true, true, true, { 0,0,0,0 }, this, UIFunction::FNC_UNKOWNN, "macarró");
 
 	return true;
 }

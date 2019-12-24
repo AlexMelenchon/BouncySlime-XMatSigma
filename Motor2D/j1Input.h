@@ -25,6 +25,14 @@ enum j1KeyState
 	KEY_UP
 };
 
+enum class InputState
+{
+	ST_UNKNOWN = -1,
+	KEY_DOWN,
+	KEY_REPEAT,
+	KEY_UP
+};
+
 class j1Input : public j1Module
 {
 
@@ -71,22 +79,34 @@ public:
 	void ReSetKeys();
 
 	// Get mouse / axis position
-	void GetMousePosition(int &x, int &y);
+	void GetMousePosition(int& x, int& y);
 	//Get mouse motion
 	void GetMouseMotion(int& x, int& y);
 
+	const char* GetText();
+
+	void WrittingState(bool state, SDL_Rect rect);
+
+	bool IsWritting();
 	// Get mouse / axis position
 	int			mouse_x;
 	int			mouse_y;
 
 private:
 	bool		windowEvents[WE_COUNT];
-	j1KeyState*	keyboard;
+	j1KeyState* keyboard;
 	j1KeyState	mouse_buttons[NUM_MOUSE_BUTTONS];
 
 	// Get mouse / axis motion  position
 	int			mouse_motion_x;
 	int			mouse_motion_y;
+
+
+
+	p2SString		textString;
+	bool		writting;
+	int position = 0;
+
 
 };
 

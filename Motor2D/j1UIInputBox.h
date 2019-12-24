@@ -8,7 +8,7 @@ class j1UIInputBox : public j1UIelement
 {
 public:
 	j1UIInputBox();
-	j1UIInputBox(const char* txt);
+	j1UIInputBox(char* txt);
 
 	~j1UIInputBox();
 
@@ -16,7 +16,7 @@ public:
 
 	bool Start();
 
-
+	bool InheritUpdate(float dt);
 	bool PostUpdate(bool debug);
 
 	// Called before quitting
@@ -33,7 +33,8 @@ public:
 
 private:
 
-	int w, h;
+	j1UIelement* boxImage = nullptr;
+	j1UIelement* boxText = nullptr;
 
 };
 

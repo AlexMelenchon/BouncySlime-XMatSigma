@@ -134,7 +134,7 @@ bool j1UIelement::Update(float dt)
 		{
 			App->ui->focused.lookAt->data->OnRelease();
 			App->ui->focused.lookAt->data->dragging = false;
-			App->ui->focused.lookAt = nullptr;
+			//App->ui->focused.lookAt = nullptr;
 		}
 
 	}

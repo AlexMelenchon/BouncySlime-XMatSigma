@@ -7,7 +7,7 @@ class j1UIText : public j1UIelement
 {
 public:
 	j1UIText();
-	j1UIText(const char* t);
+	j1UIText(char* t);
 
 	~j1UIText();
 
@@ -20,7 +20,6 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	void Draw(bool debug);
 
 	//--------SAVE & LOAD---------//
 	//Called when loading a save
@@ -29,10 +28,10 @@ public:
 	//Called to save the game
 	bool Save(pugi::xml_node&) const  const { return true; };
 
+	char*  GetText();
+
 
 private:
-
-	int w, h;
 
 };
 

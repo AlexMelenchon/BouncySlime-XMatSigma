@@ -86,6 +86,8 @@ bool j1UIManager::PostUpdate()
 		tmp = tmp->next;
 	}
 
+
+
 	return ret;
 }
 
@@ -104,7 +106,7 @@ SDL_Texture* j1UIManager::GetAtlas() const
 }
 
 
-j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint Position, bool interact, bool drag, bool enabled, SDL_Rect section, j1Module* listener, UIFunction func, const char* text)
+j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint Position, bool interact, bool drag, bool enabled, SDL_Rect section, j1Module* listener, UIFunction func,  char* text)
 {
 	j1UIelement* tmp = nullptr;
 
@@ -120,7 +122,10 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 	case ui_type::UI_TEXT:
 
 		if (strlen(text) > 1)
+		{
 			tmp = new j1UIText(text);
+			App->fonts->CalcSize(text, section.w, section.h);
+		}
 		break;
 
 	case ui_type::UI_IMAGE:
@@ -129,8 +134,8 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 		break;
 
 	case ui_type::UI_INPUTBOX:
-		
 			tmp = new j1UIInputBox(text);
+			App->fonts->CalcSize(text, section.w, section.h);
 		break;
 	}
 
