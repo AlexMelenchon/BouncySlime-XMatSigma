@@ -8,6 +8,7 @@
 #include "j1UIText.h"
 #include "j1UIImage.h"
 #include "j1UIInputBox.h"
+#include "j1UISlider.h"
 
 j1UIManager::j1UIManager() : j1Module()
 {
@@ -106,7 +107,7 @@ SDL_Texture* j1UIManager::GetAtlas() const
 }
 
 
-j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint Position, bool interact, bool drag, bool enabled, SDL_Rect section, j1Module* listener, UIFunction func,  char* text)
+j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint Position, bool interact, bool drag, bool enabled, SDL_Rect section, j1Module* listener, UIFunction func, drag_axis axis,  char* text)
 {
 	j1UIelement* tmp = nullptr;
 
@@ -137,6 +138,8 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 			tmp = new j1UIInputBox(text);
 			App->fonts->CalcSize(text, section.w, section.h);
 		break;
+	case ui_type::UI_SLIDER:
+		tmp = new j1UISlider(axis);
 	}
 
 	if (tmp)
@@ -161,6 +164,7 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 		tmp->rect = section;
 		tmp->listener = listener;
 		tmp->function = func;
+		tmp->axis = axis;
 
 		InitElement(UIList.add(tmp)->data, config);
 	}

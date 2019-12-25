@@ -183,8 +183,28 @@ void j1UIelement::Move(float dt)
 	App->input->GetMousePosition(MousePos.x, MousePos.y);
 
 	iPoint currentPos = Position;
-	Position.x += ((MousePos.x - Position.x) - MovePoint.x);
-	Position.y += ((MousePos.y - Position.y) - MovePoint.y);
+	
+
+	switch (axis)
+	{
+	case drag_axis::MOV_ALL:
+
+		Position.x += ((MousePos.x - Position.x) - MovePoint.x);
+		Position.y += ((MousePos.y - Position.y) - MovePoint.y);
+
+			break;
+	case drag_axis::MOV_X:
+
+		Position.x += ((MousePos.x - Position.x) - MovePoint.x);		
+
+		break;
+	case drag_axis::MOV_Y:
+
+		Position.y += ((MousePos.y - Position.y) - MovePoint.y);
+
+		break;
+	}
+	
 
 
 	if (parent != nullptr)

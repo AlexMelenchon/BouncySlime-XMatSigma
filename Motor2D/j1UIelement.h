@@ -15,7 +15,16 @@ enum class ui_type
 	UI_BUTTON,
 	UI_IMAGE,
 	UI_TEXT,
-	UI_INPUTBOX
+	UI_INPUTBOX,
+	UI_SLIDER
+};
+
+enum class drag_axis
+{
+	MOV_NONE,
+	MOV_ALL,
+	MOV_X,
+	MOV_Y
 };
 
 class j1UIelement
@@ -81,6 +90,7 @@ public:
 
 	j1UIelement* parent = nullptr;
 	ui_type type = ui_type::UI_NONE;
+	drag_axis axis = drag_axis::MOV_NONE;
 	
 
 	j1Module* listener = nullptr;

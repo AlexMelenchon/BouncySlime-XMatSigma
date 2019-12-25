@@ -100,6 +100,7 @@
     <ClCompile Include="j1UIelement.cpp" />
     <ClCompile Include="j1UIInputBox.cpp" />
     <ClCompile Include="j1UIManager.cpp" />
+    <ClCompile Include="j1UISlider.cpp" />
     <ClCompile Include="j1UIText.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="j1Render.cpp" />
@@ -123,6 +124,7 @@
     <ClInclude Include="j1UIelement.h" />
     <ClInclude Include="j1UIInputBox.h" />
     <ClInclude Include="j1UIManager.h" />
+    <ClInclude Include="j1UISlider.h" />
     <ClInclude Include="j1UIText.h" />
     <ClInclude Include="p2animation.h" />
     <ClInclude Include="j1Collision.h" />

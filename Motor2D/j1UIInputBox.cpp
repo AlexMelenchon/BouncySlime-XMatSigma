@@ -11,8 +11,8 @@ j1UIInputBox::j1UIInputBox()
 j1UIInputBox::j1UIInputBox(char* txt)
 {
 	this->type = ui_type::UI_INPUTBOX;
-	boxImage = App->ui->AddElement(ui_type::UI_IMAGE, this, this->Position, true, false, this->enabled, { 73, 406, 64, 64 }, this->listener, UIFunction::FNC_UNKOWNN);
-	boxText = App->ui->AddElement(ui_type::UI_TEXT, this, this->Position, true, false, this->enabled, this->rect, this->listener, UIFunction::FNC_UNKOWNN, txt);
+	boxImage = App->ui->AddElement(ui_type::UI_IMAGE, this, this->Position, true, false, this->enabled, { 73, 992, 256, 64 }, this->listener, UIFunction::FNC_UNKOWNN);
+	boxText = App->ui->AddElement(ui_type::UI_TEXT, this, this->Position, true, false, this->enabled, this->rect, this->listener, UIFunction::FNC_UNKOWNN, this->axis, txt);
 }
 
 j1UIInputBox::~j1UIInputBox()
@@ -54,6 +54,8 @@ bool j1UIInputBox::PostUpdate(bool debug)
 	}
 	else
 		App->input->WrittingState(false, boxImage->rect);
+
+	LOG("%i, %i %i, %i", this->rect.x, this->rect.y, this->rect.w, this->rect.h);
 
 
 	return true;

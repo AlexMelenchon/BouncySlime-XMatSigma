@@ -1,31 +1,26 @@
-#ifndef __J1__UIBUTTON__
-#define __J1__UIBUTTON__
+#ifndef __J1__UISLIDER__
+#define __J1__UISLIDER__
 
 #include"j1UIelement.h"
+#include "p2Point.h"
 
-
-
-class j1UIButton : public j1UIelement
+class j1UISlider : public j1UIelement
 {
 public:
-	j1UIButton();
-	
-	~j1UIButton();
+	j1UISlider();
+	j1UISlider(drag_axis axis);
+	~j1UISlider();
 
 	bool Awake(pugi::xml_node&);
 
-	// Called each loop iteration
-	//bool PreUpdate();
+	bool Start();
 
-	// Called each loop iteration
 	bool InheritUpdate(float dt);
-
 	bool PostUpdate(bool debug);
 
 	// Called before quitting
 	bool CleanUp();
-
-
+	
 	//--------SAVE & LOAD---------//
 	//Called when loading a save
 	bool Load(pugi::xml_node&) { return true; };
@@ -33,7 +28,12 @@ public:
 	//Called to save the game
 	bool Save(pugi::xml_node&) const  const { return true; };
 
+
+private:
+
+	j1UIelement* thumb = nullptr;
+	j1UIelement* line = nullptr;
 };
 
 
-#endif // !__J1__UIBUTTON__
+#endif // !__J1__UIINPUTBOX__

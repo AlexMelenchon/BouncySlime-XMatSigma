@@ -91,6 +91,9 @@
     <ClCompile Include="j1UIInputBox.cpp">
       <Filter>Desenvolupament  ========\UI</Filter>
     </ClCompile>
+    <ClCompile Include="j1UISlider.cpp">
+      <Filter>Desenvolupament  ========\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -202,6 +205,9 @@
       <Filter>Desenvolupament  ========\UI</Filter>
     </ClInclude>
     <ClInclude Include="j1UIInputBox.h">
+      <Filter>Desenvolupament  ========\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="j1UISlider.h">
       <Filter>Desenvolupament  ========\UI</Filter>
     </ClInclude>
   </ItemGroup>
