@@ -85,12 +85,11 @@ public:
 
 	const char* GetText();
 
-	SDL_Rect GetTextInPos();
+	int GetTextInPos();
 
 
 	void WrittingState(bool state, SDL_Rect rect);
 
-	bool IsWritting();
 	// Get mouse / axis position
 	int			mouse_x;
 	int			mouse_y;

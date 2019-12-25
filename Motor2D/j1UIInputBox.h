@@ -35,7 +35,7 @@ private:
 
 	j1UIelement* boxImage = nullptr;
 	j1UIelement* boxText = nullptr;
-
+	float cursorTimer = 0;
 };
 
 

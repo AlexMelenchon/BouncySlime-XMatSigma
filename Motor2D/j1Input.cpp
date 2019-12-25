@@ -132,20 +132,17 @@ bool j1Input::PreUpdate()
 				textString.insert(event.text.text, position);
 			}
 
-
 			break;
 
 		case SDL_KEYDOWN:
 			if (writting)
 			{
-
-
 				if (event.key.keysym.sym == SDLK_BACKSPACE && textString.Length() > 0)
 				{
 					textString.Cut(textString.Length() - (position)-1, textString.Length() - position);
 				}
 
-				if (event.key.keysym.sym == SDLK_DELETE && textString.Length() > 0)
+				else if (event.key.keysym.sym == SDLK_DELETE && textString.Length() > 0)
 				{
 					textString.Cut(textString.Length() - (position), textString.Length() - position + 1);
 					if (position > 0)
@@ -157,7 +154,7 @@ bool j1Input::PreUpdate()
 					position++;
 				}
 
-				if (event.key.keysym.sym == SDLK_RIGHT && position > 0)
+				else if (event.key.keysym.sym == SDLK_RIGHT && position > 0)
 				{
 					position--;
 				}
@@ -223,13 +220,13 @@ const char* j1Input::GetText()
 	return textString.GetString();
 }
 
-SDL_Rect j1Input::GetTextInPos()
+int j1Input::GetTextInPos()
 {
-	SDL_Rect tmp = {0,0,0,0};
+	int tmpW, tmpH = 0;
 
-	App->fonts->CalcSize(textString.GetStringInPos(position), tmp.w, tmp.h);
+	App->fonts->CalcSize(textString.GetStringInPos(position), tmpW, tmpH);
 
-	return tmp;
+	return tmpW;
 
 }
 
@@ -246,11 +243,9 @@ void j1Input::WrittingState(bool state, SDL_Rect rect)
 			ReSetKeys();
 		}
 		else
+		{
 			SDL_StopTextInput();
+			position = 0;
+		}
 	}
-}
-
-bool j1Input::IsWritting()
-{
-	return writting;
 }
