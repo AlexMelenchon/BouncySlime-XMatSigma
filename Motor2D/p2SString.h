@@ -204,19 +204,17 @@ public:
 				delete[] tmp;
 			}
 
-			//Divide original string F
+			//Copy into a buffer the side of the string we want to move
+			int nToMove = this->Length() - position;
+			const char* toMove = &str[nToMove];
+			p2SString buffer(toMove);
 
-			int mesuda = this->Length() - position;
+			//Remove the content we just copied into a buffer from the original
+			this->Cut(nToMove);
 
-			p2SString adeu;
-			p2SString hola;
-
-			strcpy_s(adeu.str, mesuda, &str[mesuda]);
-
-
-			this->Clear();
-			this->operator+=(adeu);
+			//Add the new string + what we removed
 			this->operator+=(string);
+			this->operator+=(toMove);
 
 
 
