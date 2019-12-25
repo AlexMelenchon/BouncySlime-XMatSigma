@@ -63,6 +63,7 @@ public:
 	virtual void OnDrag();
 	virtual void Move(float dt);
 	virtual void KeepDistanceToParent(float dt);
+	bool IsFocused();
 	
 
 public:

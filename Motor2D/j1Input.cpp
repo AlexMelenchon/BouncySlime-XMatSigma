@@ -4,6 +4,7 @@
 #include "j1Input.h"
 #include "j1Window.h"
 #include "SDL/include/SDL.h"
+#include "j1Fonts.h"
 
 #define MAX_KEYS 300
 
@@ -141,14 +142,14 @@ bool j1Input::PreUpdate()
 
 				if (event.key.keysym.sym == SDLK_BACKSPACE && textString.Length() > 0)
 				{
-					textString.Cut(textString.Length() -(position) -1, textString.Length() -position);
+					textString.Cut(textString.Length() - (position)-1, textString.Length() - position);
 				}
 
 				if (event.key.keysym.sym == SDLK_DELETE && textString.Length() > 0)
 				{
-					textString.Cut(textString.Length() - (position), textString.Length() - position +1);
-					if(position > 0)
-					position--;
+					textString.Cut(textString.Length() - (position), textString.Length() - position + 1);
+					if (position > 0)
+						position--;
 				}
 
 				if (event.key.keysym.sym == SDLK_LEFT && position < textString.Length())
@@ -220,6 +221,16 @@ void j1Input::ReSetKeys()
 const char* j1Input::GetText()
 {
 	return textString.GetString();
+}
+
+SDL_Rect j1Input::GetTextInPos()
+{
+	SDL_Rect tmp = {0,0,0,0};
+
+	App->fonts->CalcSize(textString.GetStringInPos(position), tmp.w, tmp.h);
+
+	return tmp;
+
 }
 
 void j1Input::WrittingState(bool state, SDL_Rect rect)

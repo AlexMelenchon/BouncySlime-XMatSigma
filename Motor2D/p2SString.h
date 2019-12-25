@@ -189,11 +189,14 @@ public:
 		return(*this);
 	}
 
-
+	/**
+	* Paste a string into another, in a specified position
+	*/
 	void insert(const char* string, unsigned int position = 0)
 	{
 		if (string != NULL)
 		{
+			//Make room----
 			unsigned int need_size = strlen(string) + Length() + 1;
 
 			if (need_size > size)
@@ -204,7 +207,7 @@ public:
 				delete[] tmp;
 			}
 
-			//Copy into a buffer the side of the string we want to move
+			//Copy into a buffer the amount of String that we need to move
 			int nToMove = this->Length() - position;
 			const char* toMove = &str[nToMove];
 			p2SString buffer(toMove);
@@ -214,13 +217,33 @@ public:
 
 			//Add the new string + what we removed
 			this->operator+=(string);
-			this->operator+=(toMove);
+			this->operator+=(buffer.GetString());
+		}
 
+	}
+
+	const char* GetStringInPos(unsigned int position = 0)
+	{
+		if (this != NULL)
+		{
+			if (position != 0)
+			{
+				//What we want to remove
+				int nToMove = this->Length() - position;
+
+				//Make a new buffer string wiith the request-----
+				p2SString buffer(this->GetString());
+				buffer.Cut(nToMove);
+				return buffer.GetString();
+			}
+			else
+				return this->GetString();
 
 
 		}
 
 	}
+
 
 	const p2SString& operator+= (const char* string)
 	{

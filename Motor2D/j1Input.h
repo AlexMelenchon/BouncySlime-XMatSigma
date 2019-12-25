@@ -85,6 +85,9 @@ public:
 
 	const char* GetText();
 
+	SDL_Rect GetTextInPos();
+
+
 	void WrittingState(bool state, SDL_Rect rect);
 
 	bool IsWritting();

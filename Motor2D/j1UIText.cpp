@@ -13,7 +13,7 @@ j1UIText::j1UIText()
 j1UIText::j1UIText(char* txt)
 {
 	this->type = ui_type::UI_TEXT;
-	this->texture =	App->fonts->Print(txt);
+	this->texture = App->fonts->Print(txt);
 
 }
 
@@ -30,13 +30,15 @@ bool j1UIText::Start()
 	return true;
 }
 
-
 bool j1UIText::PostUpdate(bool debug)
 {
-	App->tex->UnLoad(texture);
-	texture = App->fonts->Print(App->input->GetText());
+	if (parent && parent->type == ui_type::UI_INPUTBOX && parent->IsFocused())
+	{
+		App->tex->UnLoad(texture);
+		texture = App->fonts->Print(App->input->GetText());
 
-	App->fonts->CalcSize(App->input->GetText(), rect.w, rect.h);
+		App->fonts->CalcSize(App->input->GetText(), rect.w, rect.h);
+	}
 
 	Draw(debug);
 	return true;

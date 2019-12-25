@@ -122,7 +122,7 @@ bool j1UIelement::Update(float dt)
 
 	}
 
-	if (App->ui->focused.lookAt && App->ui->focused.lookAt->data == this && App->ui->focused.state == focusState::ST_FREE)
+	if (this->IsFocused() && App->ui->focused.state == focusState::ST_FREE)
 	{
 		if (dragging)
 		{
@@ -203,4 +203,8 @@ void j1UIelement::KeepDistanceToParent(float dt)
 	Position.y = parent->Position.y - PostoParent.y;
 }
 
+bool j1UIelement::IsFocused()
+{
+	return(App->ui->focused.lookAt && App->ui->focused.lookAt->data == this);
 
+}

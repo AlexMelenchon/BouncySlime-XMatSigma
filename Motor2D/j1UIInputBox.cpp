@@ -37,10 +37,12 @@ bool j1UIInputBox::InheritUpdate(float dt)
 
 bool j1UIInputBox::PostUpdate(bool debug)
 {
-	if (App->ui->focused.lookAt && App->ui->focused.lookAt->data == this)
+	if (this->IsFocused())
 	{
 		App->input->WrittingState(true, boxImage->rect);
-		App->render->DrawQuad({ boxText->Position.x + boxText->rect.w , boxText->Position.y,5, boxText->rect.h }, 255, 255, 255, 255, true, false);
+		SDL_Rect cursorPosition = App->input->GetTextInPos();
+
+		App->render->DrawQuad({ boxText->Position.x + cursorPosition.w, boxText->Position.y,4, boxText->rect.h }, 200, 200, 200, 255, true, false);
 	}
 	else
 		App->input->WrittingState(false, boxImage->rect);
