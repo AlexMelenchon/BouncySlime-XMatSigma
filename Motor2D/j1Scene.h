@@ -45,6 +45,8 @@ public:
 	void Camera();
 	//Checks camera limits
 	void CheckCameraLimits();
+	//Fade time to change maps
+	float mapFadeTime = 0.0f;
 
 	//--------PATHFINDING---------//
 	//Sets the debug pathfinding w/ the mouse
@@ -67,8 +69,7 @@ private:
 	uint height = 0u;
 	//The limits of the camera
 	iPoint  Hlimit = { 0,0 };
-	//Fade time to change maps
-	float mapFadeTime = 0.0f;
+
 
 	//--------PATHFNIDING DEBUG---------//
 	//The texture to blit the pathfinding on screen

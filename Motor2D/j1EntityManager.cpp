@@ -153,6 +153,8 @@ bool j1EntityManager::CleanUp()
 	while (tmp != nullptr)
 	{
 		tmp->data->CleanUp();
+		RELEASE(tmp->data);
+		EntityList.del(tmp);
 		tmp = tmp->next;
 	}
 	return ret;

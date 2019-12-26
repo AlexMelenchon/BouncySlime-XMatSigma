@@ -102,11 +102,11 @@ bool j1Scene::Update(float dt)
 {
 	BROFILER_CATEGORY("Scene Update", Profiler::Color::Orange)
 
-		//--------DEBUG---------//
+	//--------DEBUG---------//
 
-		//Loads the 1st map
-		if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-			App->fade->FadeToBlack(App->map->data.maplist.start->data->name.GetString(), NULL, mapFadeTime);
+	//Loads the 1st map
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+		App->fade->FadeToBlack(App->map->data.maplist.start->data->name.GetString(), NULL, mapFadeTime);
 
 	//Loads the 2nd map
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)

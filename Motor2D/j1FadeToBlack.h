@@ -21,6 +21,8 @@ public:
 
 	//--------FADE---------//
 	bool FadeToBlack(const char* mapNumber, int id, float time = 2.0f);
+	bool FadeToBlack(j1Module* SceneIn, j1Module* SceneOut, float time, bool load = false);
+
 
 private:
 	//--------FADE---------//
@@ -36,8 +38,9 @@ private:
 	SDL_Rect screen;
 	const char* mapToLoad = nullptr;
 
-	j1Module* moduleOff;
-	j1Module* moduleIn;
+	j1Module* moduleOff = nullptr;
+	j1Module* ModuleOn = nullptr;
+	bool load = false;
 
 	
 };

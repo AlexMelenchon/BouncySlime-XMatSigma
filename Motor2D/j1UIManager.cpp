@@ -97,6 +97,18 @@ bool j1UIManager::CleanUp()
 {
 	LOG("Freeing GUI");
 
+	//Iterate though all the remaining entities cleanUp
+	p2List_item<j1UIelement*>* tmp = UIList.start;
+	while (tmp != nullptr)
+	{
+
+		tmp->data->CleanUp();
+		RELEASE(tmp->data);
+		UIList.del(tmp);
+		tmp = tmp->next;
+	}
+
+
 	return true;
 }
 

@@ -52,7 +52,7 @@ bool j1Input::PreUpdate()
 {
 	BROFILER_CATEGORY("Input Pre-Update", Profiler::Color::Chartreuse)
 
-		static SDL_Event event;
+	static SDL_Event event;
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
@@ -92,6 +92,7 @@ bool j1Input::PreUpdate()
 		{
 		case SDL_QUIT:
 			windowEvents[WE_QUIT] = true;
+			return false;
 			break;
 
 		case SDL_WINDOWEVENT:

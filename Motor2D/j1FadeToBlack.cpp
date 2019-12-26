@@ -51,33 +51,56 @@ bool j1FadeToBlack::PostUpdate()
 	Uint32 now = SDL_GetTicks() - start_time;
 	float normalized = MIN(1.0f, (float)now / (float)total_time);
 
-	switch(current_step)
+	switch (current_step)
 	{
-		case fade_step::fade_to_black:
+	case fade_step::fade_to_black:
+	{
+		if (now >= total_time)
 		{
-			if(now >= total_time)
+			if (moduleOff)
+				moduleOff->Disable();
+
+			if (ModuleOn)
+				ModuleOn->Enable();
+
+			if (mapToLoad != nullptr)
 			{
 				App->map->CleanUp();
 				App->scene->Reset(mapToLoad);
-				App->input->ReSetKeys();
-				App->input->Disable();
-				// ---
-				total_time += total_time;
-				start_time = SDL_GetTicks();
-				current_step = fade_step::fade_from_black;
 			}
-		} break;
 
-		case fade_step::fade_from_black:
+			App->input->ReSetKeys();
+			App->input->Disable();
+
+			// ---
+			total_time += total_time;
+			start_time = SDL_GetTicks();
+			current_step = fade_step::fade_from_black;
+		}
+	} break;
+
+	case fade_step::fade_from_black:
+	{
+		normalized = 1.0f - normalized;
+
+		if (now >= total_time)
 		{
-			normalized = 1.0f - normalized;
+			current_step = fade_step::none;
 
-			if(now >= total_time)
+			mapToLoad = nullptr;
+			ModuleOn = nullptr;
+			moduleOff = nullptr;
+
+			if (load)
 			{
-				current_step = fade_step::none;
-				App->input->Enable();
+				App->LoadGame();
+				load = false;
 			}
-		} break;
+
+
+			App->input->Enable();
+		}
+	} break;
 	}
 
 	// Finally render the black square with alpha on the screen
@@ -95,7 +118,7 @@ bool j1FadeToBlack::FadeToBlack(const char* mapName, int id, float time)
 {
 	bool ret = false;
 
-	if(current_step == fade_step::none)
+	if (current_step == fade_step::none)
 	{
 		current_step = fade_step::fade_to_black;
 		start_time = SDL_GetTicks();
@@ -106,4 +129,21 @@ bool j1FadeToBlack::FadeToBlack(const char* mapName, int id, float time)
 	}
 
 	return ret;
+}
+
+bool j1FadeToBlack::FadeToBlack(j1Module* SceneIn, j1Module* SceneOut, float time, bool load)
+{
+	bool ret = false;
+
+	if (current_step == fade_step::none)
+	{
+		current_step = fade_step::fade_to_black;
+		start_time = SDL_GetTicks();
+		total_time = (Uint32)(time * 0.5f * 1000.0f);
+		ModuleOn = SceneIn;
+		moduleOff = SceneOut;
+		load = load;
+		ret = true;
+	}
+	return true;
 }
