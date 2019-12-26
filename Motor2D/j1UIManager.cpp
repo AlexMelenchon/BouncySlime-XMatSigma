@@ -104,6 +104,7 @@ bool j1UIManager::CleanUp()
 		UIList.del(tmp);
 		tmp = tmp->next;
 	}
+	UIList.clear();
 
 
 	bool ret = App->tex->UnLoad(atlas);
@@ -238,8 +239,7 @@ void j1UIManager::DeleteAllElements()
 		UIList.del(tmp);
 		tmp = tmp->next;
 	}
-
-
+	UIList.clear();
 }
 
 void j1UIManager::DeleteElement(p2List_item<j1UIelement*>* element)

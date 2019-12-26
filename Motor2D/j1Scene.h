@@ -51,6 +51,7 @@ public:
 	//Fade time to change maps
 	float mapFadeTime = 0.0f;
 
+	//Resets the Camera
 	void ResetCamera();
 
 	//--------PATHFINDING---------//
