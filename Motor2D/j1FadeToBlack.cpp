@@ -59,16 +59,16 @@ bool j1FadeToBlack::PostUpdate()
 		{
 			App->map->CleanUp();
 
-			if (mapToLoad != nullptr)
-			{
-				App->scene->Reset(mapToLoad);
-			}
-
 			if (moduleOff)
 				moduleOff->Disable();
 
 			if (ModuleOn)
 				ModuleOn->Enable();
+
+			if (mapToLoad != nullptr)
+			{
+				App->scene->Reset(mapToLoad);
+			}
 
 			App->input->ReSetKeys();
 			App->input->Disable();

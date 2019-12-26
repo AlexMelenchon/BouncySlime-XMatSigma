@@ -292,10 +292,9 @@ bool j1EntityManager::CleanMapEnt()
 			tmp->data->CleanUp();
 			RELEASE(tmp->data);
 			EntityList.del(tmp);
-			tmp = tmp->prev;
 		}
-		else
-			tmp = tmp->next;
+		tmp = tmp->next;
+
 	}
 
 	return ret;

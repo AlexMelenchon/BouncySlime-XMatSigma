@@ -10,37 +10,67 @@
 	<map />
 	<entities>
 		<player>
-			<position x="538.664307" y="927" />
-			<speed x="146.546249" y="0" />
-			<state current_state="1" />
-			<falling value="false" />
+			<position x="1450.49963" y="859.749939" />
+			<speed x="0" y="0" />
+			<state current_state="6" />
+			<falling value="true" />
 			<walling value="false" />
 			<wallTimer wallJumpTimer="0" />
 			<flip value="0" />
 		</player>
-		<enemyL>
-			<position x="778.133728" y="852.853394" />
-			<speed x="-203.5" y="-280.200012" />
-			<falling value="true" />
-			<trace x="802" y="899" w="155" h="0" />
+		<enemyF>
+			<position x="1264.50024" y="570.433716" />
+			<speed x="0" y="100" />
+			<trace x="1229" y="540" w="149" h="32" />
+			<flip value="0" />
+		</enemyF>
+		<enemyF>
+			<position x="1059.35791" y="240" />
+			<speed x="60" y="0" />
+			<trace x="804" y="240" w="438" h="45" />
+			<flip value="0" />
+		</enemyF>
+		<enemyF>
+			<position x="228.960007" y="231.439987" />
+			<speed x="0" y="-60" />
+			<trace x="231" y="230" w="68" h="183" />
 			<flip value="1" />
+		</enemyF>
+		<enemyF>
+			<position x="729.229858" y="695.460693" />
+			<speed x="0" y="-60" />
+			<trace x="762" y="621" w="68" h="222" />
+			<flip value="1" />
+		</enemyF>
+		<enemyF>
+			<position x="1519.41882" y="780.339111" />
+			<speed x="-27.2000027" y="100" />
+			<trace x="1550" y="519" w="92" h="350" />
+			<flip value="1" />
+		</enemyF>
+		<enemyL>
+			<position x="2271.63965" y="280" />
+			<speed x="60" y="0" />
+			<falling value="false" />
+			<trace x="2257" y="284" w="85" h="0" />
+			<flip value="0" />
 		</enemyL>
 		<enemyF>
-			<position x="1706.0603" y="581.119873" />
-			<speed x="-60" y="0" />
-			<trace x="1610" y="569" w="207" h="74" />
-			<flip value="1" />
+			<position x="272.749847" y="935.419556" />
+			<speed x="0" y="60" />
+			<trace x="204" y="954" w="130" h="67" />
+			<flip value="0" />
 		</enemyF>
 	</entities>
 	<pathfinding />
 	<gui />
 	<scene>
-		<current_map name="intro.tmx" />
+		<current_map name="map2.tmx" />
 	</scene>
 	<:anonymous />
 	<collision />
 	<fade />
 	<renderer>
-		<camera x="-126" y="-336" />
+		<camera x="-1134" y="-336" />
 	</renderer>
 </game_state>

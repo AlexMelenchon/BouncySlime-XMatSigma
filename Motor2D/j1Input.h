@@ -106,7 +106,7 @@ private:
 
 
 	p2SString		textString;
-	bool		writting;
+	bool		writting = false;
 	int position = 0;
 
 
