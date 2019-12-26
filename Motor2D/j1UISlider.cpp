@@ -4,6 +4,7 @@
 #include "j1Fonts.h"
 #include "j1Input.h"
 #include "j1Textures.h"
+#include "j1Audio.h"
 
 j1UISlider::j1UISlider()
 {
@@ -24,6 +25,18 @@ j1UISlider::~j1UISlider()
 
 bool j1UISlider::Awake(pugi::xml_node&)
 {
+	if (this->function == UIFunction::FNC_CHANGE_VFX)
+	{
+		thumb->PostoParent.x = -((int)App->audio->fxVolume * (line->rect.w - thumb->rect.w)) / 128;
+		thumb->Position.x = thumb->parent->Position.x - thumb->PostoParent.x;
+	}
+
+	if (this->function == UIFunction::FNC_CHANGE_VMUSIC)
+	{
+		thumb->PostoParent.x = -((int)App->audio->musicVolume * (line->rect.w - thumb->rect.w)) / 128;
+		thumb->Position.x = thumb->parent->Position.x - thumb->PostoParent.x;
+	}
+		
 	return true;
 }
 
