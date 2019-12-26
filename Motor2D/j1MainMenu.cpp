@@ -110,13 +110,13 @@ void j1MainMenu::OnGui(UIEventType type, UIFunction func, j1UIelement* userPoint
 
 		case UIFunction::FNC_OPTIONS:
 		{
-			optionsMenu = !optionsMenu;
+			
 			MenusLoad(UIFunction::FNC_OPTIONS);
 			break;
 		}
 		case UIFunction::FNC_CREDITS:
 
-			optionsMenu = !optionsMenu;
+			
 			MenusLoad(UIFunction::FNC_CREDITS);
 
 			break;

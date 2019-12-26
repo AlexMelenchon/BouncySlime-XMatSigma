@@ -18,8 +18,8 @@ j1UISlider::j1UISlider(drag_axis axis)
 	this->axis = axis;
 
 	//Create the child elements
-	line = App->ui->AddElement(ui_type::UI_IMAGE, this, { 0,0 }, false, false, true, { 73,992,256,64 }, this->listener, UIFunction::FNC_NONE, this->axis);
-	thumb = App->ui->AddElement(ui_type::UI_BUTTON, this, { 0,0 }, true, true, true, { 73, 36, 64, 64 }, this->listener, UIFunction::FNC_NONE, this->axis);
+	background = App->ui->AddElement(ui_type::UI_IMAGE, this, { 0,0 }, false, false, true, { 73,992,256,64 }, this->listener, UIFunction::FNC_NONE, this->axis);
+	button = App->ui->AddElement(ui_type::UI_BUTTON, this, { 0,0 }, true, true, true, { 73, 36, 64, 64 }, this->listener, UIFunction::FNC_NONE, this->axis);
 
 	
 
