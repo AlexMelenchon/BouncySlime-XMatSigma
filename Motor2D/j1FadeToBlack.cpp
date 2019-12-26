@@ -69,8 +69,8 @@ bool j1FadeToBlack::PostUpdate()
 			}
 
 			App->input->ReSetKeys();
-			App->input->Disable();
 
+			App->input->Disable();
 			if (load)
 			{
 				App->LoadGame();
@@ -108,9 +108,6 @@ bool j1FadeToBlack::PostUpdate()
 
 	return ret;
 }
-
-
-
 
 // Fade to black. At mid point deactivate one map, then activate the desired one
 bool j1FadeToBlack::FadeToBlack(const char* mapName, int id, float time)

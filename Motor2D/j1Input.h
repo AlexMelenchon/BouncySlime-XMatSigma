@@ -90,6 +90,9 @@ public:
 
 	void WrittingState(bool state, SDL_Rect rect);
 
+	void Disable();
+	void Enable();
+
 	// Get mouse / axis position
 	int			mouse_x;
 	int			mouse_y;
