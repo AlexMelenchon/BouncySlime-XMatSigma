@@ -60,6 +60,11 @@ bool j1UIInputBox::PostUpdate(bool debug)
 
 bool j1UIInputBox::CleanUp()
 {
+	App->tex->UnLoad(texture);
+	texture = nullptr;
+
+	boxImage = nullptr;
+	boxText = nullptr;
 	return true;
 }
 

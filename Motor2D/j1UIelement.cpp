@@ -146,6 +146,17 @@ bool j1UIelement::Update(float dt)
 
 }
 
+bool j1UIelement::CleanUp()
+{
+	bool ret = true;
+
+	ret = App->tex->UnLoad(texture);
+	texture = nullptr;
+
+	return ret;
+}
+
+
 void j1UIelement::OnClick()
 {
 	if (listener != nullptr)

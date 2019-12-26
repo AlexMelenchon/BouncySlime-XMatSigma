@@ -1,6 +1,7 @@
 #include "j1UIButton.h"
 #include "j1Scene.h"
 #include "j1Input.h"
+#include "j1Textures.h"
 #include "j1UIManager.h"
 
 
@@ -37,11 +38,6 @@ bool j1UIButton::PostUpdate(bool debug)
 
 	Draw(debug);
 
-	return true;
-}
-
-bool j1UIButton::CleanUp()
-{
 	return true;
 }
 

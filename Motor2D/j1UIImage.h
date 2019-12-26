@@ -12,12 +12,8 @@ public:
 
 	bool Awake(pugi::xml_node&);	
 
-	
-
 	bool PostUpdate(bool debug);
 
-	// Called before quitting
-	bool CleanUp();	
 
 	//--------SAVE & LOAD---------//
 	//Called when loading a save

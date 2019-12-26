@@ -53,7 +53,7 @@ public:
 	virtual bool PostUpdate(bool debug) { return true; };
 
 	// Called before quitting
-	virtual bool CleanUp() { return true; };
+	virtual bool CleanUp();
 
 
 	//--------DRAW--------//

@@ -57,7 +57,6 @@ bool j1FadeToBlack::PostUpdate()
 	{
 		if (now >= total_time)
 		{
-
 			App->map->CleanUp();
 
 			if (mapToLoad != nullptr)

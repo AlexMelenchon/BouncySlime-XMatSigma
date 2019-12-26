@@ -57,6 +57,9 @@ bool j1UISlider::PostUpdate(bool debug)
 
 bool j1UISlider::CleanUp()
 {
+	App->tex->UnLoad(texture);
+	texture = nullptr;
+
 	thumb = nullptr;
 	line = nullptr;
 
