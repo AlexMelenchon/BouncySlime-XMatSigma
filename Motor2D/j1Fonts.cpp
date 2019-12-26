@@ -8,13 +8,11 @@
 #include "SDL_TTF\include\SDL_ttf.h"
 #pragma comment( lib, "SDL_ttf/libx86/SDL2_ttf.lib" )
 
+//Constructor
 j1Fonts::j1Fonts() : j1Module()
 {
 	name.create("fonts");
 }
-
-//if (TTF_SizeText(default_font, "pepe", &w, &h))
-
 
 // Destructor
 j1Fonts::~j1Fonts()
@@ -101,7 +99,7 @@ SDL_Texture* j1Fonts::Print(const char* text, SDL_Color color, _TTF_Font* font)
 
 
 
-// calculate size of a text
+//	Calculates the size of a text
 bool j1Fonts::CalcSize(const char* text, int& width, int& height, _TTF_Font* font) const
 {
 	if (font == NULL)

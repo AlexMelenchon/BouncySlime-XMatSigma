@@ -376,11 +376,11 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 				break;
 			case(COLLIDER_DEATH):
 				inputs.add(IN_DEATH);
-				App->fade->FadeToBlack(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
+				App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
 				//ReSetMovement();
 				break;
 			case(COLLIDER_WIN):
-				App->fade->FadeToBlack(App->map->GetNextMap(),winFx.id,playerFadeTime );
+				App->fade->FadeToBlackMap(App->map->GetNextMap(),winFx.id,playerFadeTime );
 				ReSetMovement();
 				break;
 			case(COLLIDER_ENEMY):
@@ -389,7 +389,7 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 				if (CheckCollisionDir(playerCol->rect, coll->rect) != DIRECTION_DOWN)
 				{
 					inputs.add(IN_DEATH);
-					App->fade->FadeToBlack(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
+					App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
 				}
 
 				//ENEMY DIES

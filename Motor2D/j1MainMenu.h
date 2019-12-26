@@ -35,19 +35,22 @@ public:
 	//Manages the UI inputs of this module
 	void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr);
 
+	//Loads the options sub-menu
 	void MenusLoad(UIFunction func);
 
 
 private:
 
-	bool optionsMenu = false;	
-
-	j1UIelement* parent = nullptr;
-
+	//--------UI LOGIC---------//
+	
+	//Used to exit the game
 	bool exiting = true;
 
+	//Used to load/unload the options submenu
 	UIFunction lastcall;
 
+	//"Ghost" UI used for position reference to the sub-menus
+	j1UIelement* parent = nullptr;
 
 };
 

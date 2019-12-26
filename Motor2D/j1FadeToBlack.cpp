@@ -110,7 +110,8 @@ bool j1FadeToBlack::PostUpdate()
 }
 
 // Fade to black. At mid point deactivate one map, then activate the desired one
-bool j1FadeToBlack::FadeToBlack(const char* mapName, int id, float time)
+// From a map to map
+bool j1FadeToBlack::FadeToBlackMap(const char* mapName, int id, float time)
 {
 	bool ret = false;
 
@@ -127,7 +128,9 @@ bool j1FadeToBlack::FadeToBlack(const char* mapName, int id, float time)
 	return ret;
 }
 
-bool j1FadeToBlack::FadeToBlack(j1Module* SceneIn, j1Module* SceneOut, float time, bool load)
+// Fade to black. At mid point deactivate one map, then activate the desired one
+// From module to omdule
+bool j1FadeToBlack::FadeToBlackMod(j1Module* SceneIn, j1Module* SceneOut, float time, bool load)
 {
 	bool ret = false;
 

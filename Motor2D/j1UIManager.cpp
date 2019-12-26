@@ -96,15 +96,7 @@ bool j1UIManager::CleanUp()
 	LOG("Freeing GUI");
 
 	//Iterate though all the remaining entities cleanUp
-	p2List_item<j1UIelement*>* tmp = UIList.start;
-	while (tmp != nullptr)
-	{
-		tmp->data->CleanUp();
-		RELEASE(tmp->data);
-		UIList.del(tmp);
-		tmp = tmp->next;
-	}
-	UIList.clear();
+	DeleteAllElements();
 
 
 	bool ret = App->tex->UnLoad(atlas);
@@ -195,7 +187,6 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 
 void j1UIManager::InitElement(j1UIelement* element, pugi::xml_node config)
 {
-	element->Awake(config);
 	element->Start();
 }
 

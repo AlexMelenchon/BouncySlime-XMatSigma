@@ -36,6 +36,7 @@ public:
 	// Retrieve window scale
 	uint GetScale() const;
 
+	//Sets the window title for the map info
 	void ShowWindowTitle() const;
 
 public:

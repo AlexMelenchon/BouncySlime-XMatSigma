@@ -8,7 +8,7 @@
 
 #include "SDL/include/SDL.h"
 
-
+//Constructor
 j1Window::j1Window() : j1Module()
 {
 	window = NULL;
@@ -18,8 +18,7 @@ j1Window::j1Window() : j1Module()
 
 // Destructor
 j1Window::~j1Window()
-{
-}
+{}
 
 // Called before render is available
 bool j1Window::Awake(pugi::xml_node& config)
@@ -81,6 +80,7 @@ bool j1Window::Awake(pugi::xml_node& config)
 	return ret;
 }
 
+// Called at the end of the frame
 bool j1Window::PostUpdate()
 {
 	bool ret = true;
@@ -113,12 +113,14 @@ void j1Window::SetTitle(const char* new_title)
 	SDL_SetWindowTitle(window, new_title);
 }
 
+// Retrive window size
 void j1Window::GetWindowSize(uint& width, uint& height) const
 {
 	width = this->width;
 	height = this->height;
 }
 
+// Retrieve window scale
 uint j1Window::GetScale() const
 {
 	return scale;

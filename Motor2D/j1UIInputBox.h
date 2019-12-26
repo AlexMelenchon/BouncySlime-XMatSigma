@@ -7,35 +7,34 @@
 class j1UIInputBox : public j1UIelement
 {
 public:
+	//--------INTERNAL CONTROL---------//
+	//Constructors----
 	j1UIInputBox();
 	j1UIInputBox(char* txt);
 
+	//Destructors
 	~j1UIInputBox();
 
-	bool Awake(pugi::xml_node&);
-
-	bool Start();
-
+	//Called every frame after the element update
 	bool InheritUpdate(float dt);
+
+	// Called before all Updates
 	bool PostUpdate(bool debug);
-	void DeFocus();
 
 	// Called before quitting
 	bool CleanUp();
 
-
-	//--------SAVE & LOAD---------//
-	//Called when loading a save
-	bool Load(pugi::xml_node&) { return true; };
-
-	//Called to save the game
-	bool Save(pugi::xml_node&) const  const { return true; };
-
+	//--------INTERNAL MANAGEMENT---------//
+	//Retrives focus when the conditions are met
+	void DeFocus();
 
 private:
-
+	//--------INTERNAL MANAGEMENT---------//
+	//Input box childs------
 	j1UIelement* boxImage = nullptr;
 	j1UIelement* boxText = nullptr;
+
+	//The time elapsed that the cursor blinks
 	float cursorTimer = 0;
 };
 

@@ -7,35 +7,40 @@
 class j1UISlider : public j1UIelement
 {
 public:
+	//--------INTERNAL CONTROL---------//
+
+	//Constructors-----
 	j1UISlider();
 	j1UISlider(drag_axis axis);
+
+	//Destructors
 	~j1UISlider();
 
-	bool Awake(pugi::xml_node&);
-
+	// Called before the first frame when created
 	bool Start();
 
+	//Called every frame after the element update
 	bool InheritUpdate(float dt);
+
+	// Called before all Updates
 	bool PostUpdate(bool debug);
 
 	// Called before quitting
 	bool CleanUp();
 	
-	//--------SAVE & LOAD---------//
-	//Called when loading a save
-	bool Load(pugi::xml_node&) { return true; };
+	//--------SLIDER MANAGEMENT---------//
 
-	//Called to save the game
-	bool Save(pugi::xml_node&) const  const { return true; };
-
+	//Check if the slider button goes pass the limits & reposition it
 	void CheckLimits();
 
+	//Get the value (& translate it to audio) from the button
 	int GetAudioValue();
 
 
 private:
-	j1UIelement* thumb = nullptr;
-	j1UIelement* line = nullptr;
+	//--------SLIDER CHILDS---------//
+	j1UIelement* button = nullptr;
+	j1UIelement* background = nullptr;
 };
 
 
