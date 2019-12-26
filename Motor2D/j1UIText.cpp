@@ -27,6 +27,11 @@ bool j1UIText::Awake(pugi::xml_node&)
 
 bool j1UIText::Start()
 {
+	if (parent && parent->type == ui_type::UI_BUTTON)
+	{
+		this->PostoParent.x = -parent->rect.w / 2 + this->rect.w /2;
+		this->PostoParent.y = -parent->rect.h / 2 + this->rect.h / 2;
+	}
 	return true;
 }
 

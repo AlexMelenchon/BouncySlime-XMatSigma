@@ -53,8 +53,16 @@ enum class UIEventType
 
 enum class UIFunction
 {
-	FNC_UNKOWNN = -1,
+	FNC_NONE = -1,
 
+	//Main Menu
+	FNC_STARTGAME,
+	FNC_CONTINUEGAME,
+	FNC_OPTIONS,
+	FNC_CREDITS,
+	FNC_EXIT,
+
+	//In-Game
 	FNC_PAUSE
 
 };

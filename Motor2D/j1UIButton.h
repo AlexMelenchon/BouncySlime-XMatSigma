@@ -9,6 +9,9 @@ class j1UIButton : public j1UIelement
 {
 public:
 	j1UIButton();
+
+	j1UIButton(const char* text);
+
 	
 	~j1UIButton();
 

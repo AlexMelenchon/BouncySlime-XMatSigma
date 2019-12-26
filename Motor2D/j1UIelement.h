@@ -95,12 +95,12 @@ public:
 	
 
 	j1Module* listener = nullptr;
-	UIFunction function = UIFunction::FNC_UNKOWNN;
+	UIFunction function = UIFunction::FNC_NONE;
 
 	bool hovering = false;
 	bool dragging = false;
 
-
+	const char* text = nullptr;
 };
 
 #endif // !__J1UIELEMENT__

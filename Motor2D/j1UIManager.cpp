@@ -116,8 +116,11 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 	switch (type)
 	{
 	case ui_type::UI_BUTTON:
+		if (strlen(text) > 1)
+			tmp = new j1UIButton(text);
 
-		tmp = new j1UIButton();
+		else
+			tmp = new j1UIButton();
 		break;
 
 	case ui_type::UI_TEXT:

@@ -65,7 +65,7 @@ public:
 		bool enabled = false,
 		SDL_Rect section = { 0,0,0,0 },
 		j1Module* listener = nullptr,
-		UIFunction func = UIFunction::FNC_UNKOWNN,
+		UIFunction func = UIFunction::FNC_NONE,
 		drag_axis axis = drag_axis::MOV_ALL,
 		char* text = ""
 	);
