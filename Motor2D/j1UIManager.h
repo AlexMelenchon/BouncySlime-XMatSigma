@@ -74,6 +74,8 @@ public:
 
 	void DeleteElement(p2List_item<j1UIelement*>* element);
 
+	void ToDeleteElement();
+
 	p2List_item<j1UIelement*>* GetElementFromList(j1UIelement* toSearch);
 	void ChangeFocus();
 

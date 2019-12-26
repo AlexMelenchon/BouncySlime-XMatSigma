@@ -150,8 +150,7 @@ bool j1UIelement::CleanUp()
 {
 	bool ret = true;
 
-	ret = App->tex->UnLoad(texture);
-	texture = nullptr;
+	this->texture = nullptr;
 
 	return ret;
 }

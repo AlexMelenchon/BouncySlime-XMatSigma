@@ -74,9 +74,9 @@ public:
 
 	virtual void Move(float dt);
 	virtual void KeepDistanceToParent(float dt);
-	virtual int GetAudioValue(){ return 0;}
+	virtual int GetAudioValue() { return 0; }
 	bool IsFocused();
-	
+
 
 public:
 
@@ -94,7 +94,7 @@ public:
 	j1UIelement* parent = nullptr;
 	ui_type type = ui_type::UI_NONE;
 	drag_axis axis = drag_axis::MOV_NONE;
-	
+
 
 	j1Module* listener = nullptr;
 	UIFunction function = UIFunction::FNC_NONE;

@@ -77,6 +77,10 @@ private:
 
 	//Array to store the debug path made w/ the mouse
 	p2DynArray<iPoint> debugPath;
+
+	j1UIelement* parent = nullptr;
+	j1UIelement* pause = nullptr;
+
 };
 
 

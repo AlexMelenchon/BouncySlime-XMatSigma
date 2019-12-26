@@ -51,6 +51,10 @@ bool j1Scene::Start()
 
 	debug_tex = App->entities->debug_tex;
 
+	parent = App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 0,0 }, false, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
+
+	pause  = App->ui->AddElement(ui_type::UI_BUTTON, parent, { 100,100 }, true, false, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
+
 
 
 	return true;

@@ -86,9 +86,7 @@ bool j1UIManager::PostUpdate()
 		ret = tmp->data->PostUpdate(debug);
 		tmp = tmp->next;
 	}
-
-
-
+	   
 	return ret;
 }
 
@@ -109,7 +107,10 @@ bool j1UIManager::CleanUp()
 	}
 
 
-	return true;
+	bool ret = App->tex->UnLoad(atlas);
+	atlas = nullptr;
+
+	return ret;
 }
 
 // const getter for atlas
@@ -229,7 +230,26 @@ void j1UIManager::ChangeFocus()
 
 void j1UIManager::DeleteElement(p2List_item<j1UIelement*>* element)
 {
+	 
+	for (p2List_item<j1UIelement*>* item = UIList.start; item != nullptr; item = item->next)
+	{
+		if (item->data->parent == element->data)
+		{
+			DeleteElement(item);
+		}
+	}
 	element->data->CleanUp();
 	RELEASE(element->data);
 	UIList.del(element);
+}
+
+void j1UIManager::ToDeleteElement()
+{
+	p2List_item<j1UIelement*>* item = nullptr;
+
+	for (item = UIList.start; item; item = item->next)
+	{
+		if (item->data->to_delete)
+			App->ui->DeleteElement(item);
+	}
 }
