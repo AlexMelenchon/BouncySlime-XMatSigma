@@ -28,6 +28,8 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	void OnDrag();
+
 
 	//--------SAVE & LOAD---------//
 	//Called when loading a save

@@ -71,8 +71,10 @@ public:
 	virtual void OnClick();
 	virtual void OnRelease();
 	virtual void OnDrag();
+
 	virtual void Move(float dt);
 	virtual void KeepDistanceToParent(float dt);
+	virtual int GetAudioValue(){ return 0;}
 	bool IsFocused();
 	
 

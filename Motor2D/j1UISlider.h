@@ -30,6 +30,8 @@ public:
 
 	void CheckLimits();
 
+	int GetAudioValue();
+
 
 private:
 

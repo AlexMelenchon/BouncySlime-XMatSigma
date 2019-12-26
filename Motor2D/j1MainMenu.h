@@ -33,9 +33,8 @@ public:
 
 	//--------UI---------//
 	//Manages the UI inputs of this module
-	void OnGui(UIEventType type, UIFunction func);
+	void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr);
 
-	void OptionsMenu(bool is_active);
 	void OptionsLoad(bool to_load);
 
 

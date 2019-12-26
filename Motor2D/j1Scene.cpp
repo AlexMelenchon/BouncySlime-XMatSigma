@@ -337,7 +337,7 @@ void j1Scene::CheckCameraLimits()
 }
 
 //Manages the UI inputs of this module
-void j1Scene::OnGui(UIEventType type, UIFunction func)
+void j1Scene::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer)
 {
 	switch (type)
 	{
