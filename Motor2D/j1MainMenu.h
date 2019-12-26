@@ -35,8 +35,13 @@ public:
 	//Manages the UI inputs of this module
 	void OnGui(UIEventType type, UIFunction func);
 
+	void OptionsMenu(bool is_active);
+	void OptionsLoad(bool to_load);
+
 
 private:
+
+	bool optionsMenu = false;
 
 };
 

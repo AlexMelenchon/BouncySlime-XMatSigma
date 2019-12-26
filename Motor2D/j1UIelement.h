@@ -101,6 +101,8 @@ public:
 	bool dragging = false;
 
 	const char* text = nullptr;
+
+	bool to_delete = false;
 };
 
 #endif // !__J1UIELEMENT__

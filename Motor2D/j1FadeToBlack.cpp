@@ -72,6 +72,13 @@ bool j1FadeToBlack::PostUpdate()
 			App->input->ReSetKeys();
 			App->input->Disable();
 
+			if (load)
+			{
+				App->LoadGame();
+				load = false;
+			}
+
+
 			// ---
 			total_time += total_time;
 			start_time = SDL_GetTicks();
@@ -90,13 +97,6 @@ bool j1FadeToBlack::PostUpdate()
 			mapToLoad = nullptr;
 			ModuleOn = nullptr;
 			moduleOff = nullptr;
-
-			if (load)
-			{
-				App->LoadGame();
-				load = false;
-			}
-
 
 			App->input->Enable();
 		}
@@ -142,7 +142,7 @@ bool j1FadeToBlack::FadeToBlack(j1Module* SceneIn, j1Module* SceneOut, float tim
 		total_time = (Uint32)(time * 0.5f * 1000.0f);
 		ModuleOn = SceneIn;
 		moduleOff = SceneOut;
-		load = load;
+		this->load = load;
 		ret = true;
 	}
 	return true;

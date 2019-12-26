@@ -52,6 +52,8 @@ bool j1MainMenu::PostUpdate()
 {
 	bool ret = true;
 
+	OptionsMenu(optionsMenu);
+
 	return true;
 }
 
@@ -78,7 +80,14 @@ void j1MainMenu::OnGui(UIEventType type, UIFunction func)
 		}
 		case UIFunction::FNC_CONTINUEGAME:
 		{
-			App->fade->FadeToBlack(App->scene, this, App->scene->mapFadeTime,true);
+			App->fade->FadeToBlack(App->scene, this, App->scene->mapFadeTime, true);
+			break;
+		}
+
+		case UIFunction::FNC_OPTIONS:
+		{
+			optionsMenu = !optionsMenu;
+			OptionsLoad(optionsMenu);
 			break;
 		}
 
@@ -88,6 +97,25 @@ void j1MainMenu::OnGui(UIEventType type, UIFunction func)
 
 	}
 
+
+
+}
+
+void j1MainMenu::OptionsLoad(bool to_load)
+{
+	if (to_load)
+	{
+		//TODO: Create the menu
+
+
+	}
+	else
+	{
+		//Check if though all the list if they have the flag to delete = true;
+		//Call DeleteElement to them
+
+
+	}
 
 
 }
