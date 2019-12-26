@@ -36,6 +36,9 @@ bool j1MainMenu::Start()
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 700,450 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_OPTIONS, drag_axis::MOV_NONE, "Settings");
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 700,550 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_CREDITS, drag_axis::MOV_NONE, "Credits");
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 700,650 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_EXIT, drag_axis::MOV_NONE, "Exit");
+
+	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 20,650 }, true, false, true, {331,991,64,64 }, this, UIFunction::FNC_GITHUB, drag_axis::MOV_NONE);
+
 	
 	return true;
 }
@@ -100,6 +103,9 @@ void j1MainMenu::OnGui(UIEventType type, UIFunction func, j1UIelement* userPoint
 			break;
 		}
 
+		case UIFunction::FNC_GITHUB:
+			ShellExecuteA(NULL, "open", "https://github.com/AlexMelenchon/BouncySlime-XMatSigma", NULL, NULL, SW_SHOWNORMAL);
+			break;
 		case UIFunction::FNC_EXIT:
 		{
 			exiting = false;

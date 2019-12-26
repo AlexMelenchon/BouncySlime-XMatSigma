@@ -73,8 +73,8 @@ enum class UIFunction
 	FNC_CHANGE_VMUSIC,
 	FNC_CHANGE_VFX,
 
-
-
+	//Link
+	FNC_GITHUB,
 
 };
 
