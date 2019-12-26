@@ -187,7 +187,6 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 
 void j1UIManager::InitElement(j1UIelement* element, pugi::xml_node config)
 {
-	element->Awake(config);
 	element->Start();
 }
 
