@@ -47,6 +47,7 @@ public:
 	// Called each loop iteration
 	bool Update(float dt);
 	virtual bool InheritUpdate(float dt) { return true; }
+	virtual void DeFocus();
 
 
 	virtual bool PostUpdate(bool debug) { return true; };

@@ -42,16 +42,15 @@ bool j1Scene::Awake(pugi::xml_node& scene_config)
 // Called before the first frame
 bool j1Scene::Start()
 {
+
+	//Create the player
+	App->entities->AddEntity(entityType::PLAYER, { 0,0 });
+
 	//Loads the first map
 	Reset(App->map->data.maplist.start->data->name.GetString());
 
 	debug_tex = App->entities->debug_tex;
 
-	//App->ui->AddElement(ui_type::UI_BUTTON, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, true, true, { 73,406,64,64 }, this)
-		//, { 100,300 }, true, true, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
-
-	//App->ui->AddElement(ui_type::UI_INPUTBOX, nullptr, { 100,600 }, true, true, true, { 0,0,0,0 }, this, UIFunction::FNC_UNKOWNN, drag_axis::MOV_Y, "macarró");
-	App->ui->AddElement(ui_type::UI_SLIDER, nullptr, { 100,400 }, true, true, true, { 0,0,0,0 }, this, UIFunction::FNC_UNKOWNN, drag_axis::MOV_X);
 
 
 	return true;
@@ -159,7 +158,6 @@ bool j1Scene::Update(float dt)
 		App->pause = !App->pause;
 	}
 
-
 	//Turns volume up
 	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN && (App->audio->musicVolume < 100 && App->audio->fxVolume < 100))
 	{
@@ -177,10 +175,6 @@ bool j1Scene::Update(float dt)
 
 	//Draws the current map
 	App->map->Draw();
-
-	//Sets the window title for the map info
-	showWindowTitle();
-
 
 	// Debug pathfinding w/ mouse ------------------------------
 	//Blits the debug pathfinding, if exists
@@ -230,43 +224,6 @@ bool j1Scene::Save(pugi::xml_node& save) const
 {
 	save.append_child("current_map").append_attribute("name") = App->map->data.currentmap.GetString(); //Saves the current map info
 	return true;
-}
-
-//Sets the window title for the map info
-void j1Scene::showWindowTitle() const
-{
-	if (App->windowTitleControl) //Map related info
-	{
-		p2SString title("%s - %s || Map:%dx%d Tiles:%dx%d Tilesets:%d Mouse Position X:%d Y:%d Mouse Tilset:%d,%d Current Map:%s",
-			App->GetTitle(), App->GetOrganization(),
-			App->map->data.width, App->map->data.height,
-			App->map->data.tile_width, App->map->data.tile_height,
-			App->map->data.tilesets.count(), App->input->mouse_x - App->render->camera.x,
-			App->input->mouse_y - App->render->camera.y,
-			(App->input->mouse_x - App->render->camera.x) / App->map->data.tile_width,
-			(App->input->mouse_y - App->render->camera.y) / App->map->data.tile_height,
-			App->map->data.currentmap.GetString());
-
-		App->win->SetTitle(title.GetString());
-	}
-	else //Frame control info
-	{
-		p2SString cap;
-		if (App->frameCap)
-			cap.create("ON");
-		else
-			cap.create("OFF");
-
-
-		p2SString title("%s - %s || FPS: %i Av.FPS: %.2f || FrameCap: %s FrameLimit: %i VSYNC %s || Last Frame Ms: %u ",
-			App->GetTitle(), App->GetOrganization(),
-			App->frames_on_last_update, App->avg_fps,
-			cap.GetString(), App->capTime,
-			App->render->vsync.GetString(),
-			App->last_frame_ms);
-
-		App->win->SetTitle(title.GetString());
-	}
 }
 
 //Sets the debug pathfinding w/ the mouse

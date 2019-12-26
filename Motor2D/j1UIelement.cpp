@@ -98,7 +98,7 @@ bool j1UIelement::Update(float dt)
 			App->ui->focused.lookAt = nullptr;
 			App->ui->focused.state = focusState::ST_FREE;
 		}
-		else if (App->ui->focused.lookAt && App->ui->focused.lookAt->data != this && App->ui->focused.state == focusState::ST_FREE)
+		else if (App->ui->focused.lookAt && App->ui->focused.lookAt->data != this && App->ui->focused.state == focusState::ST_FREE &&  App->ui->focused.lookAt->data->type != ui_type::UI_INPUTBOX)
 			App->ui->focused.lookAt = nullptr;
 
 		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
@@ -130,13 +130,7 @@ bool j1UIelement::Update(float dt)
 			Move(dt);
 		}
 
-		if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE || App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
-		{
-			App->ui->focused.lookAt->data->OnRelease();
-			App->ui->focused.lookAt->data->dragging = false;
-			//App->ui->focused.lookAt = nullptr;
-		}
-
+		DeFocus();
 	}
 
 
@@ -223,4 +217,14 @@ bool j1UIelement::IsFocused()
 {
 	return(App->ui->focused.lookAt && App->ui->focused.lookAt->data == this);
 
+}
+
+void j1UIelement::DeFocus()
+{
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE || App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+	{
+		App->ui->focused.lookAt->data->OnRelease();
+		App->ui->focused.lookAt->data->dragging = false;
+		App->ui->focused.lookAt = nullptr;
+	}
 }

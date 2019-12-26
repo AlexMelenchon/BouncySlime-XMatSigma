@@ -17,7 +17,6 @@ j1UISlider::j1UISlider(drag_axis axis)
 
 	line = App->ui->AddElement(ui_type::UI_IMAGE, this, { 0,0 }, false, false, true, { 73,992,256,64 }, this->listener, UIFunction::FNC_UNKOWNN, this->axis);
 	thumb = App->ui->AddElement(ui_type::UI_BUTTON, this, { 0,0 }, true, true, true, { 73, 406, 64, 64 }, this->listener, UIFunction::FNC_UNKOWNN, this->axis);
-
 }
 
 j1UISlider::~j1UISlider()
@@ -30,14 +29,15 @@ bool j1UISlider::Awake(pugi::xml_node&)
 
 bool j1UISlider::Start()
 {
-
 	return true;
 }
 
 bool j1UISlider::InheritUpdate(float dt)
 {
+	//The childs follow the father's enabled
 	thumb->enabled = this->enabled;
 	line, enabled = this->enabled;
+
 	//Check Bounadries
 	CheckLimits();
 
@@ -57,18 +57,17 @@ bool j1UISlider::CleanUp()
 
 void j1UISlider::CheckLimits()
 {
+	// Left
 	if (thumb->PostoParent.x > 0)
 	{
 		thumb->PostoParent.x = 0;
-
 		thumb->Position.x = thumb->parent->Position.x + thumb->PostoParent.x;
 
 	}
+	//Right
 	else if (thumb->PostoParent.x < (-line->rect.w + thumb->rect.w))
 	{
 		thumb->PostoParent.x = -line->rect.w + thumb->rect.w;
 		thumb->Position.x = thumb->parent->Position.x - thumb->PostoParent.x;
 	}
-
-
 }

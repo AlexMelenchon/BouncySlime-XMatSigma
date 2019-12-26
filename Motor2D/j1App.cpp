@@ -19,6 +19,7 @@
 #include "j1LandEnemy.h"
 #include "j1FlyingEnemy.h"
 #include "j1UIManager.h"
+#include "j1MainMenu.h"
 
 
 // Constructor
@@ -40,6 +41,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	tex = new j1Textures();
 	audio = new j1Audio();
 	scene = new j1Scene();
+	mainMenu = new j1MainMenu();
 	map = new j1Map();
 	entities = new j1EntityManager();
 	collision = new j1Collision();
@@ -60,6 +62,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(pathfinding);
 	AddModule(ui);
 	AddModule(scene);
+	AddModule(mainMenu);
 	AddModule(collision);
 	AddModule(fade);
 
@@ -126,6 +129,8 @@ bool j1App::Awake()
 		}
 	}
 
+	scene->Disable();
+
 	return ret;
 }
 
@@ -138,6 +143,7 @@ bool j1App::Start()
 
 	while(item != NULL && ret == true)
 	{
+		if(item->data->active)
 		ret = item->data->Start();
 		item = item->next;
 	}

@@ -89,6 +89,7 @@
     <ClCompile Include="j1App.cpp" />
     <ClCompile Include="j1Audio.cpp" />
     <ClCompile Include="j1Input.cpp" />
+    <ClCompile Include="j1MainMenu.cpp" />
     <ClCompile Include="j1Map.cpp" />
     <ClCompile Include="j1ParticleShuriken.cpp" />
     <ClCompile Include="j1Pathfinding.cpp" />
@@ -116,6 +117,7 @@
     <ClInclude Include="j1FlyingEnemy.h" />
     <ClInclude Include="j1Fonts.h" />
     <ClInclude Include="j1LandEnemy.h" />
+    <ClInclude Include="j1MainMenu.h" />
     <ClInclude Include="j1ParticleShuriken.h" />
     <ClInclude Include="j1Pathfinding.h" />
     <ClInclude Include="j1PerfTimer.h" />

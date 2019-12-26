@@ -25,6 +25,7 @@ class j1PathFinding;
 class j1LandEnemy;
 class j1FlyingEnemy;
 class j1UIManager;
+class j1MainMenu;
 
 class j1App
 {
@@ -109,6 +110,7 @@ public:
 	j1PathFinding*		pathfinding;
 	j1UIManager*		ui;
 	j1Fonts*			fonts;
+	j1MainMenu*			mainMenu;
 
 	//--------CONFIG---------//
 	//Config File

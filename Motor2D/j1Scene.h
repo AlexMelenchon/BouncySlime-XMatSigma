@@ -46,10 +46,6 @@ public:
 	//Checks camera limits
 	void CheckCameraLimits();
 
-	//--------WINDOW---------//
-	//Sets the window title for the map info
-	void showWindowTitle() const;
-
 	//--------PATHFINDING---------//
 	//Sets the debug pathfinding w/ the mouse
 	void setDebugPathfinding();
@@ -81,7 +77,6 @@ private:
 	//Array to store the debug path made w/ the mouse
 	p2DynArray<iPoint> debugPath;
 };
-
 
 
 #endif // __j1SCENE_H__

@@ -41,7 +41,7 @@ bool j1UIManager::Start()
 // Update all guis
 bool j1UIManager::PreUpdate()
 {
-	bool ret = false;
+	bool ret = true;
 
 	p2List_item<j1UIelement*>* tmp = UIList.start;
 
@@ -60,7 +60,7 @@ bool j1UIManager::PreUpdate()
 
 bool j1UIManager::Update(float dt)
 {
-	bool ret = false;
+	bool ret = true;
 
 	p2List_item<j1UIelement*>* tmp = UIList.start;
 
@@ -77,7 +77,7 @@ bool j1UIManager::Update(float dt)
 // Called after all Updates
 bool j1UIManager::PostUpdate()
 {
-	bool ret = false;
+	bool ret = true;
 
 	p2List_item<j1UIelement*>* tmp = UIList.start;
 

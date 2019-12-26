@@ -18,6 +18,7 @@ public:
 
 	bool InheritUpdate(float dt);
 	bool PostUpdate(bool debug);
+	void DeFocus();
 
 	// Called before quitting
 	bool CleanUp();

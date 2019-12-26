@@ -55,13 +55,23 @@ bool j1UIInputBox::PostUpdate(bool debug)
 	else
 		App->input->WrittingState(false, boxImage->rect);
 
-	LOG("%i, %i %i, %i", this->rect.x, this->rect.y, this->rect.w, this->rect.h);
-
-
 	return true;
 }
 
 bool j1UIInputBox::CleanUp()
 {
 	return true;
+}
+
+
+void j1UIInputBox::DeFocus()
+{
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE || App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+	{
+		App->ui->focused.lookAt->data->OnRelease();
+		App->ui->focused.lookAt->data->dragging = false;
+	}
+
+	if(App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && !this->hovering)
+		App->ui->focused.lookAt = nullptr;
 }
