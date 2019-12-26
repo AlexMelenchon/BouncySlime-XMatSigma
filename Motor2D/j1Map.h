@@ -135,6 +135,7 @@ public:
 	MapData data;
 	const char* GetNextMap();
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
+	p2SString menu_tmx;
 
 
 private:

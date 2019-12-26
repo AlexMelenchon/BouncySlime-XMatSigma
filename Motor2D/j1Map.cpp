@@ -43,6 +43,8 @@ bool j1Map::Awake(pugi::xml_node& config)
 	}
 	data.maplist = data.maplist;
 
+	menu_tmx = config.child("intro").attribute("name").as_string();
+
 	return ret;
 }
 

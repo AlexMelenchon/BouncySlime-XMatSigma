@@ -48,12 +48,16 @@ bool j1Enemy::CleanUp()
 //Changes the state of the enemy
 void j1Enemy::UpdateState()
 {
-	if (abs(abs(App->entities->player->fpPosition.x) - abs(fpPosition.x)) < chasingDistance && App->entities->player->getState() != ST_DEAD && abs(abs(App->entities->player->fpPosition.y) - abs(fpPosition.y)) < chasingDistance)
+	if (App->entities->player != nullptr)
 	{
-		state = enemy_state::ST_CHASING;
+		if (abs(abs(App->entities->player->fpPosition.x) - abs(fpPosition.x)) < chasingDistance && App->entities->player->getState() != ST_DEAD && abs(abs(App->entities->player->fpPosition.y) - abs(fpPosition.y)) < chasingDistance)
+		{
+			state = enemy_state::ST_CHASING;
+		}
+		else
+			state = enemy_state::ST_IDLE;
 	}
-	else
-		state = enemy_state::ST_IDLE;
+	
 }
 
 // Called each loop iteration

@@ -15,7 +15,7 @@
     <resolution width="1024" height="768" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
-    <resizable value="false"/>
+    <resizable  value="false"/>
     <fullscreen_window value="false"/>
   </window>
 
@@ -36,6 +36,7 @@
     <level name="intro.tmx"/>
     <level name="map2.tmx"/>
     <level name="map1.tmx"/>
+    <intro name= "menu.tmx"/>
   </map>
 
   <audio>
@@ -43,7 +44,7 @@
   </audio>
   
   <fonts>
-    <default_font file ="textures/fonts/open_sans/OpenSans-Regular.ttf" size="12"/>
+    <default_font file ="textures/fonts/VCR_OSD_MONO/VCR_OSD_MONO_1.001.ttf" size="24"/>
   </fonts>
   <entities>
 

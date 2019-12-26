@@ -100,7 +100,7 @@ public:
 	bool hovering = false;
 	bool dragging = false;
 
-	const char* text = nullptr;
+	char* text = nullptr;
 };
 
 #endif // !__J1UIELEMENT__
