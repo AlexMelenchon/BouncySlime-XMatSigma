@@ -11,8 +11,8 @@ j1UIInputBox::j1UIInputBox()
 j1UIInputBox::j1UIInputBox(char* txt)
 {
 	this->type = ui_type::UI_INPUTBOX;
-	boxImage = App->ui->AddElement(ui_type::UI_IMAGE, this, this->Position, true, false, this->enabled, { 73, 992, 256, 64 }, this->listener, UIFunction::FNC_NONE);
-	boxText = App->ui->AddElement(ui_type::UI_TEXT, this, this->Position, true, false, this->enabled, this->rect, this->listener, UIFunction::FNC_NONE, this->axis, txt);
+	boxImage = App->ui->AddElement(ui_type::UI_IMAGE, this, this->Position, true, false, true, { 73, 992, 256, 64 }, this->listener, UIFunction::FNC_NONE);
+	boxText = App->ui->AddElement(ui_type::UI_TEXT, this, this->Position, true, false, true, this->rect, this->listener, UIFunction::FNC_NONE, this->axis, txt);
 }
 
 j1UIInputBox::~j1UIInputBox()
@@ -20,8 +20,6 @@ j1UIInputBox::~j1UIInputBox()
 
 bool j1UIInputBox::Awake(pugi::xml_node&)
 {
-
-
 	return true;
 }
 

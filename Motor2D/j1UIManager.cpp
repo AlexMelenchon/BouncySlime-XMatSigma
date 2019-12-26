@@ -86,7 +86,7 @@ bool j1UIManager::PostUpdate()
 		ret = tmp->data->PostUpdate(debug);
 		tmp = tmp->next;
 	}
-	   
+
 	return ret;
 }
 
@@ -99,7 +99,6 @@ bool j1UIManager::CleanUp()
 	p2List_item<j1UIelement*>* tmp = UIList.start;
 	while (tmp != nullptr)
 	{
-
 		tmp->data->CleanUp();
 		RELEASE(tmp->data);
 		UIList.del(tmp);

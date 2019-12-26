@@ -4,6 +4,7 @@
 #include "j1Map.h"
 #include "j1Scene.h"
 #include "j1Audio.h"
+#include "j1Input.h"
 
 j1MainMenu::j1MainMenu()
 {}
@@ -27,6 +28,7 @@ bool j1MainMenu::Start()
 
 	App->map->Load(App->map->menu_tmx.GetString());
 
+
 	parent = App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 0,0 }, false, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
 
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 700,250 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_CONTINUEGAME, drag_axis::MOV_NONE, "Play");
@@ -40,27 +42,23 @@ bool j1MainMenu::Start()
 
 bool j1MainMenu::PreUpdate()
 {
-	bool ret = true;
+	//Loads the game
+	if (App->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
+		App->ui->debug = !App->ui->debug;
 
-	return true;
+	return exiting;
 }
 
 bool j1MainMenu::Update(float dt)
 {
-	bool ret = true;
-
 	App->map->Draw();
 
-	return true;
+	return exiting;
 }
 
 bool j1MainMenu::PostUpdate()
 {
-	bool ret = true;
-
-	
-
-	return true;
+	return exiting;
 }
 
 bool j1MainMenu::CleanUp()
@@ -95,6 +93,12 @@ void j1MainMenu::OnGui(UIEventType type, UIFunction func, j1UIelement* userPoint
 		{
 			optionsMenu = !optionsMenu;
 			OptionsLoad(optionsMenu);
+			break;
+		}
+
+		case UIFunction::FNC_EXIT:
+		{
+			exiting = false;
 			break;
 		}
 

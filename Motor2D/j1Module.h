@@ -12,6 +12,7 @@
 #include "p2Point.h"
 #include "SDL/include/SDL_render.h"
 #include "SDL/include/SDL_rect.h"
+#include "SDL/include/SDL.h"
 #include "p2List.h"
 #include "p2Log.h"
 #include"p2animation.h"
@@ -62,11 +63,18 @@ enum class UIFunction
 	FNC_OPTIONS,
 	FNC_CREDITS,
 	FNC_EXIT,
+
+	//In-Game
+	FNC_PAUSE,
+	FNC_EXITGAME,
+	FNC_SAVE,
+
+	//Both
 	FNC_CHANGE_VMUSIC,
 	FNC_CHANGE_VFX,
 
-	//In-Game
-	FNC_PAUSE
+
+
 
 };
 

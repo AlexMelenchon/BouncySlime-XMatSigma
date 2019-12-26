@@ -30,8 +30,6 @@ bool j1FadeToBlack::Awake(pugi::xml_node& config)
 	return true;
 }
 
-
-
 // Load assets
 bool j1FadeToBlack::Start()
 {
@@ -59,20 +57,20 @@ bool j1FadeToBlack::PostUpdate()
 		{
 			App->map->CleanUp();
 
-			if (mapToLoad != nullptr)
-			{
-				App->scene->Reset(mapToLoad);
-			}
-
 			if (moduleOff)
 				moduleOff->Disable();
 
 			if (ModuleOn)
 				ModuleOn->Enable();
 
-			App->input->ReSetKeys();
-			App->input->Disable();
+			if (mapToLoad != nullptr)
+			{
+				App->scene->Reset(mapToLoad);
+			}
 
+			App->input->ReSetKeys();
+
+			App->input->Disable();
 			if (load)
 			{
 				App->LoadGame();
@@ -110,9 +108,6 @@ bool j1FadeToBlack::PostUpdate()
 
 	return ret;
 }
-
-
-
 
 // Fade to black. At mid point deactivate one map, then activate the desired one
 bool j1FadeToBlack::FadeToBlack(const char* mapName, int id, float time)

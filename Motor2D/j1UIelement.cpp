@@ -23,13 +23,15 @@ bool j1UIelement::Start()
 	return true;
 }
 
-void j1UIelement::Draw(bool debug)
+bool j1UIelement::Draw(bool debug)
 {
-	if (App->ui->focused.lookAt && App->ui->focused.lookAt->data == this)
+
+
+	if (this->IsFocused())
 	{
 		SDL_SetTextureColorMod(texture, 150, 150, 150);
 	}
-	else if (hovering)
+	else if (hovering || (parent && parent->hovering))
 	{
 		SDL_SetTextureColorMod(texture, 200, 200, 200);
 	}
@@ -45,6 +47,8 @@ void j1UIelement::Draw(bool debug)
 	{
 		App->render->DrawQuad({ Position.x, Position.y, rect.w, rect.h }, 0, 255, 255, 255, false, false);
 	}
+
+	return true;
 }
 
 bool j1UIelement::OnHover()

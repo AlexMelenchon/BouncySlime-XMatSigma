@@ -63,6 +63,9 @@ public:
 	//Cleans all the map entities
 	bool CleanMapEnt();
 
+	//Erases the player from the map
+	bool DeletePlayer();
+
 	//Since player is used in other modules, we are going to have a pointer only to him
 	//Also the player is an unique entity case in the code, since is never destroyed,
 	//we will only change it's position & reset it's movement & state

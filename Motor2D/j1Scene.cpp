@@ -1,5 +1,3 @@
-#include "p2Defs.h"
-#include "p2Log.h"
 #include "j1App.h"
 #include "j1Input.h"
 #include "j1Textures.h"
@@ -15,6 +13,7 @@
 #include "j1Collision.h"
 #include "j1EntityManager.h"
 #include "j1UIManager.h"
+#include "j1MainMenu.h"
 
 
 //Constructor
@@ -162,6 +161,11 @@ bool j1Scene::Update(float dt)
 		App->pause = !App->pause;
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+	{
+		App->fade->FadeToBlack(App->mainMenu, this, mapFadeTime);
+	}
+
 	//Turns volume up
 	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN && (App->audio->musicVolume < 100 && App->audio->fxVolume < 100))
 	{
@@ -192,10 +196,9 @@ bool j1Scene::Update(float dt)
 // Called each loop iteration
 bool j1Scene::PostUpdate()
 {
-
 	BROFILER_CATEGORY("Scene Post-Update", Profiler::Color::Orange)
 
-		bool ret = true;
+	bool ret = true;
 
 	return ret;
 }
@@ -204,6 +207,15 @@ bool j1Scene::PostUpdate()
 bool j1Scene::CleanUp()
 {
 	LOG("Freeing scene");
+	debug_tex = nullptr;
+	debugPath.Clear();
+
+	//Delete Player
+	App->entities->DeletePlayer();
+
+	//Delete the UI
+	App->ui->CleanUp();
+
 
 	return true;
 }
@@ -353,14 +365,49 @@ void j1Scene::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer)
 		case UIFunction::FNC_PAUSE:
 		{
 			App->pause = !App->pause;
-			break;
 		}
-		}
-
-
 		break;
-	}
 
+		case UIFunction::FNC_EXIT:
+		{
+			App->fade->FadeToBlack(App->mainMenu, this, mapFadeTime);
+		}
+		break;
+
+		}
+
+
+	}
+	break;
+
+	case UIEventType::EVENT_DRAG:
+	{
+
+		switch (func)
+		{
+		case UIFunction::FNC_CHANGE_VMUSIC:
+		{
+			if (userPointer)
+			{
+				App->audio->musicVolume = userPointer->GetAudioValue();
+			}
+		}
+		break;
+
+		case UIFunction::FNC_CHANGE_VFX:
+		{
+			if (userPointer)
+			{
+				App->audio->fxVolume = userPointer->GetAudioValue();
+			}
+		}
+		break;
+
+		}
+
+
+	}
+	break;
 
 
 	}

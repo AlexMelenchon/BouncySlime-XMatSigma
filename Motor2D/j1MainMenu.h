@@ -41,7 +41,10 @@ public:
 private:
 
 	bool optionsMenu = false;
+
 	j1UIelement* parent = nullptr;
+
+	bool exiting = true;
 
 
 };

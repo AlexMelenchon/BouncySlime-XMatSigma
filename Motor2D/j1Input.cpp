@@ -250,3 +250,22 @@ void j1Input::WrittingState(bool state, SDL_Rect rect)
 		}
 	}
 }
+
+void j1Input::Disable()
+{
+	if (active == true)
+	{
+		active = false;
+		ReSetKeys();
+	}
+}
+
+void j1Input::Enable()
+{
+	if (active == false)
+	{
+		active = true;
+		ReSetKeys();
+	}
+
+}

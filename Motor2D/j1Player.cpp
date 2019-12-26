@@ -75,10 +75,7 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	animFall.loadAnimation(animIterator, "fall");
 	animDeath.loadAnimation(animIterator, "death");
 
-	
-
 	currentAnimation = &animIdle;
-
 
 	//Sfx load
 	jumpFx.path = player_node.child("fx").child("jump").attribute("path").as_string();
@@ -474,6 +471,14 @@ bool j1Player::PostUpdate()
 bool j1Player::CleanUp()
 {
 	App->tex->UnLoad(Text);
+	App->entities->player = nullptr;
+
+	if (collider != nullptr)
+	{
+		collider->to_delete = true;
+		collider = nullptr;
+	}
+
 	return true;
 }
 
