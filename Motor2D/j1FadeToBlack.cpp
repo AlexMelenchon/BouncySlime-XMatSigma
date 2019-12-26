@@ -63,9 +63,10 @@ bool j1FadeToBlack::PostUpdate()
 			if (ModuleOn)
 				ModuleOn->Enable();
 
+			App->map->CleanUp();
+
 			if (mapToLoad != nullptr)
 			{
-				App->map->CleanUp();
 				App->scene->Reset(mapToLoad);
 			}
 
