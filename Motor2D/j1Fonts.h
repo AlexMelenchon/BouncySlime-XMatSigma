@@ -14,7 +14,9 @@ struct _TTF_Font;
 class j1Fonts : public j1Module
 {
 public:
+	//--------INTERNAL CONTROL---------//
 
+	//Constructor
 	j1Fonts();
 
 	// Destructor
@@ -32,10 +34,11 @@ public:
 	// Create a surface from text
 	SDL_Texture* Print(const char* text, SDL_Color color = { 255, 255, 255, 255 }, _TTF_Font* font = nullptr);
 
+	//Calculates the size of a text
 	bool CalcSize(const char* text, int& width, int& height, _TTF_Font* font = NULL) const;
 
 public:
-
+	//--------FONTS---------//
 	p2List<_TTF_Font*>	fonts;
 	_TTF_Font* default_font;
 };

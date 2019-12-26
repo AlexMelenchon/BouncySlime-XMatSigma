@@ -49,15 +49,15 @@ bool j1ParticleShuriken::Awake(pugi::xml_node& shuriken_node)
 	scalesize = shuriken_node.child("collision").child("scalesize").text().as_uint();
 
 	SDL_Rect particleRect = { 0,0,0,0 };
-	particleRect.w = shuriken_node.child("collision").child("collider").attribute("w").as_float()*scalesize;
-	particleRect.h = shuriken_node.child("collision").child("collider").attribute("h").as_float()* scalesize;
+	particleRect.w = shuriken_node.child("collision").child("collider").attribute("w").as_float() * scalesize;
+	particleRect.h = shuriken_node.child("collision").child("collider").attribute("h").as_float() * scalesize;
 
 	//collider load
-	collider = new Collider(particleRect, COLLIDER_SHURIKEN, this);	
+	collider = new Collider(particleRect, COLLIDER_SHURIKEN, this);
 
 	//animation load
 	pugi::xml_node animIterator = shuriken_node.child("animations").child("animation");
-	anim.loadAnimation(animIterator, "shuriken");	
+	anim.loadAnimation(animIterator, "shuriken");
 
 	currentAnimation = &anim;
 
@@ -74,7 +74,7 @@ bool j1ParticleShuriken::Start()
 	App->collision->AddCollider(collider);
 
 	GetInitalSpeed();
-	
+
 	return true;
 }
 
@@ -82,7 +82,7 @@ bool j1ParticleShuriken::Start()
 bool j1ParticleShuriken::PreUpdate()
 {
 	BROFILER_CATEGORY("Particle Shuriken Ppre-Update", Profiler::Color::OldLace)
-	UpdateState();
+		UpdateState();
 	return true;
 }
 
@@ -90,7 +90,7 @@ bool j1ParticleShuriken::PreUpdate()
 bool j1ParticleShuriken::Update(float dt)
 {
 	BROFILER_CATEGORY("Particle Shuriken Update", Profiler::Color::OldLace)
-	bool ret = true;
+		bool ret = true;
 
 	//Update the timer
 	timer += dt;
@@ -128,12 +128,12 @@ bool j1ParticleShuriken::Update(float dt)
 			timer = 0;
 		}
 		break;
-   }
-   }
-   //Play the fx meanwhile in the air
-	
-	//App->audio->PlayFx(in_air.id,0,0);
-	//Update shuriken position
+	}
+	}
+	//Play the fx meanwhile in the air
+	 //App->audio->PlayFx(in_air.id,0,0);
+
+	 //Update shuriken position
 	UpdatePos(dt);
 
 	return ret;
@@ -151,7 +151,7 @@ void j1ParticleShuriken::UpdateState()
 //Moves the shuriken to the player
 void j1ParticleShuriken::MoveToPlayer(float dt)
 {
-	iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y -0.75);
+	iPoint current = App->map->MapToWorld(path.At(path.Count() - 1)->x, path.At(path.Count() - 1)->y - 0.75);
 
 	if (abs(abs(fpPosition.x) - abs(current.x)) > App->map->data.tile_height || abs(abs(fpPosition.y) - abs(current.y)) > App->map->data.tile_height)
 	{
@@ -184,14 +184,14 @@ void j1ParticleShuriken::MoveToPlayer(float dt)
 	}
 	else
 		path.Pop(current);
-	
+
 }
 
 // Called each loop iteration
 bool j1ParticleShuriken::PostUpdate(bool debug)
 {
 	BROFILER_CATEGORY("Particle Shuriken Post-Update", Profiler::Color::OldLace)
-	Draw();	
+		Draw();
 
 	if (debug)
 	{
@@ -309,8 +309,8 @@ void j1ParticleShuriken::OnCollision(Collider* entityCol, Collider* coll)
 		break;
 
 	case(COLLIDER_PLAYER):
-		if(canPickUp)
-		entityCol->to_delete = true;
+		if (canPickUp)
+			entityCol->to_delete = true;
 		break;
 	case(COLLIDER_GOD):
 		if (canPickUp)

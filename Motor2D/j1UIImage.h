@@ -6,26 +6,16 @@
 class j1UIImage : public j1UIelement
 {
 public:
+	//--------INTERNAL CONTROL---------//
+	//Constructor
 	j1UIImage();
 
+	//Destructor
 	~j1UIImage();
 
-	bool Awake(pugi::xml_node&);	
+	// Called before all Updates
 
 	bool PostUpdate(bool debug);
-
-
-	//--------SAVE & LOAD---------//
-	//Called when loading a save
-	bool Load(pugi::xml_node&) { return true; };
-
-	//Called to save the game
-	bool Save(pugi::xml_node&) const  const { return true; };
-
-
-private:
-
-	int w, h;
 
 };
 

@@ -6,31 +6,34 @@
 #include "j1Audio.h"
 #include "j1Input.h"
 
+//Constructor
 j1MainMenu::j1MainMenu()
 {}
 
-
+// Destructor
 j1MainMenu::~j1MainMenu()
 {}
 
+
+// Called before render is available
 bool j1MainMenu::Awake(pugi::xml_node& config)
 {
 	bool ret = true;
-
-	
-
 	return true;
 }
 
+// Called before the first frame
 bool j1MainMenu::Start()
 {
 	bool ret = true;
 
+	//We draw the background scene
 	App->map->Load(App->map->menu_tmx.GetString());
 
-
+	//We create the "ghost" parent
 	parent = App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 0,0 }, false, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
 
+	//We create the UI
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 700,250 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_STARTGAME, drag_axis::MOV_NONE, "Play");
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 700,350 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_CONTINUEGAME, drag_axis::MOV_NONE, "Continue");
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 700,450 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_OPTIONS, drag_axis::MOV_NONE, "Settings");
@@ -40,27 +43,32 @@ bool j1MainMenu::Start()
 	return true;
 }
 
+// Called before all Updates
 bool j1MainMenu::PreUpdate()
 {
-	//Loads the game
+	//Activates the UI debug mode
 	if (App->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
 		App->ui->debug = !App->ui->debug;
 
 	return exiting;
 }
 
+// Called each loop iteration
 bool j1MainMenu::Update(float dt)
 {
+	//We draw the background scene
 	App->map->Draw();
 
 	return exiting;
 }
 
+// Called before all Updates
 bool j1MainMenu::PostUpdate()
 {
 	return exiting;
 }
 
+// Called before quitting
 bool j1MainMenu::CleanUp()
 {
 	bool ret = true;
@@ -74,6 +82,7 @@ bool j1MainMenu::CleanUp()
 	return true;
 }
 
+//Manages the UI inputs of this module
 void j1MainMenu::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer)
 {
 	switch (type)
@@ -84,12 +93,12 @@ void j1MainMenu::OnGui(UIEventType type, UIFunction func, j1UIelement* userPoint
 		{
 		case UIFunction::FNC_STARTGAME:
 		{
-			App->fade->FadeToBlack(App->scene, this, App->scene->mapFadeTime);
+			App->fade->FadeToBlackMod(App->scene, this, App->scene->mapFadeTime);
 			break;
 		}
 		case UIFunction::FNC_CONTINUEGAME:
 		{
-			App->fade->FadeToBlack(App->scene, this, App->scene->mapFadeTime, true);
+			App->fade->FadeToBlackMod(App->scene, this, App->scene->mapFadeTime, true);
 			break;
 		}
 
@@ -142,12 +151,12 @@ void j1MainMenu::OnGui(UIEventType type, UIFunction func, j1UIelement* userPoint
 
 }
 
+//Loads the options sub-menu
 void j1MainMenu::OptionsLoad(bool to_load)
 {
 	if (to_load)
 	{
-		//TODO: Create the menu
-		//Ex. AddElement(...)->to_delete = true;
+		//Create the options sub-menu
 		App->ui->AddElement(ui_type::UI_TEXT, parent, { -200,-170 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Music Volume:")->to_delete = true;
 		App->ui->AddElement(ui_type::UI_SLIDER, parent, { -200,-200 }, true, false, true, { 0,0,0,0 }, this, UIFunction::FNC_CHANGE_VMUSIC, drag_axis::MOV_X)->to_delete = true;
 		App->ui->AddElement(ui_type::UI_TEXT, parent, { -200,-270 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Fx Volume:")->to_delete = true;
@@ -156,9 +165,7 @@ void j1MainMenu::OptionsLoad(bool to_load)
 	
 	else
 	{
-		//Check if though all the list if they have the flag to delete = true;
-		//Call DeleteElement to them
-
+		//Delete the options sub-menu
 		App->ui->ToDeleteElement();
 	}
 }

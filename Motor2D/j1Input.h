@@ -57,6 +57,10 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	//Custom enable & disable
+	void Disable();
+	void Enable();
+
 	//--------KEY CONTROL---------//
 	// Gather relevant win events
 	bool GetWindowEvent(j1EventWindow ev);
@@ -83,22 +87,25 @@ public:
 	//Get mouse motion
 	void GetMouseMotion(int& x, int& y);
 
+	//Returns the buffer string
 	const char* GetText();
 
+	//Returns the size of the buffer string in a certain position
 	int GetTextInPos();
 
-
+	//Changes the input mode from wirtting to playing
 	void WrittingState(bool state, SDL_Rect rect);
-
-	void Disable();
-	void Enable();
 
 	// Get mouse / axis position
 	int			mouse_x;
 	int			mouse_y;
 
 private:
+
+	//--------EVENT CONTROL---------//
 	bool		windowEvents[WE_COUNT];
+
+	//--------KEY CONTROL---------//
 	j1KeyState* keyboard;
 	j1KeyState	mouse_buttons[NUM_MOUSE_BUTTONS];
 
@@ -106,13 +113,12 @@ private:
 	int			mouse_motion_x;
 	int			mouse_motion_y;
 
-
-
-	p2SString		textString;
 	bool		writting = false;
+
+
+	//--------BUFFER STRING---------//
+	p2SString		textString;
 	int position = 0;
-
-
 };
 
 #endif // __j1INPUT_H__

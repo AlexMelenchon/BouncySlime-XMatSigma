@@ -6,32 +6,24 @@
 class j1UIText : public j1UIelement
 {
 public:
+
+	//--------INTERNAL CONTROL---------//
+
+	//Constructors----
 	j1UIText();
 	j1UIText(char* t);
 
+	//Destructor
 	~j1UIText();
 
-	bool Awake(pugi::xml_node&);
-
+	// Called before the first frame
 	bool Start();
 
+	// Called before all Updates
 	bool PostUpdate(bool debug);
 
 	// Called before quitting
 	bool CleanUp();
-
-
-	//--------SAVE & LOAD---------//
-	//Called when loading a save
-	bool Load(pugi::xml_node&) { return true; };
-
-	//Called to save the game
-	bool Save(pugi::xml_node&) const  const { return true; };
-
-
-
-private:
-
 };
 
 

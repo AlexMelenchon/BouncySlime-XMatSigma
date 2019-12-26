@@ -208,6 +208,7 @@ bool j1Audio::Save(pugi::xml_node& save) const
 	return true;
 }
 
+//Unloads all Fx that are Loaded
 void j1Audio::UnLoadAllFx()
 {
 	p2List_item<Mix_Chunk*>* item;

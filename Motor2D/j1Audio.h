@@ -41,6 +41,7 @@ public:
 	// Play a previously loaded WAV
 	bool PlayFx(unsigned int fx, int repeat = 0, int channel = -1);
 
+	//Unloads all Fx that are Loaded
 	void UnLoadAllFx();
 
 	//--------SAVE & LOAD---------//

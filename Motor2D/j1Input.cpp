@@ -247,6 +247,7 @@ void j1Input::WrittingState(bool state, SDL_Rect rect)
 		{
 			SDL_StopTextInput();
 			position = 0;
+			textString.Clear();
 		}
 	}
 }

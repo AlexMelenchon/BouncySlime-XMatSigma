@@ -8,32 +8,23 @@
 class j1UIButton : public j1UIelement
 {
 public:
-	j1UIButton();
+	//--------INTERNAL CONTROL---------//
 
+	//Constructors----
+	j1UIButton();
 	j1UIButton(char* text);
 
-	
+	//Destructors
 	~j1UIButton();
 
-	bool Awake(pugi::xml_node&);
+	// Called before the first frame when created
+	bool Start();
 
-	// Called each loop iteration
-	//bool PreUpdate();
-
-	// Called each loop iteration
-	bool InheritUpdate(float dt);
-
+	// Called before all Updates
 	bool PostUpdate(bool debug);
 
+	//Custom OnDrag calling function
 	void OnDrag();
-
-
-	//--------SAVE & LOAD---------//
-	//Called when loading a save
-	bool Load(pugi::xml_node&) { return true; };
-
-	//Called to save the game
-	bool Save(pugi::xml_node&) const  const { return true; };
 
 };
 

@@ -6,6 +6,8 @@
 #include "j1Fonts.h"
 #include "j1Textures.h"
 
+
+//Constructors----
 j1UIText::j1UIText()
 {
 	this->type = ui_type::UI_TEXT;
@@ -17,14 +19,11 @@ j1UIText::j1UIText(char* txt)
 
 }
 
+//Destructors
 j1UIText::~j1UIText()
 {}
 
-bool j1UIText::Awake(pugi::xml_node&)
-{
-	return true;
-}
-
+// Called before the first frame
 bool j1UIText::Start()
 {
 	if (parent && parent->type == ui_type::UI_BUTTON)
@@ -35,8 +34,10 @@ bool j1UIText::Start()
 	return true;
 }
 
+// Called before all Updates
 bool j1UIText::PostUpdate(bool debug)
 {
+	//If the button is part of an input box, we update the texture is the text changes
 	if (parent && parent->type == ui_type::UI_INPUTBOX && parent->IsFocused())
 	{
 		App->tex->UnLoad(texture);
@@ -49,12 +50,16 @@ bool j1UIText::PostUpdate(bool debug)
 	return true;
 }
 
+// Called before quitting
 bool j1UIText::CleanUp()
 {
+	//Unload the texture
 	App->tex->UnLoad(texture);
 	texture = nullptr;
-
+	
+	//Deletes loaded text, if any
 	delete text;
 	text = nullptr;
+
 	return true;
 }

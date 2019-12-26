@@ -8,7 +8,7 @@
 #include "p2DynArray.h"
 #include "SDL/include/SDL_mouse.h"
 
-
+//Enum for element types
 enum class ui_type
 {
 	UI_NONE,
@@ -18,6 +18,7 @@ enum class ui_type
 	UI_INPUTBOX,
 	UI_SLIDER
 };
+
 
 enum class drag_axis
 {
@@ -30,82 +31,120 @@ enum class drag_axis
 class j1UIelement
 {
 public:
+	//--------INTERNAL CONTROL---------//
 
+	//Constructor
 	j1UIelement();
 
+	//Destructors
 	~j1UIelement();
-
-	virtual bool Awake(pugi::xml_node&) { return true; };
 
 	// Called before the first frame
 	virtual bool Start();
 
 	// Called each loop iteration
 	bool PreUpdate();
-	virtual bool InheritPreUpdate() { return true; }
 
 	// Called each loop iteration
 	bool Update(float dt);
+	//Custom update fuction for inheritances that might need it
 	virtual bool InheritUpdate(float dt) { return true; }
-	virtual void DeFocus();
 
-
+	// Called before all Updates
 	virtual bool PostUpdate(bool debug) { return true; };
 
 	// Called before quitting
 	virtual bool CleanUp();
 
-
-	//--------DRAW--------//
+	//-----------DRAW-------------//
+	//Draws the element into the screen
 	virtual bool Draw(bool debug);
 
-	//--------SAVE & LOAD---------//
-	//Called when loading a save
-	virtual bool Load(pugi::xml_node&) { return true; };
 
-	//Called to save the game
-	virtual bool Save(pugi::xml_node&) const  const { return true; };
-
-	//-----EXTERNAL-----//
+	//-----ELEMENT MANAGEMENT-----//
+	//Checks if the mouse if hovering the element & if it should hover over it's siblings or parents
 	bool OnHover();
+
+	//Handles inputs in when the element is pressed, released & dragged respectively--------
 	virtual void OnClick();
 	virtual void OnRelease();
 	virtual void OnDrag();
 
+	//Move the element
 	virtual void Move(float dt);
-	virtual void KeepDistanceToParent(float dt);
+
+	//Make sure that, if the element has a parent, they maintain their distance to it
+	void KeepDistanceToParent(float dt);
+
+	//Gets the value from certain positions
 	virtual int GetAudioValue() { return 0; }
+
+	//Checks if the element has the focus or not
 	bool IsFocused();
 
+	//Retrives focus when the conditions are met
+	virtual void DeFocus();
+
+	//Used to Update the elements position when it's not moving
+	void UpdatePosition();
 
 public:
+	//--------UI LOGIC-------------//
 
+	//If the object is intractuable (can be clicked & calls for functions)
 	bool interact = false;
+
+	//Flag if the object is draggeable
 	bool drag = false;
+
+	//Flag if the object is enabled (if not, the draw & logic is de-activated)
 	bool enabled = false;
 
-	SDL_Rect rect = { 0,0,0,0 };
-	SDL_Texture* texture = nullptr;
-
-	iPoint PostoParent = { 0,0 };
-	iPoint Position = { 0,0 };
-	iPoint MovePoint = { 0,0 };
-
-	j1UIelement* parent = nullptr;
-	ui_type type = ui_type::UI_NONE;
-	drag_axis axis = drag_axis::MOV_NONE;
-
-
-	j1Module* listener = nullptr;
-	UIFunction function = UIFunction::FNC_NONE;
-
+	//Flags to know if the element in being hovered or dragged
 	bool hovering = false;
 	bool dragging = false;
 
+	//Flag to set-up volatile menus
+	bool to_delete = false;
 
+	//--------TEXTURE-------------------//
+
+	//Section of the texture, as well as size
+	SDL_Rect rect = { 0,0,0,0 };
+	
+	//Elements texture (it will always point to atlas :D)
+	SDL_Texture* texture = nullptr;
+
+	//-----------DISTANCE---------------//
+	//Relative position to the parent
+	iPoint PostoParent = { 0,0 };
+
+	//Global Position on Screen
+	iPoint Position = { 0,0 };
+
+	//The point in which the object has been clicked
+	iPoint MovePoint = { 0,0 };
+
+	//--------UI MANAGEMENT-------------//
+
+	//Pointer to the element's parent, if any
+	j1UIelement* parent = nullptr;
+
+	//The ui type
+	ui_type type = ui_type::UI_NONE;
+
+	//The axis in which the object can be dragged
+	drag_axis axis = drag_axis::MOV_NONE;
+
+	//The module that the element will call on a fuction case
+	j1Module* listener = nullptr;
+
+	//The fuction that the element does
+	UIFunction function = UIFunction::FNC_NONE;
+
+	//Text, if the element needs it
 	char* text = nullptr;
 
-	bool to_delete = false;
 };
 
 #endif // !__J1UIELEMENT__
