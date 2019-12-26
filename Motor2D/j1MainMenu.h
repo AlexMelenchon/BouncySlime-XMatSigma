@@ -35,16 +35,18 @@ public:
 	//Manages the UI inputs of this module
 	void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr);
 
-	void OptionsLoad(bool to_load);
+	void MenusLoad(UIFunction func);
 
 
 private:
 
-	bool optionsMenu = false;
+	bool optionsMenu = false;	
 
 	j1UIelement* parent = nullptr;
 
 	bool exiting = true;
+
+	UIFunction lastcall;
 
 
 };

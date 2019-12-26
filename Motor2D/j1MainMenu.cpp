@@ -37,8 +37,11 @@ bool j1MainMenu::Start()
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 700,550 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_CREDITS, drag_axis::MOV_NONE, "Credits");
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 700,650 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_EXIT, drag_axis::MOV_NONE, "Exit");
 
+	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 20,100 }, false, false, true, { 491,1022,394,168 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
+
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 20,650 }, true, false, true, {331,991,64,64 }, this, UIFunction::FNC_GITHUB, drag_axis::MOV_NONE);
 
+	lastcall = UIFunction::FNC_NONE;
 	
 	return true;
 }
@@ -99,9 +102,15 @@ void j1MainMenu::OnGui(UIEventType type, UIFunction func, j1UIelement* userPoint
 		case UIFunction::FNC_OPTIONS:
 		{
 			optionsMenu = !optionsMenu;
-			OptionsLoad(optionsMenu);
+			MenusLoad(UIFunction::FNC_OPTIONS);
 			break;
 		}
+		case UIFunction::FNC_CREDITS:
+
+			optionsMenu = !optionsMenu;
+			MenusLoad(UIFunction::FNC_CREDITS);
+
+			break;
 
 		case UIFunction::FNC_GITHUB:
 			ShellExecuteA(NULL, "open", "https://github.com/AlexMelenchon/BouncySlime-XMatSigma", NULL, NULL, SW_SHOWNORMAL);
@@ -148,23 +157,39 @@ void j1MainMenu::OnGui(UIEventType type, UIFunction func, j1UIelement* userPoint
 
 }
 
-void j1MainMenu::OptionsLoad(bool to_load)
+void j1MainMenu::MenusLoad(UIFunction func)
 {
-	if (to_load)
-	{
-		//TODO: Create the menu
-		//Ex. AddElement(...)->to_delete = true;
-		App->ui->AddElement(ui_type::UI_TEXT, parent, { -200,-170 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Music Volume:")->to_delete = true;
-		App->ui->AddElement(ui_type::UI_SLIDER, parent, { -200,-200 }, true, false, true, { 0,0,0,0 }, this, UIFunction::FNC_CHANGE_VMUSIC, drag_axis::MOV_X)->to_delete = true;
-		App->ui->AddElement(ui_type::UI_TEXT, parent, { -200,-270 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Fx Volume:")->to_delete = true;
-		App->ui->AddElement(ui_type::UI_SLIDER, parent, { -200,-300 },true, false, true, { 0,0,0,0 }, this, UIFunction::FNC_CHANGE_VFX, drag_axis::MOV_X)->to_delete = true;
-	}
-	
-	else
-	{
-		//Check if though all the list if they have the flag to delete = true;
-		//Call DeleteElement to them
-
 		App->ui->ToDeleteElement();
-	}
+
+		switch (func)
+		{
+
+
+		case UIFunction::FNC_OPTIONS:
+
+			App->ui->AddElement(ui_type::UI_TEXT, parent, { -50,-370 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Music Volume:")->to_delete = true;
+			App->ui->AddElement(ui_type::UI_SLIDER, parent, { -50,-400 }, true, false, true, { 0,0,0,0 }, this, UIFunction::FNC_CHANGE_VMUSIC, drag_axis::MOV_X)->to_delete = true;
+			App->ui->AddElement(ui_type::UI_TEXT, parent, { -50,-470 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Fx Volume:")->to_delete = true;
+			App->ui->AddElement(ui_type::UI_SLIDER, parent, { -50,-500 }, true, false, true, { 0,0,0,0 }, this, UIFunction::FNC_CHANGE_VFX, drag_axis::MOV_X)->to_delete = true;
+
+			break;
+
+		case UIFunction::FNC_CREDITS:
+
+			App->ui->AddElement(ui_type::UI_IMAGE, parent, { -20,-370 }, false, false, true, { 45,1436,600,210 }, nullptr)->to_delete = true;
+			App->ui->AddElement(ui_type::UI_IMAGE, parent, { -25,-390 }, false, false, true, {64,1244,590,185 }, nullptr)->to_delete = true;
+			App->ui->AddElement(ui_type::UI_IMAGE, parent, { -105,-580 }, false, false, true, { 717,1230,122,120 }, nullptr)->to_delete = true;
+
+			break;
+
+		}
+
+		if (lastcall == func)
+		{
+			App->ui->ToDeleteElement();
+			lastcall = UIFunction::FNC_NONE;
+		}
+		else
+			lastcall = func;
+
 }
