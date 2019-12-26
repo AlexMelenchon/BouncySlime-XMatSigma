@@ -22,7 +22,7 @@ j1UIButton::~j1UIButton()
 
 bool j1UIButton::Awake(pugi::xml_node& awake)
 {
-	if(strlen(text) > 1)
+	if(text && strlen(text) > 1)
 	App->ui->AddElement(ui_type::UI_TEXT, this, {- this->rect.w / 2,-this->rect.h / 2 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, text);
 	return true;
 }

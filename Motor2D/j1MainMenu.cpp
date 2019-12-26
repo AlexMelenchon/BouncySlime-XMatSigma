@@ -4,6 +4,7 @@
 #include "j1Map.h"
 #include "j1Scene.h"
 #include "j1Audio.h"
+#include "j1Input.h"
 
 j1MainMenu::j1MainMenu()
 {}
@@ -38,27 +39,23 @@ bool j1MainMenu::Start()
 
 bool j1MainMenu::PreUpdate()
 {
-	bool ret = true;
+	//Loads the game
+	if (App->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
+		App->ui->debug = !App->ui->debug;
 
-	return true;
+	return exiting;
 }
 
 bool j1MainMenu::Update(float dt)
 {
-	bool ret = true;
-
 	App->map->Draw();
 
-	return true;
+	return exiting;
 }
 
 bool j1MainMenu::PostUpdate()
 {
-	bool ret = true;
-
-	
-
-	return true;
+	return exiting;
 }
 
 bool j1MainMenu::CleanUp()
@@ -93,6 +90,12 @@ void j1MainMenu::OnGui(UIEventType type, UIFunction func, j1UIelement* userPoint
 		{
 			optionsMenu = !optionsMenu;
 			OptionsLoad(optionsMenu);
+			break;
+		}
+
+		case UIFunction::FNC_EXIT:
+		{
+			exiting = false;
 			break;
 		}
 

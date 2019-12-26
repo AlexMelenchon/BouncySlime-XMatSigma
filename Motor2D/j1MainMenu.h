@@ -42,7 +42,7 @@ private:
 
 
 	bool optionsMenu = false;
-
+	bool exiting = true;
 
 };
 

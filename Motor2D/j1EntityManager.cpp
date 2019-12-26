@@ -299,3 +299,27 @@ bool j1EntityManager::CleanMapEnt()
 
 	return ret;
 }
+
+
+//Erases the player
+bool j1EntityManager::DeletePlayer()
+{
+	bool ret = false;
+
+	//We iterate until we find the player and delete it
+	p2List_item<j1Entity*>* tmp = EntityList.start;
+	while (tmp != nullptr)
+	{
+		if (tmp->data->type == entityType::PLAYER)
+		{
+			tmp->data->CleanUp();
+			RELEASE(tmp->data);
+			EntityList.del(tmp);
+			break;
+		}
+		tmp = tmp->next;
+
+	}
+
+	return ret;
+}

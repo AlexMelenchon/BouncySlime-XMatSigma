@@ -57,7 +57,7 @@ public:
 
 
 	//--------DRAW--------//
-	virtual void Draw(bool debug);
+	virtual bool Draw(bool debug);
 
 	//--------SAVE & LOAD---------//
 	//Called when loading a save

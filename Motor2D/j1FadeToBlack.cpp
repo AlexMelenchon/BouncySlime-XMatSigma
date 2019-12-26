@@ -30,8 +30,6 @@ bool j1FadeToBlack::Awake(pugi::xml_node& config)
 	return true;
 }
 
-
-
 // Load assets
 bool j1FadeToBlack::Start()
 {
