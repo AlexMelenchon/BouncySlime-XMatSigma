@@ -29,6 +29,7 @@ j1UISlider::~j1UISlider()
 // Called before the first frame when created
 bool j1UISlider::Start()
 {
+	//If the slider created has someting to do w/ audio, we get it's position right--------------
 	if (this->function == UIFunction::FNC_CHANGE_VFX)
 	{
 		button->PostoParent.x = -((int)App->audio->fxVolume * (background->rect.w - button->rect.w)) / 128;
@@ -41,6 +42,7 @@ bool j1UISlider::Start()
 		button->Position.x = button->parent->Position.x - button->PostoParent.x;
 	}
 
+	//We set up the listeners & funcions for the slider's childs-----
 	background->listener = this->listener;
 	button->listener = this->listener;
 

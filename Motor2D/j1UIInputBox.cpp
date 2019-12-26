@@ -37,10 +37,13 @@ bool j1UIInputBox::InheritUpdate(float dt)
 // Called before all Updates
 bool j1UIInputBox::PostUpdate(bool debug)
 {
+	//If it's focused....
 	if (this->IsFocused())
 	{
+		//We say to the input that we're writting
 		App->input->WrittingState(true, boxImage->rect);
 
+		//We draw the cursor in it's position w/ a blink
 		int cursorPosition = App->input->GetTextInPos();
 		if (cursorTimer > 0.75f)
 		{
@@ -58,7 +61,6 @@ bool j1UIInputBox::CleanUp()
 {	
 	//Reset the pointers
 	texture = nullptr;
-
 	boxImage = nullptr;
 	boxText = nullptr;
 	return true;
