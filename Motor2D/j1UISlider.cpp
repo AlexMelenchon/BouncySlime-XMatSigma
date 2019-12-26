@@ -86,4 +86,3 @@ int j1UISlider::GetAudioValue()
 {
 	return round((-(float(-thumb->PostoParent.x) / ((float(-line->rect.w)) + float(thumb->rect.w))) * 128));
 }
-

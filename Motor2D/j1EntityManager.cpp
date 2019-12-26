@@ -157,6 +157,9 @@ bool j1EntityManager::CleanUp()
 		EntityList.del(tmp);
 		tmp = tmp->next;
 	}
+
+	EntityList.clear();
+
 	return ret;
 }
 
@@ -320,6 +323,7 @@ bool j1EntityManager::DeletePlayer()
 		tmp = tmp->next;
 
 	}
+	EntityList.clear();
 
 	return ret;
 }
