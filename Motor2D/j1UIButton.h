@@ -25,8 +25,7 @@ public:
 
 	bool PostUpdate(bool debug);
 
-	// Called before quitting
-	bool CleanUp();
+	void OnDrag();
 
 
 	//--------SAVE & LOAD---------//

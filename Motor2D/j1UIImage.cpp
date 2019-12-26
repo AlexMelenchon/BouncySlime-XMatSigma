@@ -18,8 +18,3 @@ bool j1UIImage::PostUpdate(bool debug)
 	Draw(debug);
 	return true;
 }
-
-bool j1UIImage::CleanUp()
-{
-	return true;
-}

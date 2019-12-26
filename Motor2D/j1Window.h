@@ -19,6 +19,10 @@ public:
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
 
+
+	// Called at the end of the frame
+	bool PostUpdate();
+
 	// Called before quitting
 	bool CleanUp();
 

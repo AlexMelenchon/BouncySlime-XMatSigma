@@ -81,6 +81,15 @@ bool j1Window::Awake(pugi::xml_node& config)
 	return ret;
 }
 
+bool j1Window::PostUpdate()
+{
+	bool ret = true;
+
+	ShowWindowTitle();
+
+	return ret;
+}
+
 // Called before quitting
 bool j1Window::CleanUp()
 {

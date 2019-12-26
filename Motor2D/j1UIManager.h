@@ -72,10 +72,11 @@ public:
 
 	void InitElement(j1UIelement* element, pugi::xml_node);
 
-	void DeleteElement(j1UIelement* element);
+	void DeleteElement(p2List_item<j1UIelement*>* element);
 
 	p2List_item<j1UIelement*>* GetElementFromList(j1UIelement* toSearch);
 	void ChangeFocus();
+
 
 	SDL_Texture* GetAtlas() const;
 

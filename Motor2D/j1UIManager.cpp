@@ -226,3 +226,10 @@ void j1UIManager::ChangeFocus()
 		focused.state = focusState::ST_FREE;
 	}
 }
+
+void j1UIManager::DeleteElement(p2List_item<j1UIelement*>* element)
+{
+	element->data->CleanUp();
+	RELEASE(element->data);
+	UIList.del(element);
+}

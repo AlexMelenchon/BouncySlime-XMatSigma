@@ -30,9 +30,10 @@ public:
 
 	void CheckLimits();
 
+	int GetAudioValue();
+
 
 private:
-
 	j1UIelement* thumb = nullptr;
 	j1UIelement* line = nullptr;
 };

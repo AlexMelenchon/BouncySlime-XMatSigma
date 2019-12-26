@@ -57,20 +57,28 @@ bool j1FadeToBlack::PostUpdate()
 	{
 		if (now >= total_time)
 		{
+			App->map->CleanUp();
+
+			if (mapToLoad != nullptr)
+			{
+				App->scene->Reset(mapToLoad);
+			}
+
 			if (moduleOff)
 				moduleOff->Disable();
 
 			if (ModuleOn)
 				ModuleOn->Enable();
 
-			if (mapToLoad != nullptr)
-			{
-				App->map->CleanUp();
-				App->scene->Reset(mapToLoad);
-			}
-
 			App->input->ReSetKeys();
 			App->input->Disable();
+
+			if (load)
+			{
+				App->LoadGame();
+				load = false;
+			}
+
 
 			// ---
 			total_time += total_time;
@@ -90,13 +98,6 @@ bool j1FadeToBlack::PostUpdate()
 			mapToLoad = nullptr;
 			ModuleOn = nullptr;
 			moduleOff = nullptr;
-
-			if (load)
-			{
-				App->LoadGame();
-				load = false;
-			}
-
 
 			App->input->Enable();
 		}
@@ -142,7 +143,7 @@ bool j1FadeToBlack::FadeToBlack(j1Module* SceneIn, j1Module* SceneOut, float tim
 		total_time = (Uint32)(time * 0.5f * 1000.0f);
 		ModuleOn = SceneIn;
 		moduleOff = SceneOut;
-		load = load;
+		this->load = load;
 		ret = true;
 	}
 	return true;

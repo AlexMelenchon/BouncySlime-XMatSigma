@@ -10,8 +10,8 @@
 	<map />
 	<entities>
 		<player>
-			<position x="60" y="928" />
-			<speed x="0" y="0" />
+			<position x="538.664307" y="927" />
+			<speed x="146.546249" y="0" />
 			<state current_state="1" />
 			<falling value="false" />
 			<walling value="false" />
@@ -19,17 +19,17 @@
 			<flip value="0" />
 		</player>
 		<enemyL>
-			<position x="862.179382" y="872" />
-			<speed x="60" y="0" />
-			<falling value="false" />
+			<position x="778.133728" y="852.853394" />
+			<speed x="-203.5" y="-280.200012" />
+			<falling value="true" />
 			<trace x="802" y="899" w="155" h="0" />
-			<flip value="0" />
+			<flip value="1" />
 		</enemyL>
 		<enemyF>
-			<position x="1670.18018" y="569" />
-			<speed x="60" y="0" />
+			<position x="1706.0603" y="581.119873" />
+			<speed x="-60" y="0" />
 			<trace x="1610" y="569" w="207" h="74" />
-			<flip value="0" />
+			<flip value="1" />
 		</enemyF>
 	</entities>
 	<pathfinding />
@@ -37,9 +37,10 @@
 	<scene>
 		<current_map name="intro.tmx" />
 	</scene>
+	<:anonymous />
 	<collision />
 	<fade />
 	<renderer>
-		<camera x="0" y="-336" />
+		<camera x="-126" y="-336" />
 	</renderer>
 </game_state>

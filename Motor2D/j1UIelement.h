@@ -53,7 +53,7 @@ public:
 	virtual bool PostUpdate(bool debug) { return true; };
 
 	// Called before quitting
-	virtual bool CleanUp() { return true; };
+	virtual bool CleanUp();
 
 
 	//--------DRAW--------//
@@ -71,8 +71,10 @@ public:
 	virtual void OnClick();
 	virtual void OnRelease();
 	virtual void OnDrag();
+
 	virtual void Move(float dt);
 	virtual void KeepDistanceToParent(float dt);
+	virtual int GetAudioValue(){ return 0;}
 	bool IsFocused();
 	
 
@@ -100,7 +102,10 @@ public:
 	bool hovering = false;
 	bool dragging = false;
 
+
 	char* text = nullptr;
+
+	bool to_delete = false;
 };
 
 #endif // !__J1UIELEMENT__

@@ -3,6 +3,7 @@
 #include "j1FadeToBlack.h"
 #include "j1Map.h"
 #include "j1Scene.h"
+#include "j1Audio.h"
 
 j1MainMenu::j1MainMenu()
 {}
@@ -23,8 +24,6 @@ bool j1MainMenu::Awake(pugi::xml_node& config)
 bool j1MainMenu::Start()
 {
 	bool ret = true;
-
- bool p = App->map->Load(App->map->menu_tmx.GetString());
 
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 700,250 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_CONTINUEGAME, drag_axis::MOV_NONE, "Play");
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 700,350 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_CONTINUEGAME, drag_axis::MOV_NONE, "Continue");
@@ -69,7 +68,7 @@ bool j1MainMenu::CleanUp()
 	return true;
 }
 
-void j1MainMenu::OnGui(UIEventType type, UIFunction func)
+void j1MainMenu::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer)
 {
 	switch (type)
 	{
@@ -84,7 +83,14 @@ void j1MainMenu::OnGui(UIEventType type, UIFunction func)
 		}
 		case UIFunction::FNC_CONTINUEGAME:
 		{
-			App->fade->FadeToBlack(App->scene, this, App->scene->mapFadeTime,true);
+			App->fade->FadeToBlack(App->scene, this, App->scene->mapFadeTime, true);
+			break;
+		}
+
+		case UIFunction::FNC_OPTIONS:
+		{
+			optionsMenu = !optionsMenu;
+			OptionsLoad(optionsMenu);
 			break;
 		}
 
@@ -92,8 +98,53 @@ void j1MainMenu::OnGui(UIEventType type, UIFunction func)
 	}
 	break;
 
+
+	case UIEventType::EVENT_DRAG:
+	{
+		switch (func)
+		{
+		case UIFunction::FNC_CHANGE_VMUSIC:
+		{
+			if (userPointer)
+			{
+				App->audio->musicVolume = userPointer->GetAudioValue();
+			}
+			break;
+		}
+
+		case UIFunction::FNC_CHANGE_VFX:
+		{
+			if (userPointer)
+			{
+				App->audio->fxVolume = userPointer->GetAudioValue();
+			}
+			break;
+		}
+
+		}
+	}
+	break;
 	}
 
+
+
+}
+
+void j1MainMenu::OptionsLoad(bool to_load)
+{
+	if (to_load)
+	{
+		//TODO: Create the menu
+		//Ex. AddElement(...)->to_delete = true;
+
+	}
+	else
+	{
+		//Check if though all the list if they have the flag to delete = true;
+		//Call DeleteElement to them
+
+
+	}
 
 
 }

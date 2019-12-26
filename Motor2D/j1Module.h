@@ -23,6 +23,7 @@ class j1App;
 struct SDL_Texture; // Struct for texture, to be able to call it from any module
 struct SDL_Rect; // Struct for rect, to be able to call it from any module
 class Animation; //Class for animations
+class j1UIelement;
 
 
 struct Collider;
@@ -61,6 +62,8 @@ enum class UIFunction
 	FNC_OPTIONS,
 	FNC_CREDITS,
 	FNC_EXIT,
+	FNC_CHANGE_VMUSIC,
+	FNC_CHANGE_VFX,
 
 	//In-Game
 	FNC_PAUSE
@@ -133,7 +136,7 @@ public:
 	}
 
 	// Manages the UI inputs for each module
-	virtual void OnGui(UIEventType type, UIFunction func) {};
+	virtual void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr) {};
 
 	//Distributes collisions
 	virtual void OnCollision(Collider*, Collider*) {}

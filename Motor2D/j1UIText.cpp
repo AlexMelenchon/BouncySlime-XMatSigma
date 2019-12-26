@@ -51,5 +51,10 @@ bool j1UIText::PostUpdate(bool debug)
 
 bool j1UIText::CleanUp()
 {
+	App->tex->UnLoad(texture);
+	texture = nullptr;
+
+	delete text;
+	text = nullptr;
 	return true;
 }

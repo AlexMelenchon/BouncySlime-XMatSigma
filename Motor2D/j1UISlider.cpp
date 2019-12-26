@@ -29,6 +29,11 @@ bool j1UISlider::Awake(pugi::xml_node&)
 
 bool j1UISlider::Start()
 {
+	line->listener = this->listener;
+	thumb->listener = this->listener;
+
+	line->function = this->function;
+	thumb->function = this->function;
 	return true;
 }
 
@@ -52,6 +57,12 @@ bool j1UISlider::PostUpdate(bool debug)
 
 bool j1UISlider::CleanUp()
 {
+	App->tex->UnLoad(texture);
+	texture = nullptr;
+
+	thumb = nullptr;
+	line = nullptr;
+
 	return true;
 }
 
@@ -71,3 +82,9 @@ void j1UISlider::CheckLimits()
 		thumb->Position.x = thumb->parent->Position.x - thumb->PostoParent.x;
 	}
 }
+
+int j1UISlider::GetAudioValue()
+{
+	return round((-(float(-thumb->PostoParent.x) / ((float(-line->rect.w)) + float(thumb->rect.w))) * 128));
+}
+
