@@ -106,7 +106,7 @@ void j1MainMenu::OptionsLoad(bool to_load)
 	if (to_load)
 	{
 		//TODO: Create the menu
-
+		//Ex. AddElement(...)->to_delete = true;
 
 	}
 	else
