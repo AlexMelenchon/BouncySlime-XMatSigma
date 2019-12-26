@@ -47,11 +47,11 @@ bool j1Scene::Start()
 
 	debug_tex = App->entities->debug_tex;
 
-	App->ui->AddElement(ui_type::UI_BUTTON, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, true, true, { 73,406,64,64 }, this)
-		, { 100,300 }, true, true, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
+	//App->ui->AddElement(ui_type::UI_BUTTON, App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 100,500 }, true, true, true, { 73,406,64,64 }, this)
+		//, { 100,300 }, true, true, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
 
 	//App->ui->AddElement(ui_type::UI_INPUTBOX, nullptr, { 100,600 }, true, true, true, { 0,0,0,0 }, this, UIFunction::FNC_UNKOWNN, drag_axis::MOV_Y, "macarró");
-	App->ui->AddElement(ui_type::UI_SLIDER, nullptr, { 100,400 }, true, true, true, { 0,0,0,0 }, this, UIFunction::FNC_UNKOWNN, drag_axis::MOV_ALL);
+	App->ui->AddElement(ui_type::UI_SLIDER, nullptr, { 100,400 }, true, true, true, { 0,0,0,0 }, this, UIFunction::FNC_UNKOWNN, drag_axis::MOV_X);
 
 
 	return true;

@@ -28,6 +28,8 @@ public:
 	//Called to save the game
 	bool Save(pugi::xml_node&) const  const { return true; };
 
+	void CheckLimits();
+
 
 private:
 

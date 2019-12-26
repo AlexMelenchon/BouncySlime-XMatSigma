@@ -183,7 +183,6 @@ void j1UIelement::Move(float dt)
 	App->input->GetMousePosition(MousePos.x, MousePos.y);
 
 	iPoint currentPos = Position;
-	
 
 	switch (axis)
 	{
@@ -192,10 +191,10 @@ void j1UIelement::Move(float dt)
 		Position.x += ((MousePos.x - Position.x) - MovePoint.x);
 		Position.y += ((MousePos.y - Position.y) - MovePoint.y);
 
-			break;
+		break;
 	case drag_axis::MOV_X:
 
-		Position.x += ((MousePos.x - Position.x) - MovePoint.x);		
+		Position.x += ((MousePos.x - Position.x) - MovePoint.x);
 
 		break;
 	case drag_axis::MOV_Y:
@@ -204,13 +203,10 @@ void j1UIelement::Move(float dt)
 
 		break;
 	}
-	
 
 
 	if (parent != nullptr)
 	{
-		//TODO: Check boundaries on the slider after this func!
-
 		PostoParent.x += currentPos.x - Position.x;
 		PostoParent.y += currentPos.y - Position.y;
 	}

@@ -107,7 +107,7 @@ SDL_Texture* j1UIManager::GetAtlas() const
 }
 
 
-j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint Position, bool interact, bool drag, bool enabled, SDL_Rect section, j1Module* listener, UIFunction func, drag_axis axis,  char* text)
+j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint Position, bool interact, bool drag, bool enabled, SDL_Rect section, j1Module* listener, UIFunction func, drag_axis axis, char* text)
 {
 	j1UIelement* tmp = nullptr;
 
@@ -135,11 +135,16 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 		break;
 
 	case ui_type::UI_INPUTBOX:
-			tmp = new j1UIInputBox(text);
-			App->fonts->CalcSize(text, section.w, section.h);
+
+		tmp = new j1UIInputBox(text);
+		App->fonts->CalcSize(text, section.w, section.h);
+
 		break;
 	case ui_type::UI_SLIDER:
+
 		tmp = new j1UISlider(axis);
+
+		break;
 	}
 
 	if (tmp)
@@ -156,7 +161,6 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 			tmp->Position.y = parent->Position.y + Position.y;
 
 		}
-
 
 		tmp->interact = interact;
 		tmp->drag = drag;
