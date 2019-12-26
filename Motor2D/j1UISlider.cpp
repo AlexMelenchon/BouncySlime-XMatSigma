@@ -57,6 +57,9 @@ bool j1UISlider::PostUpdate(bool debug)
 
 bool j1UISlider::CleanUp()
 {
+	thumb = nullptr;
+	line = nullptr;
+
 	return true;
 }
 

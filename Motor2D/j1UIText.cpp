@@ -51,5 +51,7 @@ bool j1UIText::PostUpdate(bool debug)
 
 bool j1UIText::CleanUp()
 {
+	delete text;
+	text = nullptr;
 	return true;
 }

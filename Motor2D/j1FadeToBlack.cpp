@@ -57,11 +57,6 @@ bool j1FadeToBlack::PostUpdate()
 	{
 		if (now >= total_time)
 		{
-			if (moduleOff)
-				moduleOff->Disable();
-
-			if (ModuleOn)
-				ModuleOn->Enable();
 
 			App->map->CleanUp();
 
@@ -69,6 +64,12 @@ bool j1FadeToBlack::PostUpdate()
 			{
 				App->scene->Reset(mapToLoad);
 			}
+
+			if (moduleOff)
+				moduleOff->Disable();
+
+			if (ModuleOn)
+				ModuleOn->Enable();
 
 			App->input->ReSetKeys();
 			App->input->Disable();

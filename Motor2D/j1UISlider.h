@@ -34,7 +34,6 @@ public:
 
 
 private:
-
 	j1UIelement* thumb = nullptr;
 	j1UIelement* line = nullptr;
 };
