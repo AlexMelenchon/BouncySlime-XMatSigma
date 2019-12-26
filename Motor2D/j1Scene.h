@@ -41,12 +41,17 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 	//--------CAMERA---------//
+
 	//Camer logic
 	void Camera();
+
 	//Checks camera limits
 	void CheckCameraLimits();
+
 	//Fade time to change maps
 	float mapFadeTime = 0.0f;
+
+	void ResetCamera();
 
 	//--------PATHFINDING---------//
 	//Sets the debug pathfinding w/ the mouse

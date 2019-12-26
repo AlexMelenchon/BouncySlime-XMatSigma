@@ -227,6 +227,21 @@ void j1UIManager::ChangeFocus()
 	}
 }
 
+void j1UIManager::DeleteAllElements()
+{
+	//Iterate though all the elements and delete them
+	p2List_item<j1UIelement*>* tmp = UIList.start;
+	while (tmp != nullptr)
+	{
+		tmp->data->CleanUp();
+		RELEASE(tmp->data);
+		UIList.del(tmp);
+		tmp = tmp->next;
+	}
+
+
+}
+
 void j1UIManager::DeleteElement(p2List_item<j1UIelement*>* element)
 {
 	 

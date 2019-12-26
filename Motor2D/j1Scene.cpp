@@ -213,8 +213,14 @@ bool j1Scene::CleanUp()
 	//Delete Player
 	App->entities->DeletePlayer();
 
-	//Delete the UI
-	App->ui->CleanUp();
+	//Delete the UI of the game
+	App->ui->DeleteAllElements();
+
+	//Unload All the Game Related SFX
+	App->audio->UnLoadAllFx();
+
+	//Reset the Camera
+	ResetCamera();
 
 
 	return true;
@@ -414,4 +420,10 @@ void j1Scene::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer)
 
 
 
+}
+
+void j1Scene::ResetCamera()
+{
+	App->render->camera.x = 0;
+	App->render->camera.y = 0;
 }

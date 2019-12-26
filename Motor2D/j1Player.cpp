@@ -470,9 +470,19 @@ bool j1Player::PostUpdate()
 // Called before quitting
 bool j1Player::CleanUp()
 {
+	//Unload Player Texture
 	App->tex->UnLoad(Text);
+	Text = nullptr;
+
+	//Unload the Shuriken Texture
+	App->tex->UnLoad(shuriken_tex);
+	shuriken_tex = nullptr;
+
+	//Set the external pointer to nullptr
 	App->entities->player = nullptr;
 
+
+	//Delte the player's Collider
 	if (collider != nullptr)
 	{
 		collider->to_delete = true;

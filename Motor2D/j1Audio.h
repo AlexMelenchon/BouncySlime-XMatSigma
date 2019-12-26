@@ -41,6 +41,8 @@ public:
 	// Play a previously loaded WAV
 	bool PlayFx(unsigned int fx, int repeat = 0, int channel = -1);
 
+	void UnLoadAllFx();
+
 	//--------SAVE & LOAD---------//
 //Called when loading a save
 	bool Load(pugi::xml_node&);
