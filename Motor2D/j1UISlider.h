@@ -39,9 +39,8 @@ public:
 
 private:
 	//--------SLIDER CHILDS---------//
-
-	j1UIelement* thumb = nullptr;
-	j1UIelement* line = nullptr;
+	j1UIelement* button = nullptr;
+	j1UIelement* background = nullptr;
 };
 
 

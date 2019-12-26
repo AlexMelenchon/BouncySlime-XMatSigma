@@ -14,7 +14,6 @@ public:
 	~j1UIImage();
 
 	// Called before all Updates
-
 	bool PostUpdate(bool debug);
 
 };

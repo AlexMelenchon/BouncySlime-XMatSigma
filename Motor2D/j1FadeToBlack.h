@@ -21,10 +21,10 @@ public:
 
 	//--------FADE---------//
 	//Fades from one map to another
-	bool FadeToBlack(const char* mapNumber, int id, float time = 2.0f);
+	bool FadeToBlackMap(const char* mapNumber, int id, float time = 2.0f);
 
 	//Fades from modules (menu to game & viceversa)
-	bool FadeToBlack(j1Module* SceneIn, j1Module* SceneOut, float time, bool load = false);
+	bool FadeToBlackMod(j1Module* SceneIn, j1Module* SceneOut, float time, bool load = false);
 
 
 private:
