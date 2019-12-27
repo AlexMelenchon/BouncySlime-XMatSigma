@@ -8,6 +8,7 @@
 #include "j1Map.h"
 #include "j1Collision.h"
 #include "j1ParticleShuriken.h"	
+#include "j1Coin.h"
 
 //Constructor
 j1EntityManager::j1EntityManager()
@@ -245,7 +246,7 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position, iPoint mo
 		break;
 
 	case entityType::COIN:
-		tmp = new j1ParticleShuriken();
+		tmp = new j1Coin();
 		config = entConfig.child("coin");
 
 		break;

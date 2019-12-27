@@ -451,6 +451,7 @@ void j1Scene::ResetCamera()
 }
 
 
+//Checks if the maximum score has been surpassed
 bool j1Scene::CheckMaxScore()
 {
 	bool ret = false;

@@ -223,6 +223,9 @@ void j1Collision::DebugDraw()
 		case COLLIDER_SHURIKEN:
 			App->render->DrawQuad(colliders[i]->rect, 225, 125, 70, alpha);
 			break;
+		case COLLIDER_COIN:
+			App->render->DrawQuad(colliders[i]->rect, 225, 175, 125, alpha);
+			break;
 		}
 	}
 }
