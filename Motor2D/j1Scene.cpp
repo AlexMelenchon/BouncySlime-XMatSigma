@@ -203,8 +203,6 @@ bool j1Scene::Update(float dt)
 	//Blits the debug pathfinding, if exists
 	blitDebugPath();
 
-
-
 	return true;
 }
 

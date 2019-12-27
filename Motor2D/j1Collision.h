@@ -5,7 +5,7 @@
 #include "j1Module.h"
 #include "j1Entity.h"
 
-#define MAX_COLLIDERS 60
+#define MAX_COLLIDERS 120
 
 struct Collider
 {

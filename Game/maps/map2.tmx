@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="48">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="79">
  <properties>
   <property name="music" value="audio/music/loop2.ogg"/>
  </properties>
@@ -62213,6 +62213,27 @@
   <object id="39" name="Death" x="1871" y="660" width="48.3333" height="12"/>
   <object id="45" name="EnemyF" x="1229.33" y="540" width="149.333" height="32"/>
   <object id="46" name="EnemyF" x="804" y="240" width="438.667" height="45.3333"/>
+  <object id="49" name="Coin" x="184.333" y="883.333" width="19.3333" height="16.3333"/>
+  <object id="50" name="Coin" x="274.333" y="820.333" width="19.3333" height="16.3333"/>
+  <object id="51" name="Coin" x="341.833" y="739.833" width="19.3333" height="16.3333"/>
+  <object id="52" name="Coin" x="180.833" y="613.833" width="19.3333" height="16.3333"/>
+  <object id="53" name="Coin" x="183.333" y="454.333" width="19.3333" height="16.3333"/>
+  <object id="59" name="Coin" x="227.833" y="129.333" width="19.3333" height="16.3333"/>
+  <object id="60" name="Coin" x="227.833" y="168.833" width="19.3333" height="16.3333"/>
+  <object id="61" name="Coin" x="623.833" y="556.333" width="19.3333" height="16.3333"/>
+  <object id="62" name="Coin" x="679.833" y="556.833" width="19.3333" height="16.3333"/>
+  <object id="63" name="Coin" x="653.333" y="338.333" width="19.3333" height="16.3333"/>
+  <object id="64" name="Coin" x="969.833" y="468.833" width="19.3333" height="16.3333"/>
+  <object id="65" name="Coin" x="1081.33" y="416.333" width="19.3333" height="16.3333"/>
+  <object id="66" name="Coin" x="1414.33" y="414.333" width="19.3333" height="16.3333"/>
+  <object id="67" name="Coin" x="2310.33" y="223.833" width="19.3333" height="16.3333"/>
+  <object id="68" name="Coin" x="2310.33" y="253.833" width="19.3333" height="16.3333"/>
+  <object id="69" name="Coin" x="2310.83" y="284.333" width="19.3333" height="16.3333"/>
+  <object id="70" name="Coin" x="1925.83" y="733.333" width="19.3333" height="16.3333"/>
+  <object id="71" name="Coin" x="2024.33" y="780.333" width="19.3333" height="16.3333"/>
+  <object id="74" name="Coin" x="2020.33" y="1010.83" width="19.3333" height="16.3333"/>
+  <object id="75" name="Coin" x="1965.33" y="975.833" width="19.3333" height="16.3333"/>
+  <object id="76" name="Coin" x="2230.33" y="970.333" width="19.3333" height="16.3333"/>
  </objectgroup>
  <objectgroup id="13" name="ENTITIES">
   <object id="35" name="Start" x="82.5895" y="928.746" width="5.2917" height="4.7083"/>
