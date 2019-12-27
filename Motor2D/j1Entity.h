@@ -8,11 +8,6 @@
 #include "p2Defs.h"
 #include "p2animation.h"
 
-struct FX
-{
-	int id = 0;
-	p2SString path;
-};
 
 
 enum collisionDirection

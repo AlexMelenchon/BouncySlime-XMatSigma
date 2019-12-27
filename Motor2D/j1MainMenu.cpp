@@ -8,7 +8,9 @@
 
 //Constructor
 j1MainMenu::j1MainMenu()
-{}
+{
+	name.create("scene");
+}
 
 // Destructor
 j1MainMenu::~j1MainMenu()
@@ -17,8 +19,15 @@ j1MainMenu::~j1MainMenu()
 
 // Called before render is available
 bool j1MainMenu::Awake(pugi::xml_node& config)
-{
+{	
 	bool ret = true;
+
+	
+
+	//Audio load
+	click.path = config.child("click").attribute("file").as_string();
+	
+
 	return true;
 }
 
@@ -29,6 +38,8 @@ bool j1MainMenu::Start()
 
 	//We draw the background scene
 	App->map->Load(App->map->menu_tmx.GetString());
+
+	click.id = App->audio->LoadFx(click.path.GetString());
 
 	//We create the "ghost" parent
 	parent = App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 0,0 }, false, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
@@ -44,7 +55,7 @@ bool j1MainMenu::Start()
 
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 20,650 }, true, false, true, {331,991,64,64 }, this, UIFunction::FNC_GITHUB, drag_axis::MOV_NONE);
 
-	App->ui->AddElement(ui_type::UI_INPUTBOX, nullptr, { 20,650 }, true, false, true, { 331,991,64,64 }, this, UIFunction::FNC_NONE, drag_axis::MOV_ALL, "fd");
+	//App->ui->AddElement(ui_type::UI_INPUTBOX, nullptr, { 20,650 }, true, false, true, { 331,991,64,64 }, this, UIFunction::FNC_NONE, drag_axis::MOV_ALL, "fd");
 
 
 	lastcall = UIFunction::FNC_NONE;
@@ -134,6 +145,7 @@ void j1MainMenu::OnGui(UIEventType type, UIFunction func, j1UIelement* userPoint
 		}
 
 		}
+		App->audio->PlayFx(click.id);
 	}
 	break;
 

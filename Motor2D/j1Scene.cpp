@@ -34,6 +34,8 @@ bool j1Scene::Awake(pugi::xml_node& scene_config)
 
 	mapFadeTime = scene_config.child("mapFadeTime").text().as_float();
 	startingLifes = scene_config.child("startingLifes").text().as_uint(3);
+	click.path = scene_config.child("click").attribute("file").as_string();
+
 
 	return ret;
 }
@@ -44,6 +46,9 @@ bool j1Scene::Start()
 
 	//Create the player
 	App->entities->AddEntity(entityType::PLAYER, { 0,0 });
+
+	//Load ui fx
+	click.id = App->audio->LoadFx(click.path.GetString());
 
 	//Loads the first map
 	Reset(App->map->data.maplist.start->data->name.GetString());
@@ -416,7 +421,7 @@ void j1Scene::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer)
 
 		}
 
-
+		App->audio->PlayFx(click.id);
 	}
 	break;
 
