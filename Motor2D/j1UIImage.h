@@ -13,8 +13,13 @@ public:
 	//Destructor
 	~j1UIImage();
 
+	// Called before the first frame when created
+	bool Start();
+
 	// Called before all Updates
 	bool PostUpdate(bool debug);
+
+	void NoTextDraw(bool debug);
 
 };
 

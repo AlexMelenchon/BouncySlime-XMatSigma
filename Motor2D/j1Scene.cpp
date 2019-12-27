@@ -59,6 +59,7 @@ bool j1Scene::Start()
 	//UI init-------
 	parent = App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 0,0 }, false, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
 
+
 	pause = App->ui->AddElement(ui_type::UI_BUTTON, parent, { -10,-10 }, true, false, true, { 220,406,64,64 }, this, UIFunction::FNC_PAUSE);	
 
 	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 94,10 }, false, false, true, { 1257,532,65,65 });
@@ -74,6 +75,11 @@ bool j1Scene::Start()
 	ui_time = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 664,30 }, false, false, false, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00:00:000");
 	
 	
+
+	App->ui->AddElement(ui_type::UI_BUTTON, parent, { -10,-10 }, true, false, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
+
+	App->ui->AddElement(ui_type::UI_INPUTBOX, parent, { 0,-150 }, true, false, true, {0,0,50,50}, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Bon Dia");
+
 
 	//Gameplay ini--------
 	time.Start();
@@ -133,8 +139,8 @@ bool j1Scene::Update(float dt)
 		//--------DEBUG---------//
 
 	//Loads the 1st map
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-		App->fade->FadeToBlackMap(App->map->data.maplist.start->data->name.GetString(), NULL, mapFadeTime);
+		if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+			App->fade->FadeToBlackMap(App->map->data.maplist.start->data->name.GetString(), NULL, mapFadeTime);
 
 	//Loads the 2nd map
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)

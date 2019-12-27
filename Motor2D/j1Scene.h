@@ -106,11 +106,15 @@ private:
 	p2DynArray<iPoint> debugPath;
 
 	j1UIelement* parent = nullptr;
+
 	j1UIelement* pause = nullptr;
 	j1UIelement* ui_lives = nullptr;
 	j1UIelement* ui_coins = nullptr;
 	j1UIelement* ui_score = nullptr;
 	j1UIelement* ui_time = nullptr;
+
+
+
 
 	//--------UI LOGIC---------//
 	//Used to load/unload the options submenu
