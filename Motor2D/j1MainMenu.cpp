@@ -172,13 +172,15 @@ void j1MainMenu::OnGui(UIEventType type, UIFunction func, j1UIelement* userPoint
 //Loads the options sub-menu
 void j1MainMenu::MenusLoad(UIFunction func)
 {
-		App->ui->ToDeleteElement();
+		
 
 		switch (func)
 		{
 
 
 		case UIFunction::FNC_OPTIONS:
+
+			App->ui->ToDeleteElement();
 
 			App->ui->AddElement(ui_type::UI_TEXT, parent, { -50,-370 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Music Volume:")->to_delete = true;
 			App->ui->AddElement(ui_type::UI_SLIDER, parent, { -50,-400 }, true, false, true, { 0,0,0,0 }, this, UIFunction::FNC_CHANGE_VMUSIC, drag_axis::MOV_X)->to_delete = true;
@@ -188,6 +190,8 @@ void j1MainMenu::MenusLoad(UIFunction func)
 			break;
 
 		case UIFunction::FNC_CREDITS:
+
+			App->ui->ToDeleteElement();
 
 			App->ui->AddElement(ui_type::UI_IMAGE, parent, { -20,-370 }, false, false, true, { 45,1436,600,210 }, nullptr)->to_delete = true;
 			App->ui->AddElement(ui_type::UI_IMAGE, parent, { -25,-390 }, false, false, true, {64,1244,590,185 }, nullptr)->to_delete = true;

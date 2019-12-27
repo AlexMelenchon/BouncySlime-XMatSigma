@@ -66,7 +66,9 @@ bool j1UIManager::Update(float dt)
 
 	while (tmp != nullptr)
 	{
-		ret = tmp->data->Update(dt);
+		if(tmp != nullptr)
+			ret = tmp->data->Update(dt);
+
 		tmp = tmp->next;
 	}
 

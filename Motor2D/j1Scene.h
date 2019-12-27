@@ -66,6 +66,10 @@ public:
 	//Manages the UI inputs of this module
 	void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr);
 
+
+	void MenusLoad(UIFunction func);
+
+
 	//--------GAMEPLAY RELATED---------//
 	//Checks if the maximum score has been surpassed
 	bool CheckMaxScore();
@@ -81,6 +85,7 @@ public:
 
 	// The maximum point achieved in a run
 	uint maxScore = 0u;
+
 
 private:
 	//--------CAMERA---------//
@@ -103,6 +108,11 @@ private:
 	j1UIelement* parent = nullptr;
 	j1UIelement* pause = nullptr;
 
+
+	//--------UI LOGIC---------//
+	//Used to load/unload the options submenu
+	UIFunction lastcall;
+
 	//--------GAMEPLAY RELATED---------//
 
 	//The current run time of the run
@@ -110,6 +120,7 @@ private:
 
 	//The default lifes given at the start
 	uint startingLifes = 0u;
+
 
 };
 

@@ -182,6 +182,9 @@ bool j1UIelement::CleanUp()
 
 	this->texture = nullptr;
 
+	if (this->IsFocused())
+		App->ui->focused.lookAt = nullptr;
+
 	return ret;
 }
 
@@ -272,14 +275,17 @@ bool j1UIelement::IsFocused()
 void j1UIelement::DeFocus()
 {
 	//If we let go of the click, we lose focus (THE CONDITIONS MIGHT CHANGE IN CUSTOM DeFocus() IN THE INHERITS)
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE || App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE || App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP )
 	{
 		//We call for the function
 		App->ui->focused.lookAt->data->OnRelease();
 
 		//Stop dragging & focusing
-		App->ui->focused.lookAt->data->dragging = false;
-		App->ui->focused.lookAt = nullptr;
+		if (App->ui->focused.lookAt != nullptr)
+		{
+			App->ui->focused.lookAt->data->dragging = false;
+			App->ui->focused.lookAt = nullptr;
+		}
 	}
 }
 

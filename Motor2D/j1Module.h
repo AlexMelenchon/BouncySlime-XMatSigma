@@ -71,6 +71,7 @@ enum class UIFunction
 	FNC_PAUSE,
 	FNC_EXITGAME,
 	FNC_SAVE,
+	FNC_GOBACK,
 
 	//Both
 	FNC_CHANGE_VMUSIC,
