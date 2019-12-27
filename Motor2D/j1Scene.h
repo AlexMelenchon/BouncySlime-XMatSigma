@@ -106,7 +106,6 @@ private:
 	p2DynArray<iPoint> debugPath;
 
 	j1UIelement* parent = nullptr;
-	j1UIelement* pause = nullptr;
 
 
 	//--------UI LOGIC---------//
