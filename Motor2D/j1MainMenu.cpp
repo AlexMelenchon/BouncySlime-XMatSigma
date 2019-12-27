@@ -45,6 +45,8 @@ bool j1MainMenu::Start()
 	parent = App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 0,0 }, false, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
 
 	//We create the UI
+	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 610, 120 }, false, false, true, { 1265,36,177,204 });
+	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 690, 240 }, false, false, true, { 969,34,276,490 });
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 700,250 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_STARTGAME, drag_axis::MOV_NONE, "Play");
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 700,350 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_CONTINUEGAME, drag_axis::MOV_NONE, "Continue");
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 700,450 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_OPTIONS, drag_axis::MOV_NONE, "Settings");
@@ -54,7 +56,6 @@ bool j1MainMenu::Start()
 	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 20,100 }, false, false, true, { 491,1022,394,168 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
 
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 20,650 }, true, false, true, {331,991,64,64 }, this, UIFunction::FNC_GITHUB, drag_axis::MOV_NONE);
-
 
 	//App->ui->AddElement(ui_type::UI_INPUTBOX, nullptr, { 20,650 }, true, false, true, { 331,991,64,64 }, this, UIFunction::FNC_NONE, drag_axis::MOV_ALL, "fd");
 
@@ -114,11 +115,13 @@ void j1MainMenu::OnGui(UIEventType type, UIFunction func, j1UIelement* userPoint
 		{
 		case UIFunction::FNC_STARTGAME:
 		{
+			App->pause = false;
 			App->fade->FadeToBlackMod(App->scene, this, App->scene->mapFadeTime);
 			break;
 		}
 		case UIFunction::FNC_CONTINUEGAME:
 		{
+			App->pause = false;
 			App->fade->FadeToBlackMod(App->scene, this, App->scene->mapFadeTime, true);
 			break;
 		}
@@ -195,10 +198,11 @@ void j1MainMenu::MenusLoad(UIFunction func)
 
 			App->ui->ToDeleteElement();
 
-			App->ui->AddElement(ui_type::UI_TEXT, parent, { -50,-370 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Music Volume:")->to_delete = true;
-			App->ui->AddElement(ui_type::UI_SLIDER, parent, { -50,-400 }, true, false, true, { 0,0,0,0 }, this, UIFunction::FNC_CHANGE_VMUSIC, drag_axis::MOV_X)->to_delete = true;
-			App->ui->AddElement(ui_type::UI_TEXT, parent, { -50,-470 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Fx Volume:")->to_delete = true;
-			App->ui->AddElement(ui_type::UI_SLIDER, parent, { -50,-500 }, true, false, true, { 0,0,0,0 }, this, UIFunction::FNC_CHANGE_VFX, drag_axis::MOV_X)->to_delete = true;
+			App->ui->AddElement(ui_type::UI_IMAGE, parent, { -240,-365 }, false, false, true, { 969,532,278,265 })->to_delete = true;
+			App->ui->AddElement(ui_type::UI_TEXT, parent, { -250,-370 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Music Volume:")->to_delete = true;
+			App->ui->AddElement(ui_type::UI_SLIDER, parent, { -250,-400 }, true, false, true, { 0,0,0,0 }, this, UIFunction::FNC_CHANGE_VMUSIC, drag_axis::MOV_X)->to_delete = true;
+			App->ui->AddElement(ui_type::UI_TEXT, parent, { -250,-470 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Fx Volume:")->to_delete = true;
+			App->ui->AddElement(ui_type::UI_SLIDER, parent, { -250,-500 }, true, false, true, { 0,0,0,0 }, this, UIFunction::FNC_CHANGE_VFX, drag_axis::MOV_X)->to_delete = true;
 
 			break;
 
@@ -211,7 +215,6 @@ void j1MainMenu::MenusLoad(UIFunction func)
 			App->ui->AddElement(ui_type::UI_IMAGE, parent, { -105,-580 }, false, false, true, { 717,1230,122,120 }, nullptr)->to_delete = true;
 
 			break;
-
 		}
 
 		if (lastcall == func)
