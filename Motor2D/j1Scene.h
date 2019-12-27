@@ -86,6 +86,10 @@ public:
 	// The maximum point achieved in a run
 	uint maxScore = 0u;
 
+	//--------UI LOGIC---------//
+	//Used to keep the console in check
+	j1UIelement* console = nullptr;
+
 
 private:
 	//--------CAMERA---------//
@@ -105,12 +109,14 @@ private:
 	//Array to store the debug path made w/ the mouse
 	p2DynArray<iPoint> debugPath;
 
-	j1UIelement* parent = nullptr;
 
 
 	//--------UI LOGIC---------//
 	//Used to load/unload the options submenu
 	UIFunction lastcall;
+
+	//"Ghost" parent to control the other elements on screen
+	j1UIelement* parent = nullptr;
 
 	//Audio
 	FX click;

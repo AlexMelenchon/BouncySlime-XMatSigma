@@ -5,6 +5,8 @@
 #include "j1Window.h"
 #include "SDL/include/SDL.h"
 #include "j1Fonts.h"
+#include "j1Scene.h"
+#include "j1UIelement.h"
 
 #define MAX_KEYS 300
 
@@ -52,7 +54,7 @@ bool j1Input::PreUpdate()
 {
 	BROFILER_CATEGORY("Input Pre-Update", Profiler::Color::Chartreuse)
 
-	static SDL_Event event;
+		static SDL_Event event;
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
@@ -126,18 +128,28 @@ bool j1Input::PreUpdate()
 			break;
 
 		case SDL_TEXTINPUT:
-			if (position == 0)
-				textString += event.text.text;
+			if ((GetTextSize().x) > inputRect.w)
+			{
+				LOG("Max console capacity exceeded!");
+			}
 			else
 			{
-				textString.insert(event.text.text, position);
-			}
+				if (position == 0)
+					textString += event.text.text;
+				else
+				{
+					textString.insert(event.text.text, position);
+				}
 
+			}
 			break;
 
 		case SDL_KEYDOWN:
 			if (writting)
 			{
+
+				SDL_Keycode hpña = event.key.keysym.sym;
+
 				if (event.key.keysym.sym == SDLK_BACKSPACE && textString.Length() > 0)
 				{
 					textString.Cut(textString.Length() - (position)-1, textString.Length() - position);
@@ -160,20 +172,21 @@ bool j1Input::PreUpdate()
 					position--;
 				}
 
-			}
+				if (event.key.keysym.sym == SDLK_BACKQUOTE)
+				{
+					App->input->WrittingState(false, this->inputRect);
+					App->scene->console->Disable(!App->scene->console->enabled);
+				}
 
+			}
+			break;
 		case SDL_MOUSEMOTION:
 			int scale = App->win->GetScale();
 			mouse_motion_x = event.motion.xrel / scale;
 			mouse_motion_y = event.motion.yrel / scale;
 			mouse_x = event.motion.x / scale;
 			mouse_y = event.motion.y / scale;
-			//LOG("Mouse motion x %d y %d", mouse_motion_x, mouse_motion_y);
 			break;
-
-
-
-
 		}
 	}
 
@@ -231,6 +244,16 @@ int j1Input::GetTextInPos()
 
 }
 
+iPoint j1Input::GetTextSize()
+{
+	int tmpW, tmpH = 0;
+
+	App->fonts->CalcSize(textString.GetString(), tmpW, tmpH);
+
+	return { tmpW , tmpH };
+
+}
+
 void j1Input::WrittingState(bool state, SDL_Rect rect)
 {
 	if (writting != state)
@@ -241,13 +264,16 @@ void j1Input::WrittingState(bool state, SDL_Rect rect)
 		{
 			SDL_StartTextInput();
 			SDL_SetTextInputRect(&rect);
+			inputRect = { rect.x, rect.y, rect.w, rect.h };
 			ReSetKeys();
+			TTF_GlyphMetrics(App->fonts->default_font, 1, 0, &rect.w, 0, &rect.w, 0);
 		}
 		else
 		{
 			SDL_StopTextInput();
 			position = 0;
 			textString.Clear();
+			inputRect = { 0,0,0,0 };
 		}
 	}
 }

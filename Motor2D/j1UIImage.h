@@ -3,6 +3,7 @@
 
 #include"j1UIelement.h"
 
+
 class j1UIImage : public j1UIelement
 {
 public:
@@ -19,7 +20,14 @@ public:
 	// Called before all Updates
 	bool PostUpdate(bool debug);
 
+	// Used to Draw when the image has no texture
 	void NoTextDraw(bool debug);
+
+	bool DeFocus();
+
+private:
+	//Color for the image when it has no texture
+	SDL_Color noTextColor = {255,255,255,255};
 
 };
 

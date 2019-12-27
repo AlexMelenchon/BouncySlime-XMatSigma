@@ -61,7 +61,8 @@ bool j1Scene::Start()
 
 	App->ui->AddElement(ui_type::UI_BUTTON, parent, { -10,-10 }, true, false, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
 
-	App->ui->AddElement(ui_type::UI_INPUTBOX, parent, { 0,-150 }, true, false, true, {0,0,50,50}, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Bon Dia");
+	console = App->ui->AddElement(ui_type::UI_CONSOLE, parent, { 0,0 }, true, false, true, {0,0,0,0}, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Bon Dia");
+	console->Disable(false);
 
 	//Gameplay ini--------
 	time.Start();
@@ -197,6 +198,10 @@ bool j1Scene::Update(float dt)
 		App->audio->fxVolume -= 5;
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_GRAVE) == KEY_DOWN)
+	{
+		console->Disable(!console->enabled);
+	}
 
 	//Draws the current map
 	App->map->Draw();
@@ -224,6 +229,9 @@ bool j1Scene::CleanUp()
 	LOG("Freeing scene");
 	debug_tex = nullptr;
 	debugPath.Clear();
+
+	console = nullptr;
+	parent = nullptr;
 
 	//Delete Player
 	App->entities->DeletePlayer();

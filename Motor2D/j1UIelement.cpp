@@ -29,6 +29,9 @@ bool j1UIelement::Start()
 //Draws the element into the screen
 bool j1UIelement::Draw(bool debug)
 {
+	if (!enabled)
+		return true;
+
 	// If the element if focused or hovering (or its parent), we put on the texture a mask
 	//If its focused (a.k.a pressed, we put on a greyer mask)
 	if (this->IsFocused())
@@ -107,7 +110,8 @@ bool j1UIelement::PreUpdate()
 // Called each loop iteration
 bool j1UIelement::Update(float dt)
 {
-
+	if (!enabled)
+		return true;
 
 	//If the mouse is hovering above an object...
 	if (hovering)
@@ -118,7 +122,7 @@ bool j1UIelement::Update(float dt)
 			App->ui->focused.lookAt = nullptr;
 			App->ui->focused.state = focusState::ST_FREE;
 		}
-		else if (App->ui->focused.lookAt && App->ui->focused.lookAt->data != this && App->ui->focused.state == focusState::ST_FREE &&  App->ui->focused.lookAt->data->type != ui_type::UI_INPUTBOX)
+		else if (App->ui->focused.lookAt && App->ui->focused.lookAt->data != this && App->ui->focused.state == focusState::ST_FREE && App->ui->focused.lookAt->data->type != ui_type::UI_INPUTBOX && App->ui->focused.lookAt->data->type != ui_type::UI_CONSOLE)
 			App->ui->focused.lookAt = nullptr;
 
 		//If we detect a click....
@@ -284,7 +288,7 @@ bool j1UIelement::DeFocus()
 	bool ret = false;
 
 	//If we let go of the click, we lose focus (THE CONDITIONS MIGHT CHANGE IN CUSTOM DeFocus() IN THE INHERITS)
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE || App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP )
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE || App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
 	{
 		//We call for the function
 		ret = App->ui->focused.lookAt->data->OnRelease();
@@ -301,8 +305,28 @@ bool j1UIelement::DeFocus()
 }
 
 //Used to Update the elements position when it's not moving
-void j1UIelement::UpdatePosition()
- {
-	if (parent)
-		this->Position.x = this->parent->Position.x + this->PostoParent.x;
+void j1UIelement::Disable(bool to_disable)
+{
+	if (enabled != to_disable)
+	{
+		enabled = to_disable;
+
+		for (p2List_item<j1UIelement*>* iterator = App->ui->GetElementFromList(this)->prev; iterator; iterator = iterator->prev)
+		{
+			if (iterator->data->parent == this)
+				iterator->data->Disable(to_disable);
+		}
+
+
+		if (!enabled)
+		{
+			if (this->IsFocused())
+				App->ui->focused.lookAt = nullptr;
+		}
+		else if (enabled)
+		{
+			App->ui->focused.lookAt = App->ui->GetElementFromList(App->scene->console);
+		}
+
+	}
 }

@@ -12,7 +12,7 @@ j1UISlider::j1UISlider()
 	this->type = ui_type::UI_SLIDER;
 }
 
-j1UISlider::j1UISlider(drag_axis axis)
+j1UISlider::j1UISlider(drag_axis axis, iPoint position)
 {
 	this->type = ui_type::UI_SLIDER;
 	this->axis = axis;
@@ -20,8 +20,6 @@ j1UISlider::j1UISlider(drag_axis axis)
 	//Create the child elements
 	background = App->ui->AddElement(ui_type::UI_IMAGE, this, { 0,0 }, false, false, true, { 73,992,256,64 }, this->listener, UIFunction::FNC_NONE, this->axis);
 	button = App->ui->AddElement(ui_type::UI_BUTTON, this, { 0,0 }, true, true, true, { 73, 36, 64, 64 }, this->listener, UIFunction::FNC_NONE, this->axis);
-
-
 }
 
 //Destructors

@@ -93,6 +93,9 @@ public:
 	//Returns the size of the buffer string in a certain position
 	int GetTextInPos();
 
+	//Returns the size of the text font, for multi-line purposes
+	iPoint GetTextSize();
+
 	//Changes the input mode from wirtting to playing
 	void WrittingState(bool state, SDL_Rect rect);
 
@@ -114,6 +117,8 @@ private:
 	int			mouse_motion_y;
 
 	bool		writting = false;
+
+	SDL_Rect inputRect = { 0,0,0,0 };
 
 
 	//--------BUFFER STRING---------//

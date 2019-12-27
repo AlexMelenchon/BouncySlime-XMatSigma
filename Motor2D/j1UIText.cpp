@@ -16,7 +16,6 @@ j1UIText::j1UIText(char* txt)
 {
 	this->type = ui_type::UI_TEXT;
 	this->texture = App->fonts->Print(txt);
-
 }
 
 //Destructors

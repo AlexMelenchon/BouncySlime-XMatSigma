@@ -100,6 +100,9 @@
     <ClCompile Include="j1Coin.cpp">
       <Filter>Desenvolupament  ========\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="j1Console.cpp">
+      <Filter>Desenvolupament  ========\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -221,6 +224,9 @@
     </ClInclude>
     <ClInclude Include="j1Coin.h">
       <Filter>Desenvolupament  ========\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Console.h">
+      <Filter>Desenvolupament  ========\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

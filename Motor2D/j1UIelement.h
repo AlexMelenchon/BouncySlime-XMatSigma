@@ -16,7 +16,8 @@ enum class ui_type
 	UI_IMAGE,
 	UI_TEXT,
 	UI_INPUTBOX,
-	UI_SLIDER
+	UI_SLIDER,
+	UI_CONSOLE
 };
 
 
@@ -47,6 +48,7 @@ public:
 
 	// Called each loop iteration
 	bool Update(float dt);
+
 	//Custom update fuction for inheritances that might need it
 	virtual bool InheritUpdate(float dt) { return true; }
 
@@ -85,8 +87,8 @@ public:
 	//Retrives focus when the conditions are met
 	virtual bool DeFocus();
 
-	//Used to Update the elements position when it's not moving
-	void UpdatePosition();
+	//Used to make an element disable
+	void Disable(bool to_disable);
 
 public:
 	//--------UI LOGIC-------------//

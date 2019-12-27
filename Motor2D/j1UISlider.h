@@ -11,7 +11,7 @@ public:
 
 	//Constructors-----
 	j1UISlider();
-	j1UISlider(drag_axis axis);
+	j1UISlider(drag_axis axis, iPoint position);
 
 	//Destructors
 	~j1UISlider();

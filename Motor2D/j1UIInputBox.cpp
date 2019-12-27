@@ -14,7 +14,7 @@ j1UIInputBox::j1UIInputBox(char* txt)
 	this->type = ui_type::UI_INPUTBOX;
 
 	//Load the childs----
-	boxImage = App->ui->AddElement(ui_type::UI_IMAGE, this, this->Position, true, false, true, { 73, 992, 256, 64 }, this->listener, UIFunction::FNC_NONE);
+	boxImage = App->ui->AddElement(ui_type::UI_IMAGE, this, this->Position, true, false, true, this->rect, this->listener, UIFunction::FNC_NONE);
 	boxText = App->ui->AddElement(ui_type::UI_TEXT, this, this->Position, true, false, true, this->rect, this->listener, UIFunction::FNC_NONE, this->axis, txt);
 }
 
@@ -38,8 +38,10 @@ bool j1UIInputBox::InheritUpdate(float dt)
 bool j1UIInputBox::PostUpdate(bool debug)
 {
 	//If it's focused....
-	if (this->IsFocused())
+	if (this->IsFocused() || boxImage->IsFocused() || boxText->IsFocused())
 	{
+		if(App->ui->focused.lookAt->data != this)
+		App->ui->focused.lookAt = App->ui->GetElementFromList(this);
 		//We say to the input that we're writting
 		App->input->WrittingState(true, boxImage->rect);
 
@@ -51,7 +53,9 @@ bool j1UIInputBox::PostUpdate(bool debug)
 		}
 	}
 	else
+	{
 		App->input->WrittingState(false, boxImage->rect);
+	}
 
 	return true;
 }
@@ -69,9 +73,8 @@ bool j1UIInputBox::CleanUp()
 //Retrives focus when the conditions are met
 bool j1UIInputBox::DeFocus()
 {
-	bool ret = true;
+	bool ret = false;
 	//When the player clicks outside the inputBox, we stop focusing on it
-	// TODO: when the input box closes, also do this
 	if(App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && !this->hovering)
 		App->ui->focused.lookAt = nullptr;
 
