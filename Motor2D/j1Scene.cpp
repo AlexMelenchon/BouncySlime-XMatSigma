@@ -52,7 +52,7 @@ bool j1Scene::Start()
 
 	parent = App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 0,0 }, false, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
 
-	pause  = App->ui->AddElement(ui_type::UI_BUTTON, parent, { 100,100 }, true, false, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
+	pause  = App->ui->AddElement(ui_type::UI_BUTTON, parent, { -100,-100 }, true, false, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
 
 
 
@@ -371,6 +371,15 @@ void j1Scene::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer)
 		case UIFunction::FNC_PAUSE:
 		{
 			App->pause = !App->pause;
+
+			if(App->pause)
+				MenusLoad(UIFunction::FNC_PAUSE);
+		}
+		break;
+
+		case UIFunction::FNC_OPTIONS:
+		{
+			MenusLoad(UIFunction::FNC_OPTIONS);
 		}
 		break;
 
@@ -379,6 +388,12 @@ void j1Scene::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer)
 			App->fade->FadeToBlackMod(App->mainMenu, this, mapFadeTime);
 		}
 		break;
+
+		case UIFunction::FNC_GOBACK:
+		{
+			MenusLoad(lastcall);
+		}
+			break;
 
 		}
 
@@ -420,6 +435,34 @@ void j1Scene::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer)
 
 
 
+}
+
+void j1Scene::MenusLoad(UIFunction func)
+{
+	App->ui->ToDeleteElement();
+
+	switch (func)
+	{
+		case UIFunction::FNC_PAUSE:			
+
+			App->ui->AddElement(ui_type::UI_BUTTON, parent, { -250,-300 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_PAUSE, drag_axis::MOV_NONE, "CONTINUE")->to_delete = true;
+			App->ui->AddElement(ui_type::UI_BUTTON, parent, { -250,-400 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_OPTIONS, drag_axis::MOV_NONE, "SETTINGS")->to_delete = true;
+			App->ui->AddElement(ui_type::UI_BUTTON, parent, { -250,-500 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_SAVE, drag_axis::MOV_NONE, "SAVE")->to_delete = true;
+			App->ui->AddElement(ui_type::UI_BUTTON, parent, { -250,-600 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_EXIT, drag_axis::MOV_NONE, "MAIN MENU")->to_delete = true;
+
+			break;
+
+		case UIFunction::FNC_OPTIONS:
+			
+			App->ui->AddElement(ui_type::UI_TEXT, parent, { -250,-370 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Music Volume:")->to_delete = true;
+			App->ui->AddElement(ui_type::UI_SLIDER, parent, { -250,-400 }, true, false, true, { 0,0,0,0 }, this, UIFunction::FNC_CHANGE_VMUSIC, drag_axis::MOV_X)->to_delete = true;
+			App->ui->AddElement(ui_type::UI_TEXT, parent, { -250,-470 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Fx Volume:")->to_delete = true;
+			App->ui->AddElement(ui_type::UI_SLIDER, parent, { -250,-500 }, true, false, true, { 0,0,0,0 }, this, UIFunction::FNC_CHANGE_VFX, drag_axis::MOV_X)->to_delete = true;
+			App->ui->AddElement(ui_type::UI_BUTTON, parent, { -50,-300 }, true, false, true, { 73,554,64,64 }, this, UIFunction::FNC_GOBACK, drag_axis::MOV_NONE)->to_delete = true;
+
+			break;
+	}
+	lastcall = func;
 }
 
 //Resets the Camera

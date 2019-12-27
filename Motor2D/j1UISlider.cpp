@@ -57,6 +57,8 @@ bool j1UISlider::Start()
 //Called every frame after the element update
 bool j1UISlider::InheritUpdate(float dt)
 {
+	
+
 	//The childs follow the father's enabled
 	button->enabled = this->enabled;
 	background, enabled = this->enabled;
@@ -92,14 +94,14 @@ void j1UISlider::CheckLimits()
 	if (button->PostoParent.x > 0)
 	{
 		button->PostoParent.x = 0;
-		UpdatePosition();
+		button->Position.x = button->parent->Position.x - button->PostoParent.x;
 
 	}
 	//Right
 	else if (button->PostoParent.x < (-background->rect.w + button->rect.w))
 	{
 		button->PostoParent.x = -background->rect.w + button->rect.w;
-		UpdatePosition();
+		button->Position.x = button->parent->Position.x - button->PostoParent.x;
 	}
 }
 

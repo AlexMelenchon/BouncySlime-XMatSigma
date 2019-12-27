@@ -65,6 +65,8 @@ public:
 	//Manages the UI inputs of this module
 	void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr);
 
+	void MenusLoad(UIFunction func);
+
 
 private:
 	//--------CAMERA---------//
@@ -86,6 +88,10 @@ private:
 
 	j1UIelement* parent = nullptr;
 	j1UIelement* pause = nullptr;
+
+	//--------UI LOGIC---------//
+	//Used to load/unload the options submenu
+	UIFunction lastcall;
 
 };
 
