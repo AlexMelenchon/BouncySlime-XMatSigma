@@ -52,6 +52,8 @@ private:
 	//"Ghost" UI used for position reference to the sub-menus
 	j1UIelement* parent = nullptr;
 
+	p2SString menuMusic;
+
 };
 
 

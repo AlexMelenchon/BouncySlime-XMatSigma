@@ -64,6 +64,7 @@ bool j1Scene::Start()
 	return true;
 }
 
+// Called to reset the scene
 bool j1Scene::Reset(const char* map)
 {
 	//Gets the current window width & height

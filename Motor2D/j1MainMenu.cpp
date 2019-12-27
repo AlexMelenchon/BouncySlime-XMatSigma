@@ -18,6 +18,7 @@ j1MainMenu::~j1MainMenu()
 // Called before render is available
 bool j1MainMenu::Awake(pugi::xml_node& config)
 {
+	menuMusic();
 	bool ret = true;
 	return true;
 }
@@ -29,6 +30,10 @@ bool j1MainMenu::Start()
 
 	//We draw the background scene
 	App->map->Load(App->map->menu_tmx.GetString());
+
+	//Start the music
+	App->audio->PlayMusic("audio/music/mainmenu_loop.ogg", 0.0f);
+
 
 	//We create the "ghost" parent
 	parent = App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 0,0 }, false, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
@@ -47,6 +52,7 @@ bool j1MainMenu::Start()
 
 	lastcall = UIFunction::FNC_NONE;
 	
+
 	return true;
 }
 
