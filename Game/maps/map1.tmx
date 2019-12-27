@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="108">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="150" height="69" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="132">
  <properties>
   <property name="music" value="audio/music/loop.ogg"/>
   <property name="speed" type="float" value="1"/>
@@ -62209,7 +62209,7 @@
   <object id="34" name="Floor" x="1184.09" y="239.379" width="46.495" height="15.909"/>
   <object id="36" name="Floor" x="768.086" y="448.561" width="48.37" height="127.56"/>
   <object id="37" name="Floor" x="478.086" y="432.379" width="385.162" height="33.2423"/>
-  <object id="39" name="Floor" x="399.751" y="976.131" width="94.4147" height="12.9043"/>
+  <object id="39" name="Floor" x="399.751" y="976.131" width="95.6874" height="15.7225"/>
   <object id="40" name="Floor" x="752.116" y="768.566" width="63.495" height="62.9888"/>
   <object id="41" name="Death" x="1699.38" y="198.587" width="41.62" height="9.534"/>
   <object id="42" name="Floor" x="1521.75" y="319.545" width="46.495" height="15.909"/>
@@ -62232,17 +62232,34 @@
   <object id="92" name="Death" x="2208.09" y="532.369" width="111.438" height="11.8976"/>
   <object id="94" name="Floor" x="2288.8" y="0.192833" width="30.9391" height="271.962"/>
   <object id="95" name="Floor" x="2112.02" y="18.5115" width="174.522" height="12.3685"/>
-  <object id="96" name="Death" x="2412.64" y="-167.767" width="197.38" height="1347.53"/>
+  <object id="96" name="Death" x="2356.64" y="-167.767" width="197.38" height="1347.53"/>
   <object id="97" name="Death" x="1969.43" y="422.203" width="44.2564" height="9.534"/>
   <object id="101" name="EnemyL" x="400.667" y="936.667" width="136.667" height="19.3333"/>
+  <object id="109" name="Coin" x="557" y="656.5" width="19.3333" height="16.3333"/>
+  <object id="110" name="Coin" x="750.333" y="712.833" width="19.3333" height="16.3333"/>
+  <object id="111" name="Coin" x="797.667" y="710.833" width="19.3333" height="16.3333"/>
+  <object id="112" name="Coin" x="182.833" y="897.833" width="19.3333" height="16.3333"/>
+  <object id="113" name="Coin" x="269.833" y="835.333" width="19.3333" height="16.3333"/>
+  <object id="114" name="Coin" x="375.333" y="903.833" width="19.3333" height="16.3333"/>
+  <object id="115" name="Coin" x="1233.33" y="913.333" width="19.3333" height="16.3333"/>
+  <object id="118" name="Coin" x="1772.83" y="891.333" width="19.3333" height="16.3333"/>
+  <object id="119" name="Coin" x="1544.33" y="563.833" width="19.3333" height="16.3333"/>
+  <object id="120" name="Coin" x="2256.83" y="145.333" width="19.3333" height="16.3333"/>
+  <object id="121" name="Coin" x="2256.83" y="100.833" width="19.3333" height="16.3333"/>
+  <object id="122" name="Coin" x="1705.83" y="167.833" width="19.3333" height="16.3333"/>
+  <object id="123" name="Coin" x="1344.83" y="339.833" width="19.3333" height="16.3333"/>
+  <object id="128" name="Coin" x="1680.83" y="699.833" width="19.3333" height="16.3333"/>
  </objectgroup>
  <objectgroup id="8" name="ENTITIES">
   <object id="98" name="EnemyL" x="626" y="935" width="302" height="16"/>
   <object id="99" name="EnemyL" x="558" y="408" width="90" height="16"/>
   <object id="100" name="EnemyF" x="1097" y="57" width="737" height="464"/>
   <object id="102" name="EnemyL" x="2208" y="246" width="75.5" height="15"/>
-  <object id="103" x="2454" y="272.5"/>
   <object id="104" name="EnemyF" x="559.591" y="270.576" width="129" height="33"/>
+  <object id="124" name="Coin" x="870.833" y="434.833" width="19.3333" height="16.3333"/>
+  <object id="129" name="Coin" x="2029.33" y="539.833" width="19.3333" height="16.3333"/>
+  <object id="130" name="Coin" x="2030.83" y="453.333" width="19.3333" height="16.3333"/>
+  <object id="131" name="Coin" x="2031.83" y="492.833" width="19.3333" height="16.3333"/>
  </objectgroup>
  <layer id="10" name="NAVIGATION" width="150" height="69" visible="0">
   <properties>

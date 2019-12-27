@@ -45,9 +45,6 @@ bool j1EntityManager::Start()
 	flying_tex = App->tex->Load(entConfig.child("flyingenemy").child("path").text().as_string());
 	land_tex = App->tex->Load(entConfig.child("landenemy").child("path").text().as_string());
 
-
-
-
 	return ret;
 }
 

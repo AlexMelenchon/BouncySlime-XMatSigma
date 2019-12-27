@@ -9,7 +9,7 @@
 //Constructor
 j1MainMenu::j1MainMenu()
 {
-	name.create("scene");
+	name.create("main_menu");
 }
 
 // Destructor
@@ -22,7 +22,7 @@ bool j1MainMenu::Awake(pugi::xml_node& config)
 {	
 	bool ret = true;
 
-	
+	menuMusic = config.child("musicPath").text().as_string();
 
 	//Audio load
 	click.path = config.child("click").attribute("file").as_string();
@@ -39,6 +39,10 @@ bool j1MainMenu::Start()
 	//We draw the background scene
 	App->map->Load(App->map->menu_tmx.GetString());
 
+	//Start the music
+	App->audio->PlayMusic(menuMusic.GetString(), 0.0f);
+
+	//Load the sfx-----
 	click.id = App->audio->LoadFx(click.path.GetString());
 
 	//We create the "ghost" parent
@@ -62,6 +66,7 @@ bool j1MainMenu::Start()
 
 	lastcall = UIFunction::FNC_NONE;
 	
+
 	return true;
 }
 

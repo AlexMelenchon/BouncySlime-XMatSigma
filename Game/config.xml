@@ -28,6 +28,12 @@
     <startingLifes>5</startingLifes>
     <click file="audio/fx/click.wav"/>
   </scene>
+  
+  <main_menu>
+    <musicPath>audio/music/mainmenu_loop.ogg</musicPath>
+    <click file="audio/fx/click.wav"/>
+
+  </main_menu>
 
   <gui>
     <atlas file="textures/atlas.png"/>   
@@ -42,7 +48,7 @@
   </map>
 
   <audio>
-    <volume general="25" music="15"/>
+    <volume general="55" music="35"/>
   </audio>
 
   <fonts>
@@ -57,9 +63,9 @@
 
     <player>
       <movement>
-        <movementForce x="-70.0f" y="-220.0f" />
+        <movementForce x="-65.0f" y="-220.0f" />
         <miniMovementForce x="0.0f" y="-100.0f" />
-        <wallForce x="350.0f" y="-275.0f" />
+        <wallForce x="320.0f" y="-245.0f" />
         <gravity>62.5f</gravity>
         <slowGrade>0.95f</slowGrade>
         <slowGradeAir>0.975f</slowGradeAir>
