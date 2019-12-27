@@ -28,6 +28,11 @@ struct SDL_Rect; // Struct for rect, to be able to call it from any module
 class Animation; //Class for animations
 class j1UIelement;
 
+struct FX
+{
+	int id = 0;
+	p2SString path;
+};
 
 struct Collider;
 enum COLLIDER_TYPE

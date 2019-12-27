@@ -26,10 +26,11 @@
   <scene>
     <mapFadeTime>0.7f</mapFadeTime>
     <startingLifes>5</startingLifes>
+    <click file="audio/fx/click.wav"/>
   </scene>
 
   <gui>
-    <atlas file="textures/atlas.png"/>
+    <atlas file="textures/atlas.png"/>   
   </gui>
 
   <map>

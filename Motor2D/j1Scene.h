@@ -113,6 +113,9 @@ private:
 	//Used to load/unload the options submenu
 	UIFunction lastcall;
 
+	//Audio
+	FX click;
+
 	//--------GAMEPLAY RELATED---------//
 
 	//The current run time of the run
@@ -120,6 +123,8 @@ private:
 
 	//The default lifes given at the start
 	uint startingLifes = 0u;
+
+	
 
 
 };

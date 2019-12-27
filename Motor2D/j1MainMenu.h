@@ -3,6 +3,8 @@
 
 #include "j1Module.h"
 
+
+
 class j1MainMenu : public j1Module
 {
 public:
@@ -53,6 +55,8 @@ private:
 	j1UIelement* parent = nullptr;
 
 	p2SString menuMusic;
+	
+	FX click;
 
 };
 
