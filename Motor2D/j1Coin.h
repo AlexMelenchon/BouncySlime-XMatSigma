@@ -1,5 +1,5 @@
-#ifndef __j1SHURIKENPARTICLE_H__
-#define __j1SHURIKENPARTICLE_H__
+#ifndef __j1COIN_H__
+#define __j1COI_H__
 
 #include "j1Entity.h"
 #include "p2Defs.h"
@@ -25,22 +25,24 @@ public:
 	bool Start();
 
 	// Called each loop iteration
-	bool PreUpdate();
-
-	// Called each loop iteration
 	bool Update(float dt);
 
 	// Called each loop iteration
 	bool PostUpdate(bool debug);
 
 	// Called before quitting
-	bool CleanUp();
 
+	bool CleanUp();
+	//--------SAVE & LOAD---------//
+	//Called when loading a save
+	bool Load(pugi::xml_node&);
+
+	//Called to save the game
+	bool Save(pugi::xml_node&) const;
 
 	//--------COLLISION ---------//
-
 	//If a collision is detected by the j1Collision, distributes collisions according to it's type
-	void OnCollision(Collider* playerCol, Collider* coll);
+	void OnCollision(Collider* coinCol, Collider* coll);
 
 
 private:

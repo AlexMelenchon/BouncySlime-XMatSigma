@@ -28,8 +28,8 @@ j1Player::~j1Player()
 bool j1Player::Awake(pugi::xml_node& player_node)
 {
 	//State Machine start
-	inputs.start = 0; 
-	
+	inputs.start = 0;
+
 	//Movement load
 	fpForce.x = player_node.child("movement").child("movementForce").attribute("x").as_float();
 	fpForce.y = player_node.child("movement").child("movementForce").attribute("y").as_float();
@@ -107,13 +107,13 @@ bool j1Player::Start()
 
 	//Collision load
 	App->collision->AddCollider(collider);
-	
+
 	//Fx load
 	jumpFx.id = App->audio->LoadFx(jumpFx.path.GetString());
-	deathFx.id=App->audio->LoadFx(deathFx.path.GetString());
-	landFx.id=App->audio->LoadFx(landFx.path.GetString());
-	winFx.id=App->audio->LoadFx(winFx.path.GetString());
-	bounceFx.id=App->audio->LoadFx(bounceFx.path.GetString());
+	deathFx.id = App->audio->LoadFx(deathFx.path.GetString());
+	landFx.id = App->audio->LoadFx(landFx.path.GetString());
+	winFx.id = App->audio->LoadFx(winFx.path.GetString());
+	bounceFx.id = App->audio->LoadFx(bounceFx.path.GetString());
 	enemyDeathFx.id = App->audio->LoadFx(enemyDeathFx.path.GetString());
 	throw_shuriken.id = App->audio->LoadFx(throw_shuriken.path.GetString());
 	shuriken_hit.id = App->audio->LoadFx(shuriken_hit.path.GetString());
@@ -141,7 +141,7 @@ void j1Player::standardInputs()
 					fpSpeed.x += fpForce.x * (App->GetDeltaTime() * VEL_TO_WORLD);
 			}
 			else
- 				fpSpeed.x += fpForce.x * (App->GetDeltaTime() * VEL_TO_WORLD);
+				fpSpeed.x += fpForce.x * (App->GetDeltaTime() * VEL_TO_WORLD);
 		}
 
 		if (fpSpeed.x > 0)
@@ -171,8 +171,8 @@ void j1Player::standardInputs()
 	}
 	else
 	{
-			//Slow X
-			fpSpeed.x -= DeAccel(fpSpeed.x, fSlowGradeWall);
+		//Slow X
+		fpSpeed.x -= DeAccel(fpSpeed.x, fSlowGradeWall);
 	}
 
 	//Jump
@@ -183,8 +183,8 @@ void j1Player::standardInputs()
 
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 	{
-		if(App->entities->shuriken == nullptr)
-		App->entities->AddEntity(entityType::SHURIKEN, { int(round(fpPosition.x)),int(round(fpPosition.y)) });
+		if (App->entities->shuriken == nullptr)
+			App->entities->AddEntity(entityType::SHURIKEN, { int(round(fpPosition.x)),int(round(fpPosition.y)) });
 		App->audio->PlayFx(throw_shuriken.id);
 	}
 
@@ -195,12 +195,12 @@ void j1Player::godInputs()
 {
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		fpSpeed.x = -fpMaxSpeed.x*godSpeedMultiplier;
+		fpSpeed.x = -fpMaxSpeed.x * godSpeedMultiplier;
 
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		fpSpeed.x = fpMaxSpeed.x* godSpeedMultiplier;
+		fpSpeed.x = fpMaxSpeed.x * godSpeedMultiplier;
 
 	}
 	else
@@ -208,12 +208,12 @@ void j1Player::godInputs()
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
-		fpSpeed.y = -fpMaxSpeed.y* godSpeedMultiplier;
+		fpSpeed.y = -fpMaxSpeed.y * godSpeedMultiplier;
 
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		fpSpeed.y = +fpMaxSpeed.y* godSpeedMultiplier;
+		fpSpeed.y = +fpMaxSpeed.y * godSpeedMultiplier;
 
 	}
 	else
@@ -224,10 +224,10 @@ void j1Player::godInputs()
 		if (App->entities->shuriken == nullptr)
 		{
 			App->audio->PlayFx(throw_shuriken.id);
-			App->entities->AddEntity(entityType::SHURIKEN, { int(round(fpPosition.x)),int(round(fpPosition.y)) });			
+			App->entities->AddEntity(entityType::SHURIKEN, { int(round(fpPosition.x)),int(round(fpPosition.y)) });
 		}
-		
-			
+
+
 	}
 }
 
@@ -235,13 +235,13 @@ void j1Player::godInputs()
 bool j1Player::PreUpdate()
 {
 	BROFILER_CATEGORY("Player Pre-Update", Profiler::Color::Magenta)
-	if (!App->pause && current_state != ST_DEAD)
-	{
-		if (!god)
-			standardInputs();
-		else
-			godInputs();
-	}
+		if (!App->pause && current_state != ST_DEAD)
+		{
+			if (!god)
+				standardInputs();
+			else
+				godInputs();
+		}
 
 	//Check the player state and update to the next one
 	UpdateState();
@@ -250,12 +250,12 @@ bool j1Player::PreUpdate()
 }
 
 //Updates the current state
-void j1Player::UpdateState() 
+void j1Player::UpdateState()
 {
-	if(!god)
+	if (!god)
 	{
-	player_states state = process_fsm(inputs);
-	current_state = state;
+		player_states state = process_fsm(inputs);
+		current_state = state;
 	}
 }
 
@@ -264,82 +264,82 @@ bool j1Player::Update(float dt)
 {
 	BROFILER_CATEGORY("Player Update", Profiler::Color::Magenta)
 
-	//Logic for every playe state
-	switch (current_state)
-	{
-	case ST_GROUND:
-
-		//The axis Y is 0
-		fAccel = 0;
-		fpSpeed.y = 0;
-		//We check the player's speed and select his animation accordingly
-		if ((fpSpeed.x > -fpForce.x) || (fpSpeed.x < fpForce.x))
+		//Logic for every playe state
+		switch (current_state)
 		{
-			currentAnimation = &animRun;
-		}
-		else
-		{
-			currentAnimation = &animIdle;
-		}
-		break;
+		case ST_GROUND:
 
-	case ST_AIR:
+			//The axis Y is 0
+			fAccel = 0;
+			fpSpeed.y = 0;
+			//We check the player's speed and select his animation accordingly
+			if ((fpSpeed.x > -fpForce.x) || (fpSpeed.x < fpForce.x))
+			{
+				currentAnimation = &animRun;
+			}
+			else
+			{
+				currentAnimation = &animIdle;
+			}
+			break;
 
-		fAccel += fGravity *(dt * VEL_TO_WORLD);
+		case ST_AIR:
 
-		//We check the player's speed and select his animation accordingly
-		if (fpSpeed.y > 0.0f)
-		{
-		currentAnimation = &animJump;
-		}
-		else
-		{
+			fAccel += fGravity * (dt * VEL_TO_WORLD);
+
+			//We check the player's speed and select his animation accordingly
+			if (fpSpeed.y > 0.0f)
+			{
+				currentAnimation = &animJump;
+			}
+			else
+			{
+				currentAnimation = &animFall;
+			}
+			break;
+
+		case ST_FALLING:
+
+			fAccel += fGravity * 2.0f * (dt * VEL_TO_WORLD);
 			currentAnimation = &animFall;
+			break;
+
+		case ST_WALL:
+
+			fAccel += fGravity / 2.0f * (dt * VEL_TO_WORLD);
+			currentAnimation = &animWall;
+			break;
+
+		case ST_WALL_JUMPING:
+
+			fAccel += fGravity * (dt * VEL_TO_WORLD);
+			wallJumpTimer += dt;
+			if (wallJumpTimer > wallJumpLimit) //When the player jumps, there's a limit in his speed to make him not stick to the wall for ever
+			{
+				wallJumpTimer = 0.0f;
+				inputs.add(IN_JUMP);
+				wallJumpDirection = DIRECTION_NONE;
+			}
+			currentAnimation = &animJump;
+			break;
+
+		case ST_GOD:
+			falling = false;
+			walling = false;
+			currentAnimation = &animIdle;
+			break;
+		case ST_DEAD:
+			LOG("Git Gud :P \n");
+			currentAnimation = &animDeath;
+			disabledCollision = true;
 		}
-		break;
-
-	case ST_FALLING:
-
-		fAccel += fGravity*2.0f * (dt * VEL_TO_WORLD);
-		currentAnimation = &animFall;
-		break;
-
-	case ST_WALL:
-
-		fAccel += fGravity/2.0f * (dt * VEL_TO_WORLD);
-		currentAnimation = &animWall;
-		break;
-
-	case ST_WALL_JUMPING:
-
-		fAccel += fGravity * (dt * VEL_TO_WORLD);
-		wallJumpTimer += dt;
- 		if (wallJumpTimer > wallJumpLimit) //When the player jumps, there's a limit in his speed to make him not stick to the wall for ever
-		{
-			wallJumpTimer = 0.0f;
-			inputs.add(IN_JUMP);
-			wallJumpDirection = DIRECTION_NONE;
-		}
-		currentAnimation = &animJump;
-		break;
-
-	case ST_GOD:
-		falling = false;
-		walling = false;
-		currentAnimation = &animIdle;
-		break;
-	case ST_DEAD:
-		LOG("Git Gud :P \n");
-		currentAnimation = &animDeath;
-		disabledCollision = true;
-	}
 
 	//We save the value of dt, to use it in various timer across the entity
 	flCurrentTime = dt;
 
 	//Update position
 	UpdatePos(dt);
-	
+
 	return true;
 }
 
@@ -351,8 +351,8 @@ void j1Player::UpdatePos(float dt)
 	walling = false;
 
 	//Limit Speed, only if you are not in GodMode
-	if(!god)
-	LimitSpeed();
+	if (!god)
+		LimitSpeed();
 
 	fpPosition.x += fpSpeed.x * dt;
 	fpPosition.y += fpSpeed.y * dt;
@@ -371,77 +371,77 @@ void j1Player::UpdatePos(float dt)
 //Distributes collisions according to it's type
 void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 {
-			switch (coll->type) 
+	switch (coll->type)
+	{
+
+	case(COLLIDER_WALL):
+		RecalculatePos(playerCol->rect, coll->rect);
+		break;
+	case(COLLIDER_DEATH):
+		inputs.add(IN_DEATH);
+
+		if (!disabledCollision)
+			if (App->scene->lifes > 0)
 			{
-
-			case(COLLIDER_WALL):
-				RecalculatePos(playerCol->rect, coll->rect);
-				break;
-			case(COLLIDER_DEATH):
-				inputs.add(IN_DEATH);
-
-				if (!disabledCollision)
-				if (App->scene->lifes > 0)
-				{
-					App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
-					App->scene->lifes -= 1;
-				}
-				else
-				{
-					App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime);
-					//TODO: PLAY LOSE SOUND
-				}
-
-				break;
-			case(COLLIDER_WIN):
+				App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
+				App->scene->lifes -= 1;
+			}
+			else
 			{
-				const char* nextMap = App->map->GetNextMap();
-				//If the map to go is the first one, we finish the run
-				if (nextMap == App->map->data.maplist.start->data->name.GetString())
-				{
-					App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime);
-					if (App->scene->CheckMaxScore())
-						true; //TODO: Play a big ass congratulations sound
-					else
-						true;
-						//TODO: PLAY WIN SOUND
-				}
-				else
-				{
-					App->fade->FadeToBlackMap(App->map->GetNextMap(), winFx.id, playerFadeTime);
-					ReSetMovement();
-					App->scene->score += 450;
-				}
-				break;
+				App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime);
+				//TODO: PLAY LOSE SOUND
 			}
-			case(COLLIDER_COIN):
-				App->scene->score += 20;
-				App->scene->coins++;
-				if (App->scene->coins % 10 == 0)
-					App->scene->lifes++;
-				//TODO: Destroy Coin
-				//TODO: PLAY FX SOUND;
-				coll->to_delete = true;
-				break;
-			case(COLLIDER_ENEMY):
-			
-				//PLAYER DIES, because he didn't collide from ABOVE
-				if (CheckCollisionDir(playerCol->rect, coll->rect) != DIRECTION_DOWN)
-				{
-					inputs.add(IN_DEATH);
-					App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
-				}
 
-				//ENEMY DIES
-				else
-				{
-					coll->to_delete = true;
-					Jump(fpForceMiniJump.y, enemyDeathFx.id);
-					App->scene->score += 100;
-				}
-				break;
-			
-			}
+		break;
+	case(COLLIDER_WIN):
+	{
+		const char* nextMap = App->map->GetNextMap();
+		//If the map to go is the first one, we finish the run
+		if (nextMap == App->map->data.maplist.start->data->name.GetString())
+		{
+			App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime);
+			if (App->scene->CheckMaxScore())
+				true; //TODO: Play a big ass congratulations sound
+			else
+				true;
+			//TODO: PLAY WIN SOUND
+		}
+		else
+		{
+			App->fade->FadeToBlackMap(App->map->GetNextMap(), winFx.id, playerFadeTime);
+			ReSetMovement();
+			App->scene->score += 450;
+		}
+		break;
+	}
+	case(COLLIDER_COIN):
+		App->scene->score += 20;
+		App->scene->coins++;
+		if (App->scene->coins % 10 == 0)
+			App->scene->lifes++;
+		//TODO: Destroy Coin
+		//TODO: PLAY FX SOUND;
+		coll->to_delete = true;
+		break;
+	case(COLLIDER_ENEMY):
+
+		//PLAYER DIES, because he didn't collide from ABOVE
+		if (CheckCollisionDir(playerCol->rect, coll->rect) != DIRECTION_DOWN)
+		{
+			inputs.add(IN_DEATH);
+			App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
+		}
+
+		//ENEMY DIES
+		else
+		{
+			coll->to_delete = true;
+			Jump(fpForceMiniJump.y, enemyDeathFx.id);
+			App->scene->score += 100;
+		}
+		break;
+
+	}
 }
 
 //Calculate the collisions with the enviroment
@@ -453,11 +453,11 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 	//Then we update the player's position & logic according to it's movement & the minimum result that we just calculated
 	switch (directionCheck) {
 	case DIRECTION_UP:
-		fpPosition.y = collRect.y + collRect.h+2;
+		fpPosition.y = collRect.y + collRect.h + 2;
 		fpSpeed.y = 0;
 		break;
 	case DIRECTION_DOWN:
-		fpPosition.y = collRect.y - playerRect.h ;
+		fpPosition.y = collRect.y - playerRect.h;
 		fpSpeed.y = 0;
 		fAccel = 0;
 		falling = false;
@@ -466,7 +466,7 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 		break;
 	case DIRECTION_LEFT:
 		fpPosition.x = collRect.x + collRect.w;
-		if(fpSpeed.x < 0)
+		if (fpSpeed.x < 0)
 			fpSpeed.x = 0;
 		walling = true;
 		falling = false;
@@ -490,9 +490,9 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 bool j1Player::PostUpdate()
 {
 	BROFILER_CATEGORY("Player Post-Update", Profiler::Color::Magenta)
-	//If the player is not touching the ground, he is falling
-	if (falling)
-		inputs.add(IN_FALL);
+		//If the player is not touching the ground, he is falling
+		if (falling)
+			inputs.add(IN_FALL);
 	//Same if the player's on the wall
 	if (walling)
 		inputs.add(IN_WALL);
@@ -541,7 +541,7 @@ bool j1Player::Load(pugi::xml_node& load)
 	fpPosition.y = load.child("position").attribute("y").as_float();
 	fpSpeed.x = load.child("speed").attribute("x").as_float();
 	fpSpeed.y = load.child("speed").attribute("y").as_float();
-	
+
 	//State
 	falling = load.child("falling").attribute("value").as_bool();
 	walling = load.child("walling").attribute("value").as_bool();
@@ -641,7 +641,7 @@ void j1Player::GodMode()
 		god = true;
 	}
 	//God mode is turned off
-	else if(god)
+	else if (god)
 	{
 		collider->setType(COLLIDER_PLAYER);
 		inputs.add(IN_FALL);
@@ -653,7 +653,7 @@ void j1Player::GodMode()
 player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 {
 	static player_states state = ST_GROUND;
-	 player_inputs  last_input;
+	player_inputs  last_input;
 
 	while (inputs.Pop(last_input))
 	{
@@ -663,10 +663,10 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 		{
 			switch (last_input)
 			{
-		case IN_JUMP: state = ST_AIR;  break;
-		case IN_FALL: state = ST_FALLING; break;
-		case IN_GOD: state = ST_GOD; break;
-		case IN_DEATH: state = ST_DEAD; break;
+			case IN_JUMP: state = ST_AIR;  break;
+			case IN_FALL: state = ST_FALLING; break;
+			case IN_GOD: state = ST_GOD; break;
+			case IN_DEATH: state = ST_DEAD; break;
 			}
 		}
 		break;
@@ -675,18 +675,18 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 		{
 			switch (last_input)
 			{
-			case IN_JUMP_FINISH: 
+			case IN_JUMP_FINISH:
 			{
 				state = ST_GROUND;
 				App->audio->PlayFx(landFx.id);
 			}
-				break;
-			case IN_WALL: 
+			break;
+			case IN_WALL:
 			{
 				state = ST_WALL;
 				InWall();
-			} 
-				break;
+			}
+			break;
 
 			case IN_GOD: state = ST_GOD; break;
 			case IN_DEATH: state = ST_DEAD; break;
@@ -704,15 +704,15 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 				state = ST_GROUND;
 				App->audio->PlayFx(landFx.id);
 			}
-				break;
+			break;
 
 			case IN_GOD: state = ST_GOD; break;
 
-			case IN_WALL: 
+			case IN_WALL:
 			{
-				state =  ST_WALL;
+				state = ST_WALL;
 				InWall();
-			} 
+			}
 			break;
 			case IN_DEATH: state = ST_DEAD; break;
 			}
@@ -728,13 +728,13 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 				state = ST_FALLING;
 				wallingLeave = 0.0f;
 			}
-				break;
-			case IN_JUMP: 
-			{   
-				state = ST_WALL_JUMPING; 
+			break;
+			case IN_JUMP:
+			{
+				state = ST_WALL_JUMPING;
 				fpSpeed.y = wallForce.y; //The player's initial speed  when jumping off a wall
 				fAccel = 0;
- 				if (Flip == SDL_FLIP_NONE)
+				if (Flip == SDL_FLIP_NONE)
 				{
 					fpSpeed.x = -wallForce.x;
 					wallJumpDirection = DIRECTION_LEFT;
@@ -745,21 +745,21 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 					wallJumpDirection = DIRECTION_RIGHT;
 				}
 				wallingLeave = 0.0f;
-			}  
-				break;
+			}
+			break;
 
 			case IN_JUMP_FINISH:
 			{
-				state = ST_GROUND; 
+				state = ST_GROUND;
 				wallingLeave = 0.0f;
 			}
-				break;
+			break;
 			case IN_GOD:
 			{
 				state = ST_GOD;
 				wallingLeave = 0.0f;
 			}
-				break;
+			break;
 			case IN_DEATH: state = ST_DEAD; break;
 			}
 		}
@@ -769,26 +769,26 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 		{
 			switch (last_input)
 			{
-			case IN_JUMP: 
+			case IN_JUMP:
 			{
-				state = ST_AIR; 			
+				state = ST_AIR;
 				wallJumpDirection = DIRECTION_NONE;
-			} 
-				break;
+			}
+			break;
 
-			case IN_JUMP_FINISH: 
+			case IN_JUMP_FINISH:
 			{
 				state = ST_GROUND;
 				wallJumpDirection = DIRECTION_NONE;
-			}  
-				break;
+			}
+			break;
 
-			case IN_WALL: 
+			case IN_WALL:
 			{
-				state = ST_WALL;	
+				state = ST_WALL;
 				InWall();
 			}
-				break;
+			break;
 
 			case IN_GOD: state = ST_GOD; break;
 			case IN_DEATH: state = ST_DEAD; break;
