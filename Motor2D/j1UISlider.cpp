@@ -92,14 +92,14 @@ void j1UISlider::CheckLimits()
 	if (button->PostoParent.x > 0)
 	{
 		button->PostoParent.x = 0;
-		UpdatePosition();
+		button->UpdatePosition();
 
 	}
 	//Right
 	else if (button->PostoParent.x < (-background->rect.w + button->rect.w))
 	{
 		button->PostoParent.x = -background->rect.w + button->rect.w;
-		UpdatePosition();
+		button->UpdatePosition();
 	}
 }
 

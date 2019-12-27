@@ -32,7 +32,8 @@ enum  class entityType
 	PLAYER,
 	FLYING_ENEMY,
 	LAND_ENEMY,
-	SHURIKEN
+	SHURIKEN,
+	COIN
 };
 
 
