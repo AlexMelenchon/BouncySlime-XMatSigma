@@ -174,6 +174,9 @@ public:
 	// Checks if the entity is scheduled to delete
 	bool to_delete = false;
 
+	//Disables the collision when the player is dead
+	bool disabledCollision = false;
+
 	//--------ANIMATIONS---------//
 	Animation* currentAnimation = nullptr;
 };

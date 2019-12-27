@@ -25,6 +25,7 @@
 
   <scene>
     <mapFadeTime>0.7f</mapFadeTime>
+    <startingLifes>5</startingLifes>
   </scene>
 
   <gui>
