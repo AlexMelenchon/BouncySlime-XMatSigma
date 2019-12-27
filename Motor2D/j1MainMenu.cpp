@@ -203,7 +203,7 @@ void j1MainMenu::MenusLoad(UIFunction func)
 
 			App->ui->ToDeleteElement();
 
-			App->ui->AddElement(ui_type::UI_IMAGE, parent, { -240,-365 }, false, false, true, { 969,532,278,265 })->to_delete = true;
+			App->ui->AddElement(ui_type::UI_IMAGE, parent, { -240,-365 }, false, false, true, { 969,532,278,225 })->to_delete = true;
 			App->ui->AddElement(ui_type::UI_TEXT, parent, { -250,-370 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Music Volume:")->to_delete = true;
 			App->ui->AddElement(ui_type::UI_SLIDER, parent, { -250,-400 }, true, false, true, { 0,0,0,0 }, this, UIFunction::FNC_CHANGE_VMUSIC, drag_axis::MOV_X)->to_delete = true;
 			App->ui->AddElement(ui_type::UI_TEXT, parent, { -250,-470 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Fx Volume:")->to_delete = true;
