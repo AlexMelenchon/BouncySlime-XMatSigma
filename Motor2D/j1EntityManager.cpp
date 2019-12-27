@@ -243,6 +243,12 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position, iPoint mo
 		tmp = new j1ParticleShuriken();
 		config = entConfig.child("shuriken");
 		break;
+
+	case entityType::COIN:
+		tmp = new j1ParticleShuriken();
+		config = entConfig.child("coin");
+
+		break;
 	}
 
 	//If there was a succesful match, we create the entity

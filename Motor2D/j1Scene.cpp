@@ -33,7 +33,7 @@ bool j1Scene::Awake(pugi::xml_node& scene_config)
 	bool ret = true;
 
 	mapFadeTime = scene_config.child("mapFadeTime").text().as_float();
-
+	startingLifes = scene_config.child("startingLifes").text().as_uint(3);
 
 	return ret;
 }
@@ -48,12 +48,17 @@ bool j1Scene::Start()
 	//Loads the first map
 	Reset(App->map->data.maplist.start->data->name.GetString());
 
+	//Debug texture for the debug pathfinding
 	debug_tex = App->entities->debug_tex;
 
+	//UI init-------
 	parent = App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 0,0 }, false, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
 
 	pause  = App->ui->AddElement(ui_type::UI_BUTTON, parent, { -100,-100 }, true, false, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
 
+	//Gameplay ini--------
+	time.Start();
+	lifes = startingLifes;
 
 
 	return true;
@@ -222,6 +227,10 @@ bool j1Scene::CleanUp()
 	//Reset the Camera
 	ResetCamera();
 
+	//Set the gameplay vars to 0 ------------------
+	lifes = 0u;
+	score = 0u;
+	coins = 0u;
 
 	return true;
 }
@@ -235,6 +244,12 @@ bool j1Scene::Load(pugi::xml_node& load)
 		App->map->CleanUp();
 		App->scene->Reset(load.child("current_map").attribute("name").as_string());
 	}
+
+	//Load the gameplay related vars-------------
+	lifes = load.child("current_lifes").attribute("value").as_uint();
+	score = load.child("current_score").attribute("value").as_uint();
+	coins = load.child("current_coins").attribute("value").as_uint();
+	time.StartFrom(load.child("current_time").attribute("value").as_uint());
 	return true;
 }
 
@@ -242,6 +257,12 @@ bool j1Scene::Load(pugi::xml_node& load)
 bool j1Scene::Save(pugi::xml_node& save) const
 {
 	save.append_child("current_map").append_attribute("name") = App->map->data.currentmap.GetString(); //Saves the current map info
+
+	//Save of the gameplay related vars-------------
+	save.append_child("current_lifes").append_attribute("value") = lifes; 
+	save.append_child("current_score").append_attribute("value") = score;
+	save.append_child("current_coins").append_attribute("value") = coins;
+	save.append_child("current_time").append_attribute("value") = time.Read();
 	return true;
 }
 
@@ -470,4 +491,17 @@ void j1Scene::ResetCamera()
 {
 	App->render->camera.x = 0;
 	App->render->camera.y = 0;
+}
+
+
+bool j1Scene::CheckMaxScore()
+{
+	bool ret = false;
+	if (score > maxScore)
+	{
+		maxScore = score;
+		ret = true;
+	}
+
+	return ret;
 }

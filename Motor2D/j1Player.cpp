@@ -8,6 +8,8 @@
 #include "j1Map.h"
 #include "j1Audio.h"
 #include "j1EntityManager.h"
+#include "j1Scene.h"
+#include "j1MainMenu.h"
 
 
 //Constructor
@@ -329,6 +331,7 @@ bool j1Player::Update(float dt)
 	case ST_DEAD:
 		LOG("Git Gud :P \n");
 		currentAnimation = &animDeath;
+		disabledCollision = true;
 	}
 
 	//We save the value of dt, to use it in various timer across the entity
@@ -376,12 +379,49 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 				break;
 			case(COLLIDER_DEATH):
 				inputs.add(IN_DEATH);
-				App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
-				//ReSetMovement();
+
+				if (!disabledCollision)
+				if (App->scene->lifes > 0)
+				{
+					App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
+					App->scene->lifes -= 1;
+				}
+				else
+				{
+					App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime);
+					//TODO: PLAY LOSE SOUND
+				}
+
 				break;
 			case(COLLIDER_WIN):
-				App->fade->FadeToBlackMap(App->map->GetNextMap(),winFx.id,playerFadeTime );
-				ReSetMovement();
+			{
+				const char* nextMap = App->map->GetNextMap();
+				//If the map to go is the first one, we finish the run
+				if (nextMap == App->map->data.maplist.start->data->name.GetString())
+				{
+					App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime);
+					if (App->scene->CheckMaxScore())
+						true; //TODO: Play a big ass congratulations sound
+					else
+						true;
+						//TODO: PLAY WIN SOUND
+				}
+				else
+				{
+					App->fade->FadeToBlackMap(App->map->GetNextMap(), winFx.id, playerFadeTime);
+					ReSetMovement();
+					App->scene->score += 450;
+				}
+				break;
+			}
+			case(COLLIDER_COIN):
+				App->scene->score += 20;
+				App->scene->coins++;
+				if (App->scene->coins % 10 == 0)
+					App->scene->lifes++;
+				//TODO: Destroy Coin
+				//TODO: PLAY FX SOUND;
+				coll->to_delete = true;
 				break;
 			case(COLLIDER_ENEMY):
 			
@@ -397,6 +437,7 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 				{
 					coll->to_delete = true;
 					Jump(fpForceMiniJump.y, enemyDeathFx.id);
+					App->scene->score += 100;
 				}
 				break;
 			
@@ -575,6 +616,7 @@ void j1Player::SetPos(int x, int y)
 	currentAnimation = &animIdle;
 
 	inputs.add(IN_DEATH_FINISH);
+	disabledCollision = false;
 }
 
 

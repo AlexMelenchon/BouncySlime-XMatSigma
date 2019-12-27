@@ -306,6 +306,7 @@ void j1ParticleShuriken::OnCollision(Collider* entityCol, Collider* coll)
 	case(COLLIDER_ENEMY):
 		coll->to_delete = true;
 		App->audio->PlayFx(App->entities->player->shuriken_hit.id);
+		App->scene->score += 75;
 		break;
 
 	case(COLLIDER_PLAYER):

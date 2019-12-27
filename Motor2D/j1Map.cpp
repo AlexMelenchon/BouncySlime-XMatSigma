@@ -572,6 +572,11 @@ bool j1Map::loadObjects(pugi::xml_node& node)
 		App->entities->AddEntity(entityType::FLYING_ENEMY, { colliderRect.x, colliderRect.y }, { colliderRect.w, colliderRect.h });
 		return ret;
 	}
+	else if (name == "Coin")
+	{
+		App->entities->AddEntity(entityType::COIN, { colliderRect.x, colliderRect.y });
+		return ret;
+	}
 	else
 		type = COLLIDER_NONE;
 		

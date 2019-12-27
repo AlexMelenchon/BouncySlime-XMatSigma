@@ -4,6 +4,7 @@
 #include "j1Module.h"
 
 struct SDL_Texture;
+class j1Timer;
 
 class j1Scene : public j1Module
 {
@@ -65,7 +66,25 @@ public:
 	//Manages the UI inputs of this module
 	void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr);
 
+
 	void MenusLoad(UIFunction func);
+
+
+	//--------GAMEPLAY RELATED---------//
+	//Checks if the maximum score has been surpassed
+	bool CheckMaxScore();
+
+	//The amount of lifes the player has remaining
+	uint lifes = 0u;
+
+	//The amount of coins the player has recollected
+	uint coins = 0u;
+
+	// The score in the run of the player
+	uint score = 0u;
+
+	// The maximum point achieved in a run
+	uint maxScore = 0u;
 
 
 private:
@@ -89,9 +108,19 @@ private:
 	j1UIelement* parent = nullptr;
 	j1UIelement* pause = nullptr;
 
+
 	//--------UI LOGIC---------//
 	//Used to load/unload the options submenu
 	UIFunction lastcall;
+
+	//--------GAMEPLAY RELATED---------//
+
+	//The current run time of the run
+	j1Timer time;
+
+	//The default lifes given at the start
+	uint startingLifes = 0u;
+
 
 };
 
