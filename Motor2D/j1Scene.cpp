@@ -118,9 +118,9 @@ bool j1Scene::Update(float dt)
 
 		//--------DEBUG---------//
 
-		//Loads the 1st map
-		if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-			App->fade->FadeToBlackMap(App->map->data.maplist.start->data->name.GetString(), NULL, mapFadeTime);
+	//Loads the 1st map
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+		App->fade->FadeToBlackMap(App->map->data.maplist.start->data->name.GetString(), NULL, mapFadeTime);
 
 	//Loads the 2nd map
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
@@ -142,9 +142,15 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		App->LoadGame();
 
-	//Loads the game
+	//Activates the debug draw for the ui
 	if (App->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
 		App->ui->debug = !App->ui->debug;
+
+	//Exits to the main menu
+	if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
+	{
+		App->fade->FadeToBlackMod(App->mainMenu, this, mapFadeTime);
+	}
 
 	//Activates collider debug draw mode
 	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
@@ -163,19 +169,17 @@ bool j1Scene::Update(float dt)
 		App->frameCap = !App->frameCap;
 
 	//Changes the Window Title Display
-	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F12) == KEY_DOWN)
 		App->windowTitleControl = !App->windowTitleControl;
 
-	//Sets Pause in the Game
-	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+	//Sets Pause in the Game & opens the menu
+	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
 		App->pause = !App->pause;
+		MenusLoad(UIFunction::FNC_PAUSE);
+		App->audio->PlayFx(click.id);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
-	{
-		App->fade->FadeToBlackMod(App->mainMenu, this, mapFadeTime);
-	}
 
 	//Turns volume up
 	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN && (App->audio->musicVolume < 100 && App->audio->fxVolume < 100))
