@@ -66,6 +66,9 @@ public:
 	//Manages the UI inputs of this module
 	void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr);
 
+	void UIInGameUpdate();
+
+	void UITimeUpdate();
 
 	void MenusLoad(UIFunction func);
 
@@ -108,6 +111,19 @@ private:
 
 	//Array to store the debug path made w/ the mouse
 	p2DynArray<iPoint> debugPath;
+
+
+	j1UIelement* pause = nullptr;
+	j1UIelement* ui_lifes = nullptr;
+	j1UIelement* ui_coins = nullptr;
+	j1UIelement* ui_score = nullptr;
+	j1UIelement* ui_time = nullptr;
+
+	char lifes_text[2];
+	char coins_text[2];
+	char score_text[5];
+	char time_text[10];
+
 
 
 

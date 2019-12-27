@@ -385,6 +385,7 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 			{
 				App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
 				App->scene->lifes -= 1;
+				App->scene->UIInGameUpdate();
 			}
 			else
 			{
@@ -418,7 +419,11 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 		App->scene->score += 20;
 		App->scene->coins++;
 		if (App->scene->coins % 10 == 0)
+		{
 			App->scene->lifes++;
+       			App->scene->UIInGameUpdate();
+		}
+			
 		//TODO: Destroy Coin
 		//TODO: PLAY FX SOUND;
 		coll->to_delete = true;
@@ -428,8 +433,10 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 		//PLAYER DIES, because he didn't collide from ABOVE
 		if (CheckCollisionDir(playerCol->rect, coll->rect) != DIRECTION_DOWN)
 		{
-			inputs.add(IN_DEATH);
+			inputs.add(IN_DEATH);			
 			App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
+			App->scene->lifes -= 1;
+			App->scene->UIInGameUpdate();
 		}
 
 		//ENEMY DIES
