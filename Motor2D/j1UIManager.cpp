@@ -66,7 +66,7 @@ bool j1UIManager::Update(float dt)
 
 	while (tmp != nullptr)
 	{
-		if(tmp != nullptr)
+		if (tmp != nullptr && tmp->data && tmp->data->type != ui_type::UI_NONE)
 			ret = tmp->data->Update(dt);
 
 		tmp = tmp->next;
@@ -237,14 +237,20 @@ void j1UIManager::DeleteAllElements()
 
 void j1UIManager::DeleteElement(p2List_item<j1UIelement*>* element)
 {
-	 
-	for (p2List_item<j1UIelement*>* item = UIList.start; item != nullptr; item = item->next)
+	p2List_item<j1UIelement*>* item = UIList.start;
+	while (item != nullptr)
 	{
 		if (item->data->parent == element->data)
 		{
-			DeleteElement(item);
+			item->data->CleanUp();
+			RELEASE(item->data);
+			UIList.del(item);
 		}
+		item = item->next;
+
 	}
+
+
 	element->data->CleanUp();
 	RELEASE(element->data);
 	UIList.del(element);
@@ -252,13 +258,20 @@ void j1UIManager::DeleteElement(p2List_item<j1UIelement*>* element)
 
 void j1UIManager::ToDeleteElement()
 {
-	p2List_item<j1UIelement*>* item = nullptr;
-
-	for (item = UIList.start; item; item = item->next)
+	p2List_item<j1UIelement*>* item = UIList.start;
+	while (item != nullptr)
 	{
 		if (item->data->to_delete)
+		{ 
 			App->ui->DeleteElement(item);
+			item = UIList.start;
+		}
+
+		item = item->next;
+
 	}
+
+
 }
 
 

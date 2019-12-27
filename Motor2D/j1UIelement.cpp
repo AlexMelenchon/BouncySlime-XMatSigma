@@ -107,8 +107,7 @@ bool j1UIelement::PreUpdate()
 // Called each loop iteration
 bool j1UIelement::Update(float dt)
 {
-	if (this == nullptr)
-		return true;
+
 
 	//If the mouse is hovering above an object...
 	if (hovering)
@@ -163,13 +162,11 @@ bool j1UIelement::Update(float dt)
 		if (DeFocus())
 			return true;
 	}
-	if (this == nullptr || this->type == ui_type::UI_NONE)
-		return true;
 
 	//If the obect has a parent, we make sure it keeps it's distance
 	if (parent)
 	{
-		KeepDistanceToParent(dt);
+		KeepDistanceToParent();
 	}
 
 	// We call for the inherits custom update, if any
@@ -269,7 +266,7 @@ void j1UIelement::Move(float dt)
 }
 
 //Make sure that, if the element has a parent, they maintain their distance to it
-void j1UIelement::KeepDistanceToParent(float dt)
+void j1UIelement::KeepDistanceToParent()
 {
 	Position.x = parent->Position.x - PostoParent.x;
 	Position.y = parent->Position.y - PostoParent.y;

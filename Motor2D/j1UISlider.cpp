@@ -21,7 +21,6 @@ j1UISlider::j1UISlider(drag_axis axis)
 	background = App->ui->AddElement(ui_type::UI_IMAGE, this, { 0,0 }, false, false, true, { 73,992,256,64 }, this->listener, UIFunction::FNC_NONE, this->axis);
 	button = App->ui->AddElement(ui_type::UI_BUTTON, this, { 0,0 }, true, true, true, { 73, 36, 64, 64 }, this->listener, UIFunction::FNC_NONE, this->axis);
 
-	
 
 }
 
@@ -51,14 +50,15 @@ bool j1UISlider::Start()
 
 	background->function = this->function;
 	button->function = this->function;
+
+	background->KeepDistanceToParent();
+	button->KeepDistanceToParent();
 	return true;
 }
 
 //Called every frame after the element update
 bool j1UISlider::InheritUpdate(float dt)
 {
-	
-
 	//The childs follow the father's enabled
 	button->enabled = this->enabled;
 	background, enabled = this->enabled;
@@ -107,5 +107,7 @@ void j1UISlider::CheckLimits()
 //Get the value (& translate it to audio) from the button
 int j1UISlider::GetAudioValue()
 {
-	return round((-(float(-button->PostoParent.x) / ((float(-background->rect.w)) + float(button->rect.w))) * 128));
+	int toRet = round((-(float(-button->PostoParent.x) / ((float(-background->rect.w)) + float(button->rect.w))) * 128));
+	if (toRet < 0) toRet = 0;
+	return toRet;
 }

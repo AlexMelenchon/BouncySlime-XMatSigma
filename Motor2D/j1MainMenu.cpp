@@ -55,6 +55,7 @@ bool j1MainMenu::Start()
 
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 20,650 }, true, false, true, {331,991,64,64 }, this, UIFunction::FNC_GITHUB, drag_axis::MOV_NONE);
 
+
 	//App->ui->AddElement(ui_type::UI_INPUTBOX, nullptr, { 20,650 }, true, false, true, { 331,991,64,64 }, this, UIFunction::FNC_NONE, drag_axis::MOV_ALL, "fd");
 
 

@@ -74,7 +74,7 @@ public:
 	virtual void Move(float dt);
 
 	//Make sure that, if the element has a parent, they maintain their distance to it
-	void KeepDistanceToParent(float dt);
+	void KeepDistanceToParent();
 
 	//Gets the value from certain positions
 	virtual int GetAudioValue() { return 0; }
