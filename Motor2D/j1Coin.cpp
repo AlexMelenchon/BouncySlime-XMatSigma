@@ -95,22 +95,6 @@ void j1Coin::OnCollision(Collider* coinCol, Collider* coll)
 }
 
 
-// Called each loop iteration
-void j1Coin::OnCollision(Collider* coinCol, Collider* coll)
-{
-	switch (coll->type)
-	{
-	case(COLLIDER_PLAYER):
-		coinCol->to_delete = true;
-		break;
-
-	case(COLLIDER_GOD):
-		coinCol->to_delete = true;
-		break;
-	}
-}
-
-
 //Called when loading a save
 bool j1Coin::Load(pugi::xml_node& load)
 {
