@@ -70,17 +70,17 @@ bool j1Scene::Start()
 	pause = App->ui->AddElement(ui_type::UI_BUTTON, parent, { -10,-10 }, true, false, true, { 220,406,64,64 }, this, UIFunction::FNC_PAUSE);	
 
 	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 94,10 }, false, false, true, { 1257,532,65,65 });
-	ui_lifes = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 164,30 }, false, false, false, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, lifes_text);
+	ui_lifes = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 164,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, lifes_text);
 
 	
 	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 244,10 }, false, false, true, { 1257,605,65,64 });
-	ui_coins = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 314,30 }, false, false, false, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00");
+	ui_coins = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 314,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00");
 
 	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 394,10 }, false, false, true, { 144,922,65,64 });
-	ui_score = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 464,30 }, false, false, false, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00000");
+	ui_score = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 464,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00000");
 
 	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 594,10 }, false, false, true, { 737,478,64,64});
-	ui_time = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 664,30 }, false, false, false, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00000");
+	ui_time = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 664,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00000");
 	
 	
 
