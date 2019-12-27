@@ -54,7 +54,7 @@ bool j1Scene::Start()
 
 	pause  = App->ui->AddElement(ui_type::UI_BUTTON, parent, { 100,100 }, true, false, true, { 73,406,64,64 }, this, UIFunction::FNC_PAUSE);
 
-
+	time.Start();
 
 	return true;
 }
@@ -235,6 +235,12 @@ bool j1Scene::Load(pugi::xml_node& load)
 		App->map->CleanUp();
 		App->scene->Reset(load.child("current_map").attribute("name").as_string());
 	}
+
+	//Load the gameplay related vars-------------
+	lifes = load.child("current_lifes").attribute("value").as_uint();
+	score = load.child("current_score").attribute("value").as_uint();
+	coins = load.child("current_coins").attribute("value").as_uint();
+	time.StartFrom(load.child("current_time").attribute("value").as_uint());
 	return true;
 }
 
@@ -242,6 +248,12 @@ bool j1Scene::Load(pugi::xml_node& load)
 bool j1Scene::Save(pugi::xml_node& save) const
 {
 	save.append_child("current_map").append_attribute("name") = App->map->data.currentmap.GetString(); //Saves the current map info
+
+	//Save of the gameplay related vars-------------
+	save.append_child("current_lifes").append_attribute("value") = lifes; 
+	save.append_child("current_score").append_attribute("value") = score;
+	save.append_child("current_coins").append_attribute("value") = coins;
+	save.append_child("current_time").append_attribute("value") = time.Read();
 	return true;
 }
 

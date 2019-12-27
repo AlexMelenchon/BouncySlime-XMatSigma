@@ -15,9 +15,13 @@ j1Timer::j1Timer()
 // ---------------------------------------------
 void j1Timer::Start()
 {
-	// TODO 1: Fill Start(), Read(), ReadSec() methods
-	// they are simple, one line each!
 	started_at = SDL_GetTicks();
+}
+
+// ---------------------------------------------
+void j1Timer::StartFrom(uint time)
+{
+	started_at = time;
 }
 
 // ---------------------------------------------

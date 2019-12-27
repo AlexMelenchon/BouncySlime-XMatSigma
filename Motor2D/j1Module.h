@@ -18,6 +18,8 @@
 #include"p2animation.h"
 #include "p2DynArray.h"
 #include "Brofiler/include/Brofiler.h"
+#include "j1Timer.h"
+
 
 class j1App;
 
@@ -40,6 +42,7 @@ enum COLLIDER_TYPE
 	COLLIDER_GOD,
 	COLLIDER_ENEMY,
 	COLLIDER_SHURIKEN,
+	COLLIDER_COIN,
 
 	COLLIDER_MAX
 };

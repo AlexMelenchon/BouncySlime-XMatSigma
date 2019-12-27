@@ -4,6 +4,7 @@
 #include "j1Module.h"
 
 struct SDL_Texture;
+class j1Timer;
 
 class j1Scene : public j1Module
 {
@@ -87,6 +88,18 @@ private:
 	j1UIelement* parent = nullptr;
 	j1UIelement* pause = nullptr;
 
+	//--------GAMEPLAY RELATED---------//
+	//The amount of lifes the player has remaining
+	uint lifes = 0u;
+
+	//The amount of coins the player has recollected
+	uint coins = 0u;
+
+	// The score in the run of the player
+	uint score = 0u;
+
+	//The current run time of the run
+	j1Timer time;
 };
 
 
