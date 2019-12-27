@@ -9,7 +9,7 @@
 //Constructor
 j1MainMenu::j1MainMenu()
 {
-	name.create("scene");
+	name.create("main_menu");
 }
 
 // Destructor
@@ -22,7 +22,7 @@ bool j1MainMenu::Awake(pugi::xml_node& config)
 {	
 	bool ret = true;
 
-	
+	menuMusic = config.child("musicPath").text().as_string();
 
 	//Audio load
 	click.path = config.child("click").attribute("file").as_string();
@@ -40,7 +40,7 @@ bool j1MainMenu::Start()
 	App->map->Load(App->map->menu_tmx.GetString());
 
 	//Start the music
-	App->audio->PlayMusic("audio/music/mainmenu_loop.ogg", 0.0f);
+	App->audio->PlayMusic(menuMusic.GetString(), 0.0f);
 
 	//Load the sfx-----
 	click.id = App->audio->LoadFx(click.path.GetString());

@@ -28,6 +28,12 @@
     <startingLifes>5</startingLifes>
     <click file="audio/fx/click.wav"/>
   </scene>
+  
+  <main_menu>
+    <musicPath>audio/music/mainmenu_loop.ogg</musicPath>
+    <click file="audio/fx/click.wav"/>
+
+  </main_menu>
 
   <gui>
     <atlas file="textures/atlas.png"/>   
