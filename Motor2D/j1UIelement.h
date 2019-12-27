@@ -67,7 +67,7 @@ public:
 
 	//Handles inputs in when the element is pressed, released & dragged respectively--------
 	virtual void OnClick();
-	virtual void OnRelease();
+	virtual bool OnRelease();
 	virtual void OnDrag();
 
 	//Move the element
@@ -83,7 +83,7 @@ public:
 	bool IsFocused();
 
 	//Retrives focus when the conditions are met
-	virtual void DeFocus();
+	virtual bool DeFocus();
 
 	//Used to Update the elements position when it's not moving
 	void UpdatePosition();

@@ -26,7 +26,7 @@ public:
 
 	//--------INTERNAL MANAGEMENT---------//
 	//Retrives focus when the conditions are met
-	void DeFocus();
+	bool DeFocus();
 
 private:
 	//--------INTERNAL MANAGEMENT---------//

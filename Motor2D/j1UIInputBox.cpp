@@ -67,10 +67,13 @@ bool j1UIInputBox::CleanUp()
 }
 
 //Retrives focus when the conditions are met
-void j1UIInputBox::DeFocus()
+bool j1UIInputBox::DeFocus()
 {
+	bool ret = true;
 	//When the player clicks outside the inputBox, we stop focusing on it
 	// TODO: when the input box closes, also do this
 	if(App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && !this->hovering)
 		App->ui->focused.lookAt = nullptr;
+
+	return ret;
 }

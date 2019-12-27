@@ -260,3 +260,5 @@ void j1UIManager::ToDeleteElement()
 			App->ui->DeleteElement(item);
 	}
 }
+
+

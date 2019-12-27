@@ -107,6 +107,9 @@ bool j1UIelement::PreUpdate()
 // Called each loop iteration
 bool j1UIelement::Update(float dt)
 {
+	if (this == nullptr)
+		return true;
+
 	//If the mouse is hovering above an object...
 	if (hovering)
 	{
@@ -157,9 +160,11 @@ bool j1UIelement::Update(float dt)
 		}
 
 		// Check if we lose focus of the object
-		DeFocus();
+		if (DeFocus())
+			return true;
 	}
-
+	if (this == nullptr || this->type == ui_type::UI_NONE)
+		return true;
 
 	//If the obect has a parent, we make sure it keeps it's distance
 	if (parent)
@@ -199,12 +204,17 @@ void j1UIelement::OnClick()
 }
 
 //Calls for function when the object stops being pressed
-void j1UIelement::OnRelease()
+bool j1UIelement::OnRelease()
 {
+	bool ret = false;
+
 	if (listener != nullptr && function != UIFunction::FNC_NONE)
 	{
 		this->listener->OnGui(UIEventType::EVENT_UPCLICK, this->function);
+		ret = true;
 	}
+
+	return ret;
 }
 
 //Calls for function when the object is dragged
@@ -272,13 +282,15 @@ bool j1UIelement::IsFocused()
 }
 
 //Retrives focus when the conditions are met
-void j1UIelement::DeFocus()
+bool j1UIelement::DeFocus()
 {
+	bool ret = false;
+
 	//If we let go of the click, we lose focus (THE CONDITIONS MIGHT CHANGE IN CUSTOM DeFocus() IN THE INHERITS)
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE || App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP )
 	{
 		//We call for the function
-		App->ui->focused.lookAt->data->OnRelease();
+		ret = App->ui->focused.lookAt->data->OnRelease();
 
 		//Stop dragging & focusing
 		if (App->ui->focused.lookAt != nullptr)
@@ -287,6 +299,8 @@ void j1UIelement::DeFocus()
 			App->ui->focused.lookAt = nullptr;
 		}
 	}
+
+	return ret;
 }
 
 //Used to Update the elements position when it's not moving
