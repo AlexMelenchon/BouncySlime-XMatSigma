@@ -27,9 +27,12 @@ You'll have to prove yourself parkouring through the world and get your reward t
 
 
  
-### What are you waiting for to play the game?
+# What are you waiting for to play the game?
+
+
 
 <p align="center"> 
+ 	<video src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/trailer.mp4" width="1920" height="1080" controls preload></video>
 	<a href="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/releases/download/2.0/BouncySlime.zip"><strong>DOWNLOAD</strong></a>
 </p>
 
