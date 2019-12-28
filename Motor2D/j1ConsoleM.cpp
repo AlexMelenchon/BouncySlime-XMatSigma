@@ -12,7 +12,9 @@ j1ConsoleM::~j1ConsoleM()
 
 bool j1ConsoleM::Awake(pugi::xml_node& consoleConfig)
 {
-	CreateCommand("log", this, 2, 100, UIFunction::FNC_LOG);
+	CreateCommand("log mystring", this, 2, 100, UIFunction::FNC_LOG);
+
+	CreateCommand("list", this, 1, 1, UIFunction::FNC_LIST);
 
 	return true;
 }
@@ -69,19 +71,33 @@ bool j1ConsoleM::ManageCommand(const char* command)
 			commandBuffer = command;
 
 			//We check if it has the number adequate of arguments
-			if (commandFound->max_arg > 1)
-			{
-				int hola = commandBuffer.Find(" ") + 1;
-				if (hola < commandFound->min_arg || hola > commandFound->max_arg)
+				int wordNum = commandBuffer.Find(" ") + 1;
+				if (wordNum < commandFound->min_arg || wordNum > commandFound->max_arg)
 					break;
-			}
+
+			//If all the checks were positive, we execute the command
 			switch (commandFound->function)
 			{
 			case UIFunction::FNC_LOG:
 				commandBuffer.Cut(0, commandBuffer.FindFirst(" "));
 				commandFound->callback->OnGui(UIEventType::EVENT_CONSOLE, commandFound->function, nullptr, commandBuffer.GetString());
 				break;
+			case UIFunction::FNC_GODMODE:
+				commandFound->callback->OnGui(UIEventType::EVENT_CONSOLE, commandFound->function);
+				break;
 
+			case UIFunction::FNC_QUIT:
+				commandFound->callback->OnGui(UIEventType::EVENT_CONSOLE, commandFound->function);
+				break;
+
+			case UIFunction::FNC_LIST:
+				commandFound->callback->OnGui(UIEventType::EVENT_CONSOLE, commandFound->function);
+				break;
+
+			case UIFunction::FNC_LOADMAP:
+				commandBuffer.Cut(0, commandBuffer.FindFirst(" ")+1);
+				commandFound->callback->OnGui(UIEventType::EVENT_CONSOLE, commandFound->function,nullptr, commandBuffer.GetString());
+				break;
 
 			}
 
@@ -106,6 +122,17 @@ void j1ConsoleM::OnGui(UIEventType type, UIFunction func, j1UIelement* userPoint
 		{
 		case UIFunction::FNC_LOG:
 			LOG("LOG: %s", bufferText);
+			break;
+
+		case UIFunction::FNC_LIST:
+		{
+			int CommandNum = 1;
+			for (p2List_item<j1Command*>* iterator = commandList.start; iterator; iterator = iterator->next)
+			{
+				LOG("%d: %s", CommandNum, iterator->data->GetDescription().GetString());
+				CommandNum++;
+			}
+		}
 			break;
 		}
 	}

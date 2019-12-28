@@ -648,7 +648,7 @@ void j1Player::ReSetMovement()
 }
 
 //Controls god mode
-void j1Player::GodMode()
+bool j1Player::GodMode()
 {
 	//God mode is turned on
 	if (!god)
@@ -658,6 +658,7 @@ void j1Player::GodMode()
 		fpSpeed.y = 0;
 		fpSpeed.x = 0;
 		god = true;
+		LOG("God Mode: ON");
 	}
 	//God mode is turned off
 	else if (god)
@@ -665,7 +666,10 @@ void j1Player::GodMode()
 		collider->setType(COLLIDER_PLAYER);
 		inputs.add(IN_FALL);
 		god = false;
+		LOG("God Mode: OFF");
 	}
+
+	return god;
 }
 
 //Iterates the states taking in account the inputs

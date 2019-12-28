@@ -7,6 +7,7 @@
 #include "j1Fonts.h"
 #include "j1Scene.h"
 #include "j1UIelement.h"
+#include "j1ConsoleM.h"
 
 #define MAX_KEYS 300
 
@@ -39,6 +40,8 @@ bool j1Input::Awake(pugi::xml_node& config)
 		ret = false;
 	}
 
+	App->console->CreateCommand("quit", this, 1, 1, UIFunction::FNC_QUIT);
+
 	return ret;
 }
 
@@ -54,7 +57,11 @@ bool j1Input::PreUpdate()
 {
 	BROFILER_CATEGORY("Input Pre-Update", Profiler::Color::Chartreuse)
 
-		static SDL_Event event;
+	static SDL_Event event;
+
+	if (windowEvents[WE_QUIT] == true)
+		return false;
+	
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
@@ -94,7 +101,7 @@ bool j1Input::PreUpdate()
 		{
 		case SDL_QUIT:
 			windowEvents[WE_QUIT] = true;
-			return false;
+			LOG("User Exit");
 			break;
 
 		case SDL_WINDOWEVENT:
@@ -303,4 +310,30 @@ void j1Input::Enable()
 		ReSetKeys();
 	}
 
+}
+
+//used to say to the game we want quit
+void j1Input::Quit(bool scheduleToQuit)
+{
+	if (scheduleToQuit)
+		windowEvents[WE_QUIT] = true;
+}
+
+
+//Manages the UI inputs of this module
+void j1Input::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer, const char* bufferText)
+{
+	switch (type)
+	{
+	case UIEventType::EVENT_CONSOLE:
+
+		switch (func)
+		{
+		case UIFunction::FNC_QUIT:
+			Quit(true);
+			LOG("Quitting...");
+			LOG("Thank you for playing Bouncy Slime! Please check out our GitHub Project for more Info :)");
+			break;
+		}
+	}
 }

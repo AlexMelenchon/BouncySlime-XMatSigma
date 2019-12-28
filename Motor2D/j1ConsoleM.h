@@ -25,16 +25,18 @@ public:
 	// Manages Console Input
 	bool ManageCommand(const char* command);
 
-	//--------UI---------//
+	//--------UI----------------------//
 	//Manages the UI inputs of this module
 	void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr, const char* bufferText = "");
-
-private:
 
 	//--------CONSOLE RELATED---------//
 	// Adds a Command into the list
 	j1Command* CreateCommand(const char* command, j1Module* callback, uint min_arg, uint max_args, UIFunction function);
 
+private:
+
+
+	//--------CONSOLE RELATED---------//
 	//Contains a list of all commands
 	p2List<j1Command*> commandList;
 };

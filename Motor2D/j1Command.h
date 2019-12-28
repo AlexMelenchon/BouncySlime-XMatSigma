@@ -17,6 +17,7 @@ public:
 
 	// Get text from String
 	p2SString GetCommandText();
+	p2SString GetDescription();
 
 	j1Module* callback = nullptr;
 	uint min_arg = 0u;
@@ -25,6 +26,7 @@ public:
 
 private:
 	p2SString commandText;
+	p2SString Description;
 
 };
 

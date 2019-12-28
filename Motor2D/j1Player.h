@@ -96,7 +96,7 @@ public:
 	void godInputs(); 
 
 	//Controls God Mode
-	void GodMode(); 
+	bool GodMode(); 
 
 
 	//--------STATE MACHiNE---------//

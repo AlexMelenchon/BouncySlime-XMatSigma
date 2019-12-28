@@ -14,6 +14,7 @@
 #include "j1EntityManager.h"
 #include "j1UIManager.h"
 #include "j1MainMenu.h"
+#include "j1ConsoleM.h"
 
 #include <stdio.h>
 
@@ -33,12 +34,18 @@ bool j1Scene::Awake(pugi::xml_node& scene_config)
 	LOG("Loading Scene");
 	bool ret = true;
 
+	//Auxiliar used to save the maximum score
 	sceneConfig = scene_config;
 
+	//Var load------------
 	mapFadeTime = scene_config.child("mapFadeTime").text().as_float();
 	startingLifes = scene_config.child("startingLifes").text().as_uint(3);
 	maxScore = scene_config.child("maxScore").attribute("value").as_uint(4500);
 	click.path = scene_config.child("click").attribute("file").as_string();
+
+	//Command creation--------
+	App->console->CreateCommand("god_mode", this, 1, 1, UIFunction::FNC_GODMODE);
+	App->console->CreateCommand("map map_name.tmx", this, 2, 2, UIFunction::FNC_LOADMAP);
 
 
 	return ret;
@@ -207,12 +214,7 @@ bool j1Scene::Update(float dt)
 
 	//Adds Score
 	if (App->input->GetKey(SDL_SCANCODE_KP_4) == KEY_DOWN)
-	{
-		if (score > 98998)
-			score += 1000;
-		else
-			score = 99999;
-	}
+		score += 1000;
 
 	//Retrieves Score
 	if (App->input->GetKey(SDL_SCANCODE_KP_5) == KEY_DOWN)
@@ -233,7 +235,6 @@ bool j1Scene::Update(float dt)
 		MenusLoad(UIFunction::FNC_PAUSE);
 		App->audio->PlayFx(click.id);
 	}
-
 
 	//Turns volume up
 	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN && (App->audio->musicVolume < 100 && App->audio->fxVolume < 100))
@@ -287,6 +288,7 @@ bool j1Scene::PostUpdate()
 bool j1Scene::CleanUp()
 {
 	LOG("Freeing scene");
+	//We make sure all the pointers are disabled----
 	debug_tex = nullptr;
 	debugPath.Clear();
 	App->collision->debug = false;
@@ -338,8 +340,6 @@ bool j1Scene::Load(pugi::xml_node& load)
 		App->pause = false;
 		MenusLoad(UIFunction::FNC_PAUSE);
 	}
-
-
 	return true;
 }
 
@@ -547,6 +547,38 @@ void j1Scene::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer,
 		}
 	}
 	break;
+
+	case UIEventType::EVENT_CONSOLE:
+	{
+		switch (func)
+		{
+		case UIFunction::FNC_GODMODE:
+		{
+			if(App->entities->player)
+			{
+				App->entities->player->GodMode();
+			}
+		}
+		break;
+
+		case UIFunction::FNC_LOADMAP:
+		{
+			//We check if the map exists we introduced exists, if a positve case we load it's name
+			bufferText = App->map->MapExist(bufferText);
+			if (strlen(bufferText) > 2)
+			{
+				App->fade->FadeToBlackMap(bufferText, -1, App->scene->mapFadeTime);
+				LOG("Loading: %s", bufferText);
+			}
+			else
+				LOG("Map Name was Incorrect!", bufferText);
+
+		}
+		break;
+		}
+		break;
+
+	}
 	}
 }
 

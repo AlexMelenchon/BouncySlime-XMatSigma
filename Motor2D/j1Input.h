@@ -76,6 +76,9 @@ public:
 		return mouse_buttons[id - 1];
 	}
 
+	//used to say to the game we want quit
+	void Quit(bool scheduleToQuit);
+
 	// Check if a certain window event happened
 	bool GetWindowEvent(int code);
 
@@ -102,6 +105,10 @@ public:
 	// Get mouse / axis position
 	int			mouse_x;
 	int			mouse_y;
+
+	//--------UI----------------------//
+	//Manages the UI inputs of this module
+	void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr, const char* bufferText = "");
 
 private:
 

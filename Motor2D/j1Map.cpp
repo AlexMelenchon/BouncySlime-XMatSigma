@@ -620,3 +620,19 @@ const char* j1Map::GetNextMap()
 	return iterator->data->name.GetString();
 
 };
+
+const char* j1Map::MapExist(const char* mapPath) const
+{
+	p2List_item<MapInfo*>* iterator = data.maplist.start;
+
+	while (iterator != NULL)
+	{
+		if (iterator->data->name == mapPath)
+			return iterator->data->name.GetString();
+
+		iterator = iterator->next;
+
+	}
+	return "";
+
+}
