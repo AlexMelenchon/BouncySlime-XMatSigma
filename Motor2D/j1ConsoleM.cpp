@@ -99,6 +99,12 @@ bool j1ConsoleM::ManageCommand(const char* command)
 				commandFound->callback->OnGui(UIEventType::EVENT_CONSOLE, commandFound->function,nullptr, commandBuffer.GetString());
 				break;
 
+
+			case UIFunction::FNC_FPS:
+				commandBuffer.Cut(0, commandBuffer.FindFirst(" ") + 1);
+				commandFound->callback->OnGui(UIEventType::EVENT_CONSOLE, commandFound->function, nullptr, commandBuffer.GetString());
+				break;
+
 			}
 
 			ret = true;

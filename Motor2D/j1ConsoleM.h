@@ -35,7 +35,6 @@ public:
 
 private:
 
-
 	//--------CONSOLE RELATED---------//
 	//Contains a list of all commands
 	p2List<j1Command*> commandList;

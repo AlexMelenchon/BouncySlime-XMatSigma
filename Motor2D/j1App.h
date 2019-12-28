@@ -72,6 +72,9 @@ public:
 	// Load config file
 	pugi::xml_node LoadConfig(pugi::xml_document&) const;
 
+	//Used to change the frame cap
+	void UpdateFrameCap(uint newCap);
+
 private:
 
 	// Call modules before each loop iteration

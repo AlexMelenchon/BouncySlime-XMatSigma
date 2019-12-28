@@ -455,3 +455,9 @@ void j1App::saveConfigFile()
 {
 	config_file.save_file(config_route.GetString());
 }
+
+void j1App::UpdateFrameCap(uint newCap)
+{
+	capTime = newCap;
+
+}

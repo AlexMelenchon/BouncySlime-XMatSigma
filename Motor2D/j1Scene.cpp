@@ -46,6 +46,7 @@ bool j1Scene::Awake(pugi::xml_node& scene_config)
 	//Command creation--------
 	App->console->CreateCommand("god_mode", this, 1, 1, UIFunction::FNC_GODMODE);
 	App->console->CreateCommand("map map_name.tmx", this, 2, 2, UIFunction::FNC_LOADMAP);
+	App->console->CreateCommand("FPS number (between 30-120)", this, 2, 2, UIFunction::FNC_FPS);
 
 
 	return ret;
@@ -554,7 +555,7 @@ void j1Scene::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer,
 		{
 		case UIFunction::FNC_GODMODE:
 		{
-			if(App->entities->player)
+			if (App->entities->player)
 			{
 				App->entities->player->GodMode();
 			}
@@ -573,6 +574,20 @@ void j1Scene::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer,
 			else
 				LOG("Map Name was Incorrect!", bufferText);
 
+		}
+		break;
+
+		case UIFunction::FNC_FPS:
+		{
+			uint newCap = atoi(bufferText);
+			
+			//Check Limits
+			if (newCap > 120)newCap = 120;
+			else if (newCap < 30) newCap = 30;
+
+			App->UpdateFrameCap(newCap);
+
+			LOG("FrameCap is now %u", newCap);
 		}
 		break;
 		}
