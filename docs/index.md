@@ -1,5 +1,5 @@
 <p align="left"> 
-	<img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/david.png?raw=true">
+	<img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/bs.png?raw=true">
 </p>
 
 # What is it?
