@@ -175,7 +175,7 @@ bool j1Input::PreUpdate()
 				if (event.key.keysym.sym == SDLK_BACKQUOTE)
 				{
 					App->input->WrittingState(false, this->inputRect);
-					App->scene->console->Disable(!App->scene->console->enabled);
+					App->scene->console->SetToDisable(!App->scene->console->enabled);
 				}
 
 			}

@@ -2,6 +2,7 @@
 #define __j1SCENE_H__
 
 #include "j1Module.h"
+#include "j1Console.h"
 
 struct SDL_Texture;
 class j1Timer;
@@ -91,7 +92,7 @@ public:
 
 	//--------UI LOGIC---------//
 	//Used to keep the console in check
-	j1UIelement* console = nullptr;
+	j1Console* console = nullptr;
 
 
 private:

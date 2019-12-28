@@ -77,7 +77,8 @@ bool j1Scene::Start()
 	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 594,10 }, false, false, true, { 737,478,64,64 });
 	ui_time = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 664,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00000");
 
-	console = App->ui->AddElement(ui_type::UI_CONSOLE, nullptr, { 0,0 }, true, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Bon Dia");
+	//Console Init------
+	App->ui->AddElement(ui_type::UI_CONSOLE, nullptr, { 0,0 }, true, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
 
 
 
@@ -197,7 +198,7 @@ bool j1Scene::Update(float dt)
 	//Minus 1 life
 	if (App->input->GetKey(SDL_SCANCODE_KP_2) == KEY_DOWN)
 		App->entities->player->LoseALife();
-
+	
 	//Adds Score
 	if (App->input->GetKey(SDL_SCANCODE_KP_4) == KEY_DOWN)
 		score += 1000;
@@ -240,7 +241,7 @@ bool j1Scene::Update(float dt)
 	//Opens / Closes the Console
 	if (App->input->GetKey(SDL_SCANCODE_GRAVE) == KEY_DOWN)
 	{
-		console->Disable(!console->enabled);
+		console->SetToDisable(!console->enabled);
 	}
 
 	UIInGameUpdate();

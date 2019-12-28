@@ -28,11 +28,20 @@ public:
 	//Retrives focus when the conditions are met
 	bool DeFocus();
 
+	//Updates the text to show
+	void UpdateText(const char* newLogEntry);
+
+	//Called when the console is disabled
+	void Disable();
+
 private:
 	//--------INTERNAL MANAGEMENT---------//
 	//Input box childs------
 	j1UIelement* inputBox = nullptr;
 	j1UIelement* image = nullptr;
+	j1UIelement* Ctext = nullptr;
+
+	p2SString consoleBuffer;
 };
 
 

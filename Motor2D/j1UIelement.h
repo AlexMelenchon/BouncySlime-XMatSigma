@@ -88,7 +88,10 @@ public:
 	virtual bool DeFocus();
 
 	//Used to make an element disable
-	void Disable(bool to_disable);
+	void SetToDisable(bool to_disable);
+
+	//Called when a element is disabled
+	virtual void Disable();
 
 public:
 	//--------UI LOGIC-------------//
