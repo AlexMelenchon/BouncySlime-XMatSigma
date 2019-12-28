@@ -38,13 +38,13 @@ You'll have to prove yourself parkouring through the world and get your reward t
 <a href="https://alexmelenchon.github.io/BouncySlime-XMatSigma#what-are-you-waiting-for-to-play-the-game">Download</a> the latest release and open the .exe in the game folder.
 
 ## Game Controls 
-+ <strong>A:</strong>  		Move left
-+ <strong>S:</strong>		Move right
-+ <strong>D:</strong>		Move down
-+ <strong>Space:</strong>	Jump, and wall jumping +WASD
-+ <strong>L:</strong>		Throw shuriken + WASD
-+ <strong>NumPad +:</strong>  	Volume up
-+ <strong>NumPad -:</strong>	Volume Down
++ <strong>A:</strong>  		<p align="center"> Move left</p>
++ <strong>S:</strong>		<p align="center"> Move right</p>
++ <strong>D:</strong>		<p align="center"> Move down</p>
++ <strong>Space:</strong>	<p align="center"> Jump, and wall jumping +WASD</p>
++ <strong>L:</strong>		<p align="center"> Throw shuriken + WASD</p>
++ <strong>NumPad +:</strong>  	<p align="center"> Volume up</p>
++ <strong>NumPad -:</strong>	<p align="center"> Volume Down</p>
 
 ## Debug Keys
 
