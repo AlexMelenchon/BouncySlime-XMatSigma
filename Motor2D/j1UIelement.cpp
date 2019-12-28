@@ -49,6 +49,7 @@ bool j1UIelement::Draw(bool debug)
 	}
 
 	//Blit the element into screen
+	if(texture)
 	App->render->Blit(texture, Position.x, Position.y, &rect, 0.0f);
 
 	//In debug mode, we also drag its rectangle
@@ -322,28 +323,26 @@ bool j1UIelement::DeFocus()
 }
 
 //Used to Update the elements position when it's not moving
-void j1UIelement::Disable(bool to_disable)
+void j1UIelement::SetToDisable(bool to_disable)
 {
 	if (enabled != to_disable)
 	{
 		enabled = to_disable;
 
-		//for (p2List_item<j1UIelement*>* iterator = App->ui->GetElementFromList(this)->prev; iterator; iterator = iterator->prev)
-		//{
-		//	if (iterator->data->parent == this)
-		//		iterator->data->Disable(to_disable);
-		//}
-
-
 		if (!enabled)
 		{
-			if (this->IsFocused())
-				App->ui->focused.lookAt = nullptr;
+			Disable();
 		}
 		else if (enabled)
 		{
-			App->ui->focused.lookAt = App->ui->GetElementFromList(App->scene->console);
+			App->ui->focused.lookAt = App->ui->GetElementFromList(this);
 		}
 
 	}
+}
+
+void j1UIelement::Disable()
+{
+	if (this->IsFocused())
+		App->ui->focused.lookAt = nullptr;
 }

@@ -92,11 +92,7 @@ SDL_Texture* j1Fonts::Print(const char* text, SDL_Color color, _TTF_Font* font)
 		h = surface->h;
 	}
 
-	if (surface == NULL)
-	{
-		LOG("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
-	}
-	else
+	if (surface != NULL)
 	{
 		ret = App->tex->LoadSurface(surface);
 		SDL_FreeSurface(surface);

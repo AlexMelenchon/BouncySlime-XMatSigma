@@ -15,7 +15,7 @@ j1UIInputBox::j1UIInputBox(char* txt)
 
 	//Load the childs----
 	boxImage = App->ui->AddElement(ui_type::UI_IMAGE, this, this->Position, true, false, true, this->rect, this->listener, UIFunction::FNC_NONE);
-	boxText = App->ui->AddElement(ui_type::UI_TEXT, this, this->Position, true, false, true, this->rect, this->listener, UIFunction::FNC_NONE, this->axis, txt);
+	boxText = App->ui->AddElement(ui_type::UI_TEXT, this, this->Position, true, false, true, this->rect, this->listener, UIFunction::FNC_NONE, this->axis, "Init!");
 }
 
 //Destructor
@@ -48,10 +48,6 @@ bool j1UIInputBox::PostUpdate(bool debug)
 		//We draw the cursor in it's position w/ a blink
 		int cursorPosition = App->input->GetTextInPos();
 
-		if (!cursorPosition)
-		{
-			LOG("Bon Dia");
-		}
 
 		if (cursorTimer > 0.75f)
 		{
