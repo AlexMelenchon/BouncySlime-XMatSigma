@@ -11,7 +11,7 @@ You'll have to prove yourself parkouring through the world and get your reward t
   **Check it out!**
 </p>
 
-
+<img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/mushroom.gif?raw=true">
  
 ### What are you waiting for to play the game?
 
