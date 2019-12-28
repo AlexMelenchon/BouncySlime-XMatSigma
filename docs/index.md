@@ -35,9 +35,70 @@ You'll have to prove yourself parkouring through the world and get your reward t
 
 # Instructions
 
-#Credits
+<a href="https://alexmelenchon.github.io/BouncySlime-XMatSigma#what-are-you-waiting-for-to-play-the-game">Download</a> the latest release and open the .exe in the game folder.
 
-##Art
+<table> 
+  <tr>
+    <th>Game controls</th>
+    <th>Debug keys</th>
+    <th>Console comands</th>
+  </tr> 
+  <tr>
+    <td> A: Move left </td>   
+    <td> F1:  Load the tutorial map </td> 
+    <td>  </td>   
+  </tr>
+  <tr>
+    <td> D: Move right </td>    
+    <td> F2:  Load the first map </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td> S: Move down </td>   
+    <td> F3:  Load the second map </td> 
+    <td>  </td>   
+  </tr>
+  <tr>
+    <td> Space: Jump and wall jump +WASD </td>    
+    <td> F4:  Reset the current map </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td> L: Throw shuriken + WASD </td>   
+    <td> F5:  Save game </td>    
+    <td>  </td>
+  </tr>
+  <tr>
+    <td> NumPad +: Volume up </td>    
+    <td> F6:  Load game </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td> NumPad -: Volume down </td>   
+    <td> F9:  Draw colliders in screen, and enemy paths </td>
+    <td>  </td>    
+  </tr>
+  <tr>
+    <td> Esc: Pause game </td>    
+    <td> F10: God mode </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td>  </td>   
+    <td> F11: Enable/disable framecap </td>
+    <td>  </td>    
+  </tr>
+  <tr>
+    <td>  </td>    
+    <td> F12: Change title info display (Frame or Map Data) </td>
+    <td>  </td>
+  </tr>  
+</table>
+
+
+# Credits
+
+## Art
 
  Level tileset by: <a href="https://anokolisa.itch.io/">Anokolisa</a>
  
