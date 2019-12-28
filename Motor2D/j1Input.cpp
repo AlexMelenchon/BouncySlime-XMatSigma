@@ -260,7 +260,6 @@ int j1Input::GetTextWidth()
 	App->fonts->CalcSize(textString.GetString(), tmpW, tmpH);
 
 	return tmpW;
-
 }
 
 void j1Input::WrittingState(bool state, SDL_Rect rect)

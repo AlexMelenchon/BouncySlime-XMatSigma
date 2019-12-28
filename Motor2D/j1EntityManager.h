@@ -88,6 +88,7 @@ public:
 	//We load the enemy textures here, so there are not multiple loads
 	SDL_Texture* flying_tex = nullptr;
 	SDL_Texture* land_tex = nullptr;
+	SDL_Texture* player_tex = nullptr;
 
 
 private:

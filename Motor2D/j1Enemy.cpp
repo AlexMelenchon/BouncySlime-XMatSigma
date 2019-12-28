@@ -26,7 +26,7 @@ j1Enemy::~j1Enemy()
 bool j1Enemy::PreUpdate()
 {
 	BROFILER_CATEGORY("Enemy Pre-Update", Profiler::Color::RoyalBlue)
-	UpdateState();
+		UpdateState();
 
 	return true;
 }
@@ -48,23 +48,19 @@ bool j1Enemy::CleanUp()
 //Changes the state of the enemy
 void j1Enemy::UpdateState()
 {
-	if (App->entities->player != nullptr)
+	if (App->entities->player && abs(abs(App->entities->player->fpPosition.x) - abs(fpPosition.x)) < chasingDistance && App->entities->player->getState() != ST_DEAD && abs(abs(App->entities->player->fpPosition.y) - abs(fpPosition.y)) < chasingDistance)
 	{
-		if (abs(abs(App->entities->player->fpPosition.x) - abs(fpPosition.x)) < chasingDistance && App->entities->player->getState() != ST_DEAD && abs(abs(App->entities->player->fpPosition.y) - abs(fpPosition.y)) < chasingDistance)
-		{
-			state = enemy_state::ST_CHASING;
-		}
-		else
-			state = enemy_state::ST_IDLE;
+		state = enemy_state::ST_CHASING;
 	}
-	
+	else
+		state = enemy_state::ST_IDLE;
 }
 
 // Called each loop iteration
 bool j1Enemy::PostUpdate(bool debug)
 {
 	BROFILER_CATEGORY("Enemy Post-Update", Profiler::Color::RoyalBlue)
-	FlipControl();
+		FlipControl();
 
 	Draw();
 

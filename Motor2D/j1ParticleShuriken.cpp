@@ -27,7 +27,6 @@ j1ParticleShuriken::j1ParticleShuriken() : j1Entity()
 j1ParticleShuriken ::~j1ParticleShuriken()
 {
 	path.~p2DynArray();
-
 }
 
 
@@ -68,7 +67,7 @@ bool j1ParticleShuriken::Awake(pugi::xml_node& shuriken_node)
 bool j1ParticleShuriken::Start()
 {
 	//The enemy's texture load
-	Text = App->entities->player->Text;
+	Text = App->entities->player_tex;
 
 	//Collision load
 	App->collision->AddCollider(collider);

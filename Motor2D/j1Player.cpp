@@ -107,7 +107,7 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 bool j1Player::Start()
 {
 	//Load the player's textures
-	Text = App->tex->Load(auxLoader.child("path").text().as_string());
+	Text = App->entities->player_tex;
 	shuriken_tex = App->tex->Load(auxLoader.child("shuriken").text().as_string());
 
 	//Collision load
@@ -533,7 +533,6 @@ bool j1Player::PostUpdate()
 bool j1Player::CleanUp()
 {
 	//Unload Player Texture
-	App->tex->UnLoad(Text);
 	Text = nullptr;
 
 	//Unload the Shuriken Texture

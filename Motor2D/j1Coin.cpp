@@ -41,7 +41,7 @@ bool j1Coin::Awake(pugi::xml_node& coin_node)
 bool j1Coin::Start()
 {
 	//The enemy's texture load
-	Text = App->entities->player->Text;
+	Text = App->entities->player_tex;
 
 	//Collision load
 	App->collision->AddCollider(collider);
