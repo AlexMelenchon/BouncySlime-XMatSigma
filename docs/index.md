@@ -20,8 +20,7 @@ You'll have to prove yourself parkouring through the world and get your reward t
     <td> <img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/david.png"> </td>    
   </tr>
   <tr>
-    <td><a href="https://github.com/AlexMelenchon">Àlex Melenchón</a></td>
-    <td>Code</td>
+    <td><a href="https://github.com/AlexMelenchon">Àlex Melenchón</a></td>    
     <td> <img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/alex.png"> </td>
   </tr>
 </table>
