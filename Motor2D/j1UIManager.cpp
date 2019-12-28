@@ -213,11 +213,20 @@ p2List_item<j1UIelement*>* j1UIManager::GetElementFromList(j1UIelement* toSearch
 //Changes the focus through elements pressing TAB
 void j1UIManager::ChangeFocus()
 {
-	if (focused.lookAt && focused.lookAt->next)
+	if (focused.lookAt && focused.lookAt->next && focused.lookAt->next->data->enabled)
 		focused.lookAt = focused.lookAt->next;
 	else if (!focused.lookAt)
 	{
-		focused.lookAt = UIList.start;
+		p2List_item<j1UIelement*>* tmp = UIList.start;
+		while (tmp != nullptr)
+		{
+			if (tmp->data->enabled)
+			{
+				focused.lookAt = tmp;
+				break;
+			}
+			tmp = tmp->next;
+		}
 		focused.state = focusState::ST_LOCKED;
 	}
 	else
@@ -256,7 +265,6 @@ void j1UIManager::DeleteElement(p2List_item<j1UIelement*>* element)
 		item = item->next;
 
 	}
-
 
 	element->data->CleanUp();
 	RELEASE(element->data);

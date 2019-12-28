@@ -219,15 +219,26 @@ bool j1Scene::Update(float dt)
 
 	//Retrieves Score
 	if (App->input->GetKey(SDL_SCANCODE_KP_5) == KEY_DOWN)
-		score -= 1000;
+	{
+		if (score > 1000)
+			score -= 1000;
+		else
+			score = 0;
+	}
 
 	//Adds Coins
 	if (App->input->GetKey(SDL_SCANCODE_KP_7) == KEY_DOWN)
-		coins += 1;
+	{
+		if (coins < 99)
+			coins += 1;
+	}
 
 	//Retrieves Coins
 	if (App->input->GetKey(SDL_SCANCODE_KP_8) == KEY_DOWN)
-		coins -= 1;
+	{
+		if (coins > 0)
+			coins -= 1;
+	}
 
 	//Sets Pause in the Game & opens the menu
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
