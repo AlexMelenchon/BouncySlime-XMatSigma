@@ -188,6 +188,7 @@ bool j1EntityManager::Load(pugi::xml_node& file)
 	p2SString playerStr("player");
 	p2SString enemyL("enemyL");
 	p2SString enemyF("enemyF");
+	p2SString coin("coin");
 
 	//We iterate though all the entities that we saved, creating each one of them
 	for (pugi::xml_node propIterator = file.child("enemyL"); propIterator; propIterator = propIterator.next_sibling())
@@ -202,6 +203,14 @@ bool j1EntityManager::Load(pugi::xml_node& file)
 
 		if (enemyF == propIterator.name())
 			AddEntity(entityType::FLYING_ENEMY, { 0,0 })->Load(propIterator);
+
+	}
+
+	for (pugi::xml_node propIterator = file.child("coin"); propIterator; propIterator = propIterator.next_sibling())
+	{
+
+		if (coin == propIterator.name())
+			AddEntity(entityType::COIN, { 0,0 })->Load(propIterator);
 
 	}
 

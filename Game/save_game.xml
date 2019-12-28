@@ -10,36 +10,75 @@
 	<map />
 	<entities>
 		<player>
-			<position x="98.2277145" y="928" />
-			<speed x="-160.534775" y="0" />
+			<position x="60" y="928" />
+			<speed x="0" y="0" />
 			<state current_state="1" />
 			<falling value="false" />
 			<walling value="false" />
 			<wallTimer wallJumpTimer="0" />
-			<flip value="1" />
+			<flip value="0" />
 		</player>
 		<enemyL>
-			<position x="847.618896" y="872" />
-			<speed x="60" y="0" />
+			<position x="895.239014" y="872" />
+			<speed x="-60" y="0" />
 			<falling value="false" />
 			<trace x="802" y="899" w="155" h="0" />
-			<flip value="0" />
+			<flip value="1" />
 		</enemyL>
 		<enemyF>
-			<position x="1710.38037" y="569.059998" />
+			<position x="1727.24121" y="569" />
 			<speed x="60" y="0" />
 			<trace x="1610" y="569" w="207" h="74" />
 			<flip value="0" />
 		</enemyF>
+		<coin>
+			<position x="231" y="850" />
+		</coin>
+		<coin>
+			<position x="289" y="815" />
+		</coin>
+		<coin>
+			<position x="791" y="811" />
+		</coin>
+		<coin>
+			<position x="363" y="869" />
+		</coin>
+		<coin>
+			<position x="1385" y="659" />
+		</coin>
+		<coin>
+			<position x="1486" y="1040" />
+		</coin>
+		<coin>
+			<position x="1843" y="707" />
+		</coin>
+		<coin>
+			<position x="1895" y="642" />
+		</coin>
+		<coin>
+			<position x="1993" y="685" />
+		</coin>
+		<coin>
+			<position x="1306" y="602" />
+		</coin>
+		<coin>
+			<position x="873" y="810" />
+		</coin>
+		<coin>
+			<position x="978" y="807" />
+		</coin>
+		<coin>
+			<position x="1484" y="993" />
+		</coin>
 	</entities>
 	<pathfinding />
 	<gui />
 	<scene>
 		<current_map name="intro.tmx" />
 		<current_lifes value="5" />
-		<current_score value="60" />
-		<current_coins value="3" />
-		<current_time value="75820" />
+		<current_score value="0" />
+		<current_coins value="0" />
+		<current_time value="4322" />
 	</scene>
 	<main_menu />
 	<collision />

@@ -292,7 +292,7 @@ bool j1Scene::Load(pugi::xml_node& load)
 	lifes = load.child("current_lifes").attribute("value").as_uint();
 	score = load.child("current_score").attribute("value").as_uint();
 	coins = load.child("current_coins").attribute("value").as_uint();
-	time.StartFrom(load.child("current_time").attribute("value").as_uint());
+	time.StartFrom(load.child("current_time").attribute("value").as_int());
 	return true;
 }
 
@@ -305,7 +305,9 @@ bool j1Scene::Save(pugi::xml_node& save) const
 	save.append_child("current_lifes").append_attribute("value") = lifes;
 	save.append_child("current_score").append_attribute("value") = score;
 	save.append_child("current_coins").append_attribute("value") = coins;
-	save.append_child("current_time").append_attribute("value") = time.Read();
+
+	uint curr_time = time.Read();
+	save.append_child("current_time").append_attribute("value") = curr_time;
 	return true;
 }
 
