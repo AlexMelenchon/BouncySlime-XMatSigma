@@ -1,3 +1,7 @@
+<p align="left"> 
+	<img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/david.png?raw=true">
+</p>
+
 # What is it?
 
 Bouncy Slime is a 2D platformer game developed by 2 students from CITM pursuing a degree in Videogames Design and Development.
