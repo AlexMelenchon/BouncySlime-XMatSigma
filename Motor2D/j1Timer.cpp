@@ -21,7 +21,6 @@ void j1Timer::Start()
 // ---------------------------------------------
 void j1Timer::StartFrom(uint time)
 {
-	//started_at = time;
 	started_at = SDL_GetTicks() - time;
 }
 

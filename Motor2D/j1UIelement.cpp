@@ -111,7 +111,15 @@ bool j1UIelement::PreUpdate()
 bool j1UIelement::Update(float dt)
 {
 	if (!enabled)
+	{
+		//Check if parent is active
+		if(parent)
+		this->enabled = parent->enabled;
+
+		//Re-Check; if still the same we don't do the logic of the disabled element
+		if (!enabled)
 		return true;
+	}
 
 	//If the mouse is hovering above an object...
 	if (hovering)
@@ -167,10 +175,19 @@ bool j1UIelement::Update(float dt)
 			return true;
 	}
 
-	//If the obect has a parent, we make sure it keeps it's distance
+	//If the obect has a parent, we make sure it keeps it's distance & has the same enable
 	if (parent)
 	{
 		KeepDistanceToParent();
+
+		if (this->enabled != parent->enabled)
+		{
+			this->enabled = parent->enabled;
+
+			if (this->IsFocused())
+				App->ui->focused.lookAt = nullptr;
+		}
+		
 	}
 
 	// We call for the inherits custom update, if any
@@ -311,11 +328,11 @@ void j1UIelement::Disable(bool to_disable)
 	{
 		enabled = to_disable;
 
-		for (p2List_item<j1UIelement*>* iterator = App->ui->GetElementFromList(this)->prev; iterator; iterator = iterator->prev)
-		{
-			if (iterator->data->parent == this)
-				iterator->data->Disable(to_disable);
-		}
+		//for (p2List_item<j1UIelement*>* iterator = App->ui->GetElementFromList(this)->prev; iterator; iterator = iterator->prev)
+		//{
+		//	if (iterator->data->parent == this)
+		//		iterator->data->Disable(to_disable);
+		//}
 
 
 		if (!enabled)

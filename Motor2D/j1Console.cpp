@@ -21,10 +21,12 @@ bool j1Console::InheritUpdate(float dt)
 {
 	bool ret = true;
 
+	//If the console is focused, redirect to focus to the input box
 	if (IsFocused())
 	{
 		App->ui->focused.lookAt = App->ui->GetElementFromList(inputBox);
 	}
+	//If the input box loses focus, disable the whole console
 	else if (!inputBox->IsFocused())
 		Disable(!enabled);
 

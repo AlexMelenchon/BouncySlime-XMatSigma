@@ -57,10 +57,6 @@ bool j1UISlider::Start()
 //Called every frame after the element update
 bool j1UISlider::InheritUpdate(float dt)
 {
-	//The childs follow the father's enabled
-	button->enabled = this->enabled;
-	background, enabled = this->enabled;
-
 	//Check Bounadries
 	CheckLimits();
 

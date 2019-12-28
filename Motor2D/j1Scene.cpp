@@ -61,11 +61,7 @@ bool j1Scene::Start()
 	sprintf_s(lifes_text,10, "%02d", lifes);
 
 	//UI init-------
-	parent = App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 0,0 }, false, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
-
-
-	console = App->ui->AddElement(ui_type::UI_CONSOLE, parent, { 0,0 }, true, false, true, {0,0,0,0}, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Bon Dia");
-	console->Disable(false);
+	parent = App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 0,0 }, false, false, true, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
 
 	pause = App->ui->AddElement(ui_type::UI_BUTTON, parent, { -10,-10 }, true, false, true, { 220,406,64,64 }, this, UIFunction::FNC_PAUSE);	
 
@@ -82,7 +78,8 @@ bool j1Scene::Start()
 	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 594,10 }, false, false, true, { 737,478,64,64});
 	ui_time = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 664,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00000");
 	
-	
+	console = App->ui->AddElement(ui_type::UI_CONSOLE, nullptr, { 0,0 }, true, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Bon Dia");
+
 
 
 	//Gameplay ini--------
@@ -306,6 +303,7 @@ bool j1Scene::Save(pugi::xml_node& save) const
 	save.append_child("current_score").append_attribute("value") = score;
 	save.append_child("current_coins").append_attribute("value") = coins;
 
+	//Time load------------------
 	uint curr_time = time.Read();
 	save.append_child("current_time").append_attribute("value") = curr_time;
 	return true;

@@ -240,6 +240,8 @@ int j1Input::GetTextInPos()
 
 	App->fonts->CalcSize(textString.GetStringInPos(position), tmpW, tmpH);
 
+	if (tmpW < -TMP_STRING_SIZE) tmpW = 0;
+
 	return tmpW;
 
 }

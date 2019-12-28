@@ -46,7 +46,7 @@ bool j1MainMenu::Start()
 	click.id = App->audio->LoadFx(click.path.GetString());
 
 	//We create the "ghost" parent
-	parent = App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 0,0 }, false, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
+	parent = App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 0,0 }, false, false, true, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
 
 	//We create the UI
 	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 610, 120 }, false, false, true, { 1265,36,177,204 });
@@ -60,8 +60,6 @@ bool j1MainMenu::Start()
 	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 20,100 }, false, false, true, { 491,1022,394,168 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
 
 	App->ui->AddElement(ui_type::UI_BUTTON, nullptr, { 20,650 }, true, false, true, {331,991,64,64 }, this, UIFunction::FNC_GITHUB, drag_axis::MOV_NONE);
-
-	//App->ui->AddElement(ui_type::UI_INPUTBOX, nullptr, { 20,650 }, true, false, true, { 331,991,64,64 }, this, UIFunction::FNC_NONE, drag_axis::MOV_ALL, "fd");
 
 
 	lastcall = UIFunction::FNC_NONE;
