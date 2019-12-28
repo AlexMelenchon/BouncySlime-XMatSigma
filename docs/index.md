@@ -39,7 +39,7 @@ You'll have to prove yourself parkouring through the world and get your reward t
 
 
 <p align="center">
-
+## Game Controls
 </p>
 
 
