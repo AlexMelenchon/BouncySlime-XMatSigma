@@ -290,6 +290,14 @@ bool j1Scene::Load(pugi::xml_node& load)
 	score = load.child("current_score").attribute("value").as_uint();
 	coins = load.child("current_coins").attribute("value").as_uint();
 	time.StartFrom(load.child("current_time").attribute("value").as_int());
+
+	if (App->pause)
+	{
+		App->pause = false;
+		MenusLoad(UIFunction::FNC_PAUSE);
+	}
+
+
 	return true;
 }
 
@@ -418,8 +426,6 @@ void j1Scene::CheckCameraLimits()
 	//Down
 	if (cameraPos.y > 0)
 		cameraPos.y = 0;
-
-
 }
 
 //Manages the UI inputs of this module
@@ -544,8 +550,6 @@ void j1Scene::UITimeUpdate()
 	App->fonts->CalcSize(time_text, ui_time->rect.w, ui_time->rect.h);
 }
 
-
-
 void j1Scene::MenusLoad(UIFunction func)
 {
 	App->ui->ToDeleteElement();
@@ -562,7 +566,10 @@ void j1Scene::MenusLoad(UIFunction func)
 			App->ui->AddElement(ui_type::UI_BUTTON, parent, { -375,-400 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_CONTINUEGAME, drag_axis::MOV_NONE, "LOAD")->to_delete = true;
 			App->ui->AddElement(ui_type::UI_BUTTON, parent, { -375,-500 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_SAVE, drag_axis::MOV_NONE, "SAVE")->to_delete = true;
 			App->ui->AddElement(ui_type::UI_BUTTON, parent, { -375,-600 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_EXIT, drag_axis::MOV_NONE, "MAIN MENU")->to_delete = true;
+			time.Stop();
 		}
+		else
+			time.ReStart();
 		break;
 
 	case UIFunction::FNC_OPTIONS:

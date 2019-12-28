@@ -19,17 +19,17 @@
 			<flip value="0" />
 		</player>
 		<enemyL>
-			<position x="895.239014" y="872" />
+			<position x="850.899475" y="872" />
 			<speed x="-60" y="0" />
 			<falling value="false" />
 			<trace x="802" y="899" w="155" h="0" />
 			<flip value="1" />
 		</enemyL>
 		<enemyF>
-			<position x="1727.24121" y="569" />
-			<speed x="60" y="0" />
+			<position x="1752.62061" y="582.919861" />
+			<speed x="-60" y="0" />
 			<trace x="1610" y="569" w="207" h="74" />
-			<flip value="0" />
+			<flip value="1" />
 		</enemyF>
 		<coin>
 			<position x="231" y="850" />
@@ -78,7 +78,7 @@
 		<current_lifes value="5" />
 		<current_score value="0" />
 		<current_coins value="0" />
-		<current_time value="4322" />
+		<current_time value="2749" />
 	</scene>
 	<main_menu />
 	<collision />
