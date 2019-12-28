@@ -12,18 +12,16 @@ You'll have to prove yourself parkouring through the world and get your reward t
 
 <table>
   <tr>
-   <th> <strong>Member</strong> </th>
-   <th> <strong>Role</strong> </th>
+   <th> <strong>Member</strong> </th>   
    <th>      </th>
   </tr>
   <tr>
-    <td> <a href="https://github.com/davidcarrasquet">David Carrasquet</a></td>
-    <td> Code</td>
-    <td> <img>/docs/pollo.jpg</img> </td>    
+    <td> <a href="https://github.com/davidcarrasquet">David Carrasquet</a></td>   
+    <td> <img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/david.png"> </td>    
   </tr>
   <tr>
     <td><a href="https://github.com/AlexMelenchon">Àlex Melenchón</a></td>
     <td>Code</td>
-    <td> <img>pollo.jpg<img> </td>
+    <td> <img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/alex.png"> </td>
   </tr>
 </table>
