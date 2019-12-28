@@ -43,8 +43,7 @@ bool j1Scene::Awake(pugi::xml_node& scene_config)
 
 // Called before the first frame
 bool j1Scene::Start()
-{
-
+{	
 	//Create the player
 	App->entities->AddEntity(entityType::PLAYER, { 0,0 });
 

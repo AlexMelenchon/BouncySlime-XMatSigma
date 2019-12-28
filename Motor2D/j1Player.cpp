@@ -88,6 +88,11 @@ bool j1Player::Awake(pugi::xml_node& player_node)
 	enemyDeathFx.path = player_node.child("fx").child("enemydeath").attribute("path").as_string();
 	throw_shuriken.path = player_node.child("fx").child("throw").attribute("path").as_string();
 	shuriken_hit.path = player_node.child("fx").child("hit").attribute("path").as_string();
+	congratsFx.path = player_node.child("fx").child("congrats").attribute("path").as_string();
+	loseFx.path = player_node.child("fx").child("lose").attribute("path").as_string();
+	coinFx.path = player_node.child("fx").child("coin").attribute("path").as_string();
+	lifeFx.path = player_node.child("fx").child("life").attribute("path").as_string();
+
 
 	//Assign the value to the auxiliar node
 	//We need this in order to load things later in start whose modules are not awoken yet
@@ -117,6 +122,9 @@ bool j1Player::Start()
 	enemyDeathFx.id = App->audio->LoadFx(enemyDeathFx.path.GetString());
 	throw_shuriken.id = App->audio->LoadFx(throw_shuriken.path.GetString());
 	shuriken_hit.id = App->audio->LoadFx(shuriken_hit.path.GetString());
+	congratsFx.id = App->audio->LoadFx(congratsFx.path.GetString());
+	loseFx.id = App->audio->LoadFx(loseFx.path.GetString());
+	coinFx.id = App->audio->LoadFx(coinFx.path.GetString());
 
 
 	return true;
@@ -393,12 +401,19 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 		//If the map to go is the first one, we finish the run
 		if (nextMap == App->map->data.maplist.start->data->name.GetString())
 		{
-			App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime);
-			if (App->scene->CheckMaxScore())
-				true; //TODO: Play a big ass congratulations sound
-			else
-				true;
-			//TODO: PLAY WIN SOUND
+			if (!disabledCollision)
+			{
+				disabledCollision = true;
+				App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime * 4);
+				if (App->scene->CheckMaxScore())
+				{
+					App->audio->PlayFx(congratsFx.id);
+				}
+				else
+					App->audio->PlayFx(winFx.id);
+			}
+			
+
 		}
 		else if (!disabledCollision)
 		{
@@ -420,6 +435,7 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 
 		//TODO: Destroy Coin
 		//TODO: PLAY FX SOUND;
+		App->audio->PlayFx(coinFx.id);
 		coll->to_delete = true;
 		break;
 	case(COLLIDER_ENEMY):
@@ -847,7 +863,7 @@ void j1Player::LoseALife()
 	}
 	else
 	{
-		App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime);
-		//TODO: PLAY LOSE SOUND
+		App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime);		
+		App->audio->PlayFx(loseFx.id);
 	}
 }
