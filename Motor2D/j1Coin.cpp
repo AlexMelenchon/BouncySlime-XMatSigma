@@ -1,6 +1,7 @@
 #include "j1Coin.h"
 #include "j1Collision.h"
 #include "j1EntityManager.h"
+#include "j1Audio.h"
 
 
 //Constructor
@@ -74,6 +75,7 @@ bool j1Coin::CleanUp()
 		collider->to_delete = true;
 		collider = nullptr;
 	}
+	Text = nullptr;
 
 	return true;
 }
@@ -89,6 +91,9 @@ void j1Coin::OnCollision(Collider* coinCol, Collider* coll)
 		break;
 
 	case(COLLIDER_GOD):
+		if(!coinCol->to_delete)
+			App->audio->PlayFx(App->entities->player->coinFx.id);
+
 		coinCol->to_delete = true;
 		break;
 	}

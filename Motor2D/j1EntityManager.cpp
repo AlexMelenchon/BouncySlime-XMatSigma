@@ -44,7 +44,6 @@ bool j1EntityManager::Start()
 	debug_tex = App->tex->Load(entConfig.child("manager").child("debugTextPath").text().as_string());
 	flying_tex = App->tex->Load(entConfig.child("flyingenemy").child("path").text().as_string());
 	land_tex = App->tex->Load(entConfig.child("landenemy").child("path").text().as_string());
-	//App->tex->Load(auxLoader.child("path").text().as_string())
 	player_tex = App->tex->Load(entConfig.child("player").child("path").text().as_string());
 
 	return ret;

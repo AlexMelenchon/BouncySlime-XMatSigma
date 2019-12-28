@@ -215,6 +215,7 @@ bool j1ParticleShuriken::CleanUp()
 	}
 
 	App->entities->shuriken = nullptr;
+	Text = nullptr;
 
 	path.Clear();
 
