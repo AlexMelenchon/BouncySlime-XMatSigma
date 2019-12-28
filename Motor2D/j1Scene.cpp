@@ -58,33 +58,33 @@ bool j1Scene::Start()
 	debug_tex = App->entities->debug_tex;
 
 	lifes = startingLifes;
-	sprintf_s(lifes_text,10, "%02d", lifes);
+	sprintf_s(lifes_text, 10, "%02d", lifes);
 
 	//UI init-------
 	parent = App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 0,0 }, false, false, true, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
 
-	pause = App->ui->AddElement(ui_type::UI_BUTTON, parent, { -10,-10 }, true, false, true, { 220,406,64,64 }, this, UIFunction::FNC_PAUSE);	
+	pause = App->ui->AddElement(ui_type::UI_BUTTON, parent, { -10,-10 }, true, false, true, { 220,406,64,64 }, this, UIFunction::FNC_PAUSE);
 
 	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 94,10 }, false, false, true, { 1257,532,65,65 });
 	ui_lifes = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 164,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, lifes_text);
 
-	
+
 	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 244,10 }, false, false, true, { 1257,605,65,64 });
 	ui_coins = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 314,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00");
 
 	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 394,10 }, false, false, true, { 144,922,65,64 });
 	ui_score = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 464,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00000");
 
-	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 594,10 }, false, false, true, { 737,478,64,64});
+	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 594,10 }, false, false, true, { 737,478,64,64 });
 	ui_time = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 664,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00000");
-	
+
 	console = App->ui->AddElement(ui_type::UI_CONSOLE, nullptr, { 0,0 }, true, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Bon Dia");
 
 
 
 	//Gameplay ini--------
-	time.Start();	
-	
+	time.Start();
+
 	return true;
 }
 
@@ -191,6 +191,30 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F12) == KEY_DOWN)
 		App->windowTitleControl = !App->windowTitleControl;
 
+	//Adds a life
+	if (App->input->GetKey(SDL_SCANCODE_KP_1) == KEY_DOWN)
+		lifes += 1;
+
+	//Minus 1 life
+	if (App->input->GetKey(SDL_SCANCODE_KP_2) == KEY_DOWN)
+		App->entities->player->LoseALife();
+
+	//Adds Score
+	if (App->input->GetKey(SDL_SCANCODE_KP_4) == KEY_DOWN)
+		score += 1000;
+
+	//Retrieves Score
+	if (App->input->GetKey(SDL_SCANCODE_KP_5) == KEY_DOWN)
+		score -= 1000;
+
+	//Adds Coins
+	if (App->input->GetKey(SDL_SCANCODE_KP_7) == KEY_DOWN)
+		coins += 1;
+
+	//Retrieves Coins
+	if (App->input->GetKey(SDL_SCANCODE_KP_8) == KEY_DOWN)
+		coins -= 1;
+
 	//Sets Pause in the Game & opens the menu
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
@@ -219,7 +243,7 @@ bool j1Scene::Update(float dt)
 	{
 		console->Disable(!console->enabled);
 	}
-	
+
 	UIInGameUpdate();
 
 	//Draws the current map
@@ -483,7 +507,6 @@ void j1Scene::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer)
 
 	case UIEventType::EVENT_DRAG:
 	{
-
 		switch (func)
 		{
 		case UIFunction::FNC_CHANGE_VMUSIC:
@@ -503,21 +526,10 @@ void j1Scene::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer)
 			}
 		}
 		break;
-
-
-
 		}
-
-
-
 	}
 	break;
-
-
 	}
-
-
-
 }
 
 void j1Scene::UIInGameUpdate()
@@ -529,13 +541,13 @@ void j1Scene::UIInGameUpdate()
 
 	App->tex->UnLoad(ui_coins->texture);
 	ui_coins->texture = nullptr;
-	sprintf_s(coins_text, 10, "%02d",coins);
+	sprintf_s(coins_text, 10, "%02d", coins);
 	ui_coins->texture = App->fonts->Print(coins_text);
 
 	App->tex->UnLoad(ui_score->texture);
 	ui_score->texture = nullptr;
 	sprintf_s(score_text, 10, "%05d", score);
-	ui_score->texture = App->fonts->Print(score_text);	
+	ui_score->texture = App->fonts->Print(score_text);
 	App->fonts->CalcSize(score_text, ui_score->rect.w, ui_score->rect.h);
 }
 
@@ -545,7 +557,7 @@ void j1Scene::UITimeUpdate()
 
 	App->tex->UnLoad(ui_time->texture);
 	ui_time->texture = nullptr;
-	sprintf_s(time_text,"%3.2f", seconds);
+	sprintf_s(time_text, "%3.2f", seconds);
 	ui_time->texture = App->fonts->Print(time_text);
 	App->fonts->CalcSize(time_text, ui_time->rect.w, ui_time->rect.h);
 }
@@ -559,7 +571,7 @@ void j1Scene::MenusLoad(UIFunction func)
 	case UIFunction::FNC_PAUSE:
 		if (App->pause)
 		{
-			App->ui->AddElement(ui_type::UI_IMAGE, parent, { -260, -85 }, false, false, true, {1265,36,177,204 })->to_delete = true;
+			App->ui->AddElement(ui_type::UI_IMAGE, parent, { -260, -85 }, false, false, true, { 1265,36,177,204 })->to_delete = true;
 			App->ui->AddElement(ui_type::UI_IMAGE, parent, { -365, -190 }, false, false, true, { 969,34,276,490 })->to_delete = true;
 			App->ui->AddElement(ui_type::UI_BUTTON, parent, { -375,-200 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_PAUSE, drag_axis::MOV_NONE, "CONTINUE")->to_delete = true;
 			App->ui->AddElement(ui_type::UI_BUTTON, parent, { -375,-300 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_OPTIONS, drag_axis::MOV_NONE, "SETTINGS")->to_delete = true;

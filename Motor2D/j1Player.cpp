@@ -381,17 +381,10 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 		inputs.add(IN_DEATH);
 
 		if (!disabledCollision)
-			if (App->scene->lifes > 0)
-			{
-				App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
-				App->scene->lifes -= 1;
-				App->scene->UIInGameUpdate();
-			}
-			else
-			{
-				App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime);
-				//TODO: PLAY LOSE SOUND
-			}
+		{
+			LoseALife();
+			App->scene->UIInGameUpdate();
+		}
 
 		break;
 	case(COLLIDER_WIN):
@@ -407,8 +400,9 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 				true;
 			//TODO: PLAY WIN SOUND
 		}
-		else
+		else if (!disabledCollision)
 		{
+			disabledCollision = true;
 			App->fade->FadeToBlackMap(App->map->GetNextMap(), winFx.id, playerFadeTime);
 			ReSetMovement();
 			App->scene->score += 450;
@@ -421,9 +415,9 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 		if (App->scene->coins % 10 == 0)
 		{
 			App->scene->lifes++;
-       			App->scene->UIInGameUpdate();
+			App->scene->UIInGameUpdate();
 		}
-			
+
 		//TODO: Destroy Coin
 		//TODO: PLAY FX SOUND;
 		coll->to_delete = true;
@@ -433,9 +427,11 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 		//PLAYER DIES, because he didn't collide from ABOVE
 		if (CheckCollisionDir(playerCol->rect, coll->rect) != DIRECTION_DOWN)
 		{
-			inputs.add(IN_DEATH);			
-			App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
-			App->scene->lifes -= 1;
+			inputs.add(IN_DEATH);
+
+			if (!disabledCollision)
+				LoseALife();
+
 			App->scene->UIInGameUpdate();
 		}
 
@@ -839,4 +835,19 @@ void j1Player::Jump(float forcey, int fxId)
 	App->audio->PlayFx(fxId); //Play the SFX
 
 	inputs.add(IN_JUMP); //Update the state
+}
+
+void j1Player::LoseALife()
+{
+	if (App->scene->lifes > 0)
+	{
+		App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
+		App->scene->lifes -= 1;
+		App->scene->UIInGameUpdate();
+	}
+	else
+	{
+		App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime);
+		//TODO: PLAY LOSE SOUND
+	}
 }

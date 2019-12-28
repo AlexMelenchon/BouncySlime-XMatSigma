@@ -130,6 +130,10 @@ public:
 	FX throw_shuriken;
 	FX shuriken_hit;
 
+	//--------GAMEPLAY RELATED---------//
+	//Called when player loses a life
+	void LoseALife();
+
 private:
 
 	//--------MOVEMENT ---------//
