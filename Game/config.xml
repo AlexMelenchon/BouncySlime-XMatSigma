@@ -24,7 +24,7 @@
   </file_system>
 
   <scene>
-    <mapFadeTime>0.7f</mapFadeTime>
+    <mapFadeTime>1.5f</mapFadeTime>
     <startingLifes>5</startingLifes>
     <click file="audio/fx/click.wav"/>
   </scene>
@@ -148,6 +148,10 @@
         <enemydeath path="audio/fx/flyingDeath.wav"/>
         <throw path="audio/fx/throw.wav"/>
         <hit path="audio/fx/shuriken_hit.wav"/>
+        <congrats path="audio/fx/bigasswin.wav"/>
+        <lose path="audio/fx/lose.wav"/>
+        <coin path="audio/fx/coin.wav"/>
+        <life path="audio/fx/1up.wav"/>
       </fx>
 
       <path>textures/player/sprite.png</path>
@@ -288,13 +292,12 @@
     <coin>
 
       <animations>
-        <animation name = "coin" speed="2">
-          <sprite x ="18" y ="348" w ="17" h="17" frames ="2"  pivotx ="8" pivoty="8"/>
-          <sprite x ="20" y ="346" w ="19" h="19" frames ="2"  pivotx ="8" pivoty="8"/>
-          <sprite x ="40" y ="348" w ="17" h="17" frames ="2"  pivotx ="8" pivoty="8"/>
-          <sprite x ="58" y ="346" w ="19" h="19" frames ="2"  pivotx ="8" pivoty="8"/>
-          <sprite x ="78" y ="348" w ="17" h="17" frames ="2"  pivotx ="8" pivoty="8"/>
-          <sprite x ="97" y ="346" w ="19" h="19" frames ="2"  pivotx ="8" pivoty="8"/>
+        <animation name = "coin" speed="1">
+          <sprite x ="117" y ="349" w ="14" h="16" frames ="2"  pivotx ="4" pivoty="8"/>
+          <sprite x ="135" y ="349" w ="10" h="16" frames ="2"  pivotx ="4" pivoty="8"/>
+          <sprite x ="153" y ="349" w ="6" h="16" frames ="2"  pivotx ="4" pivoty="8"/>
+          <sprite x ="167" y ="349" w ="10" h="16" frames ="2"  pivotx ="4" pivoty="8"/>
+          <sprite x ="181" y ="349" w ="14" h="16" frames ="2"  pivotx ="4" pivoty="8"/>         
         </animation>
       </animations>
 
