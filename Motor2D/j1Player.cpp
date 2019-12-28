@@ -329,7 +329,6 @@ bool j1Player::Update(float dt)
 			currentAnimation = &animIdle;
 			break;
 		case ST_DEAD:
-			LOG("Git Gud :P \n");
 			currentAnimation = &animDeath;
 			disabledCollision = true;
 		}
@@ -669,7 +668,10 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			case IN_JUMP: state = ST_AIR;  break;
 			case IN_FALL: state = ST_FALLING; break;
 			case IN_GOD: state = ST_GOD; break;
-			case IN_DEATH: state = ST_DEAD; break;
+			case IN_DEATH:
+				state = ST_DEAD;
+				LOG("Git Gud :P");
+				break;
 			}
 		}
 		break;
@@ -692,7 +694,10 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			break;
 
 			case IN_GOD: state = ST_GOD; break;
-			case IN_DEATH: state = ST_DEAD; break;
+			case IN_DEATH:
+				state = ST_DEAD;
+				LOG("Git Gud :P");
+				break;
 			}
 
 		}
@@ -717,7 +722,10 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 				InWall();
 			}
 			break;
-			case IN_DEATH: state = ST_DEAD; break;
+			case IN_DEATH:
+				state = ST_DEAD;
+				LOG("Git Gud :P");
+				break;
 			}
 		}
 		break;
@@ -763,7 +771,10 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 				wallingLeave = 0.0f;
 			}
 			break;
-			case IN_DEATH: state = ST_DEAD; break;
+			case IN_DEATH:
+				state = ST_DEAD;
+				LOG("Git Gud :P");
+				break;
 			}
 		}
 		break;
@@ -794,7 +805,10 @@ player_states j1Player::process_fsm(p2List<player_inputs>& inputs)
 			break;
 
 			case IN_GOD: state = ST_GOD; break;
-			case IN_DEATH: state = ST_DEAD; break;
+			case IN_DEATH:
+				state = ST_DEAD;
+				LOG("Git Gud :P");
+				break;
 			}
 		}
 		break;
