@@ -19,11 +19,11 @@ You'll have to prove yourself parkouring through the world and get your reward t
   <tr>
     <td> <a href="https://github.com/davidcarrasquet">David Carrasquet</a></td>
     <td> Code</td>
-    <td> ![Alt text](/docs/pollo.jpg) </td>    
+    <td> <img>/docs/pollo.jpg</img> </td>    
   </tr>
   <tr>
     <td><a href="https://github.com/AlexMelenchon">Àlex Melenchón</a></td>
     <td>Code</td>
-    <td> ![Alt text](pollo.jpg) </td>
+    <td> <img>pollo.jpg<img> </td>
   </tr>
 </table>
