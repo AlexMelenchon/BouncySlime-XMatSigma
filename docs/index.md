@@ -5,7 +5,7 @@ You'll have to prove yourself parkouring through the world and get your reward t
 ### What are you waiting for to play the game?
 
 <p align="center"> 
-	<strong><a href="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/releases/download/2.0/BouncySlime.zip">DOWNLOAD</a></strong>
+	<a href="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/releases/download/2.0/BouncySlime.zip"><strong>DOWNLOAD</strong></a>
 </p>
 
 # Who we are?
@@ -19,10 +19,11 @@ You'll have to prove yourself parkouring through the world and get your reward t
   <tr>
     <td> <a href="https://github.com/davidcarrasquet">David Carrasquet</a></td>
     <td> Code</td>
-    
+    <td> ![Alt text](/docs/pollo.jpg) </td>    
   </tr>
   <tr>
     <td><a href="https://github.com/AlexMelenchon">Àlex Melenchón</a></td>
     <td>Code</td>
+    <td> ![Alt text](pollo.jpg) </td>
   </tr>
 </table>
