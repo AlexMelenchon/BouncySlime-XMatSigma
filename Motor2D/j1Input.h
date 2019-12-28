@@ -94,10 +94,10 @@ public:
 	int GetTextInPos();
 
 	//Returns the size of the text font, for multi-line purposes
-	iPoint GetTextSize();
+	int GetTextWidth();
 
 	//Changes the input mode from wirtting to playing
-	void WrittingState(bool state, SDL_Rect rect);
+	void WrittingState(bool state, SDL_Rect rect = {0,0,0,0});
 
 	// Get mouse / axis position
 	int			mouse_x;
@@ -118,12 +118,12 @@ private:
 
 	bool		writting = false;
 
-	SDL_Rect inputRect = { 0,0,0,0 };
+	int inputRect_w =  0;
 
 
 	//--------BUFFER STRING---------//
 	p2SString		textString;
-	int position = 0;
+	int cursorPosition = 0;
 };
 
 #endif // __j1INPUT_H__

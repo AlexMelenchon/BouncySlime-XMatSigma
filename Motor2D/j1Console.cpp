@@ -4,6 +4,8 @@
 #include "j1Textures.h"
 #include "j1Fonts.h"
 #include "j1Scene.h"
+#include "j1Input.h"
+#include "j1ConsoleM.h"
 
 //Constructors----
 j1Console::j1Console()
@@ -48,8 +50,6 @@ bool j1Console::InheritUpdate(float dt)
 bool j1Console::PostUpdate(bool debug)
 {
 	bool ret = true;
-
-
 	return ret;
 }
 
@@ -58,10 +58,15 @@ bool j1Console::CleanUp()
 {
 	bool ret = true;
 
+	//We clean the pointers to childs & the string buffer
 	inputBox = nullptr;
 	image = nullptr;
 	App->scene->console = nullptr;
 	consoleBuffer.Clear();
+
+	//We also make sure we're not in writting mode anymore
+	App->input->WrittingState(false);
+
 
 	return ret;
 }
@@ -88,7 +93,7 @@ void j1Console::UpdateText(const char* newLogEntry)
 	App->fonts->CalcSize(consoleBuffer.GetString(), Ctext->rect.w, Ctext->rect.h);
 
 	//If the console text exceeds
-	if (Ctext->rect.h > (int)App->win->height / 4)
+	if (Ctext->rect.h > image->rect.h)
 	{
 		consoleBuffer.Cut(consoleBuffer.FindFirst(">"), consoleBuffer.FindFirst(";")+2);
 	}
@@ -105,3 +110,9 @@ void j1Console::Disable()
 
 }
 
+//Gets the text from the input
+void j1Console::RecieveCommand(const char* newCommand)
+{
+	if(!App->console->ManageCommand(newCommand))
+		LOG("Invalid Command! Please check the command list with: list ");
+}

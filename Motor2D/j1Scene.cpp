@@ -33,8 +33,11 @@ bool j1Scene::Awake(pugi::xml_node& scene_config)
 	LOG("Loading Scene");
 	bool ret = true;
 
+	sceneConfig = scene_config;
+
 	mapFadeTime = scene_config.child("mapFadeTime").text().as_float();
 	startingLifes = scene_config.child("startingLifes").text().as_uint(3);
+	maxScore = scene_config.child("maxScore").attribute("value").as_uint(4500);
 	click.path = scene_config.child("click").attribute("file").as_string();
 
 
@@ -43,7 +46,7 @@ bool j1Scene::Awake(pugi::xml_node& scene_config)
 
 // Called before the first frame
 bool j1Scene::Start()
-{	
+{
 	//Create the player
 	App->entities->AddEntity(entityType::PLAYER, { 0,0 });
 
@@ -193,15 +196,23 @@ bool j1Scene::Update(float dt)
 
 	//Adds a life
 	if (App->input->GetKey(SDL_SCANCODE_KP_1) == KEY_DOWN)
-		lifes += 1;
+	{
+		if (lifes < 99)
+			lifes += 1;
+	}
 
 	//Minus 1 life
 	if (App->input->GetKey(SDL_SCANCODE_KP_2) == KEY_DOWN)
 		App->entities->player->LoseALife();
-	
+
 	//Adds Score
 	if (App->input->GetKey(SDL_SCANCODE_KP_4) == KEY_DOWN)
-		score += 1000;
+	{
+		if (score > 98998)
+			score += 1000;
+		else
+			score = 99999;
+	}
 
 	//Retrieves Score
 	if (App->input->GetKey(SDL_SCANCODE_KP_5) == KEY_DOWN)
@@ -256,6 +267,9 @@ bool j1Scene::Update(float dt)
 	//update texture of the time
 	UITimeUpdate();
 
+
+
+
 	return true;
 }
 
@@ -275,12 +289,16 @@ bool j1Scene::CleanUp()
 	LOG("Freeing scene");
 	debug_tex = nullptr;
 	debugPath.Clear();
+	App->collision->debug = false;
+	App->entities->debug = false;
+	App->ui->focused.lookAt = nullptr;
 
 	console = nullptr;
 	parent = nullptr;
 
 	//Delete Player
 	App->entities->DeletePlayer();
+	App->entities->player = nullptr;
 
 	//Delete the UI of the game
 	App->ui->DeleteAllElements();
@@ -453,7 +471,7 @@ void j1Scene::CheckCameraLimits()
 }
 
 //Manages the UI inputs of this module
-void j1Scene::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer)
+void j1Scene::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer, const char* bufferText)
 {
 	switch (type)
 	{
@@ -614,9 +632,17 @@ bool j1Scene::CheckMaxScore()
 	bool ret = false;
 	if (score > maxScore)
 	{
-		maxScore = score;
+		//Save Score-----------------------------------
+		LOG("Saving Game new Max Score");
 		ret = true;
+
+		pugi::xml_node max_score = sceneConfig.child("maxScore");
+		max_score.attribute("value").set_value(score);
+		maxScore = score;
+
+		App->saveConfigFile();
 	}
+
 
 	return ret;
 }

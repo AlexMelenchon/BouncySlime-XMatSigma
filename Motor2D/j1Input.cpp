@@ -128,17 +128,17 @@ bool j1Input::PreUpdate()
 			break;
 
 		case SDL_TEXTINPUT:
-			if ((GetTextSize().x) > inputRect.w)
+			if (GetTextWidth() > inputRect_w)
 			{
 				LOG("Max console capacity exceeded!");
 			}
 			else
 			{
-				if (position == 0)
+				if (cursorPosition == 0)
 					textString += event.text.text;
 				else
 				{
-					textString.insert(event.text.text, position);
+					textString.insert(event.text.text, cursorPosition);
 				}
 
 			}
@@ -148,34 +148,39 @@ bool j1Input::PreUpdate()
 			if (writting)
 			{
 
-				SDL_Keycode hpña = event.key.keysym.sym;
-
 				if (event.key.keysym.sym == SDLK_BACKSPACE && textString.Length() > 0)
 				{
-					textString.Cut(textString.Length() - (position)-1, textString.Length() - position);
+					textString.Cut(textString.Length() - (cursorPosition)-1, textString.Length() - cursorPosition);
 				}
 
 				else if (event.key.keysym.sym == SDLK_DELETE && textString.Length() > 0)
 				{
-					textString.Cut(textString.Length() - (position), textString.Length() - position + 1);
-					if (position > 0)
-						position--;
+					textString.Cut(textString.Length() - (cursorPosition), textString.Length() - cursorPosition + 1);
+					if (cursorPosition > 0)
+						cursorPosition--;
 				}
 
-				if (event.key.keysym.sym == SDLK_LEFT && position < textString.Length())
+				if (event.key.keysym.sym == SDLK_LEFT && cursorPosition < textString.Length())
 				{
-					position++;
+					cursorPosition++;
 				}
 
-				else if (event.key.keysym.sym == SDLK_RIGHT && position > 0)
+				else if (event.key.keysym.sym == SDLK_RIGHT && cursorPosition > 0)
 				{
-					position--;
+					cursorPosition--;
 				}
 
 				if (event.key.keysym.sym == SDLK_BACKQUOTE)
 				{
-					App->input->WrittingState(false, this->inputRect);
+					App->input->WrittingState(false);
 					App->scene->console->SetToDisable(!App->scene->console->enabled);
+				}
+
+				if (event.key.keysym.sym == SDLK_RETURN)
+				{
+					App->scene->console->RecieveCommand(textString.GetString());
+					cursorPosition = 0;
+					textString.Clear();
 				}
 
 			}
@@ -238,7 +243,7 @@ int j1Input::GetTextInPos()
 {
 	int tmpW, tmpH = 0;
 
-	App->fonts->CalcSize(textString.GetStringInPos(position), tmpW, tmpH);
+	App->fonts->CalcSize(textString.GetStringInPos(cursorPosition), tmpW, tmpH);
 
 	if (tmpW < -TMP_STRING_SIZE) tmpW = 0;
 
@@ -246,13 +251,15 @@ int j1Input::GetTextInPos()
 
 }
 
-iPoint j1Input::GetTextSize()
+int j1Input::GetTextWidth()
 {
-	int tmpW, tmpH = 0;
+	int tmpW = 1;
+	int tmpH = 1;
 
+	if(textString.Length() > 2)
 	App->fonts->CalcSize(textString.GetString(), tmpW, tmpH);
 
-	return { tmpW , tmpH };
+	return tmpW;
 
 }
 
@@ -266,16 +273,16 @@ void j1Input::WrittingState(bool state, SDL_Rect rect)
 		{
 			SDL_StartTextInput();
 			SDL_SetTextInputRect(&rect);
-			inputRect = { rect.x, rect.y, rect.w, rect.h };
+			inputRect_w = rect.w;
 			ReSetKeys();
 			TTF_GlyphMetrics(App->fonts->default_font, 1, 0, &rect.w, 0, &rect.w, 0);
 		}
 		else
 		{
 			SDL_StopTextInput();
-			position = 0;
+			cursorPosition = 0;
 			textString.Clear();
-			inputRect = { 0,0,0,0 };
+			inputRect_w = 0;
 		}
 	}
 }

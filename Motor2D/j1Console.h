@@ -28,11 +28,15 @@ public:
 	//Retrives focus when the conditions are met
 	bool DeFocus();
 
+	//Called when the console is disabled
+	void Disable();
+
+	//----------CONSOLE RELATED-------------//
 	//Updates the text to show
 	void UpdateText(const char* newLogEntry);
 
-	//Called when the console is disabled
-	void Disable();
+	//Gets the text from the input
+	void RecieveCommand(const char* newCommand);
 
 private:
 	//--------INTERNAL MANAGEMENT---------//

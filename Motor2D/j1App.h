@@ -26,6 +26,7 @@ class j1LandEnemy;
 class j1FlyingEnemy;
 class j1UIManager;
 class j1MainMenu;
+class j1ConsoleM;
 
 class j1App
 {
@@ -62,6 +63,7 @@ public:
 	void LoadGame();
 	void SaveGame() const;
 	void GetSaveGames(p2List<p2SString>& list_to_fill) const;
+	void saveConfigFile();
 
 	//Gets the difference between the last update (frames)
 	//Used in the physics calculations of the game
@@ -111,6 +113,7 @@ public:
 	j1UIManager*		ui;
 	j1Fonts*			fonts;
 	j1MainMenu*			mainMenu;
+	j1ConsoleM*			console;
 
 	//--------CONFIG---------//
 	//Config File
@@ -167,6 +170,7 @@ private:
 	mutable bool		want_to_save;
 	bool				want_to_load;
 	p2SString			load_game;
+	p2SString			config_route;
 	mutable p2SString	save_game;
 
 };

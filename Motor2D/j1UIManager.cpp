@@ -11,6 +11,7 @@
 #include "j1UISlider.h"
 #include "j1Console.h"
 
+//Constructor
 j1UIManager::j1UIManager() : j1Module()
 {
 	name.create("gui");
@@ -59,6 +60,7 @@ bool j1UIManager::PreUpdate()
 	return ret;
 }
 
+// Called each loop iteration
 bool j1UIManager::Update(float dt)
 {
 	bool ret = true;
@@ -97,12 +99,12 @@ bool j1UIManager::PostUpdate()
 bool j1UIManager::CleanUp()
 {
 	LOG("Freeing GUI");
-
+	bool ret = true;
 	//Iterate though all the remaining entities cleanUp
 	DeleteAllElements();
 
-
-	bool ret = App->tex->UnLoad(atlas);
+	//Freeeing atlas
+	ret = App->tex->UnLoad(atlas);
 	atlas = nullptr;
 
 	return ret;
@@ -114,7 +116,7 @@ SDL_Texture* j1UIManager::GetAtlas() const
 	return atlas;
 }
 
-
+//Adds an UI element into the list
 j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint Position, bool interact, bool drag, bool enabled, SDL_Rect section, j1Module* listener, UIFunction func, drag_axis axis, char* text)
 {
 	j1UIelement* tmp = nullptr;
@@ -189,13 +191,13 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 	return tmp;
 }
 
-
+//Initializes UI elements
 void j1UIManager::InitElement(j1UIelement* element, pugi::xml_node config)
 {
 	element->Start();
 }
 
-
+//Gets an element from the UI list
 p2List_item<j1UIelement*>* j1UIManager::GetElementFromList(j1UIelement* toSearch)
 {
 	for (p2List_item<j1UIelement*>* iterator = UIList.start; iterator; iterator = iterator->next)
@@ -208,6 +210,7 @@ p2List_item<j1UIelement*>* j1UIManager::GetElementFromList(j1UIelement* toSearch
 	return nullptr;
 }
 
+//Changes the focus through elements pressing TAB
 void j1UIManager::ChangeFocus()
 {
 	if (focused.lookAt && focused.lookAt->next)
@@ -238,6 +241,7 @@ void j1UIManager::DeleteAllElements()
 	UIList.clear();
 }
 
+//Deletes an specific element
 void j1UIManager::DeleteElement(p2List_item<j1UIelement*>* element)
 {
 	p2List_item<j1UIelement*>* item = UIList.start;
@@ -259,6 +263,7 @@ void j1UIManager::DeleteElement(p2List_item<j1UIelement*>* element)
 	UIList.del(element);
 }
 
+//Deletes the elements with the "to_delete" flag
 void j1UIManager::ToDeleteElement()
 {
 	p2List_item<j1UIelement*>* item = UIList.start;
@@ -271,10 +276,5 @@ void j1UIManager::ToDeleteElement()
 		}
 
 		item = item->next;
-
 	}
-
-
 }
-
-

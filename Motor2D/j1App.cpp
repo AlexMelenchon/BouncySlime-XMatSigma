@@ -20,6 +20,7 @@
 #include "j1FlyingEnemy.h"
 #include "j1UIManager.h"
 #include "j1MainMenu.h"
+#include "j1ConsoleM.h"
 
 
 // Constructor
@@ -49,6 +50,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	pathfinding = new j1PathFinding();
 	ui = new j1UIManager();
 	fonts = new j1Fonts();
+	console = new j1ConsoleM();
 
 	
 	// Reverse order of CleanUp
@@ -65,6 +67,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(mainMenu);
 	AddModule(collision);
 	AddModule(fade);
+	AddModule(console);
 
 	// render last to swap buffer
 	AddModule(render);
@@ -102,6 +105,7 @@ bool j1App::Awake()
 
 	save_game = "save_game.xml";
 	load_game = "save_game.xml";
+	config_route = "config.xml";
 	bool ret = false;
 		
 	config = LoadConfig(config_file);
@@ -445,4 +449,9 @@ bool j1App::SavegameNow() const
 float j1App::GetDeltaTime() const
 {
 	return dt;
+}
+
+void j1App::saveConfigFile()
+{
+	config_file.save_file(config_route.GetString());
 }

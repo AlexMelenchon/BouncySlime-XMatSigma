@@ -58,7 +58,8 @@ enum class UIEventType
 
 	EVENT_ONCLICK,
 	EVENT_UPCLICK,
-	EVENT_DRAG
+	EVENT_DRAG,
+	EVENT_CONSOLE
 };
 
 enum class UIFunction
@@ -84,6 +85,14 @@ enum class UIFunction
 
 	//Link
 	FNC_GITHUB,
+
+	//Console
+	FNC_GODMODE,
+	FNC_QUIT,
+	FNC_LIST,
+	FNC_FPS,
+	FNC_LOADMAP,
+	FNC_LOG
 
 };
 
@@ -153,7 +162,7 @@ public:
 	}
 
 	// Manages the UI inputs for each module
-	virtual void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr) {};
+	virtual void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr, const char* bufferText = "") {};
 
 	//Distributes collisions
 	virtual void OnCollision(Collider*, Collider*) {}

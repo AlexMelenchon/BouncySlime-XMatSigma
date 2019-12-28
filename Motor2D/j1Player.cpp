@@ -403,13 +403,16 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 			if (!disabledCollision)
 			{
 				disabledCollision = true;
-				App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime * 4);
 				if (App->scene->CheckMaxScore())
 				{
 					App->audio->PlayFx(congratsFx.id);
+					App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime * 2);
 				}
 				else
+				{
 					App->audio->PlayFx(winFx.id);
+					App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime * 1.5f);
+				}
 			}
 			
 
@@ -432,8 +435,6 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 			App->scene->UIInGameUpdate();
 		}
 
-		//TODO: Destroy Coin
-		//TODO: PLAY FX SOUND;
 		App->audio->PlayFx(coinFx.id);
 		coll->to_delete = true;
 		break;
@@ -442,10 +443,12 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 		//PLAYER DIES, because he didn't collide from ABOVE
 		if (CheckCollisionDir(playerCol->rect, coll->rect) != DIRECTION_DOWN)
 		{
-			inputs.add(IN_DEATH);
 
 			if (!disabledCollision)
+			{
 				LoseALife();
+				inputs.add(IN_DEATH);
+			}
 
 			App->scene->UIInGameUpdate();
 		}
@@ -539,7 +542,6 @@ bool j1Player::CleanUp()
 
 	//Set the external pointer to nullptr
 	App->entities->player = nullptr;
-
 
 	//Delte the player's Collider
 	if (collider != nullptr)

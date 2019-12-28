@@ -7,6 +7,7 @@
 #include "p2Point.h"
 #include "p2Defs.h"
 #include "j1UIelement.h"
+#include "j1Command.h"
 
 class j1UIelement;
 
@@ -95,8 +96,7 @@ public:
 	//Get the atlas texture
 	SDL_Texture* GetAtlas() const;
 
-
-	//------------Variables--------------------//
+	//-----------INNER LOGIC-----------//
 	bool debug = false;
 	focus focused;
 

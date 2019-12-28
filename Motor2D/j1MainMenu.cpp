@@ -108,7 +108,7 @@ bool j1MainMenu::CleanUp()
 }
 
 //Manages the UI inputs of this module
-void j1MainMenu::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer)
+void j1MainMenu::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer, const char* buffer)
 {
 	switch (type)
 	{

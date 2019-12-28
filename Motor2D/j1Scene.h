@@ -21,10 +21,10 @@ public:
 	bool Awake(pugi::xml_node&);
 
 	// Called before the first frame
-	 bool Start();
+	bool Start();
 
-	 // Called to reset the scene
-	 bool Reset(const char* map);
+	// Called to reset the scene
+	bool Reset(const char* map);
 
 	// Called before all Updates
 	bool PreUpdate();
@@ -59,13 +59,13 @@ public:
 	//--------PATHFINDING---------//
 	//Sets the debug pathfinding w/ the mouse
 	void setDebugPathfinding();
-	
+
 	//Blits the debug pathfinding, if exists
 	void blitDebugPath() const;
 
 	//--------UI---------//
 	//Manages the UI inputs of this module
-	void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr);
+	void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr,  const char* bufferText = "");
 
 	void UIInGameUpdate();
 
@@ -94,6 +94,9 @@ public:
 	//Used to keep the console in check
 	j1Console* console = nullptr;
 
+	//The list of commands of the console
+	p2List<p2SString*> CommandList;
+
 
 private:
 	//--------CAMERA---------//
@@ -113,19 +116,22 @@ private:
 	//Array to store the debug path made w/ the mouse
 	p2DynArray<iPoint> debugPath;
 
-
+	//Elements
 	j1UIelement* pause = nullptr;
 	j1UIelement* ui_lifes = nullptr;
 	j1UIelement* ui_coins = nullptr;
 	j1UIelement* ui_score = nullptr;
 	j1UIelement* ui_time = nullptr;
 
+	//Text to blit into screen
 	char lifes_text[2];
 	char coins_text[2];
 	char score_text[5];
 	char time_text[10];
 
-
+	//--------INTERNAL CONTROL---------//
+	//Node for saving the MaxScore
+	pugi::xml_node		sceneConfig;
 
 
 	//--------UI LOGIC---------//
@@ -145,9 +151,6 @@ private:
 
 	//The default lifes given at the start
 	uint startingLifes = 0u;
-
-	
-
 
 };
 

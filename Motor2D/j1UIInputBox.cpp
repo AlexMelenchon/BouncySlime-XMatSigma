@@ -55,7 +55,7 @@ bool j1UIInputBox::PostUpdate(bool debug)
 		}
 	}
 	else
-		App->input->WrittingState(false, boxImage->rect);
+		App->input->WrittingState(false);
 	
 
 	return true;
