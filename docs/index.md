@@ -20,20 +20,14 @@ You'll have to prove yourself parkouring through the world and get your reward t
   </tr>
 </table>
 
-
-<p align="center"> 
- <img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/mushroom.gif?raw=true"> <strong>Check it out!</strong> <img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/mushroom.gif?raw=true">
-</p>
-
-
  
 # What are you waiting for to play the game?
 
 
 
 <p align="center"> 
- 	<video src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/trailer.mp4?raw=true" width="640" height="480" controls preload></video>
-	<a href="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/releases/download/2.0/BouncySlime.zip"><strong>DOWNLOAD</strong></a>
+ 	<video src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/trailer.mp4?raw=true" width="640" height="360" controls preload></video>
+	<img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/mushroom.gif?raw=true"> <a href="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/releases/download/2.0/BouncySlime.zip"><strong>DOWNLOAD</strong></a> <img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/mushroom.gif?raw=true"> 
 </p>
 
 # Instructions
