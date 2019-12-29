@@ -111,7 +111,7 @@ _innovations are features that weren't needed as a requirement for our assigment
 
  Loop musics by: <a href="https://soundcloud.com/pascalbelisle">Pascal Belisle</a> 
 
- Kahoot music by: a href="https://kahoot.com/library/kahoot-sheet-music/">Alf Inge Wang</a>  
+ Kahoot music by: <a href="https://kahoot.com/library/kahoot-sheet-music/">Alf Inge Wang</a>  
  
  Sound effects by: Nintendo, ripped by <a href="https://www.sounds-resource.com/wii/ssbb/">Sound-Resource</a>  
  
