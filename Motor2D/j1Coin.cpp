@@ -9,7 +9,6 @@
 j1Coin::j1Coin() : j1Entity()
 {
 	this->type = entityType::COIN;
-
 }
 
 //Destructor
@@ -20,7 +19,7 @@ j1Coin ::~j1Coin()
 // Called before render is available
 bool j1Coin::Awake(pugi::xml_node& coin_node)
 {
-	//Create the player's collider
+	//Create the coin's collider
 	scalesize = coin_node.child("collision").child("scalesize").text().as_uint();
 
 	SDL_Rect particleRect = { 0,0,0,0 };
@@ -56,6 +55,7 @@ bool j1Coin::Update(float dt)
 {
 	bool ret = true;
 
+	//Calculate the coin collider posttion
 	CalculateCollider(this->fpPosition);
 
 	return ret;

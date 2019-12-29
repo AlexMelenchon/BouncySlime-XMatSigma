@@ -24,11 +24,13 @@ j1Command::~j1Command()
 	callback = nullptr;
 }
 
+// Get the actual Command String
 p2SString j1Command::GetCommandText()
 {
 	return commandText;
 }
 
+// Get the command description
 p2SString j1Command::GetDescription()
 {
 	return Description;

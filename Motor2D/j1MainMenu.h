@@ -3,8 +3,6 @@
 
 #include "j1Module.h"
 
-
-
 class j1MainMenu : public j1Module
 {
 public:
@@ -54,8 +52,12 @@ private:
 	//"Ghost" UI used for position reference to the sub-menus
 	j1UIelement* parent = nullptr;
 
+	//--------AUDIO---------//
+
+	//Saves the main menu Music Path
 	p2SString menuMusic;
 	
+	//Sfx for clicking
 	FX click;
 
 };

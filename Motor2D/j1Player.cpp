@@ -418,6 +418,7 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 			
 
 		}
+		//If the map to go is not the first one, we go on to the next
 		else if (!disabledCollision)
 		{
 			disabledCollision = true;
@@ -436,7 +437,6 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 		//PLAYER DIES, because he didn't collide from ABOVE
 		if (CheckCollisionDir(playerCol->rect, coll->rect) != DIRECTION_DOWN)
 		{
-
 			if (!disabledCollision)
 			{
 				App->scene->LoseALife();

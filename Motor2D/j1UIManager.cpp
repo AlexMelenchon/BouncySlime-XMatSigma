@@ -9,7 +9,7 @@
 #include "j1UIImage.h"
 #include "j1UIInputBox.h"
 #include "j1UISlider.h"
-#include "j1Console.h"
+#include "j1UIConsole.h"
 
 //Constructor
 j1UIManager::j1UIManager() : j1Module()
@@ -43,6 +43,8 @@ bool j1UIManager::Start()
 // Update all guis
 bool j1UIManager::PreUpdate()
 {
+	BROFILER_CATEGORY("UI Pre-Update", Profiler::Color::DarkGray)
+
 	bool ret = true;
 
 	p2List_item<j1UIelement*>* tmp = UIList.start;
@@ -63,6 +65,8 @@ bool j1UIManager::PreUpdate()
 // Called each loop iteration
 bool j1UIManager::Update(float dt)
 {
+	BROFILER_CATEGORY("UI Update", Profiler::Color::DarkGray)
+
 	bool ret = true;
 
 	p2List_item<j1UIelement*>* tmp = UIList.start;
@@ -82,6 +86,8 @@ bool j1UIManager::Update(float dt)
 // Called after all Updates
 bool j1UIManager::PostUpdate()
 {
+	BROFILER_CATEGORY("UI Post-Update", Profiler::Color::DarkGray)
+
 	bool ret = true;
 
 	p2List_item<j1UIelement*>* tmp = UIList.start;
@@ -158,7 +164,7 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 		break;
 
 	case ui_type::UI_CONSOLE:
-		tmp = new j1Console(text, Position);
+		tmp = new j1UIConsole(text, Position);
 		break;
 	}
 

@@ -49,7 +49,7 @@ bool j1UIInputBox::PostUpdate(bool debug)
 		//We draw the cursor in it's position w/ a blink
 		int cursorPosition = App->input->GetTextInPos();
 
-
+		//The cursor beep-----
 		if (cursorTimer > 0.75f)
 		{
 			App->render->DrawQuad({ boxText->Position.x + cursorPosition, boxText->Position.y,4, boxText->rect.h }, 200, 200, 200, 255, true, false);

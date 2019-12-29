@@ -1,5 +1,5 @@
 #include "p2Log.h"
-#include "j1Console.h"
+#include "j1UIConsole.h"
 #include "j1App.h"
 #include "j1Scene.h"
 

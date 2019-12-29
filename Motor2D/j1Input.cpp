@@ -40,6 +40,7 @@ bool j1Input::Awake(pugi::xml_node& config)
 		ret = false;
 	}
 
+	//Create the console command to quit
 	App->console->CreateCommand("quit", this, 1, 1, UIFunction::FNC_QUIT);
 
 	return ret;
@@ -65,6 +66,7 @@ bool j1Input::PreUpdate()
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
+	//If we are not writting, we disable the "gameplay" inputs & we just focus on the writting events
 	if (!writting)
 	{
 		for (int i = 0; i < MAX_KEYS; ++i)
@@ -135,12 +137,14 @@ bool j1Input::PreUpdate()
 
 		case SDL_TEXTINPUT:
 
+			//If the square text is full, we don't write anyting & we notice the puser
 			if (GetTextWidth() >= inputRect_w)
 			{
 				LOG("Max console capacity exceeded!");
 			}
 			else
 			{
+				//We write in the cursor position
 				if (cursorPosition == 0)
 					textString += event.text.text;
 				else
@@ -152,13 +156,16 @@ bool j1Input::PreUpdate()
 			break;
 
 		case SDL_KEYDOWN:
+			//If we are not writting, we are going to ignore this, since we don't use them for gameplay
 			if (writting)
 			{
+				//Deletes the left letter of the cursor when the backspace is pressed
 				if (event.key.keysym.sym == SDLK_BACKSPACE && textString.Length() > 0)
 				{
 					textString.Cut(textString.Length() - (cursorPosition)-1, textString.Length() - cursorPosition);
 				}
 
+				//Deletes the right letter of the cursor when supr is pressed
 				else if (event.key.keysym.sym == SDLK_DELETE && textString.Length() > 0)
 				{
 					textString.Cut(textString.Length() - (cursorPosition), textString.Length() - cursorPosition + 1);
@@ -166,22 +173,26 @@ bool j1Input::PreUpdate()
 						cursorPosition--;
 				}
 
+				//Moves though the written string to the left
 				if (event.key.keysym.sym == SDLK_LEFT && cursorPosition < textString.Length())
 				{
 					cursorPosition++;
 				}
 
+				//Moves though the written string to the right
 				else if (event.key.keysym.sym == SDLK_RIGHT && cursorPosition > 0)
 				{
 					cursorPosition--;
 				}
 
+				//Closes the console
 				if (event.key.keysym.sym == SDLK_BACKQUOTE)
 				{
 					App->input->WrittingState(false);
 					App->scene->console->SetToDisable(!App->scene->console->enabled);
 				}
 
+				//Enters a command into the console
 				if (event.key.keysym.sym == SDLK_RETURN)
 				{
 					App->scene->console->RecieveCommand(textString.GetString());
@@ -240,11 +251,13 @@ void j1Input::ReSetKeys()
 	}
 }
 
+//Returns the buffer string
 const char* j1Input::GetText()
 {
 	return textString.GetString();
 }
 
+//Returns the size of the buffer string in a certain position
 int j1Input::GetTextInPos()
 {
 	int tmpW, tmpH = 0;
@@ -257,6 +270,7 @@ int j1Input::GetTextInPos()
 
 }
 
+//Returns the size of the text font, for multi-line purposes
 int j1Input::GetTextWidth()
 {
 	int tmpW = 1;
@@ -268,6 +282,7 @@ int j1Input::GetTextWidth()
 	return tmpW;
 }
 
+//Changes the input mode from wirtting to playing
 void j1Input::WrittingState(bool state, SDL_Rect rect)
 {
 	if (writting != state)
@@ -292,6 +307,7 @@ void j1Input::WrittingState(bool state, SDL_Rect rect)
 	}
 }
 
+//Custom Disable (cleanup the module & it's updates are not done till is activated again)
 void j1Input::Disable()
 {
 	if (active == true)
@@ -301,6 +317,7 @@ void j1Input::Disable()
 	}
 }
 
+//Custom enable (calls the module Start() & make it active again)
 void j1Input::Enable()
 {
 	if (active == false)
@@ -331,7 +348,9 @@ void j1Input::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer,
 		case UIFunction::FNC_QUIT:
 			Quit(true);
 			LOG("Quitting...");
-			LOG("Thank you for playing Bouncy Slime! Please check out our GitHub Project for more Info :)");
+			LOG("Thank you for playing Bouncy Slime!");
+			LOG("Please check out our GitHub Project for more Info :)");
+
 			break;
 		}
 	}

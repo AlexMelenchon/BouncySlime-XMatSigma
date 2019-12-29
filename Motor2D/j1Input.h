@@ -57,8 +57,10 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	//Custom enable & disable
+	//Custom Disable (cleanup the module & it's updates are not done till is activated again)
 	void Disable();
+
+	//Custom enable (calls the module Start() & make it active again)
 	void Enable();
 
 	//--------KEY CONTROL---------//

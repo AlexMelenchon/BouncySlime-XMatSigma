@@ -119,7 +119,7 @@ public:
 	//Returns x,y coordinates in the Map
 	iPoint WorldToMap(int x, int y) const;
 
-	//Returns true if the path is a map on the list
+	//Checks if the a path exists in the maplist, if it does, it return the map name
 	const char* MapExist(const char* mapPath) const;
 
 private:
