@@ -40,7 +40,7 @@ bool j1Scene::Awake(pugi::xml_node& scene_config)
 	//Var load------------
 	mapFadeTime = scene_config.child("mapFadeTime").text().as_float();
 	startingLifes = scene_config.child("startingLifes").text().as_uint(3);
-	maxScore = scene_config.child("maxScore").attribute("value").as_uint(4500);
+	maxScore = scene_config.child("maxScore").attribute("value").as_uint();
 	click.path = scene_config.child("click").attribute("file").as_string();
 
 	//Command creation--------
@@ -82,15 +82,18 @@ bool j1Scene::Start()
 	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 244,10 }, false, false, true, { 1257,605,65,64 });
 	ui_coins = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 314,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00");
 
-	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 394,10 }, false, false, true, { 144,922,65,64 });
+	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 394,10 }, false, false, true, { 144,922,65,64 });	
 	ui_score = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 464,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00000");
 
-	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 594,10 }, false, false, true, { 737,478,64,64 });
-	ui_time = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 664,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00000");
+	sprintf_s(maxScore_text, 10, "%05d", maxScore);
+	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 574,10 }, false, false, true, { 738,702,65,64 });
+	ui_maxScore = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 644,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, maxScore_text);
+
+	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 744,10 }, false, false, true, { 737,478,64,64 });
+	ui_time = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 814,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00000");
 
 	//Console Init------
 	App->ui->AddElement(ui_type::UI_CONSOLE, nullptr, { 0,0 }, true, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
-
 
 
 	//Gameplay ini--------
@@ -343,7 +346,7 @@ bool j1Scene::Load(pugi::xml_node& load)
 
 	//Load the gameplay related vars-------------
 	lifes = load.child("current_lifes").attribute("value").as_uint();
-	score = load.child("current_score").attribute("value").as_uint();
+	score = load.child("current_score").attribute("value").as_uint();	
 	coins = load.child("current_coins").attribute("value").as_uint();
 	time.StartFrom(load.child("current_time").attribute("value").as_int());
 
@@ -700,9 +703,15 @@ bool j1Scene::CheckMaxScore()
 		max_score.attribute("value").set_value(score);
 		maxScore = score;
 
+		//UI update------------------------------------
+		App->tex->UnLoad(ui_maxScore->texture);
+		ui_maxScore->texture = nullptr;
+		sprintf_s(maxScore_text, 10, "%05d", maxScore);
+		ui_maxScore->texture = App->fonts->Print(maxScore_text);
+		App->fonts->CalcSize(maxScore_text, ui_maxScore->rect.w, ui_maxScore->rect.h);
+
 		App->saveConfigFile();
 	}
-
 
 	return ret;
 }
@@ -737,10 +746,9 @@ void j1Scene::CoinUp()
 	if (coins % 10 == 0)
 	{
 		lifes++;
-		//TODO: LIFE UP SFX
+		App->audio->PlayFx(App->entities->player->lifeFx.id);
 		App->scene->UIInGameUpdate();
 	}
 
 	App->audio->PlayFx(App->entities->player->coinFx.id);
-
 }

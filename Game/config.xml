@@ -21,7 +21,7 @@
 	<scene>
 		<mapFadeTime>1.f</mapFadeTime>
 		<startingLifes>1</startingLifes>
-		<maxScore value="3500" />
+		<maxScore value="16080" />
 		<click file="audio/fx/click.wav" />
 	</scene>
 	<main_menu>
@@ -34,8 +34,8 @@
 	<map>
 		<folder>maps/</folder>
 		<level name="intro.tmx" />
-    <level name="map1.tmx" />
-    <level name="map2.tmx" />
+		<level name="map1.tmx" />
+		<level name="map2.tmx" />
 		<intro name="menu.tmx" />
 	</map>
 	<audio>

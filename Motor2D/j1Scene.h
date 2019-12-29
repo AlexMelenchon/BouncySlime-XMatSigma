@@ -128,12 +128,14 @@ private:
 	j1UIelement* ui_lifes = nullptr;
 	j1UIelement* ui_coins = nullptr;
 	j1UIelement* ui_score = nullptr;
+	j1UIelement* ui_maxScore = nullptr;
 	j1UIelement* ui_time = nullptr;
 
 	//Text to blit into screen
 	char lifes_text[2];
 	char coins_text[2];
 	char score_text[5];
+	char maxScore_text[5];
 	char time_text[10];
 
 	//--------INTERNAL CONTROL---------//
