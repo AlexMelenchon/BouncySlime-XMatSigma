@@ -116,7 +116,7 @@ David Carrasquet Iniesta:
  Loop musics by: Pascal Belisle
  https://soundcloud.com/pascalbelisle
  
- Main Menu Loop by: Alf Inge Wang
+ Main Menu Loop by: Kahoot
  https://kahoot.com/library/kahoot-sheet-music/
  
  Sound effects by: Nintendo, ripped by Sound-Resource
@@ -128,6 +128,15 @@ David Carrasquet Iniesta:
  Shuriken fx:
  https://freesound.org/people/marchon11/sounds/493224/
  https://freesound.org/people/DWOBoyle/sounds/144266/
+
+ Coin fx: 
+ https://freesound.org/people/ProjectsU012/sounds/341695/
+
+ Click fx: 
+ https://freesound.org/people/kwahmah_02/sounds/256116/
+
+ Win fx: 
+ https://freesound.org/people/LittleRobotSoundFactory/
 
 ## License:
 GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007

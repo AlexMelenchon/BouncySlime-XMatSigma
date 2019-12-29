@@ -149,7 +149,7 @@ void j1MainMenu::OnGui(UIEventType type, UIFunction func, j1UIelement* userPoint
 
 		case UIFunction::FNC_GITHUB:
 		{
-			ShellExecuteA(NULL, "open", "https://github.com/AlexMelenchon/BouncySlime-XMatSigma", NULL, NULL, SW_SHOWNORMAL);
+			ShellExecuteA(NULL, "open", "https://alexmelenchon.github.io/BouncySlime-XMatSigma/", NULL, NULL, SW_SHOWNORMAL);
 		}
 			break;
 		case UIFunction::FNC_EXIT:
