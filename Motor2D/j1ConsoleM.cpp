@@ -77,15 +77,15 @@ bool j1ConsoleM::ManageCommand(const char* command)
 			commandBuffer = command;
 
 			//We check if it has the number adequate of arguments
-				int wordNum = commandBuffer.Find(" ") + 1;
-				if (wordNum < commandFound->min_arg || wordNum > commandFound->max_arg)
-					break;
+			int wordNum = commandBuffer.Find(" ") + 1;
+			if (wordNum < commandFound->min_arg || wordNum > commandFound->max_arg)
+				break;
 
 			//If all the checks were positive, we execute the command
 			switch (commandFound->function)
 			{
 			case UIFunction::FNC_LOG:
-				commandBuffer.Cut(0, commandBuffer.FindFirst(" ")+1);
+				commandBuffer.Cut(0, commandBuffer.FindFirst(" ") + 1);
 				commandFound->callback->OnGui(UIEventType::EVENT_CONSOLE, commandFound->function, nullptr, commandBuffer.GetString());
 				break;
 			case UIFunction::FNC_GODMODE:
@@ -101,10 +101,9 @@ bool j1ConsoleM::ManageCommand(const char* command)
 				break;
 
 			case UIFunction::FNC_LOADMAP:
-				commandBuffer.Cut(0, commandBuffer.FindFirst(" ")+1);
-				commandFound->callback->OnGui(UIEventType::EVENT_CONSOLE, commandFound->function,nullptr, commandBuffer.GetString());
+				commandBuffer.Cut(0, commandBuffer.FindFirst(" ") + 1);
+				commandFound->callback->OnGui(UIEventType::EVENT_CONSOLE, commandFound->function, nullptr, commandBuffer.GetString());
 				break;
-
 
 			case UIFunction::FNC_FPS:
 				commandBuffer.Cut(0, commandBuffer.FindFirst(" ") + 1);
@@ -145,7 +144,7 @@ void j1ConsoleM::OnGui(UIEventType type, UIFunction func, j1UIelement* userPoint
 				CommandNum++;
 			}
 		}
-			break;
+		break;
 		}
 	}
 }
