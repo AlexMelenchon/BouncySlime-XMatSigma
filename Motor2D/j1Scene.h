@@ -74,9 +74,16 @@ public:
 	void MenusLoad(UIFunction func);
 
 
+
 	//--------GAMEPLAY RELATED---------//
 	//Checks if the maximum score has been surpassed
 	bool CheckMaxScore();
+
+	//Called when player loses a life
+	void LoseALife();
+
+	//Called when player gets a coin
+	void CoinUp();
 
 	//The amount of lifes the player has remaining
 	uint lifes = 0u;

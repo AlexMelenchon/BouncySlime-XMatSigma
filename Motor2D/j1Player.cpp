@@ -389,7 +389,7 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 
 		if (!disabledCollision)
 		{
-			LoseALife();
+			App->scene->LoseALife();
 			App->scene->UIInGameUpdate();
 		}
 
@@ -427,15 +427,7 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 		break;
 	}
 	case(COLLIDER_COIN):
-		App->scene->score += 20;
-		App->scene->coins++;
-		if (App->scene->coins % 10 == 0)
-		{
-			App->scene->lifes++;
-			App->scene->UIInGameUpdate();
-		}
-
-		App->audio->PlayFx(coinFx.id);
+		App->scene->CoinUp();
 		coll->to_delete = true;
 		break;
 	case(COLLIDER_ENEMY):
@@ -446,7 +438,7 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 
 			if (!disabledCollision)
 			{
-				LoseALife();
+				App->scene->LoseALife();
 				inputs.add(IN_DEATH);
 			}
 
@@ -872,17 +864,3 @@ void j1Player::Jump(float forcey, int fxId)
 	inputs.add(IN_JUMP); //Update the state
 }
 
-void j1Player::LoseALife()
-{
-	if (App->scene->lifes > 0)
-	{
-		App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), deathFx.id, playerFadeTime);
-		App->scene->lifes -= 1;
-		App->scene->UIInGameUpdate();
-	}
-	else
-	{
-		App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime);		
-		App->audio->PlayFx(loseFx.id);
-	}
-}

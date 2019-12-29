@@ -100,8 +100,7 @@ bool j1Input::PreUpdate()
 		switch (event.type)
 		{
 		case SDL_QUIT:
-			windowEvents[WE_QUIT] = true;
-			LOG("User Exit");
+			Quit(true);
 			break;
 
 		case SDL_WINDOWEVENT:
@@ -135,7 +134,8 @@ bool j1Input::PreUpdate()
 			break;
 
 		case SDL_TEXTINPUT:
-			if (GetTextWidth() > inputRect_w)
+
+			if (GetTextWidth() >= inputRect_w)
 			{
 				LOG("Max console capacity exceeded!");
 			}
@@ -154,7 +154,6 @@ bool j1Input::PreUpdate()
 		case SDL_KEYDOWN:
 			if (writting)
 			{
-
 				if (event.key.keysym.sym == SDLK_BACKSPACE && textString.Length() > 0)
 				{
 					textString.Cut(textString.Length() - (cursorPosition)-1, textString.Length() - cursorPosition);
@@ -279,7 +278,7 @@ void j1Input::WrittingState(bool state, SDL_Rect rect)
 		{
 			SDL_StartTextInput();
 			SDL_SetTextInputRect(&rect);
-			inputRect_w = rect.w;
+			inputRect_w = rect.w * 0.99f;
 			ReSetKeys();
 			TTF_GlyphMetrics(App->fonts->default_font, 1, 0, &rect.w, 0, &rect.w, 0);
 		}

@@ -2,6 +2,7 @@
 #include "j1Collision.h"
 #include "j1EntityManager.h"
 #include "j1Audio.h"
+#include "j1Scene.h"
 
 
 //Constructor
@@ -92,7 +93,7 @@ void j1Coin::OnCollision(Collider* coinCol, Collider* coll)
 
 	case(COLLIDER_GOD):
 		if(!coinCol->to_delete)
-			App->audio->PlayFx(App->entities->player->coinFx.id);
+			App->scene->CoinUp();
 
 		coinCol->to_delete = true;
 		break;

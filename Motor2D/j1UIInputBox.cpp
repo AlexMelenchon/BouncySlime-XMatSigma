@@ -42,6 +42,7 @@ bool j1UIInputBox::PostUpdate(bool debug)
 	{
 		if(App->ui->focused.lookAt->data != this)
 		App->ui->focused.lookAt = App->ui->GetElementFromList(this);
+
 		//We say to the input that we're writting
 		App->input->WrittingState(true, boxImage->rect);
 

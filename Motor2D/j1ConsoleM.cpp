@@ -79,7 +79,7 @@ bool j1ConsoleM::ManageCommand(const char* command)
 			switch (commandFound->function)
 			{
 			case UIFunction::FNC_LOG:
-				commandBuffer.Cut(0, commandBuffer.FindFirst(" "));
+				commandBuffer.Cut(0, commandBuffer.FindFirst(" ")+1);
 				commandFound->callback->OnGui(UIEventType::EVENT_CONSOLE, commandFound->function, nullptr, commandBuffer.GetString());
 				break;
 			case UIFunction::FNC_GODMODE:

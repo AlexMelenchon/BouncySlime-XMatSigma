@@ -134,10 +134,6 @@ public:
 	FX coinFx;
 	FX lifeFx;
 
-	//--------GAMEPLAY RELATED---------//
-	//Called when player loses a life
-	void LoseALife();
-
 private:
 
 	//--------MOVEMENT ---------//

@@ -211,7 +211,7 @@ bool j1Scene::Update(float dt)
 
 	//Minus 1 life
 	if (App->input->GetKey(SDL_SCANCODE_KP_2) == KEY_DOWN)
-		App->entities->player->LoseALife();
+		LoseALife();
 
 	//Adds Score
 	if (App->input->GetKey(SDL_SCANCODE_KP_4) == KEY_DOWN)
@@ -230,7 +230,7 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_KP_7) == KEY_DOWN)
 	{
 		if (coins < 99)
-			coins += 1;
+			CoinUp();
 	}
 
 	//Retrieves Coins
@@ -590,7 +590,9 @@ void j1Scene::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer,
 
 		case UIFunction::FNC_FPS:
 		{
-			uint newCap = atoi(bufferText);
+			int newCap = 0;
+
+			sscanf_s(bufferText, "%d", &newCap);
 			
 			//Check Limits
 			if (newCap > 120)newCap = 120;
@@ -703,4 +705,42 @@ bool j1Scene::CheckMaxScore()
 
 
 	return ret;
+}
+
+//Called when player loses a life
+void j1Scene::LoseALife()
+{
+	if (!App->entities->player)
+		return;
+
+	if (lifes > 0)
+	{
+		App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), App->entities->player->deathFx.id, mapFadeTime);
+		lifes -= 1;
+		UIInGameUpdate();
+	}
+	else
+	{
+		App->fade->FadeToBlackMod(App->mainMenu, this, mapFadeTime);
+		App->audio->PlayFx(App->entities->player->loseFx.id);
+	}
+}
+
+//Called when player gets a coin
+void j1Scene::CoinUp()
+{
+	if (!App->entities->player)
+		return;
+
+	score += 20;
+	coins++;
+	if (coins % 10 == 0)
+	{
+		lifes++;
+		//TODO: LIFE UP SFX
+		App->scene->UIInGameUpdate();
+	}
+
+	App->audio->PlayFx(App->entities->player->coinFx.id);
+
 }
