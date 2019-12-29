@@ -7,6 +7,9 @@ This project is made by sophomore students from CITM.
 ## Link to our Github Project:
 https://github.com/AlexMelenchon/BouncySlime-XMatSigma
 
+## Link to our Website:
+https://alexmelenchon.github.io/BouncySlime-XMatSigma/
+
 
 ## Game Keys:
 
