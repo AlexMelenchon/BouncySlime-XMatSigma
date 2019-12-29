@@ -125,6 +125,7 @@ bool j1Player::Start()
 	congratsFx.id = App->audio->LoadFx(congratsFx.path.GetString());
 	loseFx.id = App->audio->LoadFx(loseFx.path.GetString());
 	coinFx.id = App->audio->LoadFx(coinFx.path.GetString());
+	lifeFx.id = App->audio->LoadFx(lifeFx.path.GetString());
 
 
 	return true;
