@@ -621,6 +621,7 @@ const char* j1Map::GetNextMap()
 
 };
 
+//Checks if the a path exists in the maplist, if it does, it return the map name
 const char* j1Map::MapExist(const char* mapPath) const
 {
 	p2List_item<MapInfo*>* iterator = data.maplist.start;

@@ -67,13 +67,14 @@ public:
 	//Manages the UI inputs of this module
 	void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr,  const char* bufferText = "");
 
+	//Updates the UI textures shown in screen
 	void UIInGameUpdate();
 
+	//Updates the time shown in screen
 	void UITimeUpdate();
 
+	//Opens/closes the pause menu & the audio change menu inside it
 	void MenusLoad(UIFunction func);
-
-
 
 	//--------GAMEPLAY RELATED---------//
 	//Checks if the maximum score has been surpassed
@@ -148,11 +149,11 @@ private:
 	//"Ghost" parent to control the other elements on screen
 	j1UIelement* parent = nullptr;
 
-	//Audio
+	//--------AUDIO---------//
+	//Sfx for clicking
 	FX click;
 
 	//--------GAMEPLAY RELATED---------//
-
 	//The current run time of the run
 	j1Timer time;
 

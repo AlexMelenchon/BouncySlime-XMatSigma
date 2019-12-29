@@ -43,6 +43,8 @@ bool j1UIManager::Start()
 // Update all guis
 bool j1UIManager::PreUpdate()
 {
+	BROFILER_CATEGORY("UI Pre-Update", Profiler::Color::DarkGray)
+
 	bool ret = true;
 
 	p2List_item<j1UIelement*>* tmp = UIList.start;
@@ -63,6 +65,8 @@ bool j1UIManager::PreUpdate()
 // Called each loop iteration
 bool j1UIManager::Update(float dt)
 {
+	BROFILER_CATEGORY("UI Update", Profiler::Color::DarkGray)
+
 	bool ret = true;
 
 	p2List_item<j1UIelement*>* tmp = UIList.start;
@@ -82,6 +86,8 @@ bool j1UIManager::Update(float dt)
 // Called after all Updates
 bool j1UIManager::PostUpdate()
 {
+	BROFILER_CATEGORY("UI Post-Update", Profiler::Color::DarkGray)
+
 	bool ret = true;
 
 	p2List_item<j1UIelement*>* tmp = UIList.start;

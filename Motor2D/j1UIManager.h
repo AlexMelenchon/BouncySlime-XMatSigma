@@ -97,7 +97,10 @@ public:
 	SDL_Texture* GetAtlas() const;
 
 	//-----------INNER LOGIC-----------//
+	//Activates debug draw mode
 	bool debug = false;
+
+	//The focus to an element  & it's state (ST_FREE if it's done by the mouse / ST_LOCKED if it's done by pressing TAB)
 	focus focused;
 
 private:

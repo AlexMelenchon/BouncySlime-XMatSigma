@@ -15,16 +15,28 @@ public:
 	//Destructor
 	~j1Command();
 
-	// Get text from String
+	// Get the actual Command String
 	p2SString GetCommandText();
+
+	// Get the command description (used by the command list)
 	p2SString GetDescription();
 
+	//--------COMMAND STRUCTURE---------//
+
+	//Pointer to the module that will recieve the command
 	j1Module* callback = nullptr;
+
+	//Min & Max arguments that a command admits
 	uint min_arg = 0u;
 	uint max_arg = 0u;
+
+	//The function that the command does
 	UIFunction function = UIFunction::FNC_NONE;
 
 private:
+	//--------COMMAND STRUCTURE---------//
+	
+	//String storage of the command description + it's actual command
 	p2SString commandText;
 	p2SString Description;
 

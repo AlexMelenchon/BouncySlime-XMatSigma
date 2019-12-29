@@ -10,9 +10,10 @@ j1ConsoleM::j1ConsoleM() : j1Module()
 j1ConsoleM::~j1ConsoleM()
 {}
 
+// Called before render is available
 bool j1ConsoleM::Awake(pugi::xml_node& consoleConfig)
 {
-	CreateCommand("log mystring", this, 2, 100, UIFunction::FNC_LOG);
+	CreateCommand("log mystring (between 1-100 words)", this, 2, 100, UIFunction::FNC_LOG);
 
 	CreateCommand("list", this, 1, 1, UIFunction::FNC_LIST);
 
@@ -40,6 +41,8 @@ j1Command* j1ConsoleM::CreateCommand(const char* command, j1Module* callback, ui
 bool j1ConsoleM::CleanUp()
 {
 	bool ret = true;
+
+	//Iterate through all commands and delete them
 	p2List_item<j1Command*>* item = commandList.start;
 
 	while (item != NULL)
@@ -53,6 +56,7 @@ bool j1ConsoleM::CleanUp()
 	return ret;
 }
 
+// Manages Console Input
 bool j1ConsoleM::ManageCommand(const char* command)
 {
 	bool ret = false;
