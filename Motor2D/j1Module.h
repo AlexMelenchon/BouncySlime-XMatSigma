@@ -12,18 +12,27 @@
 #include "p2Point.h"
 #include "SDL/include/SDL_render.h"
 #include "SDL/include/SDL_rect.h"
+#include "SDL/include/SDL.h"
 #include "p2List.h"
 #include "p2Log.h"
 #include"p2animation.h"
 #include "p2DynArray.h"
 #include "Brofiler/include/Brofiler.h"
+#include "j1Timer.h"
+
 
 class j1App;
 
 struct SDL_Texture; // Struct for texture, to be able to call it from any module
 struct SDL_Rect; // Struct for rect, to be able to call it from any module
 class Animation; //Class for animations
+class j1UIelement;
 
+struct FX
+{
+	int id = 0;
+	p2SString path;
+};
 
 struct Collider;
 enum COLLIDER_TYPE
@@ -38,8 +47,53 @@ enum COLLIDER_TYPE
 	COLLIDER_GOD,
 	COLLIDER_ENEMY,
 	COLLIDER_SHURIKEN,
+	COLLIDER_COIN,
 
 	COLLIDER_MAX
+};
+
+enum class UIEventType
+{
+	EVENT_UNKOWNN = -1,
+
+	EVENT_ONCLICK,
+	EVENT_UPCLICK,
+	EVENT_DRAG,
+	EVENT_CONSOLE
+};
+
+enum class UIFunction
+{
+	FNC_NONE = -1,
+
+	//Main Menu
+	FNC_STARTGAME,
+	FNC_CONTINUEGAME,
+	FNC_OPTIONS,
+	FNC_CREDITS,
+	FNC_EXIT,
+
+	//In-Game
+	FNC_PAUSE,
+	FNC_EXITGAME,
+	FNC_SAVE,
+	FNC_GOBACK,
+
+	//Both
+	FNC_CHANGE_VMUSIC,
+	FNC_CHANGE_VFX,
+
+	//Link
+	FNC_GITHUB,
+
+	//Console
+	FNC_GODMODE,
+	FNC_QUIT,
+	FNC_LIST,
+	FNC_FPS,
+	FNC_LOADMAP,
+	FNC_LOG
+
 };
 
 #define VEL_TO_WORLD 20
@@ -106,6 +160,9 @@ public:
 	{
 		return true;
 	}
+
+	// Manages the UI inputs for each module
+	virtual void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr, const char* bufferText = "") {};
 
 	//Distributes collisions
 	virtual void OnCollision(Collider*, Collider*) {}

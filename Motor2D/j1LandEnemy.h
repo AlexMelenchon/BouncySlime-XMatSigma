@@ -10,7 +10,7 @@
 
 class j1LandEnemy : public j1Enemy
 {
-public: 	
+public:
 	
 	//--------INTERNAL CONTROL---------//
 	//Constructor
@@ -59,6 +59,7 @@ public:
 
 	//Updates the enemy movement logic
 	void MovementLogic(float dt, bool toPlayer = true);
+
 
 	//--------COLLISION ---------//
 	

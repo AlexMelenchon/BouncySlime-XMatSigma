@@ -1,10 +1,9 @@
-#include "p2Defs.h"
-#include "p2Log.h"
 #include "j1App.h"
 #include "j1Input.h"
 #include "j1Textures.h"
 #include "j1Audio.h"
 #include "j1Render.h"
+#include "j1Fonts.h"
 #include "j1Window.h"
 #include "j1Map.h"
 #include "j1PathFinding.h"
@@ -13,7 +12,11 @@
 #include "j1FadeToBlack.h"
 #include "j1Collision.h"
 #include "j1EntityManager.h"
+#include "j1UIManager.h"
+#include "j1MainMenu.h"
+#include "j1ConsoleM.h"
 
+#include <stdio.h>
 
 //Constructor
 j1Scene::j1Scene() : j1Module()
@@ -31,23 +34,72 @@ bool j1Scene::Awake(pugi::xml_node& scene_config)
 	LOG("Loading Scene");
 	bool ret = true;
 
-	mapFadeTime = scene_config.child("mapFadeTime").text().as_float();
+	//Auxiliar used to save the maximum score
+	sceneConfig = scene_config;
 
-	
+	//Var load------------
+	mapFadeTime = scene_config.child("mapFadeTime").text().as_float();
+	startingLifes = scene_config.child("startingLifes").text().as_uint(3);
+	maxScore = scene_config.child("maxScore").attribute("value").as_uint(4500);
+	click.path = scene_config.child("click").attribute("file").as_string();
+
+	//Command creation--------
+	App->console->CreateCommand("god_mode", this, 1, 1, UIFunction::FNC_GODMODE);
+	App->console->CreateCommand("map map_name.tmx", this, 2, 2, UIFunction::FNC_LOADMAP);
+	App->console->CreateCommand("FPS number (between 30-120)", this, 2, 2, UIFunction::FNC_FPS);
+
+
 	return ret;
 }
 
 // Called before the first frame
 bool j1Scene::Start()
 {
-	//Loads the first map
-	Reset(App->map->data.maplist.start->data->name.GetString()); 
+	//Create the player
+	App->entities->AddEntity(entityType::PLAYER, { 0,0 });
 
+	//Load ui fx
+	click.id = App->audio->LoadFx(click.path.GetString());
+
+	//Loads the first map
+	Reset(App->map->data.maplist.start->data->name.GetString());
+
+	//Debug texture for the debug pathfinding
 	debug_tex = App->entities->debug_tex;
+
+	lifes = startingLifes;
+	sprintf_s(lifes_text, 10, "%02d", lifes);
+
+	//UI init-------
+	parent = App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 0,0 }, false, false, true, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
+
+	pause = App->ui->AddElement(ui_type::UI_BUTTON, parent, { -10,-10 }, true, false, true, { 220,406,64,64 }, this, UIFunction::FNC_PAUSE);
+
+	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 94,10 }, false, false, true, { 1257,532,65,65 });
+	ui_lifes = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 164,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, lifes_text);
+
+
+	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 244,10 }, false, false, true, { 1257,605,65,64 });
+	ui_coins = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 314,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00");
+
+	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 394,10 }, false, false, true, { 144,922,65,64 });
+	ui_score = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 464,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00000");
+
+	App->ui->AddElement(ui_type::UI_IMAGE, nullptr, { 594,10 }, false, false, true, { 737,478,64,64 });
+	ui_time = App->ui->AddElement(ui_type::UI_TEXT, nullptr, { 664,30 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "00000");
+
+	//Console Init------
+	App->ui->AddElement(ui_type::UI_CONSOLE, nullptr, { 0,0 }, true, false, false, { 0,0,0,0 }, this, UIFunction::FNC_NONE, drag_axis::MOV_NONE);
+
+
+
+	//Gameplay ini--------
+	time.Start();
 
 	return true;
 }
 
+// Called to reset the scene
 bool j1Scene::Reset(const char* map)
 {
 	//Gets the current window width & height
@@ -65,13 +117,13 @@ bool j1Scene::Reset(const char* map)
 		}
 
 	}
-	
+
 	// Limit for the end of the map
-	Hlimit.x = App->map->data.tile_width * App->map->data.width; 
+	Hlimit.x = App->map->data.tile_width * App->map->data.width;
 	Hlimit.y = App->map->data.tile_height * App->map->data.height;
 
 	//Start the music
-	App->audio->PlayMusic(App->map->data.music.GetString(),0.0f);
+	App->audio->PlayMusic(App->map->data.music.GetString(), 0.0f);
 
 	return true;
 }
@@ -81,8 +133,8 @@ bool j1Scene::PreUpdate()
 {
 	BROFILER_CATEGORY("Scene Pre-Update", Profiler::Color::Orange)
 
-	//Camera logic
-	Camera();
+		//Camera logic
+		Camera();
 
 	// debug pathfing ------------------
 	setDebugPathfinding();
@@ -94,23 +146,23 @@ bool j1Scene::Update(float dt)
 {
 	BROFILER_CATEGORY("Scene Update", Profiler::Color::Orange)
 
-	//--------DEBUG---------//
+		//--------DEBUG---------//
 
 	//Loads the 1st map
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-		App->fade->FadeToBlack(App->map->data.maplist.start->data->name.GetString(),NULL , mapFadeTime);
-	
+		if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+			App->fade->FadeToBlackMap(App->map->data.maplist.start->data->name.GetString(), NULL, mapFadeTime);
+
 	//Loads the 2nd map
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-		App->fade->FadeToBlack(App->map->data.maplist.At(1)->data->name.GetString(), NULL ,mapFadeTime);
+		App->fade->FadeToBlackMap(App->map->data.maplist.At(1)->data->name.GetString(), NULL, mapFadeTime);
 
 	//Loads the 3rd map
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
-		App->fade->FadeToBlack(App->map->data.maplist.At(2)->data->name.GetString(), NULL ,  mapFadeTime);
+		App->fade->FadeToBlackMap(App->map->data.maplist.At(2)->data->name.GetString(), NULL, mapFadeTime);
 
 	//Reloads current map (a.k.a player's death)
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
-		App->fade->FadeToBlack(App->map->data.currentmap.GetString(), NULL , mapFadeTime);
+		App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), NULL, mapFadeTime);
 
 	//Saves the game
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
@@ -119,6 +171,16 @@ bool j1Scene::Update(float dt)
 	//Loads the game
 	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		App->LoadGame();
+
+	//Activates the debug draw for the ui
+	if (App->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
+		App->ui->debug = !App->ui->debug;
+
+	//Exits to the main menu
+	if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
+	{
+		App->fade->FadeToBlackMod(App->mainMenu, this, mapFadeTime);
+	}
 
 	//Activates collider debug draw mode
 	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
@@ -140,12 +202,51 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F12) == KEY_DOWN)
 		App->windowTitleControl = !App->windowTitleControl;
 
-	//Sets Pause in the Game
-	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+	//Adds a life
+	if (App->input->GetKey(SDL_SCANCODE_KP_1) == KEY_DOWN)
 	{
-		App->pause = !App->pause;
+		if (lifes < 99)
+			lifes += 1;
 	}
 
+	//Minus 1 life
+	if (App->input->GetKey(SDL_SCANCODE_KP_2) == KEY_DOWN)
+		LoseALife();
+
+	//Adds Score
+	if (App->input->GetKey(SDL_SCANCODE_KP_4) == KEY_DOWN)
+		score += 1000;
+
+	//Retrieves Score
+	if (App->input->GetKey(SDL_SCANCODE_KP_5) == KEY_DOWN)
+	{
+		if (score > 1000)
+			score -= 1000;
+		else
+			score = 0;
+	}
+
+	//Adds Coins
+	if (App->input->GetKey(SDL_SCANCODE_KP_7) == KEY_DOWN)
+	{
+		if (coins < 99)
+			CoinUp();
+	}
+
+	//Retrieves Coins
+	if (App->input->GetKey(SDL_SCANCODE_KP_8) == KEY_DOWN)
+	{
+		if (coins > 0)
+			coins -= 1;
+	}
+
+	//Sets Pause in the Game & opens the menu
+	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	{
+		App->pause = !App->pause;
+		MenusLoad(UIFunction::FNC_PAUSE);
+		App->audio->PlayFx(click.id);
+	}
 
 	//Turns volume up
 	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN && (App->audio->musicVolume < 100 && App->audio->fxVolume < 100))
@@ -161,19 +262,26 @@ bool j1Scene::Update(float dt)
 		App->audio->fxVolume -= 5;
 	}
 
+	//Opens / Closes the Console
+	if (App->input->GetKey(SDL_SCANCODE_GRAVE) == KEY_DOWN)
+	{
+		console->SetToDisable(!console->enabled);
+	}
+
+	UIInGameUpdate();
 
 	//Draws the current map
 	App->map->Draw();
 
-	//Sets the window title for the map info
-	showWindowTitle();
-
-
 	// Debug pathfinding w/ mouse ------------------------------
 	//Blits the debug pathfinding, if exists
 	blitDebugPath();
-	
-	
+
+	//update texture of the time
+	UITimeUpdate();
+
+
+
 
 	return true;
 }
@@ -181,13 +289,9 @@ bool j1Scene::Update(float dt)
 // Called each loop iteration
 bool j1Scene::PostUpdate()
 {
-
 	BROFILER_CATEGORY("Scene Post-Update", Profiler::Color::Orange)
 
-	bool ret = true;
-
-	if(App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
+		bool ret = true;
 
 	return ret;
 }
@@ -196,6 +300,33 @@ bool j1Scene::PostUpdate()
 bool j1Scene::CleanUp()
 {
 	LOG("Freeing scene");
+	//We make sure all the pointers are disabled----
+	debug_tex = nullptr;
+	debugPath.Clear();
+	App->collision->debug = false;
+	App->entities->debug = false;
+	App->ui->focused.lookAt = nullptr;
+
+	console = nullptr;
+	parent = nullptr;
+
+	//Delete Player
+	App->entities->DeletePlayer();
+	App->entities->player = nullptr;
+
+	//Delete the UI of the game
+	App->ui->DeleteAllElements();
+
+	//Unload All the Game Related SFX
+	App->audio->UnLoadAllFx();
+
+	//Reset the Camera
+	ResetCamera();
+
+	//Set the gameplay vars to 0 ------------------
+	lifes = 0u;
+	score = 0u;
+	coins = 0u;
 
 	return true;
 }
@@ -209,6 +340,18 @@ bool j1Scene::Load(pugi::xml_node& load)
 		App->map->CleanUp();
 		App->scene->Reset(load.child("current_map").attribute("name").as_string());
 	}
+
+	//Load the gameplay related vars-------------
+	lifes = load.child("current_lifes").attribute("value").as_uint();
+	score = load.child("current_score").attribute("value").as_uint();
+	coins = load.child("current_coins").attribute("value").as_uint();
+	time.StartFrom(load.child("current_time").attribute("value").as_int());
+
+	if (App->pause)
+	{
+		App->pause = false;
+		MenusLoad(UIFunction::FNC_PAUSE);
+	}
 	return true;
 }
 
@@ -216,44 +359,16 @@ bool j1Scene::Load(pugi::xml_node& load)
 bool j1Scene::Save(pugi::xml_node& save) const
 {
 	save.append_child("current_map").append_attribute("name") = App->map->data.currentmap.GetString(); //Saves the current map info
+
+	//Save of the gameplay related vars-------------
+	save.append_child("current_lifes").append_attribute("value") = lifes;
+	save.append_child("current_score").append_attribute("value") = score;
+	save.append_child("current_coins").append_attribute("value") = coins;
+
+	//Time load------------------
+	uint curr_time = time.Read();
+	save.append_child("current_time").append_attribute("value") = curr_time;
 	return true;
-}
-
-//Sets the window title for the map info
-void j1Scene::showWindowTitle() const
-{
-	if (App->windowTitleControl) //Map related info
-	{
-		p2SString title("%s - %s || Map:%dx%d Tiles:%dx%d Tilesets:%d Mouse Position X:%d Y:%d Mouse Tilset:%d,%d Current Map:%s",
-			App->GetTitle(), App->GetOrganization(),
-			App->map->data.width, App->map->data.height,
-			App->map->data.tile_width, App->map->data.tile_height,
-			App->map->data.tilesets.count(), App->input->mouse_x - App->render->camera.x,
-			App->input->mouse_y - App->render->camera.y,
-			(App->input->mouse_x - App->render->camera.x) / App->map->data.tile_width,
-			(App->input->mouse_y - App->render->camera.y) / App->map->data.tile_height,
-			App->map->data.currentmap.GetString());
-
-		App->win->SetTitle(title.GetString());
-	}
-	else //Frame control info
-	{
-		p2SString cap;
-		if (App->frameCap)
-			cap.create("ON");
-		else
-			cap.create("OFF");
-
-
-		p2SString title("%s - %s || FPS: %i Av.FPS: %.2f || FrameCap: %s FrameLimit: %i VSYNC %s || Last Frame Ms: %u ",
-			App->GetTitle(), App->GetOrganization(),
-			App->frames_on_last_update, App->avg_fps,
-			cap.GetString(), App->capTime,
-			App->render->vsync.GetString(),
-			App->last_frame_ms);
-
-		App->win->SetTitle(title.GetString());
-	}
 }
 
 //Sets the debug pathfinding w/ the mouse
@@ -334,9 +449,9 @@ void j1Scene::Camera()
 
 	//Recalculate it taking account the previous camera
 	cameraPos.x += (cameraPos.x * App->win->GetScale() - App->render->camera.w) / 10;
-	cameraPos.y += ((cameraPos.y * App->win->GetScale() - App->render->camera.y )/10);
+	cameraPos.y += ((cameraPos.y * App->win->GetScale() - App->render->camera.y) / 10);
 
-	
+
 	//We lock the camera if we get to the edges
 	CheckCameraLimits();
 
@@ -365,8 +480,267 @@ void j1Scene::CheckCameraLimits()
 	//Down
 	if (cameraPos.y > 0)
 		cameraPos.y = 0;
+}
 
+//Manages the UI inputs of this module
+void j1Scene::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer, const char* bufferText)
+{
+	switch (type)
+	{
+	case UIEventType::EVENT_UPCLICK:
+	{
+
+		switch (func)
+		{
+		case UIFunction::FNC_PAUSE:
+		{
+			App->pause = !App->pause;
+			MenusLoad(UIFunction::FNC_PAUSE);
+		}
+		break;
+
+		case UIFunction::FNC_OPTIONS:
+		{
+			MenusLoad(UIFunction::FNC_OPTIONS);
+		}
+		break;
+
+		case UIFunction::FNC_EXIT:
+		{
+			App->pause = false;
+			App->fade->FadeToBlackMod(App->mainMenu, this, mapFadeTime);
+		}
+		break;
+
+		case UIFunction::FNC_GOBACK:
+		{
+			MenusLoad(lastcall);
+		}
+		break;
+
+		case UIFunction::FNC_SAVE:
+		{
+			App->SaveGame();
+		}
+		break;
+
+		case UIFunction::FNC_CONTINUEGAME:
+		{
+			App->LoadGame();
+		}
+		break;
+		}
+
+		App->audio->PlayFx(click.id);
+	}
+	break;
+
+	case UIEventType::EVENT_DRAG:
+	{
+		switch (func)
+		{
+		case UIFunction::FNC_CHANGE_VMUSIC:
+		{
+			if (userPointer)
+			{
+				App->audio->musicVolume = userPointer->GetAudioValue();
+			}
+		}
+		break;
+
+		case UIFunction::FNC_CHANGE_VFX:
+		{
+			if (userPointer)
+			{
+				App->audio->fxVolume = userPointer->GetAudioValue();
+			}
+		}
+		break;
+		}
+	}
+	break;
+
+	case UIEventType::EVENT_CONSOLE:
+	{
+		switch (func)
+		{
+		case UIFunction::FNC_GODMODE:
+		{
+			if (App->entities->player)
+			{
+				App->entities->player->GodMode();
+			}
+		}
+		break;
+
+		case UIFunction::FNC_LOADMAP:
+		{
+			//We check if the map exists we introduced exists, if a positve case we load it's name
+			bufferText = App->map->MapExist(bufferText);
+			if (strlen(bufferText) > 2)
+			{
+				App->fade->FadeToBlackMap(bufferText, -1, App->scene->mapFadeTime);
+				LOG("Loading: %s", bufferText);
+			}
+			else
+				LOG("Map Name was Incorrect!", bufferText);
+
+		}
+		break;
+
+		case UIFunction::FNC_FPS:
+		{
+			int newCap = 0;
+
+			sscanf_s(bufferText, "%d", &newCap);
+			
+			//Check Limits
+			if (newCap > 120)newCap = 120;
+			else if (newCap < 30) newCap = 30;
+
+			App->UpdateFrameCap(newCap);
+
+			LOG("FrameCap is now %u", newCap);
+		}
+		break;
+		}
+		break;
+
+	}
+	}
+}
+
+void j1Scene::UIInGameUpdate()
+{
+	App->tex->UnLoad(ui_lifes->texture);
+	ui_lifes->texture = nullptr;
+	sprintf_s(lifes_text, 10, "%02d", lifes);
+	ui_lifes->texture = App->fonts->Print(lifes_text);
+
+	App->tex->UnLoad(ui_coins->texture);
+	ui_coins->texture = nullptr;
+	sprintf_s(coins_text, 10, "%02d", coins);
+	ui_coins->texture = App->fonts->Print(coins_text);
+
+	App->tex->UnLoad(ui_score->texture);
+	ui_score->texture = nullptr;
+	sprintf_s(score_text, 10, "%05d", score);
+	ui_score->texture = App->fonts->Print(score_text);
+	App->fonts->CalcSize(score_text, ui_score->rect.w, ui_score->rect.h);
+}
+
+void j1Scene::UITimeUpdate()
+{
+	float seconds = time.ReadSec();
+
+	App->tex->UnLoad(ui_time->texture);
+	ui_time->texture = nullptr;
+	sprintf_s(time_text, "%3.2f", seconds);
+	ui_time->texture = App->fonts->Print(time_text);
+	App->fonts->CalcSize(time_text, ui_time->rect.w, ui_time->rect.h);
+}
+
+void j1Scene::MenusLoad(UIFunction func)
+{
+	App->ui->ToDeleteElement();
+
+	switch (func)
+	{
+	case UIFunction::FNC_PAUSE:
+		if (App->pause)
+		{
+			App->ui->AddElement(ui_type::UI_IMAGE, parent, { -260, -85 }, false, false, true, { 1265,36,177,204 })->to_delete = true;
+			App->ui->AddElement(ui_type::UI_IMAGE, parent, { -365, -190 }, false, false, true, { 969,34,276,490 })->to_delete = true;
+			App->ui->AddElement(ui_type::UI_BUTTON, parent, { -375,-200 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_PAUSE, drag_axis::MOV_NONE, "CONTINUE")->to_delete = true;
+			App->ui->AddElement(ui_type::UI_BUTTON, parent, { -375,-300 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_OPTIONS, drag_axis::MOV_NONE, "SETTINGS")->to_delete = true;
+			App->ui->AddElement(ui_type::UI_BUTTON, parent, { -375,-400 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_CONTINUEGAME, drag_axis::MOV_NONE, "LOAD")->to_delete = true;
+			App->ui->AddElement(ui_type::UI_BUTTON, parent, { -375,-500 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_SAVE, drag_axis::MOV_NONE, "SAVE")->to_delete = true;
+			App->ui->AddElement(ui_type::UI_BUTTON, parent, { -375,-600 }, true, false, true, { 73,992,256,64 }, this, UIFunction::FNC_EXIT, drag_axis::MOV_NONE, "MAIN MENU")->to_delete = true;
+			time.Stop();
+		}
+		else
+			time.ReStart();
+		break;
+
+	case UIFunction::FNC_OPTIONS:
+
+		App->ui->AddElement(ui_type::UI_IMAGE, parent, { -295,-290 }, false, false, true, { 969,763,400,306 })->to_delete = true;
+		App->ui->AddElement(ui_type::UI_TEXT, parent, { -375,-370 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Music Volume:")->to_delete = true;
+		App->ui->AddElement(ui_type::UI_SLIDER, parent, { -375,-400 }, true, false, true, { 0,0,0,0 }, this, UIFunction::FNC_CHANGE_VMUSIC, drag_axis::MOV_X)->to_delete = true;
+		App->ui->AddElement(ui_type::UI_TEXT, parent, { -375,-470 }, false, false, true, { 0,0,0,0 }, nullptr, UIFunction::FNC_NONE, drag_axis::MOV_NONE, "Fx Volume:")->to_delete = true;
+		App->ui->AddElement(ui_type::UI_SLIDER, parent, { -375,-500 }, true, false, true, { 0,0,0,0 }, this, UIFunction::FNC_CHANGE_VFX, drag_axis::MOV_X)->to_delete = true;
+		App->ui->AddElement(ui_type::UI_BUTTON, parent, { -305,-300 }, true, false, true, { 221,554,64,64 }, this, UIFunction::FNC_GOBACK, drag_axis::MOV_NONE)->to_delete = true;
+
+		lastcall = UIFunction::FNC_PAUSE;
+
+		break;
+	}
 
 }
 
+//Resets the Camera
+void j1Scene::ResetCamera()
+{
+	App->render->camera.x = 0;
+	App->render->camera.y = 0;
+}
 
+
+//Checks if the maximum score has been surpassed
+bool j1Scene::CheckMaxScore()
+{
+	bool ret = false;
+	if (score > maxScore)
+	{
+		//Save Score-----------------------------------
+		LOG("Saving Game new Max Score");
+		ret = true;
+
+		pugi::xml_node max_score = sceneConfig.child("maxScore");
+		max_score.attribute("value").set_value(score);
+		maxScore = score;
+
+		App->saveConfigFile();
+	}
+
+
+	return ret;
+}
+
+//Called when player loses a life
+void j1Scene::LoseALife()
+{
+	if (!App->entities->player)
+		return;
+
+	if (lifes > 0)
+	{
+		App->fade->FadeToBlackMap(App->map->data.currentmap.GetString(), App->entities->player->deathFx.id, mapFadeTime);
+		lifes -= 1;
+		UIInGameUpdate();
+	}
+	else
+	{
+		App->fade->FadeToBlackMod(App->mainMenu, this, mapFadeTime);
+		App->audio->PlayFx(App->entities->player->loseFx.id);
+	}
+}
+
+//Called when player gets a coin
+void j1Scene::CoinUp()
+{
+	if (!App->entities->player)
+		return;
+
+	score += 20;
+	coins++;
+	if (coins % 10 == 0)
+	{
+		lifes++;
+		//TODO: LIFE UP SFX
+		App->scene->UIInGameUpdate();
+	}
+
+	App->audio->PlayFx(App->entities->player->coinFx.id);
+
+}

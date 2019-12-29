@@ -20,7 +20,12 @@ public:
 	bool PostUpdate();
 
 	//--------FADE---------//
-	bool FadeToBlack(const char* mapNumber, int id, float time = 2.0f);
+	//Fades from one map to another
+	bool FadeToBlackMap(const char* mapNumber, int id, float time = 2.0f);
+
+	//Fades from modules (menu to game & viceversa)
+	bool FadeToBlackMod(j1Module* SceneIn, j1Module* SceneOut, float time, bool load = false);
+
 
 private:
 	//--------FADE---------//
@@ -36,8 +41,12 @@ private:
 	SDL_Rect screen;
 	const char* mapToLoad = nullptr;
 
-	j1Module* moduleOff;
-	j1Module* moduleIn;
+	//Indicates the modules to load & unload, if any
+	j1Module* moduleOff = nullptr;
+	j1Module* ModuleOn = nullptr;
+
+	//Flag to order the fadeToBlack to call for the game load
+	bool load = false;
 
 	
 };

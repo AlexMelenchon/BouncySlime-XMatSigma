@@ -4,44 +4,83 @@
 	<window />
 	<textures />
 	<audio>
-		<volume music="15" fx="25" />
+		<volume music="35" fx="55" />
 	</audio>
+	<fonts />
 	<map />
 	<entities>
 		<player>
-			<position x="831.874878" y="201.79509" />
-			<speed x="-88.5832062" y="475.731171" />
-			<state current_state="2" />
-			<falling value="true" />
+			<position x="60" y="928" />
+			<speed x="0" y="0" />
+			<state current_state="1" />
+			<falling value="false" />
 			<walling value="false" />
 			<wallTimer wallJumpTimer="0" />
 			<flip value="1" />
 		</player>
 		<enemyL>
-			<position x="627.854736" y="935" />
+			<position x="850.899475" y="872" />
 			<speed x="-60" y="0" />
 			<falling value="false" />
-			<trace x="626" y="935" w="302" h="0" />
+			<trace x="802" y="899" w="155" h="0" />
 			<flip value="1" />
 		</enemyL>
-		<enemyL>
-			<position x="597.918457" y="392" />
-			<speed x="120" y="0" />
-			<falling value="false" />
-			<trace x="558" y="408" w="90" h="0" />
-			<flip value="0" />
-		</enemyL>
 		<enemyF>
-			<position x="659.030701" y="259.891357" />
-			<speed x="150" y="-100" />
-			<trace x="559" y="270" w="129" h="33" />
-			<flip value="0" />
+			<position x="1752.62061" y="582.919861" />
+			<speed x="-60" y="0" />
+			<trace x="1610" y="569" w="207" h="74" />
+			<flip value="1" />
 		</enemyF>
+		<coin>
+			<position x="231" y="850" />
+		</coin>
+		<coin>
+			<position x="289" y="815" />
+		</coin>
+		<coin>
+			<position x="791" y="811" />
+		</coin>
+		<coin>
+			<position x="363" y="869" />
+		</coin>
+		<coin>
+			<position x="1385" y="659" />
+		</coin>
+		<coin>
+			<position x="1486" y="1040" />
+		</coin>
+		<coin>
+			<position x="1843" y="707" />
+		</coin>
+		<coin>
+			<position x="1895" y="642" />
+		</coin>
+		<coin>
+			<position x="1993" y="685" />
+		</coin>
+		<coin>
+			<position x="1306" y="602" />
+		</coin>
+		<coin>
+			<position x="873" y="810" />
+		</coin>
+		<coin>
+			<position x="978" y="807" />
+		</coin>
+		<coin>
+			<position x="1484" y="993" />
+		</coin>
 	</entities>
 	<pathfinding />
+	<gui />
 	<scene>
-		<current_map name="map1.tmx" />
+		<current_map name="intro.tmx" />
+		<current_lifes value="5" />
+		<current_score value="0" />
+		<current_coins value="0" />
+		<current_time value="2749" />
 	</scene>
+	<main_menu />
 	<collision />
 	<fade />
 	<renderer>

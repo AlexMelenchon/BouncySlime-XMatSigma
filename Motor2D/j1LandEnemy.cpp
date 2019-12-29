@@ -140,7 +140,7 @@ bool j1LandEnemy::Update(float dt)
 		//Path is created
 		if (path.Count() > 0)
 		{
-			MovementLogic(dt);
+			MovementLogic(dt, true);
 		}
 		//If there is no path we stop
 		else
@@ -274,14 +274,14 @@ void j1LandEnemy::Move(bool toPlayer, float dt)
 	{
 		if (fpPosition.x < next.x)
 		{
-			if (fpSpeed.x < 0 || (App->entities->player->fpPosition.x < fpPosition.x && toPlayer))
+			if (fpSpeed.x < 0 || (toPlayer &&App->entities->player->fpPosition.x < fpPosition.x))
 				fpSpeed.x = 0;
 
 			fpSpeed.x += moveSpeed.x * (dt * VEL_TO_WORLD);
 		}
 		else if (fpPosition.x > next.x)
 		{
-			if (fpSpeed.x > 0 || (App->entities->player->fpPosition.x > fpPosition.x && toPlayer))
+			if (fpSpeed.x > 0 || (toPlayer && App->entities->player->fpPosition.x > fpPosition.x))
 				fpSpeed.x = 0;
 			
 			fpSpeed.x -= moveSpeed.x * (dt * VEL_TO_WORLD);

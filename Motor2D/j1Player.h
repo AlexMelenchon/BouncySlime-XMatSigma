@@ -96,7 +96,7 @@ public:
 	void godInputs(); 
 
 	//Controls God Mode
-	void GodMode(); 
+	bool GodMode(); 
 
 
 	//--------STATE MACHiNE---------//
@@ -124,11 +124,15 @@ public:
 	FX jumpFx;
 	FX deathFx;
 	FX landFx;
-	FX winFx;
+	FX winFx;	
 	FX bounceFx;
 	FX enemyDeathFx;
 	FX throw_shuriken;
 	FX shuriken_hit;
+	FX congratsFx;
+	FX loseFx;
+	FX coinFx;
+	FX lifeFx;
 
 private:
 

@@ -43,6 +43,9 @@ bool j1Map::Awake(pugi::xml_node& config)
 	}
 	data.maplist = data.maplist;
 
+	//Main Menu
+	menu_tmx = config.child("intro").attribute("name").as_string();
+
 	return ret;
 }
 
@@ -570,6 +573,11 @@ bool j1Map::loadObjects(pugi::xml_node& node)
 		App->entities->AddEntity(entityType::FLYING_ENEMY, { colliderRect.x, colliderRect.y }, { colliderRect.w, colliderRect.h });
 		return ret;
 	}
+	else if (name == "Coin")
+	{
+		App->entities->AddEntity(entityType::COIN, { colliderRect.x, colliderRect.y });
+		return ret;
+	}
 	else
 		type = COLLIDER_NONE;
 		
@@ -612,3 +620,19 @@ const char* j1Map::GetNextMap()
 	return iterator->data->name.GetString();
 
 };
+
+const char* j1Map::MapExist(const char* mapPath) const
+{
+	p2List_item<MapInfo*>* iterator = data.maplist.start;
+
+	while (iterator != NULL)
+	{
+		if (iterator->data->name == mapPath)
+			return iterator->data->name.GetString();
+
+		iterator = iterator->next;
+
+	}
+	return "";
+
+}

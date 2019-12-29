@@ -126,6 +126,7 @@ bool j1FlyingEnemy::Update(float dt)
 	}
 	case enemy_state::ST_CHASING:
 	{
+		if (!App->entities->player) break;
 		//Search path timer
 		if (timer > chasingTimer)
 		{

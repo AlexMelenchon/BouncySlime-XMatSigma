@@ -8,6 +8,7 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Audio.h"
+#include "j1Fonts.h"
 #include "j1Scene.h"
 #include "j1Map.h"
 #include "j1EntityManager.h"
@@ -17,6 +18,9 @@
 #include "j1Pathfinding.h"
 #include "j1LandEnemy.h"
 #include "j1FlyingEnemy.h"
+#include "j1UIManager.h"
+#include "j1MainMenu.h"
+#include "j1ConsoleM.h"
 
 
 // Constructor
@@ -38,23 +42,32 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	tex = new j1Textures();
 	audio = new j1Audio();
 	scene = new j1Scene();
+	mainMenu = new j1MainMenu();
 	map = new j1Map();
 	entities = new j1EntityManager();
 	collision = new j1Collision();
 	fade = new j1FadeToBlack();
 	pathfinding = new j1PathFinding();
+	ui = new j1UIManager();
+	fonts = new j1Fonts();
+	console = new j1ConsoleM();
+
 	
 	// Reverse order of CleanUp
 	AddModule(input);
 	AddModule(win);
 	AddModule(tex);
 	AddModule(audio);
+	AddModule(fonts);
 	AddModule(map);
 	AddModule(entities);
 	AddModule(pathfinding);
+	AddModule(ui);
 	AddModule(scene);
+	AddModule(mainMenu);
 	AddModule(collision);
 	AddModule(fade);
+	AddModule(console);
 
 	// render last to swap buffer
 	AddModule(render);
@@ -92,6 +105,7 @@ bool j1App::Awake()
 
 	save_game = "save_game.xml";
 	load_game = "save_game.xml";
+	config_route = "config.xml";
 	bool ret = false;
 		
 	config = LoadConfig(config_file);
@@ -119,6 +133,8 @@ bool j1App::Awake()
 		}
 	}
 
+	scene->Disable();
+
 	return ret;
 }
 
@@ -131,6 +147,7 @@ bool j1App::Start()
 
 	while(item != NULL && ret == true)
 	{
+		if(item->data->active)
 		ret = item->data->Start();
 		item = item->next;
 	}
@@ -432,4 +449,15 @@ bool j1App::SavegameNow() const
 float j1App::GetDeltaTime() const
 {
 	return dt;
+}
+
+void j1App::saveConfigFile()
+{
+	config_file.save_file(config_route.GetString());
+}
+
+void j1App::UpdateFrameCap(uint newCap)
+{
+	capTime = newCap;
+
 }

@@ -14,6 +14,7 @@ class j1Input;
 class j1Render;
 class j1Textures;
 class j1Audio;
+class j1Fonts;
 class j1Scene;
 class j1Map;
 class j1Player;
@@ -23,6 +24,9 @@ class j1EntityManager;
 class j1PathFinding;
 class j1LandEnemy;
 class j1FlyingEnemy;
+class j1UIManager;
+class j1MainMenu;
+class j1ConsoleM;
 
 class j1App
 {
@@ -59,6 +63,7 @@ public:
 	void LoadGame();
 	void SaveGame() const;
 	void GetSaveGames(p2List<p2SString>& list_to_fill) const;
+	void saveConfigFile();
 
 	//Gets the difference between the last update (frames)
 	//Used in the physics calculations of the game
@@ -66,6 +71,9 @@ public:
 
 	// Load config file
 	pugi::xml_node LoadConfig(pugi::xml_document&) const;
+
+	//Used to change the frame cap
+	void UpdateFrameCap(uint newCap);
 
 private:
 
@@ -103,8 +111,12 @@ public:
 	j1Map*				map;
 	j1EntityManager*	entities;
 	j1Collision*		collision;
-	j1FadeToBlack*		 fade;
+	j1FadeToBlack*		fade;
 	j1PathFinding*		pathfinding;
+	j1UIManager*		ui;
+	j1Fonts*			fonts;
+	j1MainMenu*			mainMenu;
+	j1ConsoleM*			console;
 
 	//--------CONFIG---------//
 	//Config File
@@ -161,6 +173,7 @@ private:
 	mutable bool		want_to_save;
 	bool				want_to_load;
 	p2SString			load_game;
+	p2SString			config_route;
 	mutable p2SString	save_game;
 
 };

@@ -8,11 +8,6 @@
 #include "p2Defs.h"
 #include "p2animation.h"
 
-struct FX
-{
-	int id = 0;
-	p2SString path;
-};
 
 
 enum collisionDirection
@@ -32,7 +27,8 @@ enum  class entityType
 	PLAYER,
 	FLYING_ENEMY,
 	LAND_ENEMY,
-	SHURIKEN
+	SHURIKEN,
+	COIN
 };
 
 
@@ -173,6 +169,9 @@ public:
 
 	// Checks if the entity is scheduled to delete
 	bool to_delete = false;
+
+	//Disables the collision when the player is dead
+	bool disabledCollision = false;
 
 	//--------ANIMATIONS---------//
 	Animation* currentAnimation = nullptr;

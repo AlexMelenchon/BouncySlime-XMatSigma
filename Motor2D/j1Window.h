@@ -19,6 +19,10 @@ public:
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
 
+
+	// Called at the end of the frame
+	bool PostUpdate();
+
 	// Called before quitting
 	bool CleanUp();
 
@@ -31,6 +35,9 @@ public:
 
 	// Retrieve window scale
 	uint GetScale() const;
+
+	//Sets the window title for the map info
+	void ShowWindowTitle() const;
 
 public:
 	//--------WINDOW---------//

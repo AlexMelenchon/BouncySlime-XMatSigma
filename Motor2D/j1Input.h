@@ -25,6 +25,14 @@ enum j1KeyState
 	KEY_UP
 };
 
+enum class InputState
+{
+	ST_UNKNOWN = -1,
+	KEY_DOWN,
+	KEY_REPEAT,
+	KEY_UP
+};
+
 class j1Input : public j1Module
 {
 
@@ -49,6 +57,10 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	//Custom enable & disable
+	void Disable();
+	void Enable();
+
 	//--------KEY CONTROL---------//
 	// Gather relevant win events
 	bool GetWindowEvent(j1EventWindow ev);
@@ -64,6 +76,9 @@ public:
 		return mouse_buttons[id - 1];
 	}
 
+	//used to say to the game we want quit
+	void Quit(bool scheduleToQuit);
+
 	// Check if a certain window event happened
 	bool GetWindowEvent(int code);
 
@@ -71,23 +86,51 @@ public:
 	void ReSetKeys();
 
 	// Get mouse / axis position
-	void GetMousePosition(int &x, int &y);
+	void GetMousePosition(int& x, int& y);
 	//Get mouse motion
 	void GetMouseMotion(int& x, int& y);
+
+	//Returns the buffer string
+	const char* GetText();
+
+	//Returns the size of the buffer string in a certain position
+	int GetTextInPos();
+
+	//Returns the size of the text font, for multi-line purposes
+	int GetTextWidth();
+
+	//Changes the input mode from wirtting to playing
+	void WrittingState(bool state, SDL_Rect rect = {0,0,0,0});
 
 	// Get mouse / axis position
 	int			mouse_x;
 	int			mouse_y;
 
+	//--------UI----------------------//
+	//Manages the UI inputs of this module
+	void OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer = nullptr, const char* bufferText = "");
+
 private:
+
+	//--------EVENT CONTROL---------//
 	bool		windowEvents[WE_COUNT];
-	j1KeyState*	keyboard;
+
+	//--------KEY CONTROL---------//
+	j1KeyState* keyboard;
 	j1KeyState	mouse_buttons[NUM_MOUSE_BUTTONS];
 
 	// Get mouse / axis motion  position
 	int			mouse_motion_x;
 	int			mouse_motion_y;
 
+	bool		writting = false;
+
+	int inputRect_w =  0;
+
+
+	//--------BUFFER STRING---------//
+	p2SString		textString;
+	int cursorPosition = 0;
 };
 
 #endif // __j1INPUT_H__

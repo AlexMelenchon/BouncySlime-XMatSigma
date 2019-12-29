@@ -52,7 +52,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ShowIncludes>false</ShowIncludes>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Motor2D\Brofiler\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -78,17 +77,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="j1Coin.cpp" />
     <ClCompile Include="j1Collision.cpp" />
+    <ClCompile Include="j1Command.cpp" />
+    <ClCompile Include="j1Console.cpp" />
+    <ClCompile Include="j1ConsoleM.cpp" />
     <ClCompile Include="j1Enemy.cpp" />
     <ClCompile Include="j1Entity.cpp" />
     <ClCompile Include="j1EntityManager.cpp" />
     <ClCompile Include="j1FadeToBlack.cpp" />
     <ClCompile Include="j1FlyingEnemy.cpp" />
+    <ClCompile Include="j1Fonts.cpp" />
     <ClCompile Include="j1LandEnemy.cpp" />
     <ClCompile Include="j1Main.cpp" />
     <ClCompile Include="j1App.cpp" />
     <ClCompile Include="j1Audio.cpp" />
     <ClCompile Include="j1Input.cpp" />
+    <ClCompile Include="j1MainMenu.cpp" />
     <ClCompile Include="j1Map.cpp" />
     <ClCompile Include="j1ParticleShuriken.cpp" />
     <ClCompile Include="j1Pathfinding.cpp" />
@@ -96,22 +101,41 @@
     <ClCompile Include="j1Player.cpp" />
     <ClCompile Include="j1Scene.cpp" />
     <ClCompile Include="j1Timer.cpp" />
+    <ClCompile Include="j1UIButton.cpp" />
+    <ClCompile Include="j1UIelement.cpp" />
+    <ClCompile Include="j1UIInputBox.cpp" />
+    <ClCompile Include="j1UIManager.cpp" />
+    <ClCompile Include="j1UISlider.cpp" />
+    <ClCompile Include="j1UIText.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="j1Render.cpp" />
     <ClCompile Include="j1Textures.cpp" />
     <ClCompile Include="j1Window.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
+    <ClCompile Include="j1UIImage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="j1Coin.h" />
+    <ClInclude Include="j1Command.h" />
+    <ClInclude Include="j1Console.h" />
+    <ClInclude Include="j1ConsoleM.h" />
     <ClInclude Include="j1Enemy.h" />
     <ClInclude Include="j1Entity.h" />
     <ClInclude Include="j1EntityManager.h" />
     <ClInclude Include="j1FlyingEnemy.h" />
+    <ClInclude Include="j1Fonts.h" />
     <ClInclude Include="j1LandEnemy.h" />
+    <ClInclude Include="j1MainMenu.h" />
     <ClInclude Include="j1ParticleShuriken.h" />
     <ClInclude Include="j1Pathfinding.h" />
     <ClInclude Include="j1PerfTimer.h" />
     <ClInclude Include="j1Timer.h" />
+    <ClInclude Include="j1UIButton.h" />
+    <ClInclude Include="j1UIelement.h" />
+    <ClInclude Include="j1UIInputBox.h" />
+    <ClInclude Include="j1UIManager.h" />
+    <ClInclude Include="j1UISlider.h" />
+    <ClInclude Include="j1UIText.h" />
     <ClInclude Include="p2animation.h" />
     <ClInclude Include="j1Collision.h" />
     <ClInclude Include="j1FadeToBlack.h" />
@@ -133,6 +157,7 @@
     <ClInclude Include="p2SString.h" />
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
+    <ClInclude Include="j1UIImage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

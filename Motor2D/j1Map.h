@@ -119,6 +119,9 @@ public:
 	//Returns x,y coordinates in the Map
 	iPoint WorldToMap(int x, int y) const;
 
+	//Returns true if the path is a map on the list
+	const char* MapExist(const char* mapPath) const;
+
 private:
 
 	//Load map data
@@ -135,6 +138,7 @@ public:
 	MapData data;
 	const char* GetNextMap();
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
+	p2SString menu_tmx;
 
 
 private:

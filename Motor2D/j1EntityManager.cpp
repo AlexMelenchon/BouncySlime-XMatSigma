@@ -8,6 +8,7 @@
 #include "j1Map.h"
 #include "j1Collision.h"
 #include "j1ParticleShuriken.h"	
+#include "j1Coin.h"
 
 //Constructor
 j1EntityManager::j1EntityManager()
@@ -24,13 +25,13 @@ j1EntityManager::~j1EntityManager()
 bool j1EntityManager::Awake(pugi::xml_node& config)
 {
 	bool ret = true;
-	
+
 	//We save the node to later use in the code
 	entConfig = config;
 
 	//Variable load------------------------
 	fInFramesLimit = config.child("manager").child("inFramesLimit").text().as_float();
-	
+
 	return ret;
 }
 
@@ -43,10 +44,7 @@ bool j1EntityManager::Start()
 	debug_tex = App->tex->Load(entConfig.child("manager").child("debugTextPath").text().as_string());
 	flying_tex = App->tex->Load(entConfig.child("flyingenemy").child("path").text().as_string());
 	land_tex = App->tex->Load(entConfig.child("landenemy").child("path").text().as_string());
-
-
-	//Create the player
-	AddEntity(entityType::PLAYER, { 0,0 });
+	player_tex = App->tex->Load(entConfig.child("player").child("path").text().as_string());
 
 	return ret;
 }
@@ -56,7 +54,7 @@ bool j1EntityManager::PreUpdate()
 {
 	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue)
 
-	bool ret = false;
+		bool ret = false;
 	p2List_item<j1Entity*>* tmp = EntityList.start;
 
 	// Remove all entities scheduled for deletion
@@ -70,7 +68,7 @@ bool j1EntityManager::PreUpdate()
 			tmp = tmp->prev;
 		}
 		else
-		tmp = tmp->next;
+			tmp = tmp->next;
 	}
 
 
@@ -81,11 +79,11 @@ bool j1EntityManager::PreUpdate()
 	if (tmp == nullptr)
 		ret = true;
 	else
-	while (tmp != nullptr)
-	{
-		ret = tmp->data->PreUpdate();
-		tmp = tmp->next;
-	}
+		while (tmp != nullptr)
+		{
+			ret = tmp->data->PreUpdate();
+			tmp = tmp->next;
+		}
 	return ret;
 }
 
@@ -93,7 +91,7 @@ bool j1EntityManager::PreUpdate()
 bool j1EntityManager::Update(float dt)
 {
 	BROFILER_CATEGORY("Entity Manager Update", Profiler::Color::Blue)
-	bool ret = false;
+		bool ret = false;
 	p2List_item<j1Entity*>* tmp = EntityList.start;
 
 	//If the game is paused, we do not calculate the logic
@@ -104,11 +102,15 @@ bool j1EntityManager::Update(float dt)
 		dt = fInFramesLimit;
 
 	//We update all the entities
-	while (tmp != nullptr)
-	{
-		ret = tmp->data->Update(dt);
-		tmp = tmp->next;
-	}
+		//If no entity is loaded, we do not do nothing
+	if (tmp == nullptr)
+		ret = true;
+	else
+		while (tmp != nullptr)
+		{
+			ret = tmp->data->Update(dt);
+			tmp = tmp->next;
+		}
 	return ret;
 }
 
@@ -116,16 +118,17 @@ bool j1EntityManager::Update(float dt)
 bool j1EntityManager::PostUpdate()
 {
 	BROFILER_CATEGORY("Entity Manager Post-Update", Profiler::Color::Blue)
+
 	bool ret = true;
 
 	//We iterate though all the entities & we do their respective postupdate
 	p2List_item<j1Entity*>* tmp = EntityList.start;
 	while (tmp != nullptr)
 	{
-		if(tmp->data->type != entityType::PLAYER)
-		tmp->data->PostUpdate(debug);
+		if (tmp->data->type != entityType::PLAYER)
+			tmp->data->PostUpdate(debug);
 		else
-		tmp->data->PostUpdate();
+			tmp->data->PostUpdate();
 
 
 		tmp = tmp->next;
@@ -143,14 +146,20 @@ bool j1EntityManager::CleanUp()
 	App->tex->UnLoad(debug_tex);
 	App->tex->UnLoad(flying_tex);
 	App->tex->UnLoad(land_tex);
+	App->tex->UnLoad(player_tex);
 
 	//Iterate though all the remaining entities cleanUp
 	p2List_item<j1Entity*>* tmp = EntityList.start;
 	while (tmp != nullptr)
 	{
 		tmp->data->CleanUp();
+		RELEASE(tmp->data);
+		EntityList.del(tmp);
 		tmp = tmp->next;
 	}
+
+	EntityList.clear();
+
 	return ret;
 }
 
@@ -181,6 +190,7 @@ bool j1EntityManager::Load(pugi::xml_node& file)
 	p2SString playerStr("player");
 	p2SString enemyL("enemyL");
 	p2SString enemyF("enemyF");
+	p2SString coin("coin");
 
 	//We iterate though all the entities that we saved, creating each one of them
 	for (pugi::xml_node propIterator = file.child("enemyL"); propIterator; propIterator = propIterator.next_sibling())
@@ -195,6 +205,14 @@ bool j1EntityManager::Load(pugi::xml_node& file)
 
 		if (enemyF == propIterator.name())
 			AddEntity(entityType::FLYING_ENEMY, { 0,0 })->Load(propIterator);
+
+	}
+
+	for (pugi::xml_node propIterator = file.child("coin"); propIterator; propIterator = propIterator.next_sibling())
+	{
+
+		if (coin == propIterator.name())
+			AddEntity(entityType::COIN, { 0,0 })->Load(propIterator);
 
 	}
 
@@ -215,8 +233,8 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position, iPoint mo
 	switch (type)
 	{
 	case entityType::PLAYER:
-		if(player == nullptr)
-		tmp = new j1Player();
+		if (player == nullptr)
+			tmp = new j1Player();
 		config = entConfig.child("player");
 
 		break;
@@ -234,6 +252,12 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position, iPoint mo
 		tmp = new j1ParticleShuriken();
 		config = entConfig.child("shuriken");
 		break;
+
+	case entityType::COIN:
+		tmp = new j1Coin();
+		config = entConfig.child("coin");
+
+		break;
 	}
 
 	//If there was a succesful match, we create the entity
@@ -249,9 +273,9 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position, iPoint mo
 			{
 				tmp->SetTrace({ position.x, position.y, movement.x, movement.y });
 			}
-				
+
 		}
-			
+
 		//We awake & init the entity we just loaded
 		InitEntity(EntityList.add(tmp)->data, config);
 
@@ -283,14 +307,38 @@ bool j1EntityManager::CleanMapEnt()
 	{
 		if (tmp->data->type != entityType::PLAYER)
 		{
-			tmp->data->CleanUp(); 
+			tmp->data->CleanUp();
 			RELEASE(tmp->data);
 			EntityList.del(tmp);
-			tmp = tmp->prev;
 		}
-		else
-			tmp = tmp->next;
+		tmp = tmp->next;
+
 	}
+
+	return ret;
+}
+
+
+//Erases the player
+bool j1EntityManager::DeletePlayer()
+{
+	bool ret = false;
+
+	//We iterate until we find the player and delete it
+	p2List_item<j1Entity*>* tmp = EntityList.start;
+	while (tmp != nullptr)
+	{
+		if (tmp->data->type == entityType::PLAYER)
+		{
+			tmp->data->CleanUp();
+			RELEASE(tmp->data);
+			EntityList.del(tmp);
+			break;
+		}
+		tmp = tmp->next;
+
+	}
+	EntityList.clear();
 
 	return ret;
 }
