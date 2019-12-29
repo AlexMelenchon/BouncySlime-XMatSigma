@@ -7,6 +7,7 @@
 Bouncy Slime is a 2D platformer game developed by 2 students from CITM pursuing a degree in Videogames Design and Development.
 You'll have to prove yourself parkouring through the world and get your reward treasure. Being a slime provides you with this awesome advantage: WALL JUMPING!
 
+
 # Who we are?
 
 <table>  
@@ -22,6 +23,8 @@ You'll have to prove yourself parkouring through the world and get your reward t
   </tr>
 </table>
 
+<em>Check our github project <a href="https://github.com/AlexMelenchon/BouncySlime-XMatSigma">website</a></em>
+
  
 # What are you waiting for to play the game?
 
@@ -32,7 +35,7 @@ You'll have to prove yourself parkouring through the world and get your reward t
 </p>
 
 <p align="center">
-<img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/mushroom.gif?raw=true"> <a href="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/releases/download/2.0/BouncySlime.zip"><strong>DOWNLOAD</strong></a> <img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/mushroom.gif?raw=true"> 
+<img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/releases/download/3.0/Bouncy.Slime.rar"><strong>DOWNLOAD</strong></a> <img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/mushroom.gif?raw=true"> 
 </p>
 
 # Instructions
