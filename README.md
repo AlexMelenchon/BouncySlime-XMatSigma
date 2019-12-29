@@ -64,7 +64,7 @@ Alex Melenchón Maza:
  - https://github.com/AlexMelenchon
 
 David Carrasquet Iniesta: 
- - Main designer
+ - Main designer & Art
  - https://github.com/davidcarrasquet
  
 
