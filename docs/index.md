@@ -35,7 +35,7 @@ You'll have to prove yourself parkouring through the world and get your reward t
 </p>
 
 <p align="center">
-<img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/releases/download/3.0/Bouncy.Slime.rar"><strong>DOWNLOAD</strong></a> <img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/mushroom.gif?raw=true"> 
+<img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/mushroom.gif?raw=true"> <a href="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/releases/download/3.0/Bouncy.Slime.rar"><strong>DOWNLOAD</strong></a> <img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/mushroom.gif?raw=true"> 
 </p>
 
 # Instructions
