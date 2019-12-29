@@ -49,6 +49,7 @@ https://alexmelenchon.github.io/BouncySlime-XMatSigma/
 - KeyPad 8: Downs 1 Coin
 
 - º/ª: Open the In-Game Console (only while in the mid of a level) 
+- Write 'list' in the console to see a list of all avaliable commands
 
 
 ## Innovations:
