@@ -116,7 +116,7 @@ David Carrasquet Iniesta:
  Loop musics by: Pascal Belisle
  https://soundcloud.com/pascalbelisle
  
- Main Menu Loop by: Kahoot
+ Main Menu Loop by: Alf Inge Wang
  https://kahoot.com/library/kahoot-sheet-music/
  
  Sound effects by: Nintendo, ripped by Sound-Resource
