@@ -60,8 +60,8 @@ You'll have to prove yourself parkouring through the world and get your reward t
 + <strong>F4:</strong>	 	 Load the third map
 + <strong>F5:</strong>		 Save game
 + <strong>F6:</strong>           Load game
-+ <strong>F7:</strong>           
-+ <strong>F8:</strong>	         
++ <strong>F7:</strong>           User Interface Debug Mode (this is the only command that can be activated in the Main Menu)
++ <strong>F8:</strong>	         Returns to the main menu
 + <strong>F9:</strong>		 Draw colliders in screen, and enemy paths
 + <strong>F10:</strong>          God mode
 + <strong>F11:</strong>	     	 Enable/disable framecap
