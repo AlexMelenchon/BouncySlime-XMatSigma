@@ -92,9 +92,7 @@ bool j1UIelement::OnHover()
 			}
 
 		}
-
 	}
-
 
 	return ret;
 }
@@ -341,6 +339,7 @@ void j1UIelement::SetToDisable(bool to_disable)
 	}
 }
 
+//Called when a element is disabled
 void j1UIelement::Disable()
 {
 	if (this->IsFocused())
