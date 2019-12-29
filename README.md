@@ -24,9 +24,9 @@ https://alexmelenchon.github.io/BouncySlime-XMatSigma/
 - NumPad +: Volume up
 - NumPad -: Volume down
 
-- Esc: Exit game
+- ESC:  Open the In-Game Pause Menu
 
-### Debug Options:
+### Debug Options (only in-game):
 
 - F1:  Load the tutorial map
 - F2:  Load the first map
@@ -34,11 +34,22 @@ https://alexmelenchon.github.io/BouncySlime-XMatSigma/
 - F4:  Reset the current map
 - F5:  Save game
 - F6:  Load game
+- F7: User Interface Debug Mode (this is the only command that can be activated in the Main Menu)
+- F8: Returns to the main menu
 - F9:  Draw colliders in screen, and enemy paths
 - F10: God mode
 - F11: Enable/disable framecap
 - F12: Change title info display (Frame or Map Data)
-- P:   Pause game
+
+- KeyPad 1: Adds a Life
+- KeyPad 2: Kills the Player
+- KeyPad 4: Adds 1000 score
+- KeyPad 5: Lowers the score by 1000
+- KeyPad 7: Adds a Coin
+- KeyPad 8: Downs 1 Coin
+
+- º/ª: Open the In-Game Console (only while in the mid of a level) 
+
 
 ## Innovations:
 
@@ -88,8 +99,9 @@ David Carrasquet Iniesta:
  https://sorceressgamelab.itch.io/
 
 ### Music:
- Loop musics by: Pascal Belisle
+ Loop musics by: Pascal Belisle & Kahoot
  https://soundcloud.com/pascalbelisle
+ https://kahoot.com/library/kahoot-sheet-music/
  
  Sound effects by: Nintendo, ripped by Sound-Resource
  https://www.sounds-resource.com/wii/ssbb/
