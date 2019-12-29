@@ -28,6 +28,7 @@ https://alexmelenchon.github.io/BouncySlime-XMatSigma/
 
 ### Debug Options (only in-game):
 
+
 - F1:  Load the tutorial map
 - F2:  Load the first map
 - F3:  Load the second map
@@ -40,6 +41,8 @@ https://alexmelenchon.github.io/BouncySlime-XMatSigma/
 - F10: God mode
 - F11: Enable/disable framecap
 - F12: Change title info display (Frame or Map Data)
+- TAB: Iteratus Focus through all enabled elements on screen
+<br></br>
 
 - KeyPad 1: Adds a Life
 - KeyPad 2: Kills the Player
@@ -48,8 +51,18 @@ https://alexmelenchon.github.io/BouncySlime-XMatSigma/
 - KeyPad 7: Adds a Coin
 - KeyPad 8: Downs 1 Coin
 
+
+### Console Debug Options (only in-game):
+
+
 - º/ª: Open the In-Game Console (only while in the mid of a level) 
-- Write 'list' in the console to see a list of all avaliable commands
+- Left Arrow: Positions cursor one letter to the left
+- Right Arrow: Positions cursor one letter to the right
+- Backspace: Deletes one letter in the left of the cursor position
+- Supr: Deletes one letter in the right of the cursor position
+- Enter: Enters a command into the console
+- Enter the command 'list' in the console to see a list of all avaliable commands
+
 
 
 ## Innovations:
