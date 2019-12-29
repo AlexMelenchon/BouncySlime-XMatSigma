@@ -11,11 +11,13 @@ You'll have to prove yourself parkouring through the world and get your reward t
 
 <table>  
   <tr>
-    <td> <a href="https://github.com/davidcarrasquet">David Carrasquet</a></td>   
+    <td> <a href="https://github.com/davidcarrasquet">David Carrasquet</a></td>
+    <td> <em>Main design and code</em></a></td>    
     <td> <img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/david.png?raw=true"> </td>    
   </tr>
   <tr>
-    <td><a href="https://github.com/AlexMelenchon">Àlex Melenchón</a></td>    
+    <td><a href="https://github.com/AlexMelenchon">Àlex Melenchón</a></td>
+    <em>Main code and design</em></a></td>     
     <td> <img src="https://github.com/AlexMelenchon/BouncySlime-XMatSigma/blob/master/docs/alex.png?raw=true"> </td>
   </tr>
 </table>
@@ -64,9 +66,34 @@ You'll have to prove yourself parkouring through the world and get your reward t
 
 ## Console comands 
 
++ <strong>º/ª:</strong> Open the In-Game Console (only while in the mid of a level) 
++ <strong>Left Arrow:</strong> Positions cursor one letter to the left
++ <strong>Right Arrow:</strong> Positions cursor one letter to the right
++ <strong>Backspace:</strong> Deletes one letter in the left of the cursor position
++ <strong>Supr:</strong> Deletes one letter in the right of the cursor position
++ <strong>Enter:</strong> Enters a command into the console
+_Enter the command 'list' in the console to see a list of all avaliable commands_
 
 
+# Quick description of the system
 
+This 2D platformer is a game made with SDL with the integration of pugui::xml for loading/saving. Entities and UI work with the structure of an entity system.
+
+# Innovations
+
+_innovations are features that weren't needed as a requirement for our assigments_
+
+- Volume control in-game
+- Forward-propagation collision system, colliders are loaded from an object layer of the tmx
+- Camera culling with parallax
+- Animations load from XML document
+- Music loads from tmx
+- Enemies have a default patrol movement, if they are not chasing the player, they do a patrol
+- Enemies make pathfinding to their patrol when they stop chasing the player
+- Player has a cooldown ability, a shuriken throw. When thrown, tha player can't throw another one until it comes back to him with pathfinding. 
+- Land enemies have "intelligent" jump method, they will chase the player and jump whe they are able to make a succesful jump.
+- Game can be paused with "p".
+- Enemies and their patrol load from tmx.
 
 # Credits
 
@@ -83,6 +110,8 @@ You'll have to prove yourself parkouring through the world and get your reward t
 ## Music
 
  Loop musics by: <a href="https://soundcloud.com/pascalbelisle">Pascal Belisle</a> 
+
+ Kahoot music by: a href="https://kahoot.com/library/kahoot-sheet-music/">Alf Inge Wang</a>  
  
  Sound effects by: Nintendo, ripped by <a href="https://www.sounds-resource.com/wii/ssbb/">Sound-Resource</a>  
  
@@ -92,7 +121,10 @@ You'll have to prove yourself parkouring through the world and get your reward t
 
  Coin fx: <a href="https://freesound.org/people/ProjectsU012/sounds/341695/">ProjectsU012</a>
 
- Click fx: <a href="https://freesound.org/people/kwahmah_02/sounds/256116/">kwahmah_02</a> 
+ Click fx: <a href="https://freesound.org/people/kwahmah_02/sounds/256116/">kwahmah_02</a>
+
+ Win fx: <a href="https://freesound.org/people/LittleRobotSoundFactory/">LittleRobotSoundFactory</a>
+ 
 
 
 # License
