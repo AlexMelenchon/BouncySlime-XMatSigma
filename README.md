@@ -99,8 +99,10 @@ David Carrasquet Iniesta:
  https://sorceressgamelab.itch.io/
 
 ### Music:
- Loop musics by: Pascal Belisle & Kahoot
+ Loop musics by: Pascal Belisle
  https://soundcloud.com/pascalbelisle
+ 
+ Main Menu Loop by: Kahoot
  https://kahoot.com/library/kahoot-sheet-music/
  
  Sound effects by: Nintendo, ripped by Sound-Resource
