@@ -55,6 +55,7 @@ bool j1Coin::Update(float dt)
 {
 	bool ret = true;
 
+	//Calculate the coin collider posttion
 	CalculateCollider(this->fpPosition);
 
 	return ret;

@@ -13,8 +13,10 @@ j1ConsoleM::~j1ConsoleM()
 // Called before render is available
 bool j1ConsoleM::Awake(pugi::xml_node& consoleConfig)
 {
+	//Create commands related to console------
+	//Log Command
 	CreateCommand("log mystring (between 1-100 words)", this, 2, 100, UIFunction::FNC_LOG);
-
+	//List Command
 	CreateCommand("list", this, 1, 1, UIFunction::FNC_LIST);
 
 	return true;

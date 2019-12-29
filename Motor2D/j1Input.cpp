@@ -40,6 +40,7 @@ bool j1Input::Awake(pugi::xml_node& config)
 		ret = false;
 	}
 
+	//Create the console command to quit
 	App->console->CreateCommand("quit", this, 1, 1, UIFunction::FNC_QUIT);
 
 	return ret;

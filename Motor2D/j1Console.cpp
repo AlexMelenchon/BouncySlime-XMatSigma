@@ -107,12 +107,12 @@ void j1Console::Disable()
 
 	//If the input box loses focus, disable the whole console
 	SetToDisable(false);
-
 }
 
 //Gets the text from the input
 void j1Console::RecieveCommand(const char* newCommand)
 {
+	//If the command does not exists, we notify the user
 	if(!App->console->ManageCommand(newCommand))
 		LOG("Invalid Command! Please check the command list with: list ");
 }

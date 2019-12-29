@@ -44,9 +44,12 @@ bool j1Scene::Awake(pugi::xml_node& scene_config)
 	click.path = scene_config.child("click").attribute("file").as_string();
 
 	//Command creation--------
+	//God Mode
 	App->console->CreateCommand("god_mode", this, 1, 1, UIFunction::FNC_GODMODE);
+	//Map Load
 	App->console->CreateCommand("map map_name.tmx", this, 2, 2, UIFunction::FNC_LOADMAP);
-	App->console->CreateCommand("FPS number (between 30-120)", this, 2, 2, UIFunction::FNC_FPS);
+	//FPS Cap Change
+	App->console->CreateCommand("FPS number (sets cap between 30-120)", this, 2, 2, UIFunction::FNC_FPS);
 
 
 	return ret;
