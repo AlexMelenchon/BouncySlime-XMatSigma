@@ -348,7 +348,9 @@ void j1Input::OnGui(UIEventType type, UIFunction func, j1UIelement* userPointer,
 		case UIFunction::FNC_QUIT:
 			Quit(true);
 			LOG("Quitting...");
-			LOG("Thank you for playing Bouncy Slime! Please check out our GitHub Project for more Info :)");
+			LOG("Thank you for playing Bouncy Slime!");
+			LOG("Please check out our GitHub Project for more Info :)");
+
 			break;
 		}
 	}

@@ -1,19 +1,19 @@
-#ifndef __J1__CONSOLE__
-#define __J1__CONSOLE__
+#ifndef __J1__UICONSOLE__
+#define __J1__UICONSOLE__
 
 #include"j1UIelement.h"
 #include "p2Point.h"
 
-class j1Console : public j1UIelement
+class j1UIConsole : public j1UIelement
 {
 public:
 	//--------INTERNAL CONTROL---------//
 	//Constructors----
-	j1Console();
-	j1Console(char* txt, iPoint Position);
+	j1UIConsole();
+	j1UIConsole(char* txt, iPoint Position);
 
 	//Destructors
-	~j1Console();
+	~j1UIConsole();
 
 	//Called every frame after the element update
 	bool InheritUpdate(float dt);
@@ -46,7 +46,9 @@ private:
 	j1UIelement* Ctext = nullptr;
 
 	p2SString consoleBuffer;
+
+	iPoint inputBoxSize = {0,0};
 };
 
 
-#endif // !__J1__CONSOLE__
+#endif // !__J1__UICONSOLE__

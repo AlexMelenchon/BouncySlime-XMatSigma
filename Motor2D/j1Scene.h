@@ -2,7 +2,7 @@
 #define __j1SCENE_H__
 
 #include "j1Module.h"
-#include "j1Console.h"
+#include "j1UIConsole.h"
 
 struct SDL_Texture;
 class j1Timer;
@@ -100,7 +100,7 @@ public:
 
 	//--------UI LOGIC---------//
 	//Used to keep the console in check
-	j1Console* console = nullptr;
+	j1UIConsole* console = nullptr;
 
 	//The list of commands of the console
 	p2List<p2SString*> CommandList;

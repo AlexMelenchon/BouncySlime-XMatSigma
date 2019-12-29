@@ -100,14 +100,14 @@
     <ClCompile Include="j1Coin.cpp">
       <Filter>Desenvolupament  ========\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="j1Console.cpp">
-      <Filter>Desenvolupament  ========\UI</Filter>
-    </ClCompile>
     <ClCompile Include="j1Command.cpp">
       <Filter>Desenvolupament  ========\Commands</Filter>
     </ClCompile>
     <ClCompile Include="j1ConsoleM.cpp">
       <Filter>Desenvolupament  ========\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1UIConsole.cpp">
+      <Filter>Desenvolupament  ========\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -231,14 +231,14 @@
     <ClInclude Include="j1Coin.h">
       <Filter>Desenvolupament  ========\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="j1Console.h">
-      <Filter>Desenvolupament  ========\UI</Filter>
-    </ClInclude>
     <ClInclude Include="j1Command.h">
       <Filter>Desenvolupament  ========\Commands</Filter>
     </ClInclude>
     <ClInclude Include="j1ConsoleM.h">
       <Filter>Desenvolupament  ========\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1UIConsole.h">
+      <Filter>Desenvolupament  ========\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

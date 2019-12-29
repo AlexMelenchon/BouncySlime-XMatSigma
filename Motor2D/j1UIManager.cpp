@@ -9,7 +9,7 @@
 #include "j1UIImage.h"
 #include "j1UIInputBox.h"
 #include "j1UISlider.h"
-#include "j1Console.h"
+#include "j1UIConsole.h"
 
 //Constructor
 j1UIManager::j1UIManager() : j1Module()
@@ -164,7 +164,7 @@ j1UIelement* j1UIManager::AddElement(ui_type type, j1UIelement* parent, iPoint P
 		break;
 
 	case ui_type::UI_CONSOLE:
-		tmp = new j1Console(text, Position);
+		tmp = new j1UIConsole(text, Position);
 		break;
 	}
 

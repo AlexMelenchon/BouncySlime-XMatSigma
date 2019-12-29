@@ -1,4 +1,4 @@
-#include "j1Console.h"
+#include "j1UIConsole.h"
 #include "j1UIManager.h"
 #include "j1Window.h"
 #include "j1Textures.h"
@@ -8,12 +8,12 @@
 #include "j1ConsoleM.h"
 
 //Constructors----
-j1Console::j1Console()
+j1UIConsole::j1UIConsole()
 {
 	this->type = ui_type::UI_CONSOLE;
 }
 
-j1Console::j1Console(char* txt, iPoint Position)
+j1UIConsole::j1UIConsole(char* txt, iPoint Position)
 {
 	this->type = ui_type::UI_CONSOLE;
 	
@@ -26,14 +26,17 @@ j1Console::j1Console(char* txt, iPoint Position)
 
 	//Load the input box-----
 	inputBox = App->ui->AddElement(ui_type::UI_INPUTBOX, this, { Position.x, Position.y - (int)(App->win->height * 0.25) }, true, false, true, { 0,0,0,0 }, this->listener, UIFunction::FNC_NONE, drag_axis::MOV_NONE, txt);
+
+	//Calcule the writting font heigth
+	App->fonts->CalcSize("CalcSize", inputBoxSize.x, inputBoxSize.y);
 }
 
 //Destructors
-j1Console::~j1Console()
+j1UIConsole::~j1UIConsole()
 {}
 
 //Called every frame after the element update
-bool j1Console::InheritUpdate(float dt)
+bool j1UIConsole::InheritUpdate(float dt)
 {
 	bool ret = true;
 
@@ -47,14 +50,14 @@ bool j1Console::InheritUpdate(float dt)
 }
 
 // Called before all Updates
-bool j1Console::PostUpdate(bool debug)
+bool j1UIConsole::PostUpdate(bool debug)
 {
 	bool ret = true;
 	return ret;
 }
 
 // Called before quitting
-bool j1Console::CleanUp()
+bool j1UIConsole::CleanUp()
 {
 	bool ret = true;
 
@@ -72,13 +75,13 @@ bool j1Console::CleanUp()
 }
 
 //Retrives focus when the conditions are met
-bool j1Console::DeFocus()
+bool j1UIConsole::DeFocus()
 {
 	return false;
 }
 
 //Updates the text to show
-void j1Console::UpdateText(const char* newLogEntry)
+void j1UIConsole::UpdateText(const char* newLogEntry)
 {
 	// First of all, we paste the new log into the Screen
 	//We add flags at the start & end, the actual string & an "\n"
@@ -95,12 +98,20 @@ void j1Console::UpdateText(const char* newLogEntry)
 	//If the console text exceeds
 	if (Ctext->rect.h > image->rect.h)
 	{
-		consoleBuffer.Cut(consoleBuffer.FindFirst(">"), consoleBuffer.FindFirst(";")+2);
+		//We calculate the difference in size
+		int diff = Ctext->rect.h - image->rect.h;
+
+		//We cut the number of extra lines
+		int NLinesToDelete = round(diff / inputBoxSize.y)+1;
+		for (uint i = 0; i < NLinesToDelete; i++)
+		{
+			consoleBuffer.Cut(consoleBuffer.FindFirst(">"), consoleBuffer.FindFirst(";") + 2);
+		}
 	}
 }
 
 //Called when the console is disabled
-void j1Console::Disable()
+void j1UIConsole::Disable()
 {
 	if (this->IsFocused())
 		App->ui->focused.lookAt = nullptr;
@@ -110,7 +121,7 @@ void j1Console::Disable()
 }
 
 //Gets the text from the input
-void j1Console::RecieveCommand(const char* newCommand)
+void j1UIConsole::RecieveCommand(const char* newCommand)
 {
 	//If the command does not exists, we notify the user
 	if(!App->console->ManageCommand(newCommand))
