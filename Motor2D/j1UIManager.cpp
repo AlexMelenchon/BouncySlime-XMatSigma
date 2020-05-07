@@ -12,7 +12,7 @@
 #include "j1UIConsole.h"
 
 //Constructor
-j1UIManager::j1UIManager() : j1Module()
+j1UIManager::j1UIManager() : j1Module(), atlas(nullptr)
 {
 	name.create("gui");
 }
@@ -211,8 +211,6 @@ p2List_item<j1UIelement*>* j1UIManager::GetElementFromList(j1UIelement* toSearch
 		if (iterator->data == toSearch)
 			return iterator;
 	}
-
-
 	return nullptr;
 }
 

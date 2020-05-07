@@ -74,7 +74,7 @@ public:
 	virtual bool Load(pugi::xml_node&) { return true;  };
 
 	//Called to save the game
-	virtual bool Save(pugi::xml_node&) const  const { return true; };
+	virtual bool Save(pugi::xml_node&)  const { return true; };
 
 	//--------POSITION ----------//
 	// Limits the entity speed in both axis

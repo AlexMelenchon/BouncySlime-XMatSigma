@@ -415,7 +415,7 @@ void j1Player::OnCollision(Collider* playerCol, Collider* coll)
 					App->fade->FadeToBlackMod(App->mainMenu, App->scene, App->scene->mapFadeTime * 1.5f);
 				}
 			}
-			
+
 
 		}
 		//If the map to go is not the first one, we go on to the next
@@ -504,9 +504,10 @@ void j1Player::RecalculatePos(SDL_Rect playerRect, SDL_Rect collRect)
 bool j1Player::PostUpdate()
 {
 	BROFILER_CATEGORY("Player Post-Update", Profiler::Color::Magenta)
-		//If the player is not touching the ground, he is falling
-		if (falling)
-			inputs.add(IN_FALL);
+	//If the player is not touching the ground, he is falling
+	if (falling)
+		inputs.add(IN_FALL);
+
 	//Same if the player's on the wall
 	if (walling)
 		inputs.add(IN_WALL);

@@ -22,7 +22,7 @@ public:
 
 
 public:
-	float current_frame;
+	float current_frame = 0.f;
 	int last_frame = 0;
 	bool animEnded = false;
 	int loops = 0;

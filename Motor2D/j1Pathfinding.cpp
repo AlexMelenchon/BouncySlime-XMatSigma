@@ -197,7 +197,6 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 
 	last_path.Clear();
 
-
 	PathList opened;
 	PathList closed;
 
@@ -233,16 +232,15 @@ int j1PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 		{
 			if ((closed.Find(adjacents.list[i].pos)) == NULL)
 			{
+				adjacents.list[i].CalculateF(destination);
 				if ((opened.Find(adjacents.list[i].pos)) == NULL) {
 
-					adjacents.list[i].CalculateF(destination);
 					opened.list.add(adjacents.list[i]);
 				}
 
 				else
 				{
-					adjacents.list[i].CalculateF(destination);
-					if (adjacents.list[i].g < opened.Find(adjacents.list[i].pos)->data.g)
+					if (adjacents.list[i].Score() < opened.Find(adjacents.list[i].pos)->data.Score())
 					{
 						opened.list.del(opened.Find(adjacents.list[i].pos));
 						opened.list.add(adjacents.list[i]);

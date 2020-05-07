@@ -11,7 +11,7 @@
 #include "j1Coin.h"
 
 //Constructor
-j1EntityManager::j1EntityManager()
+j1EntityManager::j1EntityManager() : debug_tex(nullptr)
 {
 	name.create("entities");
 }
@@ -54,7 +54,7 @@ bool j1EntityManager::PreUpdate()
 {
 	BROFILER_CATEGORY("Entity Manager Pre-Update", Profiler::Color::Blue)
 
-		bool ret = false;
+	bool ret = false;
 	p2List_item<j1Entity*>* tmp = EntityList.start;
 
 	// Remove all entities scheduled for deletion
@@ -276,7 +276,7 @@ j1Entity* j1EntityManager::AddEntity(entityType type, iPoint position, iPoint mo
 
 		}
 
-		//We awake & init the entity we just loaded
+		//We awake &  the entity we just loaded
 		InitEntity(EntityList.add(tmp)->data, config);
 
 	}
